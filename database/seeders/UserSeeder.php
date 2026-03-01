@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
+use App\Enums\RoleSlug;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -12,40 +15,42 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Süper Admin',
-                'email' => 'superadmin@test.com',
-                'password' => 'Demo*12345.',
-                'role_slug' => 'super_admin',
+                'name'      => 'Süper Admin',
+                'email'     => 'superadmin@test.com',
+                'password'  => 'Demo*12345.',
+                'role_slug' => RoleSlug::SuperAdmin,
             ],
             [
-                'name' => 'Admin',
-                'email' => 'admin@test.com',
-                'password' => 'Demo*12345.',
-                'role_slug' => 'admin',
+                'name'      => 'Admin',
+                'email'     => 'admin@test.com',
+                'password'  => 'Demo*12345.',
+                'role_slug' => RoleSlug::Admin,
             ],
             [
-                'name' => 'Yazar',
-                'email' => 'yazar@test.com',
-                'password' => 'Demo*12345.',
-                'role_slug' => 'yazar',
+                'name'      => 'Yazar',
+                'email'     => 'yazar@test.com',
+                'password'  => 'Demo*12345.',
+                'role_slug' => RoleSlug::Yazar,
             ],
             [
-                'name' => 'Kullanıcı',
-                'email' => 'kullanici@test.com',
-                'password' => 'Demo*12345.',
-                'role_slug' => 'kullanici',
+                'name'      => 'Kullanıcı',
+                'email'     => 'kullanici@test.com',
+                'password'  => 'Demo*12345.',
+                'role_slug' => RoleSlug::Kullanici,
             ],
         ];
 
         foreach ($users as $userData) {
-            $role = Role::where('slug', $userData['role_slug'])->first();
+            $role = Role::where('slug', $userData['role_slug']->value)->first();
 
-            User::create([
-                'name' => $userData['name'],
-                'email' => $userData['email'],
-                'password' => $userData['password'],
-                'role_id' => $role->id,
-            ]);
+            User::updateOrCreate(
+                ['email' => $userData['email']],
+                [
+                    'name'     => $userData['name'],
+                    'password' => $userData['password'],
+                    'role_id'  => $role->id,
+                ],
+            );
         }
     }
 }
