@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>Blog — Boyalı Kelimeler</title>
+    <meta name="description" content="Boyalı Kelimeler blog yazıları. Sanat, edebiyat, kültür ve etkinlik haberleri.">
+    <meta name="keywords" content="boyalı kelimeler, blog, sanat, edebiyat, kültür, etkinlik">
+    <link rel="canonical" href="https://boyalikelimeler.com/blog">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Blog — Boyalı Kelimeler">
+    <meta property="og:description" content="Sanat, edebiyat, kültür ve etkinlik haberleri.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boyalikelimeler.com/blog">
+    <meta property="og:image" content="https://boyalikelimeler.com/images/og-cover.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="soz-meydani.html">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="iletisim.html">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="login.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş
+                    </a>
+                    <a href="register.html" class="btn-gold-sm">
+                        <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =======================================================
+         MAIN — BLOG
+    ======================================================= -->
+    <main id="main">
+
+        <!-- Page Header -->
+        <section class="blog-page-header" aria-label="Blog sayfa başlığı">
+            <div class="container">
+                <!-- Breadcrumb -->
+                <nav class="blog-page-header__breadcrumb" aria-label="Breadcrumb">
+                    <ol class="blog-page-header__breadcrumb-list">
+                        <li class="blog-page-header__breadcrumb-item">
+                            <a href="index.html" class="blog-page-header__breadcrumb-link">
+                                <i class="fa-solid fa-house"></i>
+                            </a>
+                        </li>
+                        <li class="blog-page-header__breadcrumb-sep">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </li>
+                        <li class="blog-page-header__breadcrumb-item blog-page-header__breadcrumb-item--active" aria-current="page">
+                            Blog
+                        </li>
+                    </ol>
+                </nav>
+                <!-- Title -->
+                <div class="blog-page-header__inner">
+                    <h1 class="blog-page-header__title">
+                        <i class="fa-solid fa-blog me-3"></i>Blog
+                    </h1>
+                    <p class="blog-page-header__desc">
+                        Sanat dünyasından haberler, edebiyat dünyasından söyleşiler, kültür-sanat etkinlikleri ve daha fazlası.
+                    </p>
+                    <div class="blog-page-header__stats">
+                        <span class="blog-page-header__stat">
+                            <i class="fa-solid fa-file-lines me-1"></i>77 Yazı
+                        </span>
+                        <span class="blog-page-header__stat-sep">|</span>
+                        <span class="blog-page-header__stat">
+                            <i class="fa-solid fa-folder-open me-1"></i>5 Kategori
+                        </span>
+                        <span class="blog-page-header__stat-sep">|</span>
+                        <span class="blog-page-header__stat">
+                            <i class="fa-solid fa-eye me-1"></i>86K Okunma
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================
+             HERO — Öne Çıkan Yazı (Overlay)
+        ==================================================== -->
+        <section class="blog-hero" aria-label="Öne çıkan blog yazısı">
+            <div class="blog-hero__bg">
+                <div class="blog-hero__bg-placeholder">
+                    <i class="fa-solid fa-palette"></i>
+                </div>
+                <div class="blog-hero__overlay"></div>
+            </div>
+            <div class="container">
+                <div class="blog-hero__content">
+                    <span class="blog-badge blog-badge--sanat blog-hero__badge">
+                        <i class="fa-solid fa-star me-1"></i>Öne Çıkan
+                    </span>
+                    <h1 class="blog-hero__title">
+                        <a href="blog-detay.html">2026 Altın Fırça Yarışması Sonuçları Açıklandı: İşte Kazananlar</a>
+                    </h1>
+                    <p class="blog-hero__excerpt">
+                        Bu yıl rekor katılımla gerçekleşen Altın Fırça Yarışması'nın kazananları belli oldu.
+                        3.500'den fazla eser arasından seçilen finalistler ve büyük ödülün sahibi açıklandı.
+                    </p>
+                    <div class="blog-hero__meta">
+                        <time datetime="2026-02-27">
+                            <i class="fa-regular fa-calendar me-1"></i>27 Şubat 2026
+                        </time>
+                        <span>
+                            <i class="fa-regular fa-clock me-1"></i>6 dk okuma
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-eye me-1"></i>4.820
+                        </span>
+                    </div>
+                    <a href="blog-detay.html" class="blog-hero__read-btn">
+                        <i class="fa-solid fa-arrow-right me-2"></i>Yazıyı Oku
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================
+             SON 3 HABER — Yatay Küçük Kartlar
+        ==================================================== -->
+        <section class="blog-highlights" aria-label="Son haberler">
+            <div class="container">
+                <div class="blog-highlights__grid">
+
+                    <a href="blog-detay.html" class="blog-highlight">
+                        <div class="blog-highlight__icon">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div class="blog-highlight__body">
+                            <span class="blog-highlight__cat blog-highlight__cat--edebiyat">Edebiyat</span>
+                            <h3 class="blog-highlight__title">Türk Edebiyatında Yeni Bir Soluk: 2026'nın Çıkış Yapan Yazarları</h3>
+                            <span class="blog-highlight__date">
+                                <i class="fa-regular fa-calendar me-1"></i>25 Şub 2026
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="blog-highlight">
+                        <div class="blog-highlight__icon">
+                            <i class="fa-solid fa-masks-theater"></i>
+                        </div>
+                        <div class="blog-highlight__body">
+                            <span class="blog-highlight__cat blog-highlight__cat--kultur">Kültür</span>
+                            <h3 class="blog-highlight__title">İstanbul Kültür Sanat Festivali Programı Belli Oldu</h3>
+                            <span class="blog-highlight__date">
+                                <i class="fa-regular fa-calendar me-1"></i>23 Şub 2026
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="blog-highlight">
+                        <div class="blog-highlight__icon">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <div class="blog-highlight__body">
+                            <span class="blog-highlight__cat blog-highlight__cat--duyuru">Duyuru</span>
+                            <h3 class="blog-highlight__title">Boyalı Kelimeler v2.0 Güncelleme Notları</h3>
+                            <span class="blog-highlight__date">
+                                <i class="fa-regular fa-calendar me-1"></i>15 Şub 2026
+                            </span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================
+             BLOG İÇERİK — Toolbar + Grid + Sidebar
+        ==================================================== -->
+        <section class="blog-section" aria-label="Blog yazıları">
+            <div class="container">
+                <div class="row g-4">
+
+                    <!-- SOL KOLON — ANA İÇERİK -->
+                    <div class="col-lg-8">
+
+                        <!-- Toolbar: Search + Filter + Sort -->
+                        <div class="blog-toolbar">
+                            <div class="blog-toolbar__search">
+                                <i class="fa-solid fa-magnifying-glass blog-toolbar__search-icon"></i>
+                                <input type="text"
+                                       class="wpost-form__input blog-toolbar__search-input"
+                                       placeholder="Blog yazılarında ara...">
+                            </div>
+                            <div class="blog-toolbar__filters">
+                                <select class="wpost-form__input blog-toolbar__select">
+                                    <option value="">Tüm Kategoriler</option>
+                                    <option value="sanat">Sanat</option>
+                                    <option value="edebiyat">Edebiyat</option>
+                                    <option value="kultur">Kültür</option>
+                                    <option value="etkinlik">Etkinlik</option>
+                                    <option value="duyuru">Duyuru</option>
+                                </select>
+                                <select class="wpost-form__input blog-toolbar__select">
+                                    <option value="newest">En Yeni</option>
+                                    <option value="popular">En Çok Okunan</option>
+                                    <option value="oldest">En Eski</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Sonuç Bilgisi -->
+                        <div class="blog-result-info">
+                            <span class="blog-result-info__text">
+                                <i class="fa-solid fa-file-lines me-1"></i>Toplam <strong>77</strong> yazı bulundu
+                            </span>
+                        </div>
+
+                        <!-- Blog Cards Grid -->
+                        <div class="blog-grid">
+
+                            <!-- Card 1 -->
+                            <article class="blog-card">
+                                <a href="blog-detay.html" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--etkinlik">
+                                            <i class="fa-solid fa-calendar-days me-1"></i>Etkinlik
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-02-20">
+                                        <i class="fa-regular fa-calendar me-1"></i>20 Şub 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="blog-detay.html">Boyalı Kelimeler Yazarlık Atölyesi Kayıtları Başladı</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        Mart ayında başlayacak ücretsiz yazarlık atölyemize başvurular açıldı. Kontenjan sınırlı, acele edin...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>3 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>3.102
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 2 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-palette"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--sanat">
+                                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-02-18">
+                                        <i class="fa-regular fa-calendar me-1"></i>18 Şub 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">Dijital Sanat Nereye Gidiyor? NFT Sonrası Yeni Trendler</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        NFT çılgınlığının ardından dijital sanat dünyasında neler değişti? Yeni nesil sanatçılar hangi araçları kullanıyor...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>7 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>1.567
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 3 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-book-open"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--edebiyat">
+                                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-02-12">
+                                        <i class="fa-regular fa-calendar me-1"></i>12 Şub 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">Şiirin Gücü: Sözcüklerle İyileşmek Mümkün mü?</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        Bibliyoterapi ve şiir terapisi üzerine bir araştırma. Edebiyatın iyileştirici gücü bilimsel olarak kanıtlandı...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>6 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>2.780
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 4 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-masks-theater"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--kultur">
+                                            <i class="fa-solid fa-masks-theater me-1"></i>Kültür
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-02-10">
+                                        <i class="fa-regular fa-calendar me-1"></i>10 Şub 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">Anadolu'dan Dünyaya: Türk Sanatçıların Uluslararası Başarıları</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        2025 yılında uluslararası arenada ödül alan Türk sanatçılar ve eserleri üzerine bir derleme...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>5 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>1.430
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 5 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--etkinlik">
+                                            <i class="fa-solid fa-calendar-days me-1"></i>Etkinlik
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-02-08">
+                                        <i class="fa-regular fa-calendar me-1"></i>8 Şub 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">Edebiyat Söyleşileri: Mart Ayı Konuğumuz Ayfer Tunç</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        Aylık söyleşi serimizin mart konuğu ödüllü yazar Ayfer Tunç. Kayıt için son tarih 5 Mart...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>3 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>2.150
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 6 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-palette"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--sanat">
+                                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-02-05">
+                                        <i class="fa-regular fa-calendar me-1"></i>5 Şub 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">Fotoğraf Sanatında Minimalizm: Az Çoktur</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        Minimalist fotoğraf akımının yükselişi ve Türk fotoğrafçıların bu alandaki çalışmaları...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>5 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>1.820
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 7 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-book-open"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--edebiyat">
+                                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-02-02">
+                                        <i class="fa-regular fa-calendar me-1"></i>2 Şub 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">Çağdaş Türk Romanında Kadın Anlatıcılar</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        Son 10 yılda Türk edebiyatında kadın yazarların artan etkisi ve romanlarında ele aldıkları temalar...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>8 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>3.450
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 8 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-masks-theater"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--kultur">
+                                            <i class="fa-solid fa-masks-theater me-1"></i>Kültür
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-01-28">
+                                        <i class="fa-regular fa-calendar me-1"></i>28 Oca 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">Müzeler Dijitalleşiyor: Sanal Tur Deneyimleri</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        Dünya genelinde müzelerin dijitalleşme süreci ve Türkiye'deki sanal müze projeleri...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>4 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>2.100
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <!-- Card 9 -->
+                            <article class="blog-card">
+                                <a href="#" class="blog-card__thumb-link">
+                                    <div class="blog-card__thumb">
+                                        <div class="blog-card__thumb-placeholder">
+                                            <i class="fa-solid fa-bullhorn"></i>
+                                        </div>
+                                        <span class="blog-badge blog-badge--duyuru">
+                                            <i class="fa-solid fa-bullhorn me-1"></i>Duyuru
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="blog-card__body">
+                                    <time class="blog-card__date" datetime="2026-01-25">
+                                        <i class="fa-regular fa-calendar me-1"></i>25 Oca 2026
+                                    </time>
+                                    <h3 class="blog-card__title">
+                                        <a href="#">2026 Altın Kalem Yarışması Başvuruları Açıldı</a>
+                                    </h3>
+                                    <p class="blog-card__excerpt">
+                                        Edebiyat alanındaki en prestijli yarışmamız için başvurular başladı. Ödül havuzu bu yıl iki katına çıktı...
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        <span class="blog-card__read-time">
+                                            <i class="fa-regular fa-clock me-1"></i>3 dk
+                                        </span>
+                                        <span class="blog-card__views">
+                                            <i class="fa-solid fa-eye me-1"></i>4.680
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav class="blog-pagination" aria-label="Sayfalama">
+                            <button class="blog-pagination__btn blog-pagination__btn--prev" disabled aria-label="Önceki sayfa">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button class="blog-pagination__page blog-pagination__page--active" aria-current="page">1</button>
+                            <button class="blog-pagination__page" aria-label="Sayfa 2">2</button>
+                            <button class="blog-pagination__page" aria-label="Sayfa 3">3</button>
+                            <span class="blog-pagination__dots">...</span>
+                            <button class="blog-pagination__page" aria-label="Sayfa 8">8</button>
+                            <button class="blog-pagination__btn blog-pagination__btn--next" aria-label="Sonraki sayfa">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </nav>
+
+                    </div>
+
+                    <!-- SAĞ KOLON — SIDEBAR -->
+                    <aside class="col-lg-4">
+                        <div class="blog-sidebar">
+
+                            <!-- Kategoriler -->
+                            <div class="blog-sidebar__card">
+                                <h4 class="blog-sidebar__title">
+                                    <i class="fa-solid fa-folder-open me-2"></i>Kategoriler
+                                </h4>
+                                <ul class="blog-sidebar__cat-list">
+                                    <li>
+                                        <a href="#" class="blog-sidebar__cat-link blog-sidebar__cat-link--active">
+                                            <i class="fa-solid fa-layer-group me-2"></i>Tümü
+                                            <span class="blog-sidebar__cat-count">77</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="blog-sidebar__cat-link">
+                                            <i class="fa-solid fa-palette me-2"></i>Sanat
+                                            <span class="blog-sidebar__cat-count">24</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="blog-sidebar__cat-link">
+                                            <i class="fa-solid fa-book-open me-2"></i>Edebiyat
+                                            <span class="blog-sidebar__cat-count">18</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="blog-sidebar__cat-link">
+                                            <i class="fa-solid fa-masks-theater me-2"></i>Kültür
+                                            <span class="blog-sidebar__cat-count">15</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="blog-sidebar__cat-link">
+                                            <i class="fa-solid fa-calendar-days me-2"></i>Etkinlik
+                                            <span class="blog-sidebar__cat-count">12</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="blog-sidebar__cat-link">
+                                            <i class="fa-solid fa-bullhorn me-2"></i>Duyuru
+                                            <span class="blog-sidebar__cat-count">8</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Popüler Yazılar -->
+                            <div class="blog-sidebar__card">
+                                <h4 class="blog-sidebar__title">
+                                    <i class="fa-solid fa-fire me-2"></i>En Çok Okunanlar
+                                </h4>
+                                <div class="blog-sidebar__popular">
+
+                                    <a href="#" class="blog-sidebar__popular-item">
+                                        <div class="blog-sidebar__popular-rank">01</div>
+                                        <div class="blog-sidebar__popular-info">
+                                            <h5 class="blog-sidebar__popular-title">Boyalı Kelimeler v2.0 Güncelleme Notları</h5>
+                                            <span class="blog-sidebar__popular-meta">
+                                                <i class="fa-solid fa-eye me-1"></i>5.230
+                                            </span>
+                                        </div>
+                                    </a>
+
+                                    <a href="#" class="blog-sidebar__popular-item">
+                                        <div class="blog-sidebar__popular-rank">02</div>
+                                        <div class="blog-sidebar__popular-info">
+                                            <h5 class="blog-sidebar__popular-title">Altın Fırça Yarışması Sonuçları</h5>
+                                            <span class="blog-sidebar__popular-meta">
+                                                <i class="fa-solid fa-eye me-1"></i>4.820
+                                            </span>
+                                        </div>
+                                    </a>
+
+                                    <a href="#" class="blog-sidebar__popular-item">
+                                        <div class="blog-sidebar__popular-rank">03</div>
+                                        <div class="blog-sidebar__popular-info">
+                                            <h5 class="blog-sidebar__popular-title">2026 Altın Kalem Yarışması Başvuruları</h5>
+                                            <span class="blog-sidebar__popular-meta">
+                                                <i class="fa-solid fa-eye me-1"></i>4.680
+                                            </span>
+                                        </div>
+                                    </a>
+
+                                    <a href="#" class="blog-sidebar__popular-item">
+                                        <div class="blog-sidebar__popular-rank">04</div>
+                                        <div class="blog-sidebar__popular-info">
+                                            <h5 class="blog-sidebar__popular-title">Çağdaş Türk Romanında Kadın Anlatıcılar</h5>
+                                            <span class="blog-sidebar__popular-meta">
+                                                <i class="fa-solid fa-eye me-1"></i>3.450
+                                            </span>
+                                        </div>
+                                    </a>
+
+                                    <a href="#" class="blog-sidebar__popular-item">
+                                        <div class="blog-sidebar__popular-rank">05</div>
+                                        <div class="blog-sidebar__popular-info">
+                                            <h5 class="blog-sidebar__popular-title">Yazarlık Atölyesi Kayıtları Başladı</h5>
+                                            <span class="blog-sidebar__popular-meta">
+                                                <i class="fa-solid fa-eye me-1"></i>3.102
+                                            </span>
+                                        </div>
+                                    </a>
+
+                                </div>
+                            </div>
+
+                            <!-- Etiket Bulutu -->
+                            <div class="blog-sidebar__card">
+                                <h4 class="blog-sidebar__title">
+                                    <i class="fa-solid fa-tags me-2"></i>Popüler Etiketler
+                                </h4>
+                                <div class="blogd-tags__list">
+                                    <a href="#" class="blogd-tags__tag">Sanat</a>
+                                    <a href="#" class="blogd-tags__tag">Edebiyat</a>
+                                    <a href="#" class="blogd-tags__tag">Şiir</a>
+                                    <a href="#" class="blogd-tags__tag">Yarışma</a>
+                                    <a href="#" class="blogd-tags__tag">Etkinlik</a>
+                                    <a href="#" class="blogd-tags__tag">Kültür</a>
+                                    <a href="#" class="blogd-tags__tag">Dijital Sanat</a>
+                                    <a href="#" class="blogd-tags__tag">Söyleşi</a>
+                                    <a href="#" class="blogd-tags__tag">Atölye</a>
+                                    <a href="#" class="blogd-tags__tag">Roman</a>
+                                    <a href="#" class="blogd-tags__tag">Fotoğraf</a>
+                                </div>
+                            </div>
+
+                            <!-- Bülten -->
+                            <div class="blog-sidebar__card blog-sidebar__card--newsletter">
+                                <div class="blog-sidebar__newsletter-icon">
+                                    <i class="fa-solid fa-envelope-open-text"></i>
+                                </div>
+                                <h4 class="blog-sidebar__newsletter-title">Blog Bülteni</h4>
+                                <p class="blog-sidebar__newsletter-desc">
+                                    Yeni yazılardan haberdar olun. Haftada bir, en iyi içerikler e-posta adresinize gelsin.
+                                </p>
+                                <div class="blog-sidebar__newsletter-form">
+                                    <input type="email" class="wpost-form__input" placeholder="E-posta adresiniz">
+                                    <button type="button" class="blog-sidebar__newsletter-btn">
+                                        <i class="fa-solid fa-paper-plane me-1"></i>Abone Ol
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site alt bilgi">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="soz-meydani.html" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="hakkimizda.html" class="footer-bk__link">Hakkımızda</a>
+                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="iletisim.html" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">İletişim</h5>
+                    <p class="footer-bk__text">
+                        <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
+                    </p>
+                    <p class="footer-bk__text">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+</body>
+</html>

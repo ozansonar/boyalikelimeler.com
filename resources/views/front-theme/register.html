@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>Kayıt Ol — Boyalı Kelimeler</title>
+    <meta name="description" content="Boyalı Kelimeler topluluğuna katılın. Ücretsiz kayıt olun, yazın, çizin, paylaşın.">
+    <link rel="canonical" href="https://boyalikelimeler.com/kayit-ol">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Kayıt Ol — Boyalı Kelimeler">
+    <meta property="og:description" content="Boyalı Kelimeler topluluğuna katılın.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boyalikelimeler.com/kayit-ol">
+    <meta property="og:image" content="https://boyalikelimeler.com/images/og-cover.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="login.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş Yap
+                    </a>
+                    <a href="register.html" class="navbar-bk__auth-btn">
+                        <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =======================================================
+         MAIN — REGISTER CONTENT
+    ======================================================= -->
+    <main id="main">
+        <section class="login-section" aria-label="Kayıt formu">
+            <div class="container">
+                <div class="row justify-content-center align-items-center g-5">
+
+                    <!-- Left: Welcome Text -->
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <div class="login-welcome">
+                            <h1 class="login-welcome__title">Topluluğa<br>Katılın</h1>
+                            <div class="login-welcome__divider"></div>
+                            <p class="login-welcome__text">
+                                Sanat ve edebiyatın buluştuğu bu platforma ücretsiz katılın.
+                                Yazın, çizin, paylaşın — sesinizi duyurun.
+                            </p>
+
+                            <div class="login-welcome__features">
+                                <div class="login-welcome__feature-item">
+                                    <div class="login-welcome__feature-icon">
+                                        <i class="fa-solid fa-feather-pointed"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="login-welcome__feature-title">Yazın ve Paylaşın</h4>
+                                        <p class="login-welcome__feature-text">Şiir, hikaye, deneme — her tür eseri yayınlayın</p>
+                                    </div>
+                                </div>
+                                <div class="login-welcome__feature-item">
+                                    <div class="login-welcome__feature-icon">
+                                        <i class="fa-solid fa-paintbrush"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="login-welcome__feature-title">Eserlerinizi Sergileyin</h4>
+                                        <p class="login-welcome__feature-text">Resim galerinizi oluşturun, sanatınızı gösterin</p>
+                                    </div>
+                                </div>
+                                <div class="login-welcome__feature-item">
+                                    <div class="login-welcome__feature-icon">
+                                        <i class="fa-solid fa-award"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="login-welcome__feature-title">Yarışmalara Katılın</h4>
+                                        <p class="login-welcome__feature-text">Altın Kalem ve Altın Fırça yarışmalarıyla ödüller kazanın</p>
+                                    </div>
+                                </div>
+                                <div class="login-welcome__feature-item">
+                                    <div class="login-welcome__feature-icon">
+                                        <i class="fa-solid fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="login-welcome__feature-title">Toplulukla Tanışın</h4>
+                                        <p class="login-welcome__feature-text">Yazar ve ressamlarla etkileşime geçin</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <blockquote class="login-welcome__quote">
+                                <i class="fa-solid fa-quote-left login-welcome__quote-icon"></i>
+                                <p class="login-welcome__quote-text">"Sanat, ruhun gözle görülür halidir."</p>
+                                <span class="login-welcome__quote-author">— Boyalı Kelimeler</span>
+                            </blockquote>
+                        </div>
+                    </div>
+
+                    <!-- Right: Register Form Card -->
+                    <div class="col-lg-5 col-md-8">
+                        <div class="login-card">
+                            <!-- Card Header -->
+                            <div class="login-card__header">
+                                <div class="login-card__icon">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                </div>
+                                <h2 class="login-card__title">Kayıt Ol</h2>
+                                <p class="login-card__subtitle">Aşağıdaki bilgilerle hemen üye olabilirsiniz</p>
+                            </div>
+
+                            <!-- Register Form -->
+                            <form class="auth-form" id="registerForm" novalidate>
+                                <!-- Ad + Soyad yan yana -->
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="auth-form__group">
+                                            <label class="auth-form__label" for="firstName">
+                                                <i class="fa-solid fa-user me-1"></i>Ad
+                                            </label>
+                                            <input type="text"
+                                                   class="auth-form__input"
+                                                   id="firstName"
+                                                   name="first_name"
+                                                   placeholder="Adınız"
+                                                   required
+                                                   autocomplete="given-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="auth-form__group">
+                                            <label class="auth-form__label" for="lastName">
+                                                <i class="fa-solid fa-user me-1"></i>Soyad
+                                            </label>
+                                            <input type="text"
+                                                   class="auth-form__input"
+                                                   id="lastName"
+                                                   name="last_name"
+                                                   placeholder="Soyadınız"
+                                                   required
+                                                   autocomplete="family-name">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- E-posta -->
+                                <div class="auth-form__group">
+                                    <label class="auth-form__label" for="email">
+                                        <i class="fa-solid fa-envelope me-1"></i>E-posta
+                                    </label>
+                                    <input type="email"
+                                           class="auth-form__input"
+                                           id="email"
+                                           name="email"
+                                           placeholder="ornek@email.com"
+                                           required
+                                           autocomplete="email">
+                                </div>
+
+                                <!-- Şifre -->
+                                <div class="auth-form__group">
+                                    <label class="auth-form__label" for="password">
+                                        <i class="fa-solid fa-lock me-1"></i>Şifre
+                                    </label>
+                                    <div class="auth-form__password-wrap">
+                                        <input type="password"
+                                               class="auth-form__input"
+                                               id="password"
+                                               name="password"
+                                               placeholder="En az 8 karakter"
+                                               required
+                                               minlength="8"
+                                               autocomplete="new-password">
+                                        <button type="button" class="auth-form__eye" data-target="password" aria-label="Şifreyi göster/gizle">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Şifre Tekrar -->
+                                <div class="auth-form__group">
+                                    <label class="auth-form__label" for="passwordConfirm">
+                                        <i class="fa-solid fa-lock me-1"></i>Şifre Tekrar
+                                    </label>
+                                    <div class="auth-form__password-wrap">
+                                        <input type="password"
+                                               class="auth-form__input"
+                                               id="passwordConfirm"
+                                               name="password_confirmation"
+                                               placeholder="Şifrenizi tekrar girin"
+                                               required
+                                               minlength="8"
+                                               autocomplete="new-password">
+                                        <button type="button" class="auth-form__eye" data-target="passwordConfirm" aria-label="Şifreyi göster/gizle">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Koşullar -->
+                                <div class="auth-form__check">
+                                    <input type="checkbox" class="auth-form__checkbox" id="terms" required>
+                                    <label class="auth-form__check-label" for="terms">
+                                        <a href="#" class="auth-form__link">Kullanım koşullarını</a> ve
+                                        <a href="#" class="auth-form__link">gizlilik politikasını</a> kabul ediyorum
+                                    </label>
+                                </div>
+
+                                <!-- Submit -->
+                                <button type="submit" class="auth-form__submit">
+                                    <i class="fa-solid fa-user-plus me-2"></i>Kayıt Ol
+                                </button>
+                            </form>
+
+                            <!-- Divider -->
+                            <div class="login-card__divider">
+                                <span class="login-card__divider-text">veya</span>
+                            </div>
+
+                            <!-- Social Register -->
+                            <div class="login-card__social">
+                                <button type="button" class="login-card__social-btn login-card__social-btn--google">
+                                    <i class="fa-brands fa-google me-2"></i>Google ile Kayıt Ol
+                                </button>
+                            </div>
+
+                            <!-- Login Link -->
+                            <div class="login-card__footer">
+                                <p class="login-card__footer-text">
+                                    Zaten hesabınız var mı?
+                                    <a href="login.html" class="auth-form__link">Giriş Yap</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site alt bilgi">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="#" class="footer-bk__link">Hakkımızda</a>
+                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="#" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">İletişim</h5>
+                    <p class="footer-bk__text">
+                        <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
+                    </p>
+                    <p class="footer-bk__text">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+    <script>
+        // Toggle password visibility
+        document.querySelectorAll('.auth-form__eye').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var targetId = this.getAttribute('data-target');
+                var input = document.getElementById(targetId);
+                var icon = this.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

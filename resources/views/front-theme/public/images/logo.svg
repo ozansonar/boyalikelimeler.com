@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 80" width="360" height="80">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2CFA0"/>
+      <stop offset="50%" stop-color="#C8A96E"/>
+      <stop offset="100%" stop-color="#A68B4B"/>
+    </linearGradient>
+    <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C5C8CE"/>
+      <stop offset="100%" stop-color="#9B9EA3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Feather Quill Icon -->
+  <g transform="translate(8, 6) scale(0.55)">
+    <!-- Quill body -->
+    <path d="M30 120 C30 120, 45 85, 55 60 C60 48, 62 35, 58 25 C55 18, 48 12, 40 10 C52 14, 58 22, 58 32 C58 42, 52 55, 45 70 C38 85, 32 100, 30 120Z" fill="url(#goldGrad)" opacity="0.9"/>
+    <!-- Quill feather right -->
+    <path d="M58 25 C65 15, 80 5, 100 2 C85 8, 72 18, 62 30 C58 35, 56 42, 55 48Z" fill="url(#goldGrad)" opacity="0.7"/>
+    <!-- Quill feather left -->
+    <path d="M40 10 C32 5, 18 2, 5 8 C18 8, 30 12, 38 20 C42 24, 44 30, 45 35Z" fill="url(#goldGrad)" opacity="0.6"/>
+    <!-- Ink drop -->
+    <circle cx="30" cy="125" r="5" fill="url(#goldGrad)" opacity="0.8"/>
+  </g>
+
+  <!-- Brand Text -->
+  <text x="68" y="38" font-family="'Playfair Display', Georgia, serif" font-size="28" font-weight="700" fill="url(#goldGrad)" letter-spacing="2">
+    BOYALI
+  </text>
+  <text x="68" y="65" font-family="'Playfair Display', Georgia, serif" font-size="28" font-weight="700" fill="url(#goldGrad)" letter-spacing="2">
+    KELİMELER
+  </text>
+
+  <!-- Decorative line -->
+  <line x1="68" y1="72" x2="240" y2="72" stroke="url(#silverGrad)" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Tagline -->
+  <text x="68" y="78" font-family="'Inter', sans-serif" font-size="6.5" fill="#9B9EA3" letter-spacing="3" text-transform="uppercase">
+    SOSYAL ÇÖKÜNTÜYE SANATSAL DİRENİŞ
+  </text>
+</svg>

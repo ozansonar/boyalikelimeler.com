@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>Yazı Gönder — Boyalı Kelimeler</title>
+    <meta name="description" content="Boyalı Kelimeler'de yazınızı paylaşın. Şiir, hikaye, deneme ve daha fazlası.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://boyalikelimeler.com/yazi-gonder">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- Tom Select CSS (Select2 alternative, no jQuery) -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="iletisim.html">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="profile.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-arrow-left me-1"></i>Profile Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =======================================================
+         MAIN — YAZI GÖNDER
+    ======================================================= -->
+    <main id="main">
+        <section class="wpost-section" aria-label="Yazı gönder">
+            <div class="container">
+
+                <!-- Page Header -->
+                <div class="wpost-header">
+                    <div class="wpost-header__left">
+                        <a href="profile.html" class="wpost-header__back">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Profile Dön
+                        </a>
+                        <h1 class="wpost-header__title">
+                            <i class="fa-solid fa-feather-pointed me-2"></i>Yazı Gönder
+                        </h1>
+                    </div>
+                    <div class="wpost-header__actions">
+                        <a href="profile.html" class="wpost-btn wpost-btn--ghost">
+                            <i class="fa-solid fa-xmark me-1"></i>İptal
+                        </a>
+                        <button type="submit" form="writePostForm" class="wpost-btn wpost-btn--primary">
+                            <i class="fa-solid fa-paper-plane me-1"></i>Yazıyı Gönder
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="writePostForm" novalidate>
+                    <div class="row g-4">
+
+                        <!-- Left: Main Content -->
+                        <div class="col-lg-8">
+
+                            <!-- Title -->
+                            <div class="wpost-card">
+                                <h3 class="wpost-card__title">
+                                    <i class="fa-solid fa-heading me-2"></i>Yazı Başlığı
+                                </h3>
+                                <div class="wpost-form__group">
+                                    <input type="text"
+                                           class="wpost-form__input"
+                                           id="postTitle"
+                                           name="title"
+                                           placeholder="Yazınıza etkileyici bir başlık verin..."
+                                           required
+                                           maxlength="200">
+                                    <div class="wpost-form__char-count">
+                                        <span id="titleCharCount">0</span> / 200
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content Editor -->
+                            <div class="wpost-card">
+                                <h3 class="wpost-card__title">
+                                    <i class="fa-solid fa-pen-nib me-2"></i>Yazı Detayı
+                                </h3>
+                                <div class="wpost-editor-wrap">
+                                    <textarea id="postEditor" name="content"></textarea>
+                                </div>
+                                <p class="wpost-form__hint">
+                                    <i class="fa-solid fa-circle-info me-1"></i>
+                                    Yazınızı zengin metin editörü ile biçimlendirebilirsiniz. Başlık, kalın, italik, liste, link ve görsel ekleyebilirsiniz.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Right: Sidebar -->
+                        <div class="col-lg-4">
+
+                            <!-- Category -->
+                            <div class="wpost-card">
+                                <h3 class="wpost-card__title">
+                                    <i class="fa-solid fa-folder-open me-2"></i>Kategori
+                                </h3>
+                                <div class="wpost-form__group">
+                                    <label class="wpost-form__label" for="postCategory">
+                                        <i class="fa-solid fa-tag me-1"></i>Yazı Kategorisi
+                                    </label>
+                                    <select id="postCategory"
+                                            name="category_id"
+                                            placeholder="Kategori arayın veya seçin..."
+                                            required>
+                                        <option value="">Kategori seçiniz</option>
+                                        <option value="1">Tarih</option>
+                                        <option value="2">Kültür</option>
+                                        <option value="3">Çocuk Edebiyatı</option>
+                                        <option value="4">Gündem</option>
+                                        <option value="5">Eğitim</option>
+                                        <option value="6">Kitaplar</option>
+                                        <option value="7">Araştırma</option>
+                                        <option value="8">Şarkı Sözleri</option>
+                                        <option value="9">Quizler</option>
+                                        <option value="10">Astroloji</option>
+                                        <option value="11">Kişisel Gelişim</option>
+                                        <option value="12">Maniler</option>
+                                        <option value="13">Deyimler</option>
+                                        <option value="14">Eleştiri</option>
+                                        <option value="15">Biyografi</option>
+                                        <option value="16">Kompozisyon</option>
+                                        <option value="17">Roman</option>
+                                        <option value="18">Şiir</option>
+                                        <option value="19">Günlük</option>
+                                        <option value="20">Öykü</option>
+                                        <option value="21">Deneme</option>
+                                        <option value="22">Gezi Yazısı</option>
+                                        <option value="23">Makale</option>
+                                        <option value="24">Videolu Gönderiler</option>
+                                        <option value="25">Fotoğraflı Gönderiler</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Cover Image -->
+                            <div class="wpost-card">
+                                <h3 class="wpost-card__title">
+                                    <i class="fa-solid fa-image me-2"></i>Kapak Görseli
+                                </h3>
+                                <div class="wpost-cover-upload" id="coverDropZone">
+                                    <div class="wpost-cover-upload__placeholder" id="coverPlaceholder">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        <span>Görsel yüklemek için tıklayın<br>veya sürükleyip bırakın</span>
+                                        <small>JPG, PNG veya WebP — Maks. 5MB</small>
+                                    </div>
+                                    <div class="wpost-cover-upload__preview" id="coverPreview">
+                                        <img src="" alt="Kapak görseli önizleme" id="coverPreviewImg" loading="lazy">
+                                        <button type="button" class="wpost-cover-upload__remove" id="coverRemoveBtn" aria-label="Görseli kaldır">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                    <input type="file"
+                                           class="wpost-file-input"
+                                           id="coverInput"
+                                           name="cover_image"
+                                           accept="image/jpeg,image/png,image/webp"
+                                           aria-label="Kapak görseli seç">
+                                </div>
+                            </div>
+
+                            <!-- Publish Settings -->
+                            <div class="wpost-card">
+                                <h3 class="wpost-card__title">
+                                    <i class="fa-solid fa-gear me-2"></i>Yayın Ayarları
+                                </h3>
+
+                                <div class="wpost-form__group">
+                                    <label class="wpost-form__label" for="postExcerpt">
+                                        <i class="fa-solid fa-align-left me-1"></i>Kısa Açıklama
+                                    </label>
+                                    <textarea class="wpost-form__input wpost-form__textarea"
+                                              id="postExcerpt"
+                                              name="excerpt"
+                                              placeholder="Yazınızın kısa özetini girin..."
+                                              rows="3"
+                                              maxlength="300"></textarea>
+                                    <div class="wpost-form__char-count">
+                                        <span id="excerptCharCount">0</span> / 300
+                                    </div>
+                                </div>
+
+                                <div class="wpost-form__group">
+                                    <label class="wpost-form__label" for="postTags">
+                                        <i class="fa-solid fa-hashtag me-1"></i>Etiketler
+                                    </label>
+                                    <input type="text"
+                                           class="wpost-form__input"
+                                           id="postTags"
+                                           name="tags"
+                                           placeholder="Etiket yazıp Enter'a basın...">
+                                    <p class="wpost-form__hint">
+                                        <i class="fa-solid fa-circle-info me-1"></i>
+                                        Virgül ile ayırarak birden fazla etiket ekleyebilirsiniz.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Submit (Mobile sticky) -->
+                            <div class="wpost-submit-bar">
+                                <button type="submit" form="writePostForm" class="wpost-btn wpost-btn--primary wpost-btn--block">
+                                    <i class="fa-solid fa-paper-plane me-1"></i>Yazıyı Gönder
+                                </button>
+                                <p class="wpost-submit-bar__note">
+                                    <i class="fa-solid fa-shield-halved me-1"></i>
+                                    Yazınız editör onayından sonra yayınlanacaktır.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site alt bilgi">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="#" class="footer-bk__link">Hakkımızda</a>
+                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="iletisim.html" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">İletişim</h5>
+                    <p class="footer-bk__text">
+                        <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
+                    </p>
+                    <p class="footer-bk__text">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Tom Select (vanilla JS, Select2 alternative) -->
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+    <!-- TinyMCE 7 -->
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* -- Tom Select: Category Dropdown -------------------- */
+        var categorySelect = new TomSelect('#postCategory', {
+            allowEmptyOption: false,
+            sortField: { field: 'text', direction: 'asc' },
+            placeholder: 'Kategori arayın veya seçin...',
+            controlInput: '<input type="text" autocomplete="off" size="1">',
+            render: {
+                optgroup_header: function (data) {
+                    return '<div class="optgroup-header">' +
+                        '<i class="fa-solid fa-folder me-1"></i>' + data.label +
+                        '</div>';
+                }
+            }
+        });
+
+        /* -- TinyMCE 7: Content Editor ------------------------- */
+        tinymce.init({
+            selector: '#postEditor',
+            base_url: 'https://cdn.jsdelivr.net/npm/tinymce@7.6.1',
+            suffix: '.min',
+            license_key: 'gpl',
+            skin: 'oxide-dark',
+            content_css: 'dark',
+            language: 'tr',
+            language_url: 'https://cdn.jsdelivr.net/npm/tinymce-i18n@24.11.25/langs7/tr.min.js',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen preview code',
+            toolbar: [
+                'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor',
+                'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | blockquote codesample | charmap emoticons | fullscreen code | removeformat'
+            ],
+            menubar: 'file edit view insert format tools table',
+            height: 900,
+            placeholder: 'Yazınızı buraya yazın... Hayal gücünüzün sınırı yok.',
+            promotion: false,
+            branding: false,
+            image_title: true,
+            automatic_uploads: true,
+            file_picker_types: 'image',
+            images_upload_handler: function (blobInfo) {
+                return new Promise(function (resolve) {
+                    resolve('data:' + blobInfo.blob().type + ';base64,' + blobInfo.base64());
+                });
+            },
+            content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
+        });
+
+        /* -- Title Character Counter -------------------------- */
+        var titleInput = document.getElementById('postTitle');
+        var titleCount = document.getElementById('titleCharCount');
+
+        titleInput.addEventListener('input', function () {
+            titleCount.textContent = this.value.length;
+        });
+
+        /* -- Excerpt Character Counter ------------------------ */
+        var excerptInput = document.getElementById('postExcerpt');
+        var excerptCount = document.getElementById('excerptCharCount');
+
+        excerptInput.addEventListener('input', function () {
+            excerptCount.textContent = this.value.length;
+        });
+
+        /* -- Cover Image Upload ------------------------------- */
+        var coverInput = document.getElementById('coverInput');
+        var coverDropZone = document.getElementById('coverDropZone');
+        var coverPlaceholder = document.getElementById('coverPlaceholder');
+        var coverPreview = document.getElementById('coverPreview');
+        var coverPreviewImg = document.getElementById('coverPreviewImg');
+        var coverRemoveBtn = document.getElementById('coverRemoveBtn');
+
+        function showCoverPreview(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                coverPreviewImg.src = e.target.result;
+                coverPlaceholder.classList.add('d-none');
+                coverPreview.classList.add('wpost-cover-upload__preview--active');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeCoverImage() {
+            coverInput.value = '';
+            coverPreviewImg.src = '';
+            coverPlaceholder.classList.remove('d-none');
+            coverPreview.classList.remove('wpost-cover-upload__preview--active');
+        }
+
+        coverDropZone.addEventListener('click', function (e) {
+            if (e.target.closest('#coverRemoveBtn')) return;
+            coverInput.click();
+        });
+
+        coverInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                showCoverPreview(this.files[0]);
+            }
+        });
+
+        coverRemoveBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            removeCoverImage();
+        });
+
+        /* Drag & Drop */
+        coverDropZone.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            this.classList.add('wpost-cover-upload--dragover');
+        });
+
+        coverDropZone.addEventListener('dragleave', function () {
+            this.classList.remove('wpost-cover-upload--dragover');
+        });
+
+        coverDropZone.addEventListener('drop', function (e) {
+            e.preventDefault();
+            this.classList.remove('wpost-cover-upload--dragover');
+            var files = e.dataTransfer.files;
+            if (files && files[0]) {
+                coverInput.files = files;
+                showCoverPreview(files[0]);
+            }
+        });
+
+    })();
+    </script>
+</body>
+</html>
