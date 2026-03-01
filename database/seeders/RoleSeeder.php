@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
+use App\Enums\RoleSlug;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 
@@ -9,15 +12,11 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        $roles = [
-            ['name' => 'Süper Admin', 'slug' => 'super_admin'],
-            ['name' => 'Admin', 'slug' => 'admin'],
-            ['name' => 'Yazar', 'slug' => 'yazar'],
-            ['name' => 'Kullanıcı', 'slug' => 'kullanici'],
-        ];
-
-        foreach ($roles as $role) {
-            Role::create($role);
+        foreach (RoleSlug::cases() as $role) {
+            Role::updateOrCreate(
+                ['slug' => $role->value],
+                ['name' => $role->label()],
+            );
         }
     }
 }

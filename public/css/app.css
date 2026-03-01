@@ -1,0 +1,74 @@
+/* =============================================
+   boyalikelimeler.com — Front CSS
+   BEM convention | Mobile-first
+   ============================================= */
+
+:root {
+    --color-primary:   #1a1a2e;
+    --color-accent:    #0f3460;
+    --color-highlight: #e94560;
+    --font-heading:    'Georgia', serif;
+    --font-body:       'Inter', system-ui, sans-serif;
+    --shadow-sm:       0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md:       0 4px 12px rgba(0,0,0,0.1);
+    --transition:      300ms ease;
+}
+
+/* =============================================
+   Base
+   ============================================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background: #f3f4f6;
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+/* =============================================
+   Navbar
+   ============================================= */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* =============================================
+   Auth — guest layout
+   ============================================= */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-md);
+    padding: 2.5rem 2rem;
+}
+
+.auth-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.25rem;
+    color: var(--color-primary);
+}
+
+.auth-card__subtitle {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-bottom: 1.75rem;
+}
