@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 // Laravel'den tamamen bağımsız saf PHP cookie testi
 
+// LiteSpeed'e cache yapma, Set-Cookie header'larını silme de
+header('X-LiteSpeed-Cache-Control: no-cache');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0, private');
+header('Pragma: no-cache');
+header('Expires: 0');
+
 // Cookie ayarla
 setcookie('php_test', 'value_' . time(), [
     'expires'  => time() + 3600,
@@ -21,7 +27,7 @@ $allHeaders = headers_list();
 header('Content-Type: application/json');
 
 echo json_encode([
-    'test'              => 'Pure PHP cookie test (no Laravel)',
+    'test'              => 'Pure PHP cookie test with LiteSpeed no-cache',
     'cookies_received'  => $_COOKIE,
     'headers_being_sent' => $allHeaders,
     'php_version'       => PHP_VERSION,
