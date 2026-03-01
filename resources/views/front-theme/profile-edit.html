@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>Profili Düzenle — Boyalı Kelimeler</title>
+    <meta name="description" content="Boyalı Kelimeler profil bilgilerinizi düzenleyin.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://boyalikelimeler.com/profil/duzenle">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="profile.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-arrow-left me-1"></i>Profile Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =======================================================
+         MAIN — PROFILE EDIT
+    ======================================================= -->
+    <main id="main">
+        <section class="pedit-section" aria-label="Profil düzenleme">
+            <div class="container">
+
+                <!-- Page Header -->
+                <div class="pedit-header">
+                    <div class="pedit-header__left">
+                        <a href="profile.html" class="pedit-header__back">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Profile Dön
+                        </a>
+                        <h1 class="pedit-header__title">
+                            <i class="fa-solid fa-pen-to-square me-2"></i>Profili Düzenle
+                        </h1>
+                    </div>
+                    <div class="pedit-header__actions">
+                        <a href="profile.html" class="pedit-btn pedit-btn--ghost">
+                            <i class="fa-solid fa-xmark me-1"></i>İptal
+                        </a>
+                        <button type="submit" form="profileEditForm" class="pedit-btn pedit-btn--primary">
+                            <i class="fa-solid fa-floppy-disk me-1"></i>Değişiklikleri Kaydet
+                        </button>
+                    </div>
+                </div>
+
+                <form id="profileEditForm" novalidate>
+
+                    <div class="row g-4">
+
+                        <!-- -- LEFT: Nav Tabs ----------------------- -->
+                        <div class="col-lg-3">
+                            <nav class="pedit-nav" aria-label="Düzenleme bölümleri">
+                                <button type="button" class="pedit-nav__item pedit-nav__item--active" data-target="section-photos">
+                                    <i class="fa-solid fa-camera pedit-nav__icon"></i>
+                                    <span>Fotoğraflar</span>
+                                    <i class="fa-solid fa-chevron-right pedit-nav__chevron"></i>
+                                </button>
+                                <button type="button" class="pedit-nav__item" data-target="section-info">
+                                    <i class="fa-solid fa-user pedit-nav__icon"></i>
+                                    <span>Kişisel Bilgiler</span>
+                                    <i class="fa-solid fa-chevron-right pedit-nav__chevron"></i>
+                                </button>
+                                <button type="button" class="pedit-nav__item" data-target="section-social">
+                                    <i class="fa-solid fa-share-nodes pedit-nav__icon"></i>
+                                    <span>Sosyal Medya</span>
+                                    <i class="fa-solid fa-chevron-right pedit-nav__chevron"></i>
+                                </button>
+                                <button type="button" class="pedit-nav__item" data-target="section-privacy">
+                                    <i class="fa-solid fa-lock pedit-nav__icon"></i>
+                                    <span>Gizlilik & Güvenlik</span>
+                                    <i class="fa-solid fa-chevron-right pedit-nav__chevron"></i>
+                                </button>
+                                <button type="button" class="pedit-nav__item" data-target="section-notifications">
+                                    <i class="fa-solid fa-bell pedit-nav__icon"></i>
+                                    <span>Bildirimler</span>
+                                    <i class="fa-solid fa-chevron-right pedit-nav__chevron"></i>
+                                </button>
+                                <button type="button" class="pedit-nav__item pedit-nav__item--danger" data-target="section-danger">
+                                    <i class="fa-solid fa-triangle-exclamation pedit-nav__icon"></i>
+                                    <span>Tehlikeli Bölge</span>
+                                    <i class="fa-solid fa-chevron-right pedit-nav__chevron"></i>
+                                </button>
+                            </nav>
+                        </div>
+
+                        <!-- -- RIGHT: Sections --------------------- -->
+                        <div class="col-lg-9">
+
+                            <!-- - Section: Photos - -->
+                            <div class="pedit-section-panel" id="section-photos">
+
+                                <!-- Cover Photo -->
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-image me-2"></i>Kapak Fotoğrafı
+                                    </h3>
+                                    <div class="pedit-cover-upload">
+                                        <div class="pedit-cover-upload__preview" id="coverPreviewWrap">
+                                            <img src="https://picsum.photos/1200/300?random=10"
+                                                 alt="Kapak fotoğrafı önizleme"
+                                                 class="pedit-cover-upload__img"
+                                                 id="coverPreviewImg"
+                                                 loading="lazy">
+                                            <div class="pedit-cover-upload__overlay">
+                                                <label for="coverInput" class="pedit-cover-upload__btn" aria-label="Kapak fotoğrafı değiştir">
+                                                    <i class="fa-solid fa-camera me-2"></i>Kapak Fotoğrafını Değiştir
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <input type="file"
+                                               class="pedit-file-input"
+                                               id="coverInput"
+                                               name="cover_photo"
+                                               accept="image/*"
+                                               aria-label="Kapak fotoğrafı seç">
+                                        <p class="pedit-file-hint">
+                                            <i class="fa-solid fa-circle-info me-1"></i>Önerilen boyut: 1920×400px. Maks. 5MB. JPG, PNG veya WebP.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Avatar Photo -->
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-circle-user me-2"></i>Profil Fotoğrafı
+                                    </h3>
+                                    <div class="pedit-avatar-upload">
+                                        <div class="pedit-avatar-upload__current">
+                                            <div class="pedit-avatar-upload__ring">
+                                                <img src="https://picsum.photos/200/200?random=5"
+                                                     alt="Profil fotoğrafı önizleme"
+                                                     class="pedit-avatar-upload__img"
+                                                     id="avatarPreviewImg"
+                                                     loading="lazy">
+                                                <label for="avatarInput" class="pedit-avatar-upload__overlay" aria-label="Profil fotoğrafını değiştir">
+                                                    <i class="fa-solid fa-camera"></i>
+                                                </label>
+                                            </div>
+                                            <div class="pedit-avatar-upload__info">
+                                                <p class="pedit-avatar-upload__name">Elif Yıldız</p>
+                                                <p class="pedit-avatar-upload__username">@elifyildiz</p>
+                                                <label for="avatarInput" class="pedit-btn pedit-btn--sm pedit-btn--outline">
+                                                    <i class="fa-solid fa-upload me-1"></i>Fotoğraf Yükle
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <input type="file"
+                                               class="pedit-file-input"
+                                               id="avatarInput"
+                                               name="avatar"
+                                               accept="image/*"
+                                               aria-label="Profil fotoğrafı seç">
+                                        <p class="pedit-file-hint">
+                                            <i class="fa-solid fa-circle-info me-1"></i>Önerilen boyut: 400×400px. Maks. 2MB. JPG, PNG veya WebP.
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- - Section: Personal Info - -->
+                            <div class="pedit-section-panel d-none" id="section-info">
+
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-user me-2"></i>Kişisel Bilgiler
+                                    </h3>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_firstName">
+                                                    Ad <span class="pedit-form__required">*</span>
+                                                </label>
+                                                <input type="text" class="pedit-form__input" id="pf_firstName"
+                                                       name="first_name" value="Elif" required autocomplete="given-name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_lastName">
+                                                    Soyad <span class="pedit-form__required">*</span>
+                                                </label>
+                                                <input type="text" class="pedit-form__input" id="pf_lastName"
+                                                       name="last_name" value="Yıldız" required autocomplete="family-name">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_username">
+                                                    Kullanıcı Adı <span class="pedit-form__required">*</span>
+                                                </label>
+                                                <div class="pedit-form__input-prefix-wrap">
+                                                    <span class="pedit-form__prefix">@</span>
+                                                    <input type="text" class="pedit-form__input pedit-form__input--prefixed"
+                                                           id="pf_username" name="username" value="elifyildiz"
+                                                           required minlength="3" maxlength="30"
+                                                           pattern="[a-zA-Z0-9_]+">
+                                                </div>
+                                                <span class="pedit-form__hint">
+                                                    <i class="fa-solid fa-circle-info me-1"></i>Yalnızca harf, rakam ve alt çizgi. 3–30 karakter.
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_bio">
+                                                    Hakkımda <span class="pedit-form__char-info">
+                                                        <span id="bioCharCount">0</span>/300
+                                                    </span>
+                                                </label>
+                                                <textarea class="pedit-form__input pedit-form__textarea"
+                                                          id="pf_bio"
+                                                          name="bio"
+                                                          rows="4"
+                                                          maxlength="300"
+                                                          placeholder="Kendinizi kısaca tanıtın...">Kelimelerin arasında kaybolmayı seven bir ruh. Şiir, hikaye ve deneme yazıyorum. İstanbul'un sokaklarından, gökyüzünün renklerinden ilham alıyorum.</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_about">
+                                                    Uzun Hakkında Yazısı
+                                                </label>
+                                                <textarea class="pedit-form__input pedit-form__textarea"
+                                                          id="pf_about"
+                                                          name="about"
+                                                          rows="5"
+                                                          placeholder="Profilinizde görünecek detaylı hakkında yazısı...">2018'den beri edebiyat dünyasında aktif olan Elif Yıldız, özellikle modern şiir ve kısa hikaye alanlarında eserler veriyor. İstanbul Üniversitesi Türk Dili ve Edebiyatı mezunu. Boyalı Kelimeler'in kurucu yazarlarından.</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_location">
+                                                    <i class="fa-solid fa-location-dot me-1"></i>Konum
+                                                </label>
+                                                <input type="text" class="pedit-form__input" id="pf_location"
+                                                       name="location" value="İstanbul, Türkiye"
+                                                       placeholder="Şehir, Ülke" autocomplete="address-level2">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_website">
+                                                    <i class="fa-solid fa-globe me-1"></i>Website
+                                                </label>
+                                                <input type="url" class="pedit-form__input" id="pf_website"
+                                                       name="website" value="https://elifyildiz.com"
+                                                       placeholder="https://blogunuz.com">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_email">
+                                                    <i class="fa-solid fa-envelope me-1"></i>E-posta <span class="pedit-form__required">*</span>
+                                                </label>
+                                                <input type="email" class="pedit-form__input" id="pf_email"
+                                                       name="email" value="elif@boyalikelimeler.com"
+                                                       required autocomplete="email">
+                                                <span class="pedit-form__hint">
+                                                    <i class="fa-solid fa-circle-info me-1"></i>E-postanız değiştiğinde doğrulama e-postası gönderilecek.
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_birthdate">
+                                                    <i class="fa-solid fa-cake-candles me-1"></i>Doğum Tarihi
+                                                </label>
+                                                <input type="date" class="pedit-form__input" id="pf_birthdate"
+                                                       name="birthdate" value="1998-06-15">
+                                                <span class="pedit-form__hint">
+                                                    <i class="fa-solid fa-circle-info me-1"></i>Profilinizde gösterilmez, hesap doğrulama için kullanılır.
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_gender">
+                                                    <i class="fa-solid fa-venus-mars me-1"></i>Cinsiyet
+                                                </label>
+                                                <select class="pedit-form__select" id="pf_gender" name="gender">
+                                                    <option value="">Belirtmek istemiyorum</option>
+                                                    <option value="female" selected>Kadın</option>
+                                                    <option value="male">Erkek</option>
+                                                    <option value="other">Diğer</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- İlgi Alanları -->
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-tags me-2"></i>İlgi Alanları
+                                    </h3>
+                                    <p class="pedit-card__desc">Profilinizde görünmesini istediğiniz alanları seçin.</p>
+                                    <div class="pedit-interest-grid">
+                                        <label class="pedit-interest__item pedit-interest__item--active">
+                                            <input type="checkbox" name="interests[]" value="siir" checked>
+                                            <i class="fa-solid fa-feather-pointed"></i>Şiir
+                                        </label>
+                                        <label class="pedit-interest__item pedit-interest__item--active">
+                                            <input type="checkbox" name="interests[]" value="hikaye" checked>
+                                            <i class="fa-solid fa-book"></i>Kısa Hikaye
+                                        </label>
+                                        <label class="pedit-interest__item pedit-interest__item--active">
+                                            <input type="checkbox" name="interests[]" value="deneme" checked>
+                                            <i class="fa-solid fa-scroll"></i>Deneme
+                                        </label>
+                                        <label class="pedit-interest__item pedit-interest__item--active">
+                                            <input type="checkbox" name="interests[]" value="resim" checked>
+                                            <i class="fa-solid fa-paintbrush"></i>Sulu Boya
+                                        </label>
+                                        <label class="pedit-interest__item">
+                                            <input type="checkbox" name="interests[]" value="roman">
+                                            <i class="fa-solid fa-book-open"></i>Roman
+                                        </label>
+                                        <label class="pedit-interest__item pedit-interest__item--active">
+                                            <input type="checkbox" name="interests[]" value="felsefe" checked>
+                                            <i class="fa-solid fa-brain"></i>Felsefe
+                                        </label>
+                                        <label class="pedit-interest__item pedit-interest__item--active">
+                                            <input type="checkbox" name="interests[]" value="romantizm" checked>
+                                            <i class="fa-solid fa-heart"></i>Romantizm
+                                        </label>
+                                        <label class="pedit-interest__item">
+                                            <input type="checkbox" name="interests[]" value="elestiri">
+                                            <i class="fa-solid fa-magnifying-glass"></i>Eleştiri
+                                        </label>
+                                        <label class="pedit-interest__item">
+                                            <input type="checkbox" name="interests[]" value="mitoloji">
+                                            <i class="fa-solid fa-star"></i>Mitoloji
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- - Section: Social Media - -->
+                            <div class="pedit-section-panel d-none" id="section-social">
+
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-share-nodes me-2"></i>Sosyal Medya Hesapları
+                                    </h3>
+                                    <p class="pedit-card__desc">Profilinizde görünecek sosyal medya bağlantılarınızı girin.</p>
+
+                                    <div class="row g-3">
+                                        <!-- Instagram -->
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_instagram">
+                                                    <i class="fa-brands fa-instagram pedit-form__social-icon pedit-form__social-icon--instagram me-1"></i>Instagram
+                                                </label>
+                                                <div class="pedit-form__input-prefix-wrap">
+                                                    <span class="pedit-form__prefix">instagram.com/</span>
+                                                    <input type="text" class="pedit-form__input pedit-form__input--prefixed"
+                                                           id="pf_instagram" name="instagram" value="elifyildiz"
+                                                           placeholder="kullaniciadi">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Twitter / X -->
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_twitter">
+                                                    <i class="fa-brands fa-x-twitter pedit-form__social-icon pedit-form__social-icon--twitter me-1"></i>Twitter / X
+                                                </label>
+                                                <div class="pedit-form__input-prefix-wrap">
+                                                    <span class="pedit-form__prefix">x.com/</span>
+                                                    <input type="text" class="pedit-form__input pedit-form__input--prefixed"
+                                                           id="pf_twitter" name="twitter" value="elifyildiz_"
+                                                           placeholder="kullaniciadi">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- YouTube -->
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_youtube">
+                                                    <i class="fa-brands fa-youtube pedit-form__social-icon pedit-form__social-icon--youtube me-1"></i>YouTube
+                                                </label>
+                                                <div class="pedit-form__input-prefix-wrap">
+                                                    <span class="pedit-form__prefix">youtube.com/@</span>
+                                                    <input type="text" class="pedit-form__input pedit-form__input--prefixed"
+                                                           id="pf_youtube" name="youtube" value="ElifYildiz"
+                                                           placeholder="kanal-adi">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- TikTok -->
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_tiktok">
+                                                    <i class="fa-brands fa-tiktok pedit-form__social-icon me-1"></i>TikTok
+                                                </label>
+                                                <div class="pedit-form__input-prefix-wrap">
+                                                    <span class="pedit-form__prefix">tiktok.com/@</span>
+                                                    <input type="text" class="pedit-form__input pedit-form__input--prefixed"
+                                                           id="pf_tiktok" name="tiktok" value="elifyildiz"
+                                                           placeholder="kullaniciadi">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Spotify -->
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_spotify">
+                                                    <i class="fa-brands fa-spotify pedit-form__social-icon pedit-form__social-icon--spotify me-1"></i>Spotify (Podcast)
+                                                </label>
+                                                <div class="pedit-form__input-prefix-wrap">
+                                                    <span class="pedit-form__prefix">open.spotify.com/user/</span>
+                                                    <input type="text" class="pedit-form__input pedit-form__input--prefixed"
+                                                           id="pf_spotify" name="spotify"
+                                                           placeholder="kullanici-id">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- - Section: Privacy & Security - -->
+                            <div class="pedit-section-panel d-none" id="section-privacy">
+
+                                <!-- Change Password -->
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-key me-2"></i>Şifre Değiştir
+                                    </h3>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_oldPassword">Mevcut Şifre</label>
+                                                <div class="pedit-form__password-wrap">
+                                                    <input type="password" class="pedit-form__input" id="pf_oldPassword"
+                                                           name="old_password" placeholder="Mevcut şifreniz"
+                                                           autocomplete="current-password">
+                                                    <button type="button" class="pedit-form__eye" data-target="pf_oldPassword" aria-label="Şifreyi göster/gizle">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_newPassword">Yeni Şifre</label>
+                                                <div class="pedit-form__password-wrap">
+                                                    <input type="password" class="pedit-form__input" id="pf_newPassword"
+                                                           name="password" placeholder="En az 8 karakter"
+                                                           minlength="8" autocomplete="new-password">
+                                                    <button type="button" class="pedit-form__eye" data-target="pf_newPassword" aria-label="Şifreyi göster/gizle">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="pedit-form__group">
+                                                <label class="pedit-form__label" for="pf_confirmPassword">Yeni Şifre Tekrar</label>
+                                                <div class="pedit-form__password-wrap">
+                                                    <input type="password" class="pedit-form__input" id="pf_confirmPassword"
+                                                           name="password_confirmation" placeholder="Şifreyi tekrar girin"
+                                                           minlength="8" autocomplete="new-password">
+                                                    <button type="button" class="pedit-form__eye" data-target="pf_confirmPassword" aria-label="Şifreyi göster/gizle">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Privacy Settings -->
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-shield-halved me-2"></i>Gizlilik Ayarları
+                                    </h3>
+                                    <div class="pedit-toggle-list">
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label">Profilimi herkese açık göster</span>
+                                                <span class="pedit-toggle__desc">Kapalıysa yalnızca takipçileriniz profilinizi görebilir</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="toggle_public">
+                                                <input type="checkbox" id="toggle_public" name="is_public" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label">E-posta adresimi göster</span>
+                                                <span class="pedit-toggle__desc">E-postanız profilinizde görünür</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="toggle_email">
+                                                <input type="checkbox" id="toggle_email" name="show_email">
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label">Son görülmeyi göster</span>
+                                                <span class="pedit-toggle__desc">Çevrimiçi durumunuz diğer üyelere görünür</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="toggle_lastseen">
+                                                <input type="checkbox" id="toggle_lastseen" name="show_last_seen" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label">Özel mesaj almayı kabul et</span>
+                                                <span class="pedit-toggle__desc">Kapalıysa sadece takipçileriniz mesaj gönderebilir</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="toggle_msg">
+                                                <input type="checkbox" id="toggle_msg" name="allow_messages" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- - Section: Notifications - -->
+                            <div class="pedit-section-panel d-none" id="section-notifications">
+
+                                <div class="pedit-card">
+                                    <h3 class="pedit-card__title">
+                                        <i class="fa-solid fa-bell me-2"></i>Bildirim Tercihleri
+                                    </h3>
+                                    <div class="pedit-toggle-list">
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label"><i class="fa-solid fa-heart me-1 text-gold"></i>Beğeni bildirimleri</span>
+                                                <span class="pedit-toggle__desc">Eserleriniz beğenildiğinde</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="notif_like">
+                                                <input type="checkbox" id="notif_like" name="notif_like" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label"><i class="fa-solid fa-comment me-1 text-gold"></i>Yorum bildirimleri</span>
+                                                <span class="pedit-toggle__desc">Eserlerinize yorum yapıldığında</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="notif_comment">
+                                                <input type="checkbox" id="notif_comment" name="notif_comment" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label"><i class="fa-solid fa-user-plus me-1 text-gold"></i>Takipçi bildirimleri</span>
+                                                <span class="pedit-toggle__desc">Yeni takipçi kazandığınızda</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="notif_follow">
+                                                <input type="checkbox" id="notif_follow" name="notif_follow" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label"><i class="fa-solid fa-envelope me-1 text-gold"></i>E-posta bildirimleri</span>
+                                                <span class="pedit-toggle__desc">Önemli gelişmeleri e-posta ile al</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="notif_email">
+                                                <input type="checkbox" id="notif_email" name="notif_email" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label"><i class="fa-solid fa-newspaper me-1 text-gold"></i>Dergi bildirimleri</span>
+                                                <span class="pedit-toggle__desc">Boyalı Kelimeler dergisi yayınlandığında</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="notif_dergi">
+                                                <input type="checkbox" id="notif_dergi" name="notif_dergi" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                        <div class="pedit-toggle__item">
+                                            <div class="pedit-toggle__info">
+                                                <span class="pedit-toggle__label"><i class="fa-solid fa-trophy me-1 text-gold"></i>Yarışma bildirimleri</span>
+                                                <span class="pedit-toggle__desc">Yeni yarışmalar ve sonuçlar için</span>
+                                            </div>
+                                            <label class="pedit-toggle__switch" for="notif_contest">
+                                                <input type="checkbox" id="notif_contest" name="notif_contest" checked>
+                                                <span class="pedit-toggle__track"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- - Section: Danger Zone - -->
+                            <div class="pedit-section-panel d-none" id="section-danger">
+
+                                <div class="pedit-card pedit-card--danger">
+                                    <h3 class="pedit-card__title pedit-card__title--danger">
+                                        <i class="fa-solid fa-triangle-exclamation me-2"></i>Tehlikeli Bölge
+                                    </h3>
+
+                                    <div class="pedit-danger-list">
+                                        <div class="pedit-danger__item">
+                                            <div class="pedit-danger__info">
+                                                <span class="pedit-danger__label">Hesabı Devre Dışı Bırak</span>
+                                                <span class="pedit-danger__desc">Hesabınız geçici olarak gizlenir. İstediğinizde tekrar aktif edebilirsiniz.</span>
+                                            </div>
+                                            <button type="button" class="pedit-danger__btn pedit-danger__btn--warn">
+                                                <i class="fa-solid fa-eye-slash me-1"></i>Devre Dışı Bırak
+                                            </button>
+                                        </div>
+                                        <div class="pedit-danger__item">
+                                            <div class="pedit-danger__info">
+                                                <span class="pedit-danger__label">Hesabı Kalıcı Olarak Sil</span>
+                                                <span class="pedit-danger__desc">Tüm yazılarınız, resimleriniz ve verileriniz kalıcı olarak silinir. Bu işlem geri alınamaz.</span>
+                                            </div>
+                                            <button type="button" class="pedit-danger__btn pedit-danger__btn--delete">
+                                                <i class="fa-solid fa-trash me-1"></i>Hesabı Sil
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Save Button (bottom) -->
+                            <div class="pedit-form__save-bar" id="saveBar">
+                                <p class="pedit-form__save-info">
+                                    <i class="fa-solid fa-circle-info me-1"></i>Değişiklikler kaydedilmedi
+                                </p>
+                                <div class="d-flex gap-2">
+                                    <a href="profile.html" class="pedit-btn pedit-btn--ghost">
+                                        <i class="fa-solid fa-xmark me-1"></i>İptal
+                                    </a>
+                                    <button type="submit" class="pedit-btn pedit-btn--primary">
+                                        <i class="fa-solid fa-floppy-disk me-1"></i>Kaydet
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site alt bilgi">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="#" class="footer-bk__link">Hakkımızda</a>
+                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="#" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">İletişim</h5>
+                    <p class="footer-bk__text">
+                        <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
+                    </p>
+                    <p class="footer-bk__text">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+    <script>
+        // -- Section Navigation
+        var navItems = document.querySelectorAll('.pedit-nav__item');
+        var panels = document.querySelectorAll('.pedit-section-panel');
+
+        navItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                navItems.forEach(function(n) { n.classList.remove('pedit-nav__item--active'); });
+                panels.forEach(function(p) { p.classList.add('d-none'); });
+
+                this.classList.add('pedit-nav__item--active');
+                var target = this.getAttribute('data-target');
+                var panel = document.getElementById(target);
+                if (panel) panel.classList.remove('d-none');
+            });
+        });
+
+        // -- Bio character counter
+        var bioInput = document.getElementById('pf_bio');
+        var bioCount = document.getElementById('bioCharCount');
+        if (bioInput && bioCount) {
+            bioCount.textContent = bioInput.value.length;
+            bioInput.addEventListener('input', function() {
+                bioCount.textContent = this.value.length;
+            });
+        }
+
+        // -- Cover photo preview
+        var coverInput = document.getElementById('coverInput');
+        var coverImg = document.getElementById('coverPreviewImg');
+        if (coverInput && coverImg) {
+            coverInput.addEventListener('change', function() {
+                var file = this.files[0];
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = function(e) { coverImg.src = e.target.result; };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // -- Avatar photo preview
+        var avatarInput = document.getElementById('avatarInput');
+        var avatarImg = document.getElementById('avatarPreviewImg');
+        if (avatarInput && avatarImg) {
+            avatarInput.addEventListener('change', function() {
+                var file = this.files[0];
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = function(e) { avatarImg.src = e.target.result; };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // -- Interest checkbox toggle
+        document.querySelectorAll('.pedit-interest__item input').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                this.closest('.pedit-interest__item').classList.toggle('pedit-interest__item--active', this.checked);
+            });
+        });
+
+        // -- Password toggle
+        document.querySelectorAll('.pedit-form__eye').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.getAttribute('data-target');
+                var input = document.getElementById(id);
+                var icon = this.querySelector('i');
+                if (!input) return;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+        });
+
+        // -- Show save bar on any change
+        var form = document.getElementById('profileEditForm');
+        var saveBar = document.getElementById('saveBar');
+        if (form && saveBar) {
+            form.addEventListener('change', function() {
+                saveBar.classList.add('pedit-form__save-bar--visible');
+            });
+        }
+    </script>
+</body>
+</html>

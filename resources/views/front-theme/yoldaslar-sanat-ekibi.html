@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>Sanat Ekibi — Boyalı Kelimeler Yoldaşları</title>
+    <meta name="description" content="Boyalı Kelimeler sanat ekibi ile tanışın. Sanat koordinatörleri, küratörler ve yaratıcı ekibimiz.">
+    <meta name="keywords" content="boyalı kelimeler, sanat ekibi, sanat koordinatörleri, ressam, yazar, yoldaşlar">
+    <link rel="canonical" href="https://boyalikelimeler.com/yoldaslar/sanat-ekibi">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sanat Ekibi — Boyalı Kelimeler Yoldaşları">
+    <meta property="og:description" content="Boyalı Kelimeler sanat ekibi ile tanışın. Sanat koordinatörleri, küratörler ve yaratıcı ekibimiz.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boyalikelimeler.com/yoldaslar/sanat-ekibi">
+    <meta property="og:image" content="https://boyalikelimeler.com/images/og-cover.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link (Accessibility) -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <!-- Logo -->
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <!-- Mega Navbar -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <!-- Ana Sayfa -->
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+
+                    <!-- Edebiyat — Mega Dropdown -->
+                    <li class="nav-item navbar-bk__mega-item">
+                        <a class="nav-link navbar-bk__link navbar-bk__link--dropdown" href="#" role="button" aria-expanded="false">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                            <i class="fa-solid fa-chevron-down navbar-bk__chevron"></i>
+                        </a>
+                        <div class="navbar-bk__mega-menu">
+                            <div class="container-fluid">
+                                <div class="row g-0">
+                                    <div class="col-lg-3 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-feather me-2"></i>Şiir
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Son Şiirler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Popüler Şiirler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Şiir Yarışması</a>
+                                        <a href="#" class="navbar-bk__mega-link">Şair Portreleri</a>
+                                    </div>
+                                    <div class="col-lg-3 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-pen-nib me-2"></i>Hikaye
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Son Hikayeler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Kısa Öyküler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Uzun Hikayeler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Hikaye Atölyesi</a>
+                                    </div>
+                                    <div class="col-lg-3 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-scroll me-2"></i>Deneme & Makale
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Son Denemeler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Eleştiri Yazıları</a>
+                                        <a href="#" class="navbar-bk__mega-link">Edebiyat Sohbetleri</a>
+                                        <a href="#" class="navbar-bk__mega-link">Kitap İncelemeleri</a>
+                                    </div>
+                                    <div class="col-lg-3 navbar-bk__mega-col navbar-bk__mega-col--highlight">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-award me-2"></i>Altın Kalem
+                                        </h6>
+                                        <p class="navbar-bk__mega-desc">2026 yazı yarışması başvuruları devam ediyor!</p>
+                                        <a href="#" class="btn-gold-outline navbar-bk__mega-btn">Başvur</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Sanat — Mega Dropdown -->
+                    <li class="nav-item navbar-bk__mega-item">
+                        <a class="nav-link navbar-bk__link navbar-bk__link--dropdown" href="#" role="button" aria-expanded="false">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                            <i class="fa-solid fa-chevron-down navbar-bk__chevron"></i>
+                        </a>
+                        <div class="navbar-bk__mega-menu">
+                            <div class="container-fluid">
+                                <div class="row g-0">
+                                    <div class="col-lg-3 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-paintbrush me-2"></i>Resim Galerisi
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Son Eserler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Yağlıboya</a>
+                                        <a href="#" class="navbar-bk__mega-link">Suluboya</a>
+                                        <a href="#" class="navbar-bk__mega-link">Dijital Sanat</a>
+                                    </div>
+                                    <div class="col-lg-3 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-graduation-cap me-2"></i>Sanat Okulu
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Video Dersler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Resim Teknikleri</a>
+                                        <a href="#" class="navbar-bk__mega-link">Yazarlık Dersleri</a>
+                                        <a href="#" class="navbar-bk__mega-link">Tüm Kategoriler</a>
+                                    </div>
+                                    <div class="col-lg-3 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-users me-2"></i>Sanatçılar
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Ressamlarımız</a>
+                                        <a href="#" class="navbar-bk__mega-link">Yazarlarımız</a>
+                                        <a href="#" class="navbar-bk__mega-link">Sanatçı Başvurusu</a>
+                                    </div>
+                                    <div class="col-lg-3 navbar-bk__mega-col navbar-bk__mega-col--highlight">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-paintbrush me-2"></i>Altın Fırça
+                                        </h6>
+                                        <p class="navbar-bk__mega-desc">Resim yarışmasına eserlerinizi gönderin!</p>
+                                        <a href="#" class="btn-gold-outline navbar-bk__mega-btn">Katıl</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Söz Meydanı — Dropdown -->
+                    <li class="nav-item navbar-bk__mega-item">
+                        <a class="nav-link navbar-bk__link navbar-bk__link--dropdown" href="#" role="button" aria-expanded="false">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                            <i class="fa-solid fa-chevron-down navbar-bk__chevron"></i>
+                        </a>
+                        <div class="navbar-bk__mega-menu navbar-bk__mega-menu--compact">
+                            <div class="container-fluid">
+                                <div class="row g-0">
+                                    <div class="col-lg-4 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-message me-2"></i>Soru & Cevap
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Son Sorular</a>
+                                        <a href="#" class="navbar-bk__mega-link">Popüler Konular</a>
+                                        <a href="#" class="navbar-bk__mega-link">Soru Sor</a>
+                                    </div>
+                                    <div class="col-lg-4 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-chart-bar me-2"></i>Anketler
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Aktif Anketler</a>
+                                        <a href="#" class="navbar-bk__mega-link">Sonuçlar</a>
+                                    </div>
+                                    <div class="col-lg-4 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-film me-2"></i>Kültür Köşesi
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Film Önerileri</a>
+                                        <a href="#" class="navbar-bk__mega-link">Müzik Önerileri</a>
+                                        <a href="#" class="navbar-bk__mega-link">Astroloji</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Dergimiz -->
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+
+                    <!-- Hakkımızda — Dropdown -->
+                    <li class="nav-item navbar-bk__mega-item">
+                        <a class="nav-link navbar-bk__link navbar-bk__link--dropdown active" href="#" role="button" aria-expanded="false">
+                            <i class="fa-solid fa-circle-info me-1"></i>Hakkımızda
+                            <i class="fa-solid fa-chevron-down navbar-bk__chevron"></i>
+                        </a>
+                        <div class="navbar-bk__mega-menu navbar-bk__mega-menu--compact">
+                            <div class="container-fluid">
+                                <div class="row g-0">
+                                    <div class="col-lg-4 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-building me-2"></i>Kurumsal
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Biz Kimiz?</a>
+                                        <a href="#" class="navbar-bk__mega-link">Misyon & Vizyon</a>
+                                        <a href="#" class="navbar-bk__mega-link">Yönetim Ekibi</a>
+                                    </div>
+                                    <div class="col-lg-4 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-handshake me-2"></i>Katılın
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Yazar Başvurusu</a>
+                                        <a href="#" class="navbar-bk__mega-link">Ressam Başvurusu</a>
+                                        <a href="#" class="navbar-bk__mega-link">Reklam Verin</a>
+                                    </div>
+                                    <div class="col-lg-4 navbar-bk__mega-col">
+                                        <h6 class="navbar-bk__mega-heading">
+                                            <i class="fa-solid fa-envelope me-2"></i>İletişim
+                                        </h6>
+                                        <a href="#" class="navbar-bk__mega-link">Bize Yazın</a>
+                                        <a href="#" class="navbar-bk__mega-link">WhatsApp</a>
+                                        <a href="#" class="navbar-bk__mega-link">Sosyal Medya</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- İletişim -->
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Auth Buttons -->
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="login.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş Yap
+                    </a>
+                    <a href="register.html" class="navbar-bk__auth-btn">
+                        <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main">
+
+        <!-- =======================================================
+             PAGE HEADER
+        ======================================================= -->
+        <section class="page-header">
+            <div class="container">
+                <div class="page-header__inner">
+                    <!-- Breadcrumb -->
+                    <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
+                        <a href="yoldaslar.html" class="page-header__breadcrumb-link">
+                            <i class="fa-solid fa-users me-1"></i>Yoldaşlar
+                        </a>
+                        <i class="fa-solid fa-chevron-right page-header__breadcrumb-sep"></i>
+                        <span class="page-header__breadcrumb-current">Sanat Ekibi</span>
+                    </nav>
+                    <h1 class="page-header__title">
+                        <i class="fa-solid fa-palette me-2"></i>Sanat Ekibi
+                    </h1>
+                    <div class="page-header__divider"></div>
+                    <p class="page-header__desc">
+                        Fırçanın ve kalemin buluştuğu nokta. Boyalı Kelimeler'in yaratıcı ruhunu şekillendiren sanatçılarımız.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =======================================================
+             TEAM MEMBERS
+        ======================================================= -->
+        <section class="section">
+            <div class="container">
+
+                <!-- Toolbar: Arama + Siralama -->
+                <div class="member-toolbar">
+                    <div class="member-toolbar__search">
+                        <i class="fa-solid fa-magnifying-glass member-toolbar__search-icon"></i>
+                        <input type="text"
+                               id="memberSearch"
+                               class="member-toolbar__input"
+                               placeholder="Yoldaş ara..."
+                               autocomplete="off">
+                    </div>
+                    <div class="member-toolbar__sort">
+                        <button class="member-toolbar__sort-btn member-toolbar__sort-btn--active" type="button" data-sort="default" title="Varsayılan">
+                            <i class="fa-solid fa-clock me-1"></i>Varsayılan
+                        </button>
+                        <button class="member-toolbar__sort-btn" type="button" data-sort="az" title="A'dan Z'ye">
+                            <i class="fa-solid fa-arrow-down-a-z me-1"></i>A-Z
+                        </button>
+                        <button class="member-toolbar__sort-btn" type="button" data-sort="za" title="Z'den A'ya">
+                            <i class="fa-solid fa-arrow-down-z-a me-1"></i>Z-A
+                        </button>
+                        <button class="member-toolbar__sort-btn" type="button" data-sort="random" title="Rastgele">
+                            <i class="fa-solid fa-shuffle me-1"></i>Rastgele
+                        </button>
+                    </div>
+                </div>
+
+                <div class="member-toolbar__count" id="memberCount">
+                    <span id="memberCountText">8 yoldaş gösteriliyor</span>
+                </div>
+
+                <div class="row g-4" id="memberGrid">
+
+                    <!-- Ayşe Ayaz -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="AA">
+                                    <img src="public/images/team/ayse-ayaz.jpg"
+                                         alt="Ayşe Ayaz"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Ayşe Ayaz</h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Sanat Koordinatörü &amp; Ressam</p>
+                        </article>
+                    </div>
+
+                    <!-- Hazal Sultan -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="HS">
+                                    <img src="public/images/team/hazal-sultan.jpg"
+                                         alt="Hazal Sultan"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Hazal Sultan</h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Organize Sorumlusu &amp; Ressam</p>
+                        </article>
+                    </div>
+
+                    <!-- Derya İLDAN (Ezo) -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="Dİ">
+                                    <img src="public/images/team/derya-ildan.jpg"
+                                         alt="Derya İldan (Ezo)"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Derya İLDAN <span class="member-card__nick">(Ezo)</span></h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Proje Geliştirme Sorumlusu &amp; Dekoratif Boyama Sanatçısı</p>
+                        </article>
+                    </div>
+
+                    <!-- Yasemin ERİM -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="YE">
+                                    <img src="public/images/team/yasemin-erim.jpg"
+                                         alt="Yasemin Erim"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Yasemin ERİM</h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Sanat Okulu Koordinatörü &amp; Ebru Sanatçısı</p>
+                        </article>
+                    </div>
+
+                    <!-- Nurcan BULUN -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="NB">
+                                    <img src="public/images/team/nurcan-bulun.jpg"
+                                         alt="Nurcan Bulun"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Nurcan BULUN</h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Sanat Küratörü &amp; Ressam</p>
+                        </article>
+                    </div>
+
+                    <!-- Sümeyra Ağaoğlu -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="SA">
+                                    <img src="public/images/team/sumeyra-agaoglu.jpg"
+                                         alt="Sümeyra Ağaoğlu"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Sümeyra Ağaoğlu</h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Marka ve Reklam Yüzü &amp; Yazar</p>
+                        </article>
+                    </div>
+
+                    <!-- Dr. Canan ŞENGÜL -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="CŞ">
+                                    <img src="public/images/team/canan-sengul.jpg"
+                                         alt="Dr. Canan Şengül"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Dr. Canan ŞENGÜL</h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Moderatör &amp; Şiir Seslendirmen &amp; Ressam &amp; Yazar</p>
+                        </article>
+                    </div>
+
+                    <!-- Ziyad ALDAHİR -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <article class="member-card">
+                            <div class="member-card__avatar-wrap">
+                                <div class="member-card__avatar" data-initials="ZA">
+                                    <img src="public/images/team/ziyad-aldahir.jpg"
+                                         alt="Ziyad Aldahir"
+                                         class="member-card__photo"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'">
+                                </div>
+                                <div class="member-card__glow"></div>
+                            </div>
+                            <h3 class="member-card__name">Ziyad ALDAHİR</h3>
+                            <div class="member-card__line"></div>
+                            <p class="member-card__role">Sanat Küratörü &amp; Ressam</p>
+                        </article>
+                    </div>
+
+                </div>
+
+                <!-- No Results Message -->
+                <div class="member-no-result" id="memberNoResult">
+                    <i class="fa-solid fa-search member-no-result__icon"></i>
+                    <p class="member-no-result__text">Aramanızla eşleşen yoldaş bulunamadı.</p>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="member-pagination" id="memberPagination" aria-label="Sayfalama">
+                    <button class="member-pagination__btn member-pagination__btn--prev" type="button" id="paginationPrev" aria-label="Onceki sayfa">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="member-pagination__pages" id="paginationPages">
+                    </div>
+                    <button class="member-pagination__btn member-pagination__btn--next" type="button" id="paginationNext" aria-label="Sonraki sayfa">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </nav>
+
+                <!-- Back Link -->
+                <div class="text-center mt-4">
+                    <a href="yoldaslar.html" class="member-back-link">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Tüm Ekiplere Dön
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site footer">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="#" class="footer-bk__link">Hakkımızda</a>
+                        <a href="yoldaslar.html" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="#" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Destek</h5>
+                    <nav aria-label="Destek linkleri">
+                        <a href="#" class="footer-bk__link">SSS</a>
+                        <a href="#" class="footer-bk__link">Kullanım Şartları</a>
+                    </nav>
+                    <p class="footer-bk__text mt-3">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+</body>
+</html>

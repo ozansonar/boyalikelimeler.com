@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>İçerikler — Boyalı Kelimeler</title>
+    <meta name="description" content="Boyalı Kelimeler yazarlarının en güzel yazılarını keşfedin. Şiir, hikaye, deneme, roman ve daha fazlası.">
+    <meta name="keywords" content="boyalı kelimeler, yazılar, şiir, hikaye, deneme, roman, edebiyat">
+    <link rel="canonical" href="https://boyalikelimeler.com/icerikler">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="İçerikler — Boyalı Kelimeler">
+    <meta property="og:description" content="Yazarlarımızın en güzel eserlerini keşfedin.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boyalikelimeler.com/icerikler">
+    <meta property="og:image" content="https://boyalikelimeler.com/images/og-cover.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link active" href="#">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="iletisim.html">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="login.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş
+                    </a>
+                    <a href="register.html" class="btn-gold-sm">
+                        <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =======================================================
+         MAIN — İÇERİKLER
+    ======================================================= -->
+    <main id="main">
+
+        <!-- Page Hero -->
+        <section class="clist-hero" aria-label="İçerikler başlığı">
+            <div class="container">
+                <div class="clist-hero__inner">
+                    <h1 class="clist-hero__title">
+                        <i class="fa-solid fa-feather-pointed me-3"></i>İçerikler
+                    </h1>
+                    <p class="clist-hero__desc">
+                        Yazarlarımızın kaleminden dökülen en güzel eserler. Şiirden hikayeye, denemeden romana — kelimelerin boyandığı dünya.
+                    </p>
+                    <div class="clist-hero__stats">
+                        <span class="clist-hero__stat">
+                            <i class="fa-solid fa-file-lines me-1"></i>248 Yazı
+                        </span>
+                        <span class="clist-hero__stat-sep">|</span>
+                        <span class="clist-hero__stat">
+                            <i class="fa-solid fa-users me-1"></i>42 Yazar
+                        </span>
+                        <span class="clist-hero__stat-sep">|</span>
+                        <span class="clist-hero__stat">
+                            <i class="fa-solid fa-eye me-1"></i>128K Okunma
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content List Section -->
+        <section class="clist-section" aria-label="İçerik listesi">
+            <div class="container">
+
+                <!-- Toolbar: Search + Filter + Grid Switcher -->
+                <div class="clist-toolbar">
+                    <div class="clist-toolbar__search">
+                        <i class="fa-solid fa-magnifying-glass clist-toolbar__search-icon"></i>
+                        <input type="text"
+                               class="wpost-form__input clist-toolbar__search-input"
+                               placeholder="Yazılarda ara...">
+                    </div>
+                    <div class="clist-toolbar__filters">
+                        <select class="wpost-form__input clist-toolbar__select">
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="siir">Şiir</option>
+                            <option value="hikaye">Hikaye</option>
+                            <option value="deneme">Deneme</option>
+                            <option value="roman">Roman</option>
+                            <option value="tarih">Tarih</option>
+                            <option value="kisisel-gelisim">Kişisel Gelişim</option>
+                        </select>
+                        <select class="wpost-form__input clist-toolbar__select">
+                            <option value="newest">En Yeni</option>
+                            <option value="popular">En Çok Okunan</option>
+                            <option value="liked">En Çok Beğenilen</option>
+                        </select>
+                    </div>
+                    <div class="clist-toolbar__view" aria-label="Görünüm seçici">
+                        <button type="button" class="clist-toolbar__view-btn" data-cols="2" title="2 Kolon" aria-label="2 Kolon görünüm">
+                            <i class="fa-solid fa-pause me-1"></i>2
+                        </button>
+                        <button type="button" class="clist-toolbar__view-btn clist-toolbar__view-btn--active" data-cols="3" title="3 Kolon" aria-label="3 Kolon görünüm">
+                            <i class="fa-solid fa-th-large me-1"></i>3
+                        </button>
+                        <button type="button" class="clist-toolbar__view-btn" data-cols="4" title="4 Kolon" aria-label="4 Kolon görünüm">
+                            <i class="fa-solid fa-th me-1"></i>4
+                        </button>
+                        <button type="button" class="clist-toolbar__view-btn" data-cols="5" title="5 Kolon" aria-label="5 Kolon görünüm">
+                            <i class="fa-solid fa-border-all me-1"></i>5
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content Cards Grid -->
+                <div class="clist-grid" id="clistGrid" data-cols="3">
+
+                    <!-- Card 1 -->
+                    <article class="clist-card">
+                        <a href="icerik-detay.html" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--roman">
+                                    <i class="fa-solid fa-book me-1"></i>Roman
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-26">
+                                    <i class="fa-regular fa-calendar me-1"></i>26 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>3.412
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="icerik-detay.html">Toplumsal Bellek ve Roman: Yaşar Kemal Üzerine</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Yaşar Kemal'in romanlarında toplumsal bellek nasıl inşa edilir? Anadolu'nun derin köklerinden beslenen anlatılar...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Elif Kaya</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>247</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--gelisim">
+                                    <i class="fa-solid fa-seedling me-1"></i>Kişisel Gelişim
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-24">
+                                    <i class="fa-regular fa-calendar me-1"></i>24 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>2.103
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Kişisel Gelişimde Okuma Alışkanlığının Rolü</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Okumak yalnızca bilgi edinmek değil, aynı zamanda zihinsel bir dönüşüm sürecidir...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Ahmet Yılmaz</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>189</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-pen-fancy"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--deneme">
+                                    <i class="fa-solid fa-scroll me-1"></i>Deneme
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-22">
+                                    <i class="fa-regular fa-calendar me-1"></i>22 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>1.890
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Deneme: Sessizliğin Dili</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Sessizlik, kelimelerin tükendiği yer değil; aksine, en derin anlamların yeşerdiği toprak...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Zeynep Demir</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>156</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 4 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-landmark"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--tarih">
+                                    <i class="fa-solid fa-clock-rotate-left me-1"></i>Tarih
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-20">
+                                    <i class="fa-regular fa-calendar me-1"></i>20 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>1.245
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Osmanlı'da Sanatın İzleri: Minyatürden Ebruya</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Osmanlı medeniyetinin sanatla yoğrulmuş hikayesini minyatür ve ebru sanatı üzerinden keşfediyoruz...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Mehmet Aksoy</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>98</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 5 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--cocuk">
+                                    <i class="fa-solid fa-child-reaching me-1"></i>Çocuk Edebiyatı
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-18">
+                                    <i class="fa-regular fa-calendar me-1"></i>18 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>987
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Çocuk Edebiyatında Masal Geleneği ve Modern Yorumlar</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Anadolu masal geleneğinin modern çocuk edebiyatına yansımaları. Geleneksel anlatı kalıplarıyla çağdaş hikayeler...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Ayşe Çelik</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>72</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 6 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-mountain-sun"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--gezi">
+                                    <i class="fa-solid fa-map-location-dot me-1"></i>Gezi Yazısı
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-15">
+                                    <i class="fa-regular fa-calendar me-1"></i>15 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>756
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Anadolu'nun Kayıp Şehirleri: Bir Gezi Yazısı</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Anadolu topraklarının derinliklerinde uyuyan antik şehirleri ziyaret ediyoruz. Tarih kokan sokaklarda...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Can Özkan</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>65</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 7 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-feather"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--siir">
+                                    <i class="fa-solid fa-feather me-1"></i>Şiir
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-12">
+                                    <i class="fa-regular fa-calendar me-1"></i>12 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>1.523
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Karanfil Kokulu Mektuplar: Bir Şiir Seçkisi</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Sevdanın mürekkepli dilinde karanfil kokulu dizeler. Hasretin ve kavuşmanın şiire dökülen halleri...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Selin Arslan</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>312</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 8 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-pen-nib"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--hikaye">
+                                    <i class="fa-solid fa-pen-nib me-1"></i>Hikaye
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-10">
+                                    <i class="fa-regular fa-calendar me-1"></i>10 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>2.340
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Son Durak: İstanbul — Bir Kısa Öykü</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Yıl 1978, bir sonbahar akşamı. Haydarpaşa Garı'ndan kalkan son trenin penceresinden İstanbul'a veda...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Burak Şahin</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>198</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 9 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-masks-theater"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--elestiri">
+                                    <i class="fa-solid fa-magnifying-glass me-1"></i>Eleştiri
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-08">
+                                    <i class="fa-regular fa-calendar me-1"></i>8 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>1.102
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Türk Tiyatrosunda Absürd Akım: Beckett'ten Ferhan Şensoy'a</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                Absürd tiyatronun Avrupa'daki doğuşundan Türk tiyatrosundaki yansımalarına bir yolculuk...
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Deniz Koç</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>87</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 10 -->
+                    <article class="clist-card">
+                        <a href="#" class="clist-card__thumb-link">
+                            <div class="clist-card__thumb">
+                                <div class="clist-card__thumb-placeholder">
+                                    <i class="fa-solid fa-scroll"></i>
+                                </div>
+                                <span class="clist-card__category clist-card__category--deneme">
+                                    <i class="fa-solid fa-scroll me-1"></i>Deneme
+                                </span>
+                            </div>
+                        </a>
+                        <div class="clist-card__body">
+                            <div class="clist-card__meta-top">
+                                <time class="clist-card__date" datetime="2026-02-05">
+                                    <i class="fa-regular fa-calendar me-1"></i>5 Şub 2026
+                                </time>
+                                <span class="clist-card__views">
+                                    <i class="fa-solid fa-eye me-1"></i>845
+                                </span>
+                            </div>
+                            <h3 class="clist-card__title">
+                                <a href="#">Dijital Çağda Kütüphane Kültürü ve Kitabın Geleceği</a>
+                            </h3>
+                            <p class="clist-card__excerpt">
+                                E-kitaplar ve dijital platformlar çağında geleneksel kütüphane kültürü nereye evrilecek?
+                            </p>
+                            <div class="clist-card__footer">
+                                <a href="#" class="clist-card__author">
+                                    <div class="clist-card__avatar"><i class="fa-solid fa-user"></i></div>
+                                    <span class="clist-card__author-name">Hakan Tunç</span>
+                                </a>
+                                <div class="clist-card__stats">
+                                    <span class="clist-card__stat"><i class="fa-solid fa-heart me-1"></i>63</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- Pagination -->
+                <nav class="clist-pagination" aria-label="Sayfalama">
+                    <button class="clist-pagination__btn clist-pagination__btn--prev" disabled aria-label="Önceki sayfa">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="clist-pagination__page clist-pagination__page--active" aria-current="page">1</button>
+                    <button class="clist-pagination__page" aria-label="Sayfa 2">2</button>
+                    <button class="clist-pagination__page" aria-label="Sayfa 3">3</button>
+                    <span class="clist-pagination__dots">...</span>
+                    <button class="clist-pagination__page" aria-label="Sayfa 25">25</button>
+                    <button class="clist-pagination__btn clist-pagination__btn--next" aria-label="Sonraki sayfa">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </nav>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site alt bilgi">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="#" class="footer-bk__link">Hakkımızda</a>
+                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="iletisim.html" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">İletişim</h5>
+                    <p class="footer-bk__text">
+                        <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
+                    </p>
+                    <p class="footer-bk__text">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        var grid = document.getElementById('clistGrid');
+        var viewBtns = document.querySelectorAll('.clist-toolbar__view-btn');
+
+        viewBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var cols = this.getAttribute('data-cols');
+
+                viewBtns.forEach(function (b) {
+                    b.classList.remove('clist-toolbar__view-btn--active');
+                });
+                this.classList.add('clist-toolbar__view-btn--active');
+
+                grid.setAttribute('data-cols', cols);
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

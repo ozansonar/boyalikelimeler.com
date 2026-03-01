@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>İstatistiklerim — Boyalı Kelimeler</title>
+    <meta name="description" content="Yazılarınızın okunma istatistiklerini görüntüleyin. Aylık, haftalık ve günlük detaylı grafikler.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://boyalikelimeler.com/istatistiklerim">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="iletisim.html">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="profile.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-arrow-left me-1"></i>Profile Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =======================================================
+         MAIN — İSTATİSTİKLERİM
+    ======================================================= -->
+    <main id="main">
+        <section class="wpost-section" aria-label="İstatistiklerim">
+            <div class="container">
+
+                <!-- Page Header -->
+                <div class="wpost-header">
+                    <div class="wpost-header__left">
+                        <a href="profile.html" class="wpost-header__back">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Profile Dön
+                        </a>
+                        <h1 class="wpost-header__title">
+                            <i class="fa-solid fa-chart-line me-2"></i>İstatistiklerim
+                        </h1>
+                    </div>
+                    <div class="wpost-header__actions">
+                        <a href="yazilarim.html" class="wpost-btn wpost-btn--ghost">
+                            <i class="fa-solid fa-file-lines me-1"></i>Yazılarım
+                        </a>
+                        <a href="yazi-gonder.html" class="wpost-btn wpost-btn--primary">
+                            <i class="fa-solid fa-feather-pointed me-1"></i>Yeni Yazı
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     GENEL İSTATİSTİKLER
+                ============================================= -->
+
+                <!-- Stats Summary Cards -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-lg-3">
+                        <div class="stats-card">
+                            <div class="stats-card__icon">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number">12.458</span>
+                                <span class="stats-card__label">Toplam Okunma</span>
+                            </div>
+                            <div class="stats-card__trend stats-card__trend--up">
+                                <i class="fa-solid fa-arrow-trend-up me-1"></i>%18
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stats-card">
+                            <div class="stats-card__icon stats-card__icon--purple">
+                                <i class="fa-solid fa-file-lines"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number">10</span>
+                                <span class="stats-card__label">Yayındaki Yazı</span>
+                            </div>
+                            <div class="stats-card__trend stats-card__trend--up">
+                                <i class="fa-solid fa-arrow-trend-up me-1"></i>%25
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stats-card">
+                            <div class="stats-card__icon stats-card__icon--teal">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number">1.246</span>
+                                <span class="stats-card__label">Ort. Okunma / Yazı</span>
+                            </div>
+                            <div class="stats-card__trend stats-card__trend--up">
+                                <i class="fa-solid fa-arrow-trend-up me-1"></i>%7
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stats-card">
+                            <div class="stats-card__icon stats-card__icon--rose">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number">843</span>
+                                <span class="stats-card__label">Toplam Beğeni</span>
+                            </div>
+                            <div class="stats-card__trend stats-card__trend--down">
+                                <i class="fa-solid fa-arrow-trend-down me-1"></i>%3
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- General Chart: Monthly Reads for All Posts -->
+                <div class="wpost-card mb-4">
+                    <div class="stats-chart-header">
+                        <div class="stats-chart-header__left">
+                            <h3 class="wpost-card__title">
+                                <i class="fa-solid fa-chart-area me-2"></i>Genel Okunma İstatistikleri
+                            </h3>
+                            <p class="stats-chart-header__desc">Tüm yazılarınızın aylık toplam okunma sayıları</p>
+                        </div>
+                        <div class="stats-chart-header__right">
+                            <select class="wpost-form__input stats-year-select" id="generalYearSelect">
+                                <option value="2026" selected>2026</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="stats-chart-wrap">
+                        <canvas id="generalChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Posts Table -->
+                <div class="wpost-card mb-4">
+                    <h3 class="wpost-card__title">
+                        <i class="fa-solid fa-trophy me-2"></i>En Çok Okunan Yazılarınız
+                    </h3>
+                    <div class="myposts-table-wrap">
+                        <table class="myposts-table">
+                            <thead>
+                                <tr>
+                                    <th class="myposts-table__th">#</th>
+                                    <th class="myposts-table__th myposts-table__th--title">Yazı Başlığı</th>
+                                    <th class="myposts-table__th">Kategori</th>
+                                    <th class="myposts-table__th">Okunma</th>
+                                    <th class="myposts-table__th">Beğeni</th>
+                                    <th class="myposts-table__th">Ort. Okuma Süresi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="myposts-table__row">
+                                    <td class="myposts-table__td">
+                                        <span class="stats-rank stats-rank--gold">1</span>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <a href="#" class="myposts-table__title-link">Toplumsal Bellek ve Roman: Yaşar Kemal Üzerine</a>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <span class="myposts-badge myposts-badge--category">Roman</span>
+                                    </td>
+                                    <td class="myposts-table__td"><strong>3.412</strong></td>
+                                    <td class="myposts-table__td">247</td>
+                                    <td class="myposts-table__td myposts-table__td--muted">6 dk 12 sn</td>
+                                </tr>
+                                <tr class="myposts-table__row">
+                                    <td class="myposts-table__td">
+                                        <span class="stats-rank stats-rank--silver">2</span>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <a href="#" class="myposts-table__title-link">Kişisel Gelişimde Okuma Alışkanlığının Rolü</a>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <span class="myposts-badge myposts-badge--category">Kişisel Gelişim</span>
+                                    </td>
+                                    <td class="myposts-table__td"><strong>2.103</strong></td>
+                                    <td class="myposts-table__td">189</td>
+                                    <td class="myposts-table__td myposts-table__td--muted">4 dk 45 sn</td>
+                                </tr>
+                                <tr class="myposts-table__row">
+                                    <td class="myposts-table__td">
+                                        <span class="stats-rank stats-rank--bronze">3</span>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <a href="#" class="myposts-table__title-link">Deneme: Sessizliğin Dili</a>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <span class="myposts-badge myposts-badge--category">Deneme</span>
+                                    </td>
+                                    <td class="myposts-table__td"><strong>1.890</strong></td>
+                                    <td class="myposts-table__td">156</td>
+                                    <td class="myposts-table__td myposts-table__td--muted">5 dk 30 sn</td>
+                                </tr>
+                                <tr class="myposts-table__row">
+                                    <td class="myposts-table__td">
+                                        <span class="stats-rank">4</span>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <a href="#" class="myposts-table__title-link">Osmanlı'da Sanatın İzleri: Minyatürden Ebruya</a>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <span class="myposts-badge myposts-badge--category">Tarih</span>
+                                    </td>
+                                    <td class="myposts-table__td"><strong>1.245</strong></td>
+                                    <td class="myposts-table__td">98</td>
+                                    <td class="myposts-table__td myposts-table__td--muted">3 dk 58 sn</td>
+                                </tr>
+                                <tr class="myposts-table__row">
+                                    <td class="myposts-table__td">
+                                        <span class="stats-rank">5</span>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <a href="#" class="myposts-table__title-link">Çocuk Edebiyatında Masal Geleneği ve Modern Yorumlar</a>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <span class="myposts-badge myposts-badge--category">Çocuk Edebiyatı</span>
+                                    </td>
+                                    <td class="myposts-table__td"><strong>987</strong></td>
+                                    <td class="myposts-table__td">72</td>
+                                    <td class="myposts-table__td myposts-table__td--muted">4 dk 10 sn</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     İÇERİK BAZLI İSTATİSTİKLER
+                ============================================= -->
+
+                <div class="stats-divider">
+                    <span class="stats-divider__text">
+                        <i class="fa-solid fa-magnifying-glass-chart me-2"></i>İçerik Bazlı Detaylı Analiz
+                    </span>
+                </div>
+
+                <!-- Post Selector -->
+                <div class="wpost-card mb-4">
+                    <h3 class="wpost-card__title">
+                        <i class="fa-solid fa-file-circle-check me-2"></i>Yazı Seçin
+                    </h3>
+                    <p class="stats-chart-header__desc mb-3">Detaylı istatistiklerini görmek istediğiniz yazıyı seçin</p>
+                    <select class="wpost-form__input" id="postSelector">
+                        <option value="1" selected>Toplumsal Bellek ve Roman: Yaşar Kemal Üzerine</option>
+                        <option value="2">Kişisel Gelişimde Okuma Alışkanlığının Rolü</option>
+                        <option value="3">Deneme: Sessizliğin Dili</option>
+                        <option value="4">Osmanlı'da Sanatın İzleri: Minyatürden Ebruya</option>
+                        <option value="5">Çocuk Edebiyatında Masal Geleneği ve Modern Yorumlar</option>
+                        <option value="6">Anadolu'nun Kayıp Şehirleri: Bir Gezi Yazısı</option>
+                    </select>
+                </div>
+
+                <!-- Selected Post Stats Cards -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="stats-card stats-card--compact">
+                            <div class="stats-card__icon stats-card__icon--sm">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number" id="postTotalReads">3.412</span>
+                                <span class="stats-card__label">Toplam Okunma</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stats-card stats-card--compact">
+                            <div class="stats-card__icon stats-card__icon--sm stats-card__icon--teal">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number" id="postAvgTime">6:12</span>
+                                <span class="stats-card__label">Ort. Okuma Süresi</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stats-card stats-card--compact">
+                            <div class="stats-card__icon stats-card__icon--sm stats-card__icon--rose">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number" id="postLikes">247</span>
+                                <span class="stats-card__label">Beğeni</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stats-card stats-card--compact">
+                            <div class="stats-card__icon stats-card__icon--sm stats-card__icon--purple">
+                                <i class="fa-solid fa-comment"></i>
+                            </div>
+                            <div class="stats-card__info">
+                                <span class="stats-card__number" id="postComments">34</span>
+                                <span class="stats-card__label">Yorum</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post Detail Charts Row -->
+                <div class="row g-4 mb-4">
+
+                    <!-- Daily Chart -->
+                    <div class="col-lg-6">
+                        <div class="wpost-card stats-chart-card">
+                            <div class="stats-chart-header">
+                                <div class="stats-chart-header__left">
+                                    <h3 class="wpost-card__title">
+                                        <i class="fa-solid fa-calendar-day me-2"></i>Günlük Okunma
+                                    </h3>
+                                    <p class="stats-chart-header__desc">Son 30 gün</p>
+                                </div>
+                            </div>
+                            <div class="stats-chart-wrap">
+                                <canvas id="dailyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Chart -->
+                    <div class="col-lg-6">
+                        <div class="wpost-card stats-chart-card">
+                            <div class="stats-chart-header">
+                                <div class="stats-chart-header__left">
+                                    <h3 class="wpost-card__title">
+                                        <i class="fa-solid fa-calendar-week me-2"></i>Haftalık Okunma
+                                    </h3>
+                                    <p class="stats-chart-header__desc">Son 12 hafta</p>
+                                </div>
+                            </div>
+                            <div class="stats-chart-wrap">
+                                <canvas id="weeklyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Monthly Chart (Full Width) -->
+                <div class="wpost-card">
+                    <div class="stats-chart-header">
+                        <div class="stats-chart-header__left">
+                            <h3 class="wpost-card__title">
+                                <i class="fa-solid fa-calendar-days me-2"></i>Aylık Okunma
+                            </h3>
+                            <p class="stats-chart-header__desc">Seçilen yazının aylık okunma trendi</p>
+                        </div>
+                        <div class="stats-chart-header__right">
+                            <select class="wpost-form__input stats-year-select" id="postYearSelect">
+                                <option value="2026" selected>2026</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="stats-chart-wrap">
+                        <canvas id="monthlyPostChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site alt bilgi">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="#" class="footer-bk__link">Hakkımızda</a>
+                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="iletisim.html" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">İletişim</h5>
+                    <p class="footer-bk__text">
+                        <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
+                    </p>
+                    <p class="footer-bk__text">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* =========================================================
+           CHART.JS GLOBAL DEFAULTS
+        ========================================================= */
+        Chart.defaults.color = '#9B9EA3';
+        Chart.defaults.borderColor = 'rgba(155, 158, 163, 0.1)';
+        Chart.defaults.font.family = "'Inter', system-ui, -apple-system, sans-serif";
+
+        var goldColor = '#D4AF37';
+        var goldLight = '#E2CFA0';
+        var goldGlow = 'rgba(212, 175, 55, 0.25)';
+        var tealColor = '#20c997';
+        var purpleColor = '#8b5cf6';
+        var roseColor = '#f43f5e';
+        var surfaceColor = '#222226';
+
+        var months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+
+        /* =========================================================
+           1. GENEL OKUNMA GRAFİĞİ (Aylık — Tüm Yazılar)
+        ========================================================= */
+        var generalCtx = document.getElementById('generalChart').getContext('2d');
+
+        var generalGradient = generalCtx.createLinearGradient(0, 0, 0, 350);
+        generalGradient.addColorStop(0, 'rgba(212, 175, 55, 0.3)');
+        generalGradient.addColorStop(1, 'rgba(212, 175, 55, 0.02)');
+
+        var generalData = {
+            2026: [820, 1240, 1580, 1120, 980, 1450, 1890, 1670, 0, 0, 0, 0],
+            2025: [320, 450, 580, 720, 890, 1050, 1180, 1320, 1100, 960, 780, 650]
+        };
+
+        var generalChart = new Chart(generalCtx, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Toplam Okunma',
+                    data: generalData['2026'],
+                    borderColor: goldColor,
+                    backgroundColor: generalGradient,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: goldColor,
+                    pointBorderColor: surfaceColor,
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: goldLight,
+                    pointHoverBorderColor: surfaceColor,
+                    pointHoverBorderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A1E',
+                        titleColor: goldColor,
+                        bodyColor: '#F5F5F0',
+                        borderColor: 'rgba(212, 175, 55, 0.3)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function (ctx) {
+                                return ctx.parsed.y.toLocaleString('tr-TR') + ' okunma';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(155, 158, 163, 0.06)' },
+                        ticks: {
+                            font: { size: 11 },
+                            callback: function (val) {
+                                return val >= 1000 ? (val / 1000).toFixed(1) + 'K' : val;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        document.getElementById('generalYearSelect').addEventListener('change', function () {
+            var year = this.value;
+            generalChart.data.datasets[0].data = generalData[year] || generalData['2026'];
+            generalChart.update();
+        });
+
+        /* =========================================================
+           2. İÇERİK BAZLI — POST DATA
+        ========================================================= */
+        var postsData = {
+            1: {
+                title: 'Toplumsal Bellek ve Roman',
+                totalReads: '3.412', avgTime: '6:12', likes: '247', comments: '34',
+                daily: [45, 62, 78, 55, 90, 112, 135, 98, 87, 120, 145, 132, 110, 95, 88, 76, 105, 118, 140, 125, 98, 85, 110, 130, 142, 115, 92, 80, 108, 125],
+                weekly: [320, 410, 480, 520, 390, 450, 510, 480, 420, 380, 460, 500],
+                monthly: { 2026: [280, 380, 520, 450, 410, 480, 560, 334, 0, 0, 0, 0], 2025: [0, 0, 0, 0, 0, 80, 150, 220, 310, 280, 240, 200] }
+            },
+            2: {
+                title: 'Kişisel Gelişimde Okuma',
+                totalReads: '2.103', avgTime: '4:45', likes: '189', comments: '28',
+                daily: [35, 48, 52, 40, 65, 78, 92, 70, 58, 82, 95, 88, 74, 62, 55, 48, 72, 85, 98, 80, 65, 52, 78, 90, 102, 82, 60, 45, 75, 88],
+                weekly: [250, 310, 380, 420, 340, 390, 410, 380, 350, 300, 370, 400],
+                monthly: { 2026: [180, 260, 340, 310, 280, 320, 413, 0, 0, 0, 0, 0], 2025: [0, 0, 0, 0, 0, 0, 60, 120, 200, 180, 150, 130] }
+            },
+            3: {
+                title: 'Sessizliğin Dili',
+                totalReads: '1.890', avgTime: '5:30', likes: '156', comments: '22',
+                daily: [30, 42, 58, 48, 72, 85, 95, 78, 65, 88, 102, 92, 78, 68, 60, 52, 75, 88, 105, 90, 72, 58, 82, 95, 108, 88, 65, 50, 72, 85],
+                weekly: [210, 280, 350, 380, 310, 360, 400, 370, 330, 280, 340, 380],
+                monthly: { 2026: [150, 220, 310, 280, 260, 300, 370, 0, 0, 0, 0, 0], 2025: [0, 0, 0, 0, 0, 0, 0, 80, 160, 140, 120, 100] }
+            },
+            4: {
+                title: 'Osmanlı\'da Sanatın İzleri',
+                totalReads: '1.245', avgTime: '3:58', likes: '98', comments: '15',
+                daily: [20, 32, 45, 38, 55, 68, 75, 60, 48, 65, 78, 70, 58, 45, 40, 35, 52, 65, 80, 68, 52, 40, 60, 72, 82, 65, 48, 35, 55, 65],
+                weekly: [150, 200, 260, 300, 240, 280, 310, 280, 250, 210, 260, 290],
+                monthly: { 2026: [110, 160, 210, 190, 170, 200, 204, 0, 0, 0, 0, 0], 2025: [0, 0, 0, 0, 0, 0, 0, 0, 50, 80, 70, 60] }
+            },
+            5: {
+                title: 'Çocuk Edebiyatında Masal Geleneği',
+                totalReads: '987', avgTime: '4:10', likes: '72', comments: '11',
+                daily: [15, 22, 30, 25, 38, 48, 55, 42, 35, 50, 60, 52, 42, 32, 28, 22, 38, 48, 58, 50, 38, 28, 42, 52, 60, 48, 35, 25, 40, 48],
+                weekly: [110, 150, 190, 220, 170, 200, 230, 210, 180, 150, 190, 220],
+                monthly: { 2026: [80, 120, 160, 140, 130, 150, 207, 0, 0, 0, 0, 0], 2025: [0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 40, 35] }
+            },
+            6: {
+                title: 'Anadolu\'nun Kayıp Şehirleri',
+                totalReads: '756', avgTime: '5:15', likes: '65', comments: '9',
+                daily: [10, 18, 25, 20, 30, 38, 45, 35, 28, 40, 48, 42, 35, 25, 22, 18, 30, 38, 48, 40, 30, 22, 35, 42, 50, 38, 28, 20, 32, 40],
+                weekly: [80, 110, 150, 170, 130, 160, 180, 170, 140, 120, 150, 170],
+                monthly: { 2026: [60, 90, 130, 110, 100, 120, 146, 0, 0, 0, 0, 0], 2025: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 25] }
+            }
+        };
+
+        /* =========================================================
+           3. GÜNLÜK GRAFİK
+        ========================================================= */
+        var dailyCtx = document.getElementById('dailyChart').getContext('2d');
+
+        var dailyGradient = dailyCtx.createLinearGradient(0, 0, 0, 250);
+        dailyGradient.addColorStop(0, 'rgba(32, 201, 151, 0.25)');
+        dailyGradient.addColorStop(1, 'rgba(32, 201, 151, 0.02)');
+
+        function generateDayLabels() {
+            var labels = [];
+            for (var i = 29; i >= 0; i--) {
+                var d = new Date();
+                d.setDate(d.getDate() - i);
+                labels.push(d.getDate() + ' ' + months[d.getMonth()]);
+            }
+            return labels;
+        }
+
+        var dailyChart = new Chart(dailyCtx, {
+            type: 'bar',
+            data: {
+                labels: generateDayLabels(),
+                datasets: [{
+                    label: 'Günlük Okunma',
+                    data: postsData[1].daily,
+                    backgroundColor: 'rgba(32, 201, 151, 0.6)',
+                    hoverBackgroundColor: tealColor,
+                    borderRadius: 4,
+                    borderSkipped: false,
+                    barPercentage: 0.7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A1E',
+                        titleColor: tealColor,
+                        bodyColor: '#F5F5F0',
+                        borderColor: 'rgba(32, 201, 151, 0.3)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function (ctx) {
+                                return ctx.parsed.y + ' okunma';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { size: 10 },
+                            maxRotation: 45,
+                            maxTicksLimit: 10
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(155, 158, 163, 0.06)' },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        /* =========================================================
+           4. HAFTALIK GRAFİK
+        ========================================================= */
+        var weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+
+        var weeklyGradient = weeklyCtx.createLinearGradient(0, 0, 0, 250);
+        weeklyGradient.addColorStop(0, 'rgba(139, 92, 246, 0.25)');
+        weeklyGradient.addColorStop(1, 'rgba(139, 92, 246, 0.02)');
+
+        function generateWeekLabels() {
+            var labels = [];
+            for (var i = 11; i >= 0; i--) {
+                var d = new Date();
+                d.setDate(d.getDate() - (i * 7));
+                labels.push(d.getDate() + ' ' + months[d.getMonth()]);
+            }
+            return labels;
+        }
+
+        var weeklyChart = new Chart(weeklyCtx, {
+            type: 'line',
+            data: {
+                labels: generateWeekLabels(),
+                datasets: [{
+                    label: 'Haftalık Okunma',
+                    data: postsData[1].weekly,
+                    borderColor: purpleColor,
+                    backgroundColor: weeklyGradient,
+                    borderWidth: 2.5,
+                    pointBackgroundColor: purpleColor,
+                    pointBorderColor: surfaceColor,
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A1E',
+                        titleColor: purpleColor,
+                        bodyColor: '#F5F5F0',
+                        borderColor: 'rgba(139, 92, 246, 0.3)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function (ctx) {
+                                return ctx.parsed.y + ' okunma';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10 }, maxTicksLimit: 8 }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(155, 158, 163, 0.06)' },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        /* =========================================================
+           5. AYLIK GRAFİK (İçerik Bazlı)
+        ========================================================= */
+        var monthlyCtx = document.getElementById('monthlyPostChart').getContext('2d');
+
+        var monthlyGradient = monthlyCtx.createLinearGradient(0, 0, 0, 350);
+        monthlyGradient.addColorStop(0, 'rgba(244, 63, 94, 0.25)');
+        monthlyGradient.addColorStop(1, 'rgba(244, 63, 94, 0.02)');
+
+        var monthlyPostChart = new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Aylık Okunma',
+                    data: postsData[1].monthly['2026'],
+                    backgroundColor: 'rgba(244, 63, 94, 0.5)',
+                    hoverBackgroundColor: roseColor,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1A1A1E',
+                        titleColor: roseColor,
+                        bodyColor: '#F5F5F0',
+                        borderColor: 'rgba(244, 63, 94, 0.3)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function (ctx) {
+                                return ctx.parsed.y.toLocaleString('tr-TR') + ' okunma';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(155, 158, 163, 0.06)' },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        /* -- Year selector for monthly post chart */
+        document.getElementById('postYearSelect').addEventListener('change', function () {
+            var postId = document.getElementById('postSelector').value;
+            var year = this.value;
+            var post = postsData[postId];
+            monthlyPostChart.data.datasets[0].data = post.monthly[year] || post.monthly['2026'];
+            monthlyPostChart.update();
+        });
+
+        /* =========================================================
+           6. POST SELECTOR — Update All Post Charts
+        ========================================================= */
+        document.getElementById('postSelector').addEventListener('change', function () {
+            var postId = this.value;
+            var post = postsData[postId];
+            var year = document.getElementById('postYearSelect').value;
+
+            /* Update stat cards */
+            document.getElementById('postTotalReads').textContent = post.totalReads;
+            document.getElementById('postAvgTime').textContent = post.avgTime;
+            document.getElementById('postLikes').textContent = post.likes;
+            document.getElementById('postComments').textContent = post.comments;
+
+            /* Update daily chart */
+            dailyChart.data.datasets[0].data = post.daily;
+            dailyChart.update();
+
+            /* Update weekly chart */
+            weeklyChart.data.datasets[0].data = post.weekly;
+            weeklyChart.update();
+
+            /* Update monthly chart */
+            monthlyPostChart.data.datasets[0].data = post.monthly[year] || post.monthly['2026'];
+            monthlyPostChart.update();
+        });
+
+    })();
+    </script>
+</body>
+</html>

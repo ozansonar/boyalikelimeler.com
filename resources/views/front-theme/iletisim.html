@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="public/images/favicon.svg">
+    <title>İletişim — Boyalı Kelimeler</title>
+    <meta name="description" content="Boyalı Kelimeler ile iletişime geçin. Sorularınız, önerileriniz ve iş birliği talepleriniz için bize ulaşın.">
+    <link rel="canonical" href="https://boyalikelimeler.com/iletisim">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="İletişim — Boyalı Kelimeler">
+    <meta property="og:description" content="Boyalı Kelimeler ile iletişime geçin. Sorularınız ve önerileriniz için bize ulaşın.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boyalikelimeler.com/iletisim">
+    <meta property="og:image" content="https://boyalikelimeler.com/images/og-cover.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.7.2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- AOS.js CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="public/css/app.css?v=3.0" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip Link -->
+    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
+
+    <!-- =======================================================
+         NAVBAR
+    ======================================================= -->
+    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+        <div class="container-fluid px-3 px-lg-5">
+            <a class="navbar-brand navbar-bk__brand" href="index.html">
+                <img src="public/images/logo.svg"
+                     alt="Boyalı Kelimeler Logo"
+                     class="navbar-bk__logo"
+                     width="200"
+                     height="50">
+            </a>
+
+            <button class="navbar-toggler navbar-bk__toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto navbar-bk__nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="index.html">
+                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-palette me-1"></i>Sanat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link" href="#">
+                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-bk__link active" href="iletisim.html">
+                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                    <a href="login.html" class="navbar-bk__auth-link">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş Yap
+                    </a>
+                    <a href="register.html" class="navbar-bk__auth-btn">
+                        <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =======================================================
+         MAIN — İLETİŞİM
+    ======================================================= -->
+    <main id="main">
+
+        <!-- Page Header -->
+        <section class="page-header" aria-label="Sayfa başlığı">
+            <div class="container">
+                <h1 class="page-header__title">İletişim</h1>
+                <div class="page-header__divider"></div>
+                <p class="page-header__desc">
+                    Sorularınız, önerileriniz ve iş birliği talepleriniz için bize ulaşın.<br>
+                    Her mesajınız bizim için değerlidir.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Content -->
+        <section class="section section--dark contact-section" aria-label="İletişim formu ve bilgiler">
+            <div class="container">
+                <div class="row g-4 g-lg-5">
+
+                    <!-- Left: Contact Form -->
+                    <div class="col-lg-7" data-aos="fade-up">
+                        <div class="contact-card">
+                            <div class="contact-card__header">
+                                <div class="contact-card__icon">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </div>
+                                <h2 class="contact-card__title">Bize Yazın</h2>
+                                <p class="contact-card__subtitle">Formu doldurarak mesajınızı iletebilirsiniz</p>
+                            </div>
+
+                            <form class="contact-form" id="contactForm" novalidate>
+                                <div class="row g-3">
+                                    <!-- Ad Soyad -->
+                                    <div class="col-md-6">
+                                        <div class="contact-form__group">
+                                            <label class="contact-form__label" for="fullname">
+                                                <i class="fa-solid fa-user me-1"></i>Ad Soyad
+                                            </label>
+                                            <input type="text"
+                                                   class="contact-form__input"
+                                                   id="fullname"
+                                                   name="fullname"
+                                                   placeholder="Adınız ve soyadınız"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <!-- E-posta -->
+                                    <div class="col-md-6">
+                                        <div class="contact-form__group">
+                                            <label class="contact-form__label" for="email">
+                                                <i class="fa-solid fa-envelope me-1"></i>E-posta
+                                            </label>
+                                            <input type="email"
+                                                   class="contact-form__input"
+                                                   id="email"
+                                                   name="email"
+                                                   placeholder="ornek@email.com"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Konu -->
+                                    <div class="col-12">
+                                        <div class="contact-form__group">
+                                            <label class="contact-form__label" for="subject">
+                                                <i class="fa-solid fa-tag me-1"></i>Konu
+                                            </label>
+                                            <select class="contact-form__input contact-form__select"
+                                                    id="subject"
+                                                    name="subject"
+                                                    required>
+                                                <option value="" disabled selected>Konu seçiniz</option>
+                                                <option value="genel">Genel Bilgi</option>
+                                                <option value="isbirligi">İş Birliği Talebi</option>
+                                                <option value="yarisma">Yarışma Hakkında</option>
+                                                <option value="teknik">Teknik Destek</option>
+                                                <option value="oneri">Öneri / Şikayet</option>
+                                                <option value="diger">Diğer</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mesaj -->
+                                    <div class="col-12">
+                                        <div class="contact-form__group">
+                                            <label class="contact-form__label" for="message">
+                                                <i class="fa-solid fa-message me-1"></i>Mesajınız
+                                            </label>
+                                            <textarea class="contact-form__input contact-form__textarea"
+                                                      id="message"
+                                                      name="message"
+                                                      placeholder="Mesajınızı buraya yazın..."
+                                                      rows="6"
+                                                      required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit -->
+                                    <div class="col-12">
+                                        <button type="submit" class="contact-form__submit">
+                                            <i class="fa-solid fa-paper-plane me-2"></i>Mesajı Gönder
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Right: Contact Info -->
+                    <div class="col-lg-5" data-aos="fade-up" data-aos-delay="100">
+
+                        <!-- Info Cards -->
+                        <div class="contact-info">
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">E-posta</h3>
+                                    <a href="mailto:info@boyalikelimeler.com" class="contact-info__link">info@boyalikelimeler.com</a>
+                                    <a href="mailto:yarisma@boyalikelimeler.com" class="contact-info__link">yarisma@boyalikelimeler.com</a>
+                                </div>
+                            </div>
+
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">WhatsApp</h3>
+                                    <a href="#" class="contact-info__link">+90 (555) 123 45 67</a>
+                                    <p class="contact-info__note">Hafta içi 09:00 – 18:00</p>
+                                </div>
+                            </div>
+
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">Adres</h3>
+                                    <p class="contact-info__text">
+                                        Boyalı Kelimeler Sanat Merkezi<br>
+                                        İstanbul, Türkiye
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">Çalışma Saatleri</h3>
+                                    <p class="contact-info__text">
+                                        Pazartesi – Cuma: 09:00 – 18:00<br>
+                                        Cumartesi: 10:00 – 14:00
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Media -->
+                        <div class="contact-social">
+                            <h3 class="contact-social__title">Sosyal Medya</h3>
+                            <p class="contact-social__desc">Bizi takip edin, sanatın nabzını birlikte tutalım.</p>
+                            <div class="contact-social__links">
+                                <a href="#" class="contact-social__link" aria-label="Instagram">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>
+                                <a href="#" class="contact-social__link" aria-label="Twitter">
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                </a>
+                                <a href="#" class="contact-social__link" aria-label="YouTube">
+                                    <i class="fa-brands fa-youtube"></i>
+                                </a>
+                                <a href="#" class="contact-social__link" aria-label="Facebook">
+                                    <i class="fa-brands fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="contact-social__link" aria-label="TikTok">
+                                    <i class="fa-brands fa-tiktok"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section section--surface" aria-label="Sıkça sorulan sorular">
+            <div class="container">
+                <h2 class="section__title" data-aos="fade-up">Sıkça Sorulan Sorular</h2>
+                <div class="section__divider"></div>
+                <p class="section__slogan" data-aos="fade-up">"Merak ettikleriniz, bir tık uzağınızda."</p>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                        <div class="accordion contact-faq" id="contactFaq">
+
+                            <div class="accordion-item contact-faq__item">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button contact-faq__button" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq1"
+                                            aria-expanded="true" aria-controls="faq1">
+                                        <i class="fa-solid fa-circle-question me-2"></i>
+                                        Boyalı Kelimeler'e nasıl yazar olarak katılabilirim?
+                                    </button>
+                                </h3>
+                                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#contactFaq">
+                                    <div class="accordion-body contact-faq__body">
+                                        Ücretsiz kayıt olduktan sonra profil sayfanızdan yazar başvurusu yapabilirsiniz.
+                                        Editoryal ekibimiz başvurunuzu inceleyip size en kısa sürede dönüş yapacaktır.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item contact-faq__item">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button contact-faq__button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq2"
+                                            aria-expanded="false" aria-controls="faq2">
+                                        <i class="fa-solid fa-circle-question me-2"></i>
+                                        Yarışmalara kimler katılabilir?
+                                    </button>
+                                </h3>
+                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                    <div class="accordion-body contact-faq__body">
+                                        Altın Kalem ve Altın Fırça yarışmalarımız herkese açıktır. Yaş ve deneyim
+                                        fark etmeksizin tüm sanat severler katılabilir. Detaylı bilgi için yarışma
+                                        sayfalarını ziyaret edebilirsiniz.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item contact-faq__item">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button contact-faq__button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq3"
+                                            aria-expanded="false" aria-controls="faq3">
+                                        <i class="fa-solid fa-circle-question me-2"></i>
+                                        İş birliği ve reklam taleplerim için ne yapmalıyım?
+                                    </button>
+                                </h3>
+                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                    <div class="accordion-body contact-faq__body">
+                                        İş birliği ve reklam talepleriniz için yukarıdaki iletişim formunu "İş Birliği Talebi"
+                                        konusuyla doldurabilir veya doğrudan info@boyalikelimeler.com adresine e-posta
+                                        gönderebilirsiniz.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item contact-faq__item">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button contact-faq__button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq4"
+                                            aria-expanded="false" aria-controls="faq4">
+                                        <i class="fa-solid fa-circle-question me-2"></i>
+                                        Mesajıma ne kadar sürede dönüş yapılır?
+                                    </button>
+                                </h3>
+                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                    <div class="accordion-body contact-faq__body">
+                                        Mesajlarınıza en geç 48 saat içinde dönüş sağlamaya çalışıyoruz.
+                                        Acil konularda WhatsApp hattımızı kullanabilirsiniz.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item contact-faq__item">
+                                <h3 class="accordion-header">
+                                    <button class="accordion-button contact-faq__button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#faq5"
+                                            aria-expanded="false" aria-controls="faq5">
+                                        <i class="fa-solid fa-circle-question me-2"></i>
+                                        Eserlerimin telif hakkı korunuyor mu?
+                                    </button>
+                                </h3>
+                                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                    <div class="accordion-body contact-faq__body">
+                                        Evet, platformumuza yüklediğiniz tüm eserlerin telif hakkı size aittir.
+                                        Boyalı Kelimeler yalnızca platform içinde sergileme hakkına sahiptir.
+                                        Detaylar için Gizlilik Politikası sayfamızı inceleyebilirsiniz.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =======================================================
+         FOOTER
+    ======================================================= -->
+    <footer class="footer-bk" aria-label="Site alt bilgi">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h4 class="footer-bk__brand">
+                        <i class="fa-solid fa-feather-pointed me-2"></i>Boyalı Kelimeler
+                    </h4>
+                    <p class="footer-bk__text">
+                        Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı,
+                        fırçaların konuştuğu bir sanat hareketi. 2026.
+                    </p>
+                    <div class="footer-bk__social mt-3">
+                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Keşfet</h5>
+                    <nav aria-label="Keşfet linkleri">
+                        <a href="#" class="footer-bk__link">Yazılar</a>
+                        <a href="#" class="footer-bk__link">Resimler</a>
+                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
+                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Yarışmalar</h5>
+                    <nav aria-label="Yarışma linkleri">
+                        <a href="#" class="footer-bk__link">Altın Kalem</a>
+                        <a href="#" class="footer-bk__link">Altın Fırça</a>
+                        <a href="#" class="footer-bk__link">Dergimiz</a>
+                        <a href="#" class="footer-bk__link">Astroloji</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">Kurumsal</h5>
+                    <nav aria-label="Kurumsal linkler">
+                        <a href="#" class="footer-bk__link">Hakkımızda</a>
+                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
+                        <a href="iletisim.html" class="footer-bk__link">İletişim</a>
+                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                    </nav>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="footer-bk__heading">İletişim</h5>
+                    <p class="footer-bk__text">
+                        <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
+                    </p>
+                    <p class="footer-bk__text">
+                        <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bk__bottom text-center">
+                <p class="footer-bk__copy mb-1">
+                    &copy; 2026 Boyalı Kelimeler — Tüm hakları saklıdır.
+                    <span class="d-none d-md-inline">| Sosyal Çöküntüye Sanatsal Direniş</span>
+                </p>
+                <p class="footer-bk__credit mb-0">
+                    <i class="fa-solid fa-code me-1"></i> Yazılım &amp; Tasarım
+                    <a href="https://ozansonar.net/" target="_blank" rel="noopener noreferrer" class="footer-bk__credit-link">Ozan SONAR</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS.js -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- Custom JS -->
+    <script src="public/js/app.js?v=3.0"></script>
+</body>
+</html>
