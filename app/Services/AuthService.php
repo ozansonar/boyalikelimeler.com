@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\RoleSlug;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 final class AuthService
 {
@@ -19,6 +24,24 @@ final class AuthService
         }
 
         return false;
+    }
+
+    public function register(RegisterRequest $request): User
+    {
+        return DB::transaction(function () use ($request): User {
+            $role = Role::where('slug', RoleSlug::Kullanici->value)->firstOrFail();
+
+            $user = User::create([
+                'name'     => $request->validated('first_name') . ' ' . $request->validated('last_name'),
+                'email'    => $request->validated('email'),
+                'password' => $request->validated('password'),
+                'role_id'  => $role->id,
+            ]);
+
+            Auth::login($user);
+
+            return $user;
+        });
     }
 
     public function logout(\Illuminate\Http\Request $request): void

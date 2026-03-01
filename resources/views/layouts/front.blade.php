@@ -107,8 +107,8 @@
                            class="navbar-bk__auth-link {{ request()->routeIs('login') ? 'navbar-bk__auth-link--active' : '' }}">
                             <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş Yap
                         </a>
-                        <a href="{{ url('/register') }}"
-                           class="navbar-bk__auth-btn {{ request()->is('register') ? 'navbar-bk__auth-btn--active' : '' }}">
+                        <a href="{{ route('register') }}"
+                           class="navbar-bk__auth-btn {{ request()->routeIs('register') ? 'navbar-bk__auth-btn--active' : '' }}">
                             <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
                         </a>
                     @endauth
