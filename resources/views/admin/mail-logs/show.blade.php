@@ -16,7 +16,7 @@
     <!-- Page Header -->
     <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3" data-aos="fade-down">
         <div>
-            <h1 class="page-title">{{ $log->subject ?? 'Konu yok' }}</h1>
+            <h1 class="page-title">{{ $log->subject ?: 'Konu yok' }}</h1>
             <p class="page-subtitle">Mail #{{ $log->id }} — {{ $log->created_at->format('d.m.Y H:i:s') }}</p>
         </div>
         <div class="d-flex gap-2">
@@ -64,7 +64,7 @@
 
                     <div class="mb-3">
                         <small class="text-muted d-block mb-1">Konu</small>
-                        <span>{{ $log->subject ?? '—' }}</span>
+                        <span>{{ $log->subject ?: '—' }}</span>
                     </div>
 
                     @if($log->mailable_class)
@@ -89,7 +89,7 @@
                     @if($log->error_message)
                         <div class="mb-0">
                             <small class="text-muted d-block mb-1">Hata Mesajı</small>
-                            <div class="p-2 rounded" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);">
+                            <div class="p-2 rounded bg-danger bg-opacity-10 border border-danger border-opacity-25">
                                 <small class="text-danger">{{ $log->error_message }}</small>
                             </div>
                         </div>
@@ -106,9 +106,15 @@
                 </div>
                 <div class="card-body-custom">
                     @if($log->body)
-                        <div class="mail-body-preview p-3 rounded" style="background: var(--bg-input); max-height: 600px; overflow-y: auto;">
-                            <iframe id="mailBodyFrame" class="w-100 border-0" style="min-height: 400px;"></iframe>
-                        </div>
+                        @if($isHtml)
+                            <div class="mail-body-preview p-3 rounded bg-dark bg-opacity-25 overflow-auto" data-max-height="600">
+                                <iframe id="mailBodyFrame" class="w-100 border-0 mail-body-iframe"></iframe>
+                            </div>
+                        @else
+                            <div class="mail-body-preview p-3 rounded bg-dark bg-opacity-25 overflow-auto" data-max-height="600">
+                                <pre class="text-light mb-0 mail-body-text">{{ $log->body }}</pre>
+                            </div>
+                        @endif
                     @else
                         <div class="text-center py-5 text-muted">
                             <i class="bi bi-file-earmark-x fs-1 d-block mb-2"></i>
@@ -122,7 +128,15 @@
 
 @endsection
 
-@if(!empty($log->body))
+@push('styles')
+<style>
+    .mail-body-iframe { min-height: 400px; }
+    .mail-body-text { white-space: pre-wrap; word-wrap: break-word; font-size: 0.9rem; line-height: 1.6; }
+    [data-max-height] { max-height: 600px; overflow-y: auto; }
+</style>
+@endpush
+
+@if(!empty($log->body) && !empty($isHtml))
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -134,7 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
     doc.write({!! json_encode($log->body) !!});
     doc.close();
 
-    // Auto-resize iframe height
     function resizeIframe() {
         try {
             var height = doc.body.scrollHeight;
