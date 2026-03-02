@@ -150,10 +150,55 @@ function updateSeoCounter(input, max) {
     }
 }
 
+// ── Mail Logo Upload Preview ──
+function initMailLogoPreview() {
+    var mailLogoInput = document.getElementById('mailLogoInput');
+    if (!mailLogoInput) return;
+
+    mailLogoInput.addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 1024 * 1024) {
+            alert('Dosya boyutu 1 MB\'dan büyük olamaz.');
+            e.target.value = '';
+            return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+            var img = document.getElementById('mailLogoImg');
+            var def = document.getElementById('mailLogoDefault');
+            if (img) {
+                img.src = ev.target.result;
+                img.classList.remove('d-none');
+            }
+            if (def) {
+                def.classList.add('d-none');
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// ── Send Mode Toggle ──
+function toggleSendMode() {
+    var debugField = document.getElementById('debugEmailsField');
+    if (!debugField) return;
+
+    var devRadio = document.querySelector('input[name="send_mode"][value="developer"]');
+    if (devRadio && devRadio.checked) {
+        debugField.classList.remove('d-none');
+    } else {
+        debugField.classList.add('d-none');
+    }
+}
+
 // ── Init ──
 document.addEventListener('DOMContentLoaded', function () {
     initLogoPreview();
     initFaviconPreview();
+    initMailLogoPreview();
 
     // AOS
     if (typeof AOS !== 'undefined') {

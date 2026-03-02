@@ -80,6 +80,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::put('settings/maintenance', [SettingController::class, 'updateMaintenance'])->name('settings.update.maintenance');
     Route::get('settings/remove-logo', [SettingController::class, 'removeLogo'])->name('settings.remove-logo');
     Route::get('settings/remove-favicon', [SettingController::class, 'removeFavicon'])->name('settings.remove-favicon');
+    Route::get('settings/remove-mail-logo', [SettingController::class, 'removeMailLogo'])->name('settings.remove-mail-logo');
     Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
     Route::post('settings/send-test-mail', [SettingController::class, 'sendTestMail'])->name('settings.send-test-mail');
 

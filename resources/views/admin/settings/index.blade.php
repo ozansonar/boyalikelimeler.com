@@ -388,7 +388,7 @@
 
             {{-- ==================== 5. E-POSTA (SMTP) ==================== --}}
             <div class="stg-panel {{ ($tab ?? '') === 'smtp' ? 'active' : '' }}" id="stg-email">
-                <form action="{{ route('admin.settings.update.smtp') }}" method="POST">
+                <form action="{{ route('admin.settings.update.smtp') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -445,6 +445,74 @@
                         <div class="stg-field">
                             <label class="stg-label">Gönderen E-posta</label>
                             <input type="email" name="from_email" class="stg-input" value="{{ old('from_email', $smtp['from_email'] ?? '') }}" placeholder="noreply@domain.com">
+                        </div>
+                    </div>
+
+                    <!-- Mail Logosu -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Mail Logosu</h6>
+                            <p>Giden e-postalara gömülecek logo (CID olarak eklenir, her mail istemcisinde görünür)</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Logo Görseli</label>
+                            <div class="stg-logo-upload">
+                                <div class="stg-logo-preview" id="mailLogoPreview">
+                                    @if(!empty($smtp['mail_logo']))
+                                        <div class="stg-logo-current d-none" id="mailLogoDefault"><i class="bi bi-envelope-paper"></i></div>
+                                        <img class="stg-logo-img" id="mailLogoImg" src="/uploads/{{ $smtp['mail_logo'] }}" alt="Mail Logo">
+                                    @else
+                                        <div class="stg-logo-current" id="mailLogoDefault"><i class="bi bi-envelope-paper"></i></div>
+                                        <img class="stg-logo-img d-none" id="mailLogoImg" src="" alt="Mail Logo">
+                                    @endif
+                                </div>
+                                <div class="stg-logo-actions">
+                                    <input type="file" name="mail_logo" id="mailLogoInput" accept="image/png,image/jpeg" hidden>
+                                    <button type="button" class="stg-btn stg-btn-sm" onclick="document.getElementById('mailLogoInput').click()"><i class="bi bi-upload"></i> Logo Yükle</button>
+                                    @if(!empty($smtp['mail_logo']))
+                                        <a href="{{ route('admin.settings.remove-mail-logo') }}" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="return confirm('Mail logosu kaldırılsın mı?')"><i class="bi bi-trash3"></i> Kaldır</a>
+                                    @endif
+                                    <small class="text-muted">PNG veya JPG. Maks. 1 MB. Önerilen boyut: 200x60px</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gönderim Modu -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Gönderim Modu</h6>
+                            <p>Maillerin gerçek alıcılara mı yoksa test adreslerine mi gideceğini belirleyin</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Mod Seçimi</label>
+                            <div class="stg-mode-toggle" id="sendModeToggle">
+                                <label class="stg-mode-option">
+                                    <input type="radio" name="send_mode" value="normal" {{ ($smtp['send_mode'] ?? 'normal') === 'normal' ? 'checked' : '' }} onchange="toggleSendMode()">
+                                    <div class="stg-mode-card">
+                                        <i class="bi bi-send-check"></i>
+                                        <span>Normal Mod</span>
+                                        <small>Mailler asıl alıcıya gider</small>
+                                    </div>
+                                </label>
+                                <label class="stg-mode-option">
+                                    <input type="radio" name="send_mode" value="developer" {{ ($smtp['send_mode'] ?? '') === 'developer' ? 'checked' : '' }} onchange="toggleSendMode()">
+                                    <div class="stg-mode-card stg-mode-card--dev">
+                                        <i class="bi bi-bug"></i>
+                                        <span>Developer / Test Mod</span>
+                                        <small>Tüm mailler test adreslerine yönlendirilir</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="stg-field {{ ($smtp['send_mode'] ?? 'normal') === 'developer' ? '' : 'd-none' }}" id="debugEmailsField">
+                            <label class="stg-label">Test E-posta Adresleri</label>
+                            <input type="text" name="debug_emails" class="stg-input" value="{{ old('debug_emails', $smtp['debug_emails'] ?? '') }}" placeholder="test@example.com, dev@example.com">
+                            <small class="stg-hint">Virgülle ayırarak birden fazla adres yazabilirsiniz. Tüm giden mailler bu adreslere yönlendirilecektir.</small>
+                            @error('debug_emails') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
                 </form>
