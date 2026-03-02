@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -67,6 +68,18 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::put('menus/{menu}/items/{item}', [MenuController::class, 'updateItem'])->name('menus.items.update');
     Route::delete('menus/{menu}/items/{item}', [MenuController::class, 'destroyItem'])->name('menus.items.destroy');
     Route::post('menus/{menu}/items/reorder', [MenuController::class, 'reorderItems'])->name('menus.items.reorder');
+
+    // Settings
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::put('settings/general', [SettingController::class, 'updateGeneral'])->name('settings.update.general');
+    Route::put('settings/contact', [SettingController::class, 'updateContact'])->name('settings.update.contact');
+    Route::put('settings/social', [SettingController::class, 'updateSocial'])->name('settings.update.social');
+    Route::put('settings/seo', [SettingController::class, 'updateSeo'])->name('settings.update.seo');
+    Route::put('settings/smtp', [SettingController::class, 'updateSmtp'])->name('settings.update.smtp');
+    Route::put('settings/maintenance', [SettingController::class, 'updateMaintenance'])->name('settings.update.maintenance');
+    Route::get('settings/remove-logo', [SettingController::class, 'removeLogo'])->name('settings.remove-logo');
+    Route::get('settings/remove-favicon', [SettingController::class, 'removeFavicon'])->name('settings.remove-favicon');
+    Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
 });
 
 // Static Pages (catch-all — MUST be LAST route)

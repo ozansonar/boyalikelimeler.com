@@ -34,7 +34,7 @@
         </a>
 
         <div class="nav-section-title">Sistem</div>
-        <a href="{{ route('admin.dashboard') }}" class="nav-link">
+        <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
             <i class="bi bi-gear-fill"></i> Ayarlar
         </a>
     </nav>
