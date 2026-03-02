@@ -125,8 +125,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }, { passive: true });
     }
 
-    /* AOS Init */
-    if (typeof AOS !== 'undefined') {
-        AOS.init({ duration: 600, easing: 'ease-out-cubic', once: true, offset: 50 });
-    }
 });
