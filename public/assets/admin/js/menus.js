@@ -3,30 +3,6 @@
  * Counter animation, delete/edit modals, sortable drag-drop
  */
 
-/* ==================== Counter Animation ==================== */
-function animateCounters() {
-    var counters = document.querySelectorAll('[data-count]');
-    counters.forEach(function (el) {
-        var target = parseInt(el.getAttribute('data-count'), 10) || 0;
-        var duration = 1200;
-        var startTime = null;
-
-        function step(timestamp) {
-            if (!startTime) startTime = timestamp;
-            var progress = Math.min((timestamp - startTime) / duration, 1);
-            var eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.floor(eased * target).toLocaleString('tr-TR');
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            } else {
-                el.textContent = target.toLocaleString('tr-TR');
-            }
-        }
-
-        requestAnimationFrame(step);
-    });
-}
-
 /* ==================== Delete Modal (Menus index + Items) ==================== */
 function openDeleteModal(id, title) {
     var titleEl = document.getElementById('deleteContentTitle');
@@ -100,7 +76,3 @@ function initSortable() {
     });
 }
 
-/* ==================== Init ==================== */
-document.addEventListener('DOMContentLoaded', function () {
-    animateCounters();
-});
