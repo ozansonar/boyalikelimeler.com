@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class RegisterController extends Controller
@@ -19,8 +18,8 @@ class RegisterController extends Controller
 
     public function showRegisterForm(): View|RedirectResponse
     {
-        if (Auth::check()) {
-            return redirect()->route('admin.dashboard');
+        if (auth()->check()) {
+            return redirect()->route('home');
         }
 
         return view('auth.register');
@@ -30,6 +29,7 @@ class RegisterController extends Controller
     {
         $this->authService->register($request);
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('register')
+            ->with('success', 'Kayıt işleminiz başarıyla tamamlandı! E-posta adresinize gönderilen doğrulama linkine tıklayarak hesabınızı aktif hale getirebilirsiniz.');
     }
 }

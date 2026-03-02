@@ -46,9 +46,10 @@ class UserSeeder extends Seeder
             User::updateOrCreate(
                 ['email' => $userData['email']],
                 [
-                    'name'     => $userData['name'],
-                    'password' => $userData['password'],
-                    'role_id'  => $role->id,
+                    'name'              => $userData['name'],
+                    'password'          => $userData['password'],
+                    'role_id'           => $role->id,
+                    'email_verified_at' => now(),
                 ],
             );
         }

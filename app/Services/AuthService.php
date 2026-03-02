@@ -9,8 +9,10 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\NewUserRegisteredNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 final class AuthService
 {
@@ -38,10 +40,26 @@ final class AuthService
                 'role_id'  => $role->id,
             ]);
 
-            Auth::login($user);
+            $user->sendEmailVerificationNotification();
+
+            $this->notifyAdmins($user);
 
             return $user;
         });
+    }
+
+    private function notifyAdmins(User $newUser): void
+    {
+        $adminRoles = Role::whereIn('slug', [
+            RoleSlug::SuperAdmin->value,
+            RoleSlug::Admin->value,
+        ])->pluck('id');
+
+        $admins = User::whereIn('role_id', $adminRoles)
+            ->whereNotNull('email_verified_at')
+            ->get();
+
+        Notification::send($admins, new NewUserRegisteredNotification($newUser));
     }
 
     public function logout(\Illuminate\Http\Request $request): void

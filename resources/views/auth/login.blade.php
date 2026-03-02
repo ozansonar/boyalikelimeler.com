@@ -114,7 +114,7 @@
                                        {{ old('remember') ? 'checked' : '' }}>
                                 <label class="auth-form__check-label" for="remember">Beni hatırla</label>
                             </div>
-                            <a href="#" class="auth-form__link login-card__forgot">Şifremi Unuttum</a>
+                            <a href="{{ route('password.request') }}" class="auth-form__link login-card__forgot">Şifremi Unuttum</a>
                         </div>
 
                         <button type="submit" class="auth-form__submit">
