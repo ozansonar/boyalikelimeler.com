@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\UserController;
@@ -58,6 +59,14 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 
     // Page Management
     Route::resource('pages', AdminPageController::class)->except(['show']);
+
+    // Menu Management
+    Route::resource('menus', MenuController::class)->except(['show']);
+    Route::get('menus/{menu}/items', [MenuController::class, 'items'])->name('menus.items');
+    Route::post('menus/{menu}/items', [MenuController::class, 'storeItem'])->name('menus.items.store');
+    Route::put('menus/{menu}/items/{item}', [MenuController::class, 'updateItem'])->name('menus.items.update');
+    Route::delete('menus/{menu}/items/{item}', [MenuController::class, 'destroyItem'])->name('menus.items.destroy');
+    Route::post('menus/{menu}/items/reorder', [MenuController::class, 'reorderItems'])->name('menus.items.reorder');
 });
 
 // Static Pages (catch-all — MUST be LAST route)

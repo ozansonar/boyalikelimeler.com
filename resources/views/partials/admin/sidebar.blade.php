@@ -29,6 +29,10 @@
             <i class="bi bi-people-fill"></i> Kullanıcılar
         </a>
 
+        <a href="{{ route('admin.menus.index') }}" class="nav-link {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
+            <i class="bi bi-list-nested"></i> Menüler
+        </a>
+
         <div class="nav-section-title">Sistem</div>
         <a href="{{ route('admin.dashboard') }}" class="nav-link">
             <i class="bi bi-gear-fill"></i> Ayarlar

@@ -59,36 +59,35 @@
 
             <div class="collapse navbar-collapse" id="navbarMain">
                 <ul class="navbar-nav ms-auto navbar-bk__nav">
-                    <li class="nav-item">
-                        <a class="nav-link navbar-bk__link" href="{{ url('/') }}">
-                            <i class="fa-solid fa-house me-1"></i>Ana Sayfa
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-bk__link" href="#">
-                            <i class="fa-solid fa-book-open me-1"></i>Edebiyat
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-bk__link" href="#">
-                            <i class="fa-solid fa-palette me-1"></i>Sanat
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-bk__link" href="#">
-                            <i class="fa-solid fa-comments me-1"></i>Söz Meydanı
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-bk__link" href="#">
-                            <i class="fa-solid fa-newspaper me-1"></i>Dergimiz
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-bk__link" href="#">
-                            <i class="fa-solid fa-paper-plane me-1"></i>İletişim
-                        </a>
-                    </li>
+                    @isset($navbarMenu)
+                        @foreach($navbarMenu as $navItem)
+                            @if($navItem->activeChildren->isNotEmpty())
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link navbar-bk__link dropdown-toggle" href="#" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        @if($navItem->icon)<i class="{{ $navItem->icon }} me-1"></i>@endif{{ $navItem->title }}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        @foreach($navItem->activeChildren as $child)
+                                            <li>
+                                                <a class="dropdown-item" href="{{ $child->resolvedUrl() }}"
+                                                   @if($child->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>
+                                                    @if($child->icon)<i class="{{ $child->icon }} me-1"></i>@endif{{ $child->title }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link navbar-bk__link" href="{{ $navItem->resolvedUrl() }}"
+                                       @if($navItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>
+                                        @if($navItem->icon)<i class="{{ $navItem->icon }} me-1"></i>@endif{{ $navItem->title }}
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
+                    @endisset
                 </ul>
 
                 <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
@@ -156,28 +155,34 @@
                 <div class="col-6 col-lg-2">
                     <h5 class="footer-bk__heading">Keşfet</h5>
                     <nav aria-label="Keşfet linkleri">
-                        <a href="#" class="footer-bk__link">Yazılar</a>
-                        <a href="#" class="footer-bk__link">Resimler</a>
-                        <a href="#" class="footer-bk__link">Sanat Okulu</a>
-                        <a href="#" class="footer-bk__link">Söz Meydanı</a>
+                        @isset($footerDiscoverMenu)
+                            @foreach($footerDiscoverMenu as $fItem)
+                                <a href="{{ $fItem->resolvedUrl() }}" class="footer-bk__link"
+                                   @if($fItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
+                            @endforeach
+                        @endisset
                     </nav>
                 </div>
                 <div class="col-6 col-lg-2">
                     <h5 class="footer-bk__heading">Yarışmalar</h5>
                     <nav aria-label="Yarışma linkleri">
-                        <a href="#" class="footer-bk__link">Altın Kalem</a>
-                        <a href="#" class="footer-bk__link">Altın Fırça</a>
-                        <a href="#" class="footer-bk__link">Dergimiz</a>
-                        <a href="#" class="footer-bk__link">Astroloji</a>
+                        @isset($footerCompetitionsMenu)
+                            @foreach($footerCompetitionsMenu as $fItem)
+                                <a href="{{ $fItem->resolvedUrl() }}" class="footer-bk__link"
+                                   @if($fItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
+                            @endforeach
+                        @endisset
                     </nav>
                 </div>
                 <div class="col-6 col-lg-2">
                     <h5 class="footer-bk__heading">Kurumsal</h5>
                     <nav aria-label="Kurumsal linkler">
-                        <a href="#" class="footer-bk__link">Hakkımızda</a>
-                        <a href="#" class="footer-bk__link">Yönetim Ekibi</a>
-                        <a href="#" class="footer-bk__link">İletişim</a>
-                        <a href="#" class="footer-bk__link">Gizlilik</a>
+                        @isset($footerCorporateMenu)
+                            @foreach($footerCorporateMenu as $fItem)
+                                <a href="{{ $fItem->resolvedUrl() }}" class="footer-bk__link"
+                                   @if($fItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
+                            @endforeach
+                        @endisset
                     </nav>
                 </div>
                 <div class="col-6 col-lg-2">
