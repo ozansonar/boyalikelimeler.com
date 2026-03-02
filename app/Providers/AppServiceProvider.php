@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\MailEventSubscriber;
 use App\Services\MenuService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -24,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        Event::subscribe(MailEventSubscriber::class);
 
         if (str_starts_with((string) config('app.url'), 'https')) {
             URL::forceScheme('https');

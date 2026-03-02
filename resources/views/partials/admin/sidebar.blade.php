@@ -34,6 +34,9 @@
         </a>
 
         <div class="nav-section-title">Sistem</div>
+        <a href="{{ route('admin.mail-logs.index') }}" class="nav-link {{ request()->routeIs('admin.mail-logs.*') ? 'active' : '' }}">
+            <i class="bi bi-envelope-fill"></i> Mail Logları
+        </a>
         <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
             <i class="bi bi-gear-fill"></i> Ayarlar
         </a>

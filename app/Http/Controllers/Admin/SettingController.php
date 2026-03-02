@@ -9,6 +9,7 @@ use App\Services\SettingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class SettingController extends Controller
@@ -162,5 +163,39 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings.index', ['tab' => 'maintenance'])
             ->with('success', 'Önbellek başarıyla temizlendi.');
+    }
+
+    public function sendTestMail(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'test_to'      => 'required|email|max:200',
+            'test_subject' => 'required|string|max:200',
+            'test_body'    => 'required|string|max:5000',
+        ]);
+
+        try {
+            $smtp = $this->settingService->getGroup('smtp');
+
+            config([
+                'mail.mailers.smtp.host'       => $smtp['host'] ?? '',
+                'mail.mailers.smtp.port'       => (int) ($smtp['port'] ?? 587),
+                'mail.mailers.smtp.username'   => $smtp['username'] ?? '',
+                'mail.mailers.smtp.password'   => $smtp['password'] ?? '',
+                'mail.mailers.smtp.encryption' => ($smtp['encryption'] ?? 'tls') === 'none' ? null : ($smtp['encryption'] ?? 'tls'),
+                'mail.from.name'               => $smtp['from_name'] ?? 'Boyalı Kelimeler',
+                'mail.from.address'            => $smtp['from_email'] ?? 'noreply@boyalikelimeler.com',
+            ]);
+
+            Mail::raw($data['test_body'], function ($message) use ($data): void {
+                $message->to($data['test_to'])
+                    ->subject($data['test_subject']);
+            });
+
+            return redirect()->route('admin.settings.index', ['tab' => 'smtp'])
+                ->with('success', 'Test e-postası ' . $data['test_to'] . ' adresine başarıyla gönderildi.');
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.settings.index', ['tab' => 'smtp'])
+                ->with('error', 'Mail gönderilemedi: ' . $e->getMessage());
+        }
     }
 }

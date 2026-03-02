@@ -448,6 +448,34 @@
                         </div>
                     </div>
                 </form>
+
+                <!-- Test E-postası -->
+                <form action="{{ route('admin.settings.send-test-mail') }}" method="POST">
+                    @csrf
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Test E-postası Gönder</h6>
+                            <p>SMTP ayarlarının doğru çalışıp çalışmadığını test edin</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Alıcı E-posta</label>
+                            <input type="email" name="test_to" class="stg-input" value="{{ old('test_to') }}" placeholder="test@example.com" required>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Konu</label>
+                            <input type="text" name="test_subject" class="stg-input" value="{{ old('test_subject', 'SMTP Test — Boyalı Kelimeler') }}" placeholder="Test maili konusu" required>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Mesaj</label>
+                            <textarea name="test_body" class="stg-textarea" rows="4" placeholder="Test mesajınızı yazın..." required>{{ old('test_body', 'Bu bir test e-postasıdır. SMTP ayarlarınız doğru çalışıyor.') }}</textarea>
+                        </div>
+
+                        <button type="submit" class="stg-btn"><i class="bi bi-send"></i> Test Maili Gönder</button>
+                    </div>
+                </form>
             </div>
 
             {{-- ==================== 6. BAKIM MODU ==================== --}}

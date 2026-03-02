@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MailLogController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController;
@@ -80,6 +81,12 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('settings/remove-logo', [SettingController::class, 'removeLogo'])->name('settings.remove-logo');
     Route::get('settings/remove-favicon', [SettingController::class, 'removeFavicon'])->name('settings.remove-favicon');
     Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
+    Route::post('settings/send-test-mail', [SettingController::class, 'sendTestMail'])->name('settings.send-test-mail');
+
+    // Mail Logs
+    Route::get('mail-logs', [MailLogController::class, 'index'])->name('mail-logs.index');
+    Route::get('mail-logs/{mailLog}', [MailLogController::class, 'show'])->name('mail-logs.show');
+    Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy');
 });
 
 // Static Pages (catch-all — MUST be LAST route)
