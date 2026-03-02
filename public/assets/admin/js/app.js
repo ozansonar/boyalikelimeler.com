@@ -530,28 +530,29 @@ document.querySelectorAll('.color-swatch').forEach((swatch) => {
 
 // ---- Stat Cards Counter Animation ----
 function animateCounters() {
-  document.querySelectorAll('.stat-value').forEach((el) => {
-    const text = el.textContent;
-    const hasPrefix = text.startsWith('$');
-    const hasSuffix = text.endsWith('%');
-    let target = parseFloat(text.replace(/[$,%]/g, '').replace(/,/g, ''));
+  var duration = 1200;
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    var target = parseInt(el.getAttribute('data-count'), 10);
+    if (isNaN(target) || target === 0) {
+      el.textContent = '0';
+      return;
+    }
 
-    if (isNaN(target)) return;
+    var startTime = null;
 
-    let current = 0;
-    const increment = target / 40;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        current = target;
-        clearInterval(timer);
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString('tr-TR');
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target.toLocaleString('tr-TR');
       }
-      let display = current >= 1000
-        ? current.toLocaleString('en-US', { maximumFractionDigits: 0 })
-        : current.toFixed(current % 1 !== 0 ? 1 : 0);
+    }
 
-      el.textContent = (hasPrefix ? '$' : '') + display + (hasSuffix ? '%' : '');
-    }, 30);
+    requestAnimationFrame(step);
   });
 }
 
