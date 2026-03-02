@@ -20,6 +20,9 @@
         <a href="{{ route('admin.categories.index') }}" class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
             <i class="bi bi-folder-fill"></i> Kategoriler
         </a>
+        <a href="{{ route('admin.pages.index') }}" class="nav-link {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
+            <i class="bi bi-file-earmark-richtext-fill"></i> Sayfalar
+        </a>
 
         <div class="nav-section-title">Yönetim</div>
         <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">

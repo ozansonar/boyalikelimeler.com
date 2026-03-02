@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Front\BlogController;
+use App\Http\Controllers\Front\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -53,4 +55,10 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 
     // Post Management
     Route::resource('posts', PostController::class)->except(['show']);
+
+    // Page Management
+    Route::resource('pages', AdminPageController::class)->except(['show']);
 });
+
+// Static Pages (catch-all — MUST be LAST route)
+Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')->where('slug', '[a-z0-9\-]+');
