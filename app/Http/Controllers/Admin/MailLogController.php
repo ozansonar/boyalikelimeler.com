@@ -37,8 +37,13 @@ class MailLogController extends Controller
     {
         $mailLog->load('user');
 
+        $isHtml = $mailLog->body !== null
+            && $mailLog->body !== ''
+            && preg_match('/<[a-z][\s\S]*>/i', $mailLog->body) === 1;
+
         return view('admin.mail-logs.show', [
-            'log' => $mailLog,
+            'log'    => $mailLog,
+            'isHtml' => $isHtml,
         ]);
     }
 

@@ -6,14 +6,20 @@ namespace App\Listeners;
 
 use App\Models\MailLog;
 use App\Models\User;
+use App\Services\MailLogService;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class MailEventSubscriber
 {
+    public function __construct(
+        private readonly MailLogService $mailLogService,
+    ) {}
+
     public function handleMessageSending(MessageSending $event): void
     {
         try {
@@ -23,7 +29,7 @@ class MailEventSubscriber
             $toName = $this->getFirstName($to);
 
             $subject = $message->getSubject() ?? '';
-            $body = $message->getHtmlBody() ?? $message->getTextBody() ?? '';
+            $body = $this->extractBody($message);
 
             $mailableClass = $event->data['__laravel_notification'] ?? null;
             if ($mailableClass === null && isset($event->data['__laravel_notification_id'])) {
@@ -32,7 +38,7 @@ class MailEventSubscriber
 
             $userId = $this->findUserId($toAddress);
 
-            MailLog::create([
+            $this->mailLogService->create([
                 'user_id'        => $userId,
                 'to_email'       => $toAddress,
                 'to_name'        => $toName,
@@ -60,14 +66,29 @@ class MailEventSubscriber
                 ->first();
 
             if ($log) {
-                $log->update([
-                    'status'  => 'sent',
-                    'sent_at' => now(),
-                ]);
+                $this->mailLogService->markSent($log);
             }
         } catch (\Throwable $e) {
             Log::error('Mail log update (sent) failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Extract body content from the email message.
+     */
+    private function extractBody(Email $message): string
+    {
+        $html = $message->getHtmlBody();
+        if (is_string($html) && $html !== '') {
+            return $html;
+        }
+
+        $text = $message->getTextBody();
+        if (is_string($text) && $text !== '') {
+            return $text;
+        }
+
+        return '';
     }
 
     /**
