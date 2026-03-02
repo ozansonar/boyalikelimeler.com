@@ -6,6 +6,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
+    /* -- Global Status Modal (auto-show) --------------------- */
+    var statusModal = document.getElementById('statusModal');
+    if (statusModal) {
+        var bsModal = new bootstrap.Modal(statusModal);
+        bsModal.show();
+    }
+
     /* -- Navbar Scroll Effect -------------------------------- */
     const navbar = document.querySelector('.navbar-bk');
     if (navbar) {

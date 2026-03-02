@@ -12131,3 +12131,75 @@ p {
         font-size: 1.05rem;
     }
 }
+
+/* ============================================================
+   STATUS MODAL — Global success / danger modal
+   ============================================================ */
+.status-modal {
+    background: var(--color-black-card);
+    border: var(--border-gold);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.status-modal__header {
+    padding: 1.25rem 1.5rem;
+}
+
+.status-modal__header--success {
+    background: linear-gradient(135deg, #198754 0%, #157347 100%);
+    color: #fff;
+}
+
+.status-modal__header--danger {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: #fff;
+}
+
+.status-modal__title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+}
+
+.status-modal__body {
+    padding: 1.5rem;
+    color: var(--color-white);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.status-modal__footer {
+    padding: 0 1.5rem 1.25rem;
+    justify-content: center;
+}
+
+.status-modal__btn {
+    min-width: 120px;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    color: #fff;
+    transition: var(--transition-base);
+}
+
+.status-modal__btn--success {
+    background: #198754;
+}
+
+.status-modal__btn--success:hover {
+    background: #157347;
+    color: #fff;
+}
+
+.status-modal__btn--danger {
+    background: #dc3545;
+}
+
+.status-modal__btn--danger:hover {
+    background: #b02a37;
+    color: #fff;
+}
