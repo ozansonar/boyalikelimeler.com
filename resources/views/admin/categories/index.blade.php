@@ -4,18 +4,11 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3" data-aos="fade-down">
-        <div>
-            <h1 class="page-title">Kategoriler</h1>
-            <p class="page-subtitle">İçerik kategorilerini yönetin, düzenleyin ve sıralayın</p>
-        </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('admin.categories.create') }}" class="btn-teal">
-                <i class="bi bi-plus-lg me-1"></i> Yeni Kategori
-            </a>
-        </div>
-    </div>
+    <x-admin.page-header title="Kategoriler" subtitle="İçerik kategorilerini yönetin, düzenleyin ve sıralayın">
+        <a href="{{ route('admin.categories.create') }}" class="btn-teal">
+            <i class="bi bi-plus-lg me-1"></i> Yeni Kategori
+        </a>
+    </x-admin.page-header>
 
     <!-- Filters -->
     <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="100">
@@ -95,12 +88,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-clr-muted">
-                                    <i class="bi bi-folder2-open fs-1 d-block mb-2 opacity-50"></i>
-                                    Henüz kategori oluşturulmamış.
-                                </td>
-                            </tr>
+                            <x-admin.table-empty :colspan="7" icon="bi-folder2-open" message="Henüz kategori oluşturulmamış." />
                         @endforelse
                     </tbody>
                 </table>

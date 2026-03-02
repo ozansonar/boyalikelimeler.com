@@ -73,7 +73,7 @@
                                id="contentTitle" name="title"
                                value="{{ old('title', $post->title ?? '') }}"
                                placeholder="İçeriğin ana başlığını yazın..."
-                               oninput="generateSlug(this.value); updateCharCounter(this, 120)" required>
+                               oninput="generateSlug(this.value, 'contentSlug', 'seoPreviewSlug', 'yeni-icerik'); updateSeoPreview(); updateCharCounter(this, 120)" required>
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

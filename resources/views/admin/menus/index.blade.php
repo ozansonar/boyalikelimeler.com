@@ -4,54 +4,17 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3" data-aos="fade-down">
-        <div>
-            <h1 class="page-title">Menü Yönetimi</h1>
-            <p class="page-subtitle">Navbar, footer ve diğer menüleri yönetin</p>
-        </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('admin.menus.create') }}" class="btn-teal">
-                <i class="bi bi-plus-lg"></i> Yeni Menü
-            </a>
-        </div>
-    </div>
+    <x-admin.page-header title="Menü Yönetimi" subtitle="Navbar, footer ve diğer menüleri yönetin">
+        <a href="{{ route('admin.menus.create') }}" class="btn-teal">
+            <i class="bi bi-plus-lg"></i> Yeni Menü
+        </a>
+    </x-admin.page-header>
 
     <!-- Stats -->
     <div class="row g-4 mb-4">
-        <div class="col-xxl-4 col-sm-6" data-aos="fade-up" data-aos-delay="0">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-blue">
-                    <i class="bi bi-list-nested"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Toplam Menü</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['total_menus'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-teal">
-                    <i class="bi bi-link-45deg"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Toplam Öğe</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['total_items'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-green">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Aktif Öğe</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['active_items'] }}">0</h3>
-                </div>
-            </div>
-        </div>
+        <x-admin.stat-card color="blue" icon="bi-list-nested" label="Toplam Menü" :count="$stats['total_menus']" :delay="0" col-class="col-xxl-4 col-sm-6" />
+        <x-admin.stat-card color="teal" icon="bi-link-45deg" label="Toplam Öğe" :count="$stats['total_items']" :delay="100" col-class="col-xxl-4 col-sm-6" />
+        <x-admin.stat-card color="green" icon="bi-check-circle-fill" label="Aktif Öğe" :count="$stats['active_items']" :delay="200" col-class="col-xxl-4 col-sm-6" />
     </div>
 
     <!-- Menu Cards -->
@@ -111,31 +74,7 @@
         @endforelse
     </div>
 
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body text-center py-4">
-                    <div class="status-modal-icon danger">
-                        <i class="bi bi-exclamation-triangle"></i>
-                    </div>
-                    <h5 class="cl-modal-heading">Silme Onayı</h5>
-                    <p class="cl-modal-body-text">Bu menüyü ve tüm öğelerini silmek istediğinizden emin misiniz?</p>
-                    <p class="cl-modal-content-name" id="deleteContentTitle"></p>
-                    <div class="d-flex gap-2 justify-content-center">
-                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
-                        <form id="deleteForm" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-teal btn-danger-gradient">
-                                <i class="bi bi-trash me-1"></i>Evet, Sil
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal message="Bu menüyü ve tüm öğelerini silmek istediğinizden emin misiniz?" />
 
 @endsection
 

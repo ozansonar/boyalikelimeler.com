@@ -3,30 +3,6 @@
 (function () {
   'use strict';
 
-  // ==================== SLUG GENERATOR ====================
-  window.generateSlug = function (title) {
-    var charMap = {
-      'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
-      'Ç': 'c', 'Ğ': 'g', 'İ': 'i', 'Ö': 'o', 'Ş': 's', 'Ü': 'u'
-    };
-    var slug = title.split('').map(function (ch) { return charMap[ch] || ch; }).join('');
-    slug = slug.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-    document.getElementById('contentSlug').value = slug;
-    document.getElementById('seoPreviewSlug').textContent = slug || 'yeni-icerik';
-    updateSeoPreview();
-  };
-
-
-  // ==================== CHARACTER COUNTER ====================
-  window.updateCharCounter = function (el, max) {
-    var counter = document.getElementById(el.id + '-counter');
-    if (counter) {
-      var len = el.value.length;
-      counter.textContent = len;
-      counter.style.color = len > max ? 'var(--neon-red)' : '';
-    }
-  };
-
 
   // ==================== SUBCATEGORIES ====================
   var subcategories = {
@@ -294,34 +270,6 @@
   };
 
 
-  // ==================== SECTION NAVIGATION ====================
-  window.scrollToSection = function (id, el) {
-    var target = document.getElementById(id);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    document.querySelectorAll('.stg-nav-item').forEach(function (item) { item.classList.remove('active'); });
-    if (el) el.classList.add('active');
-  };
-
-  // Auto-highlight nav on scroll
-  var sections = ['section-basic', 'section-content', 'section-media', 'section-seo', 'section-publish', 'section-advanced'];
-  var navItems = document.querySelectorAll('.stg-nav-item');
-
-  function onScroll() {
-    var scrollPos = window.scrollY + 140;
-    for (var i = sections.length - 1; i >= 0; i--) {
-      var el = document.getElementById(sections[i]);
-      if (el && el.offsetTop <= scrollPos) {
-        navItems.forEach(function (n) { n.classList.remove('active'); });
-        if (navItems[i]) navItems[i].classList.add('active');
-        break;
-      }
-    }
-  }
-  window.addEventListener('scroll', onScroll);
-
-
   // ==================== SYNC EDITOR TO HIDDEN TEXTAREA ====================
   window.syncEditor = function () {
     var editorEl = document.getElementById('contentEditor');
@@ -377,33 +325,6 @@
       showToast('Form sıfırlandı.', 'info');
     }
   };
-
-
-  // ==================== TOAST ====================
-  function showToast(message, type) {
-    var existing = document.querySelector('.ca-toast');
-    if (existing) existing.remove();
-
-    var iconMap = {
-      success: 'bi-check-circle-fill',
-      error: 'bi-exclamation-circle-fill',
-      info: 'bi-info-circle-fill'
-    };
-
-    var toast = document.createElement('div');
-    toast.className = 'ca-toast ca-toast-' + type;
-    toast.innerHTML = '<i class="bi ' + (iconMap[type] || iconMap.info) + '"></i> ' + message;
-    document.body.appendChild(toast);
-
-    requestAnimationFrame(function () {
-      toast.classList.add('show');
-    });
-
-    setTimeout(function () {
-      toast.classList.remove('show');
-      setTimeout(function () { toast.remove(); }, 300);
-    }, 3000);
-  }
 
 
   // ==================== UTILITY ====================

@@ -3,8 +3,6 @@
 (function () {
   'use strict';
 
-  var deleteTargetId = null;
-
   // ==================== STATUS TAB FILTERING ====================
   window.filterByStatus = function (status, btn) {
     document.querySelectorAll('.cl-status-tab').forEach(function (t) { t.classList.remove('active'); });
@@ -167,22 +165,6 @@
   };
 
 
-  // ==================== DELETE MODAL ====================
-  window.openDeleteModal = function (title, id) {
-    deleteTargetId = id;
-    document.getElementById('deleteContentTitle').textContent = '"' + title + '"';
-    var modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
-    modal.show();
-  };
-
-  window.confirmDelete = function () {
-    if (deleteTargetId) {
-      showToast('İçerik başarıyla silindi.', 'success');
-      deleteTargetId = null;
-    }
-  };
-
-
   // ==================== ACTIONS ====================
   window.viewContent = function (id) {
     showToast('İçerik önizleme açılıyor...', 'info');
@@ -196,24 +178,5 @@
     var formatNames = { csv: 'CSV', json: 'JSON', excel: 'Excel', pdf: 'PDF' };
     showToast((formatNames[format] || format) + ' dosyası indiriliyor...', 'success');
   };
-
-
-  // ==================== TOAST ====================
-  function showToast(message, type) {
-    var existing = document.querySelector('.ca-toast');
-    if (existing) existing.remove();
-
-    var iconMap = { success: 'bi-check-circle-fill', error: 'bi-exclamation-circle-fill', info: 'bi-info-circle-fill' };
-    var toast = document.createElement('div');
-    toast.className = 'ca-toast ca-toast-' + type;
-    toast.innerHTML = '<i class="bi ' + (iconMap[type] || iconMap.info) + '"></i> ' + message;
-    document.body.appendChild(toast);
-
-    requestAnimationFrame(function () { toast.classList.add('show'); });
-    setTimeout(function () {
-      toast.classList.remove('show');
-      setTimeout(function () { toast.remove(); }, 300);
-    }, 3000);
-  }
 
 })();

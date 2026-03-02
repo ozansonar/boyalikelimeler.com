@@ -458,45 +458,137 @@ function wizardReset() {
 document.getElementById('addUserModal')?.addEventListener('hidden.bs.modal', wizardReset);
 
 
-// ---- Toast Notification ----
-function showToast(message, type = 'success') {
-  const toast = document.createElement('div');
-  const iconMap = {
+// ---- Toast Notification (Global) ----
+function showToast(message, type) {
+  type = type || 'success';
+  var existing = document.querySelector('.ca-toast');
+  if (existing) existing.remove();
+
+  var iconMap = {
     success: 'bi-check-circle-fill',
     error: 'bi-exclamation-circle-fill',
+    danger: 'bi-exclamation-circle-fill',
     warning: 'bi-exclamation-triangle-fill',
-    info: 'bi-info-circle-fill',
+    info: 'bi-info-circle-fill'
   };
-  const colorMap = {
-    success: colors.green,
-    error: colors.red,
-    warning: colors.orange,
-    info: colors.blue,
-  };
-
-  toast.innerHTML = `
-    <div style="
-      position:fixed;bottom:24px;right:24px;z-index:9999;
-      background:#1a1f35;border:1px solid rgba(255,255,255,0.1);
-      border-radius:12px;padding:14px 20px;
-      display:flex;align-items:center;gap:12px;
-      box-shadow:0 8px 32px rgba(0,0,0,0.4);
-      animation:fadeInUp 0.3s ease;
-      border-left:3px solid ${colorMap[type]};
-      max-width:380px;
-    ">
-      <i class="bi ${iconMap[type]}" style="font-size:20px;color:${colorMap[type]}"></i>
-      <span style="font-size:13px;font-weight:500;color:#f1f5f9">${message}</span>
-    </div>
-  `;
+  var toast = document.createElement('div');
+  toast.className = 'ca-toast ca-toast-' + type;
+  toast.innerHTML = '<i class="bi ' + (iconMap[type] || iconMap.info) + '"></i> ' + message;
   document.body.appendChild(toast);
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s';
-    setTimeout(() => toast.remove(), 300);
+
+  requestAnimationFrame(function () { toast.classList.add('show'); });
+  setTimeout(function () {
+    toast.classList.remove('show');
+    setTimeout(function () { toast.remove(); }, 300);
   }, 3000);
 }
 
+// ---- Delete Modal (Global) ----
+function openDeleteModal(id, title, customUrl) {
+  var modal = document.getElementById('deleteConfirmModal') || document.getElementById('deleteModal');
+  var form = document.getElementById('deleteForm');
+  var nameEl = document.getElementById('deleteContentTitle') || document.getElementById('deleteUserName') || document.getElementById('deleteItemName');
+
+  if (nameEl) nameEl.textContent = title || '';
+  if (form) {
+    form.action = customUrl || (window.location.pathname.replace(/\/[^\/]*$/, '') + '/' + id);
+  }
+
+  if (modal) {
+    var bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+  }
+}
+
+// ---- Slug Generation (Global) ----
+function generateSlug(value, slugElId, previewElId, defaultText) {
+  var slug = value
+    .toLowerCase()
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/Ğ/g, 'g').replace(/Ü/g, 'u').replace(/Ş/g, 's')
+    .replace(/İ/g, 'i').replace(/Ö/g, 'o').replace(/Ç/g, 'c')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  var slugEl = document.getElementById(slugElId);
+  var previewEl = previewElId ? document.getElementById(previewElId) : null;
+
+  if (slugEl) slugEl.value = slug;
+  if (previewEl) previewEl.textContent = slug || (defaultText || 'yeni-icerik');
+}
+
+// ---- Image Upload Preview (Global) ----
+function initImagePreview(inputId, imgId, defaultId, maxSizeKB) {
+  var input = document.getElementById(inputId);
+  if (!input) return;
+
+  input.addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > maxSizeKB * 1024) {
+      alert('Dosya boyutu ' + (maxSizeKB >= 1024 ? (maxSizeKB / 1024) + ' MB' : maxSizeKB + ' KB') + '\'dan büyük olamaz.');
+      e.target.value = '';
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      var img = document.getElementById(imgId);
+      var def = document.getElementById(defaultId);
+      if (img) { img.src = ev.target.result; img.classList.remove('d-none'); }
+      if (def) { def.classList.add('d-none'); }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ---- Section Scroll Navigation (Global) ----
+function scrollToSection(sectionId, clickedEl) {
+  var target = document.getElementById(sectionId);
+  if (!target) return;
+
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (clickedEl) {
+    document.querySelectorAll('.stg-nav-item').forEach(function (item) {
+      item.classList.remove('active');
+    });
+    clickedEl.classList.add('active');
+  }
+}
+
+// ---- Character Counter (Global) ----
+function updateCharCounter(el, max) {
+  var counter = document.getElementById(el.id + '-counter');
+  if (counter) {
+    var len = el.value.length;
+    counter.textContent = len;
+    counter.style.color = len > max ? 'var(--neon-red)' : '';
+  }
+}
+
+// ---- Scroll Spy for Section Navigation (Global) ----
+(function () {
+  var sections = document.querySelectorAll('.card-dark[id^="section-"]');
+  var navItems = document.querySelectorAll('.stg-nav-item');
+
+  if (sections.length > 0 && navItems.length > 0) {
+    window.addEventListener('scroll', function () {
+      var scrollPos = window.scrollY + 140;
+      for (var i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop <= scrollPos) {
+          navItems.forEach(function (n) { n.classList.remove('active'); });
+          if (navItems[i]) navItems[i].classList.add('active');
+          break;
+        }
+      }
+    }, { passive: true });
+  }
+})();
 
 // ---- Export Format Selection ----
 document.querySelectorAll('#exportModal .col-6 > div').forEach((card) => {

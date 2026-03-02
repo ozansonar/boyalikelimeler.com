@@ -1,6 +1,6 @@
 /**
  * Settings Page JS
- * Tab switching, logo/favicon preview, maintenance toggle, SEO counter
+ * Tab switching, maintenance toggle, SEO counter, send mode toggle
  */
 
 // ── Tab Switching ──
@@ -39,68 +39,6 @@ function switchSettingsTab(elOrId, panelId) {
     if (content) {
         content.scrollTop = 0;
     }
-}
-
-// ── Logo Upload Preview ──
-function initLogoPreview() {
-    var logoInput = document.getElementById('logoInput');
-    if (!logoInput) return;
-
-    logoInput.addEventListener('change', function (e) {
-        var file = e.target.files[0];
-        if (!file) return;
-
-        if (file.size > 2 * 1024 * 1024) {
-            alert('Dosya boyutu 2 MB\'dan büyük olamaz.');
-            e.target.value = '';
-            return;
-        }
-
-        var reader = new FileReader();
-        reader.onload = function (ev) {
-            var img = document.getElementById('logoImg');
-            var def = document.getElementById('logoDefault');
-            if (img) {
-                img.src = ev.target.result;
-                img.classList.remove('d-none');
-            }
-            if (def) {
-                def.classList.add('d-none');
-            }
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-// ── Favicon Upload Preview ──
-function initFaviconPreview() {
-    var faviconInput = document.getElementById('faviconInput');
-    if (!faviconInput) return;
-
-    faviconInput.addEventListener('change', function (e) {
-        var file = e.target.files[0];
-        if (!file) return;
-
-        if (file.size > 512 * 1024) {
-            alert('Dosya boyutu 512 KB\'dan büyük olamaz.');
-            e.target.value = '';
-            return;
-        }
-
-        var reader = new FileReader();
-        reader.onload = function (ev) {
-            var img = document.getElementById('faviconImg');
-            var def = document.getElementById('faviconDefault');
-            if (img) {
-                img.src = ev.target.result;
-                img.classList.remove('d-none');
-            }
-            if (def) {
-                def.classList.add('d-none');
-            }
-        };
-        reader.readAsDataURL(file);
-    });
 }
 
 // ── Maintenance Toggle UI ──
@@ -150,37 +88,6 @@ function updateSeoCounter(input, max) {
     }
 }
 
-// ── Mail Logo Upload Preview ──
-function initMailLogoPreview() {
-    var mailLogoInput = document.getElementById('mailLogoInput');
-    if (!mailLogoInput) return;
-
-    mailLogoInput.addEventListener('change', function (e) {
-        var file = e.target.files[0];
-        if (!file) return;
-
-        if (file.size > 1024 * 1024) {
-            alert('Dosya boyutu 1 MB\'dan büyük olamaz.');
-            e.target.value = '';
-            return;
-        }
-
-        var reader = new FileReader();
-        reader.onload = function (ev) {
-            var img = document.getElementById('mailLogoImg');
-            var def = document.getElementById('mailLogoDefault');
-            if (img) {
-                img.src = ev.target.result;
-                img.classList.remove('d-none');
-            }
-            if (def) {
-                def.classList.add('d-none');
-            }
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
 // ── Send Mode Toggle ──
 function toggleSendMode() {
     var debugField = document.getElementById('debugEmailsField');
@@ -196,7 +103,7 @@ function toggleSendMode() {
 
 // ── Init ──
 document.addEventListener('DOMContentLoaded', function () {
-    initLogoPreview();
-    initFaviconPreview();
-    initMailLogoPreview();
+    initImagePreview('logoInput', 'logoImg', 'logoDefault', 2048);
+    initImagePreview('faviconInput', 'faviconImg', 'faviconDefault', 512);
+    initImagePreview('mailLogoInput', 'mailLogoImg', 'mailLogoDefault', 1024);
 });

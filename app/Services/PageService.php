@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Page;
+use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 final class PageService
 {
+    use GeneratesUniqueSlug;
+
+    protected function slugModel(): string
+    {
+        return Page::class;
+    }
     /**
      * @return array<string, int>
      */
@@ -87,20 +93,6 @@ final class PageService
         return Page::where('slug', $slug)
             ->where('is_active', true)
             ->first();
-    }
-
-    private function generateUniqueSlug(string $title, ?int $ignoreId = null): string
-    {
-        $slug = Str::slug($title);
-        $original = $slug;
-        $counter = 1;
-
-        while (Page::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
-            $slug = $original . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
     }
 
     private function clearCache(): void

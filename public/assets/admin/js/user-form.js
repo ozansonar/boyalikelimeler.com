@@ -2,21 +2,6 @@
    USER FORM — Admin User Create/Edit JS
    ============================================================ */
 
-/* -- Section Scroll Navigation -- */
-function scrollToSection(sectionId, clickedEl) {
-    var target = document.getElementById(sectionId);
-    if (!target) return;
-
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    if (clickedEl) {
-        document.querySelectorAll('.stg-nav-item').forEach(function (item) {
-            item.classList.remove('active');
-        });
-        clickedEl.classList.add('active');
-    }
-}
-
 /* -- Toggle Password Visibility -- */
 function togglePassword(inputId, btn) {
     var input = document.getElementById(inputId);
@@ -107,22 +92,4 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
-    /* Scroll spy for left nav */
-    var sections = document.querySelectorAll('.card-dark[id^="section-"]');
-    var navItems = document.querySelectorAll('.stg-nav-item');
-
-    if (sections.length > 0 && navItems.length > 0) {
-        window.addEventListener('scroll', function () {
-            var scrollPos = window.scrollY + 120;
-
-            sections.forEach(function (section, index) {
-                if (section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
-                    navItems.forEach(function (item) { item.classList.remove('active'); });
-                    if (navItems[index]) navItems[index].classList.add('active');
-                }
-            });
-        }, { passive: true });
-    }
-
 });
