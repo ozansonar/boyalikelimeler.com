@@ -15,9 +15,11 @@ class MailLog extends Model
         'user_id',
         'to_email',
         'to_name',
+        'original_to_email',
         'subject',
         'body',
         'mailable_class',
+        'is_debug_redirect',
         'status',
         'error_message',
         'sent_at',
@@ -26,7 +28,8 @@ class MailLog extends Model
     protected function casts(): array
     {
         return [
-            'sent_at' => 'datetime',
+            'sent_at'           => 'datetime',
+            'is_debug_redirect' => 'boolean',
         ];
     }
 

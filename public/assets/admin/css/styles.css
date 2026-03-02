@@ -13033,6 +13033,64 @@ a.btn-glass {
   align-self: flex-start;
 }
 
+/* --- Send Mode Toggle Cards --- */
+.stg-mode-toggle {
+  display: flex;
+  gap: 12px;
+}
+.stg-mode-option {
+  flex: 1;
+  cursor: pointer;
+}
+.stg-mode-option input[type="radio"] {
+  display: none;
+}
+.stg-mode-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 14px;
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.08);
+  background: var(--bg-input, #151933);
+  text-align: center;
+  transition: all 0.25s ease;
+}
+.stg-mode-card i {
+  font-size: 24px;
+  color: var(--text-secondary, #94a3b8);
+  transition: color 0.25s ease;
+}
+.stg-mode-card span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #f1f5f9);
+}
+.stg-mode-card small {
+  font-size: 12px;
+  color: var(--text-muted, #64748b);
+}
+.stg-mode-option input[type="radio"]:checked + .stg-mode-card {
+  border-color: var(--teal-primary, #14b8a6);
+  background: rgba(20,184,166,0.08);
+}
+.stg-mode-option input[type="radio"]:checked + .stg-mode-card i {
+  color: var(--teal-primary, #14b8a6);
+}
+.stg-mode-option input[type="radio"]:checked + .stg-mode-card--dev {
+  border-color: var(--neon-orange, #f97316);
+  background: rgba(249,115,22,0.08);
+}
+.stg-mode-option input[type="radio"]:checked + .stg-mode-card--dev i {
+  color: var(--neon-orange, #f97316);
+}
+@media (max-width: 575.98px) {
+  .stg-mode-toggle {
+    flex-direction: column;
+  }
+}
+
 /* --- Toggle / Switch --- */
 .stg-toggle-list {
   display: flex;

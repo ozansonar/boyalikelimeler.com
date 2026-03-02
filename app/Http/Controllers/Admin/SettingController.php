@@ -10,6 +10,7 @@ use App\Services\SettingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
@@ -112,19 +113,48 @@ class SettingController extends Controller
     public function updateSmtp(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'host'       => 'nullable|string|max:200',
-            'port'       => 'nullable|string|max:10',
-            'username'   => 'nullable|string|max:200',
-            'password'   => 'nullable|string|max:200',
-            'encryption' => 'required|string|in:tls,ssl,none',
-            'from_name'  => 'nullable|string|max:200',
-            'from_email' => 'nullable|email|max:200',
+            'host'         => 'nullable|string|max:200',
+            'port'         => 'nullable|string|max:10',
+            'username'     => 'nullable|string|max:200',
+            'password'     => 'nullable|string|max:200',
+            'encryption'   => 'required|string|in:tls,ssl,none',
+            'from_name'    => 'nullable|string|max:200',
+            'from_email'   => 'nullable|email|max:200',
+            'send_mode'    => 'required|string|in:normal,developer',
+            'debug_emails' => 'nullable|string|max:1000',
         ]);
+
+        if ($request->hasFile('mail_logo')) {
+            $request->validate(['mail_logo' => 'image|mimes:png,jpg,jpeg|max:1024']);
+
+            $oldLogo = $this->settingService->getGroup('smtp')['mail_logo'] ?? null;
+            if ($oldLogo && File::exists(public_path('uploads/' . $oldLogo))) {
+                File::delete(public_path('uploads/' . $oldLogo));
+            }
+
+            $data['mail_logo'] = $request->file('mail_logo')
+                ->store('settings', 'public_uploads');
+        }
 
         $this->settingService->updateGroup('smtp', $data);
 
         return redirect()->route('admin.settings.index', ['tab' => 'smtp'])
             ->with('success', 'E-posta (SMTP) ayarları başarıyla güncellendi.');
+    }
+
+    public function removeMailLogo(): RedirectResponse
+    {
+        $smtp = $this->settingService->getGroup('smtp');
+        $logo = $smtp['mail_logo'] ?? null;
+
+        if ($logo && File::exists(public_path('uploads/' . $logo))) {
+            File::delete(public_path('uploads/' . $logo));
+        }
+
+        $this->settingService->set('smtp', 'mail_logo', null);
+
+        return redirect()->route('admin.settings.index', ['tab' => 'smtp'])
+            ->with('success', 'Mail logosu başarıyla kaldırıldı.');
     }
 
     public function updateMaintenance(Request $request): RedirectResponse
