@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -34,6 +35,9 @@ Route::get('/sifre-sifirla/{token}', [ResetPasswordController::class, 'showForm'
 Route::post('/sifre-sifirla', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Admin Routes
-Route::prefix('admin')->middleware('admin')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // User Management
+    Route::resource('users', UserController::class)->except(['show']);
 });
