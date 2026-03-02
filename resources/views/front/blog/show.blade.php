@@ -1,0 +1,221 @@
+@extends('layouts.front')
+
+@section('title', ($post->meta_title ?: $post->title) . ' — Boyalı Kelimeler Blog')
+@section('meta_description', $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160))
+@section('canonical', route('blog.show', $post->slug))
+@section('og_title', ($post->meta_title ?: $post->title) . ' — Boyalı Kelimeler Blog')
+@section('og_description', $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160))
+@if($post->cover_image)
+    @section('og_image', asset('uploads/' . $post->cover_image))
+@endif
+
+@section('content')
+
+    <!-- Page Header -->
+    <section class="blog-page-header blog-page-header--detail" aria-label="Blog detay sayfa başlığı">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="blog-page-header__breadcrumb" aria-label="Breadcrumb">
+                <ol class="blog-page-header__breadcrumb-list">
+                    <li class="blog-page-header__breadcrumb-item">
+                        <a href="{{ url('/') }}" class="blog-page-header__breadcrumb-link">
+                            <i class="fa-solid fa-house"></i>
+                        </a>
+                    </li>
+                    <li class="blog-page-header__breadcrumb-sep">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </li>
+                    <li class="blog-page-header__breadcrumb-item">
+                        <a href="{{ route('blog.index') }}" class="blog-page-header__breadcrumb-link">Blog</a>
+                    </li>
+                    @if($post->category)
+                        <li class="blog-page-header__breadcrumb-sep">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </li>
+                        <li class="blog-page-header__breadcrumb-item">
+                            <a href="{{ route('blog.index', ['kategori' => $post->category->slug]) }}" class="blog-page-header__breadcrumb-link">{{ $post->category->name }}</a>
+                        </li>
+                    @endif
+                    <li class="blog-page-header__breadcrumb-sep">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </li>
+                    <li class="blog-page-header__breadcrumb-item blog-page-header__breadcrumb-item--active" aria-current="page">
+                        {{ Str::limit($post->title, 40) }}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Article Section -->
+    <article class="blogd-section">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- SOL KOLON — ANA İÇERİK -->
+                <div class="col-lg-8">
+
+                    <!-- Article Header -->
+                    <header class="blogd-header">
+                        @if($post->category)
+                            <span class="blog-badge blogd-header__category">
+                                <i class="fa-solid fa-folder me-1"></i>{{ $post->category->name }}
+                            </span>
+                        @endif
+
+                        <h1 class="blogd-header__title">
+                            {{ $post->title }}
+                        </h1>
+
+                        <div class="blogd-header__meta">
+                            @if($post->published_at)
+                                <time class="blogd-header__date" datetime="{{ $post->published_at->toDateString() }}">
+                                    <i class="fa-regular fa-calendar me-1"></i>{{ $post->published_at->translatedFormat('d F Y') }}
+                                </time>
+                            @endif
+                            <span class="blogd-header__read-time">
+                                <i class="fa-regular fa-clock me-1"></i>{{ $post->readingTime() }} dk okuma
+                            </span>
+                            <span class="blogd-header__views">
+                                <i class="fa-solid fa-eye me-1"></i>{{ number_format($post->view_count) }} okunma
+                            </span>
+                        </div>
+                    </header>
+
+                    <!-- Cover Image -->
+                    @if($post->cover_image)
+                        <div class="blogd-cover">
+                            <img src="{{ asset('uploads/' . $post->cover_image) }}"
+                                 alt="{{ $post->title }}"
+                                 class="blogd-cover__img img-fluid"
+                                 loading="lazy">
+                        </div>
+                    @else
+                        <div class="blogd-cover">
+                            <div class="blogd-cover__placeholder">
+                                <i class="fa-solid fa-newspaper"></i>
+                                <span>Kapak Görseli</span>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Article Content -->
+                    <div class="blogd-content">
+                        @if($post->excerpt)
+                            <p class="blogd-content__lead">
+                                {{ $post->excerpt }}
+                            </p>
+                        @endif
+
+                        {!! $post->body !!}
+                    </div>
+
+                    <!-- Share Bar -->
+                    <div class="blogd-share">
+                        <span class="blogd-share__label">
+                            <i class="fa-solid fa-share-nodes me-2"></i>Paylaş:
+                        </span>
+                        <div class="blogd-share__btns">
+                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('blog.show', $post->slug)) }}&text={{ urlencode($post->title) }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="blogd-share__btn blogd-share__btn--twitter" aria-label="Twitter'da paylaş">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('blog.show', $post->slug)) }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="blogd-share__btn blogd-share__btn--facebook" aria-label="Facebook'ta paylaş">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . route('blog.show', $post->slug)) }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="blogd-share__btn blogd-share__btn--whatsapp" aria-label="WhatsApp'ta paylaş">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                            <button type="button" class="blogd-share__btn blogd-share__btn--copy"
+                                    aria-label="Bağlantıyı kopyala"
+                                    data-url="{{ route('blog.show', $post->slug) }}">
+                                <i class="fa-solid fa-link"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- SAĞ KOLON — SIDEBAR -->
+                <aside class="col-lg-4">
+                    <div class="blogd-sidebar">
+
+                        <!-- Categories -->
+                        <div class="blogd-sidebar__card">
+                            <h4 class="blogd-sidebar__title">
+                                <i class="fa-solid fa-folder-open me-2"></i>Kategoriler
+                            </h4>
+                            <ul class="blogd-sidebar__cat-list">
+                                @foreach($categories as $cat)
+                                    <li>
+                                        <a href="{{ route('blog.index', ['kategori' => $cat->slug]) }}" class="blogd-sidebar__cat-link">
+                                            <i class="fa-solid fa-folder me-2"></i>{{ $cat->name }}
+                                            <span class="blogd-sidebar__cat-count">{{ $cat->posts()->where('status', 'published')->count() }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <!-- Popular Posts -->
+                        @if($popularPosts->isNotEmpty())
+                        <div class="blogd-sidebar__card">
+                            <h4 class="blogd-sidebar__title">
+                                <i class="fa-solid fa-fire me-2"></i>Popüler Yazılar
+                            </h4>
+                            <div class="blogd-sidebar__popular">
+                                @foreach($popularPosts as $popular)
+                                    <a href="{{ route('blog.show', $popular->slug) }}" class="blogd-sidebar__popular-item">
+                                        <div class="blogd-sidebar__popular-thumb">
+                                            <i class="fa-solid fa-newspaper"></i>
+                                        </div>
+                                        <div class="blogd-sidebar__popular-info">
+                                            <h5 class="blogd-sidebar__popular-title">{{ $popular->title }}</h5>
+                                            <span class="blogd-sidebar__popular-meta">
+                                                <i class="fa-solid fa-eye me-1"></i>{{ number_format($popular->view_count) }}
+                                                <span class="mx-1">&middot;</span>
+                                                @if($popular->published_at)
+                                                    {{ $popular->published_at->translatedFormat('d M Y') }}
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </article>
+
+@endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var copyBtn = document.querySelector('.blogd-share__btn--copy');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+            var url = this.getAttribute('data-url');
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(function () {
+                    copyBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    setTimeout(function () {
+                        copyBtn.innerHTML = '<i class="fa-solid fa-link"></i>';
+                    }, 2000);
+                });
+            }
+        });
+    }
+});
+</script>
+@endpush

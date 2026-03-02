@@ -322,6 +322,16 @@
   window.addEventListener('scroll', onScroll);
 
 
+  // ==================== SYNC EDITOR TO HIDDEN TEXTAREA ====================
+  window.syncEditor = function () {
+    var editorEl = document.getElementById('contentEditor');
+    var hidden = document.getElementById('bodyHidden');
+    if (editorEl && hidden) {
+      hidden.value = editorEl.innerHTML;
+    }
+  };
+
+
   // ==================== FORM ACTIONS ====================
   window.saveDraft = function () {
     showToast('Taslak başarıyla kaydedildi!', 'success');
