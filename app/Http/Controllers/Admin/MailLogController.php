@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\MailLog;
+use App\Services\MailLogService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class MailLogController extends Controller
+{
+    public function __construct(
+        private readonly MailLogService $mailLogService,
+    ) {}
+
+    public function index(Request $request): View
+    {
+        $perPage = in_array((int) $request->input('per_page'), [10, 25, 50, 100], true)
+            ? (int) $request->input('per_page')
+            : 25;
+
+        $filters = $request->only(['search', 'status', 'date_from', 'date_to']);
+
+        return view('admin.mail-logs.index', [
+            'logs'    => $this->mailLogService->paginate($perPage, $filters),
+            'stats'   => $this->mailLogService->getAdminStats(),
+            'filters' => $filters,
+            'perPage' => $perPage,
+        ]);
+    }
+
+    public function show(MailLog $mailLog): View
+    {
+        $mailLog->load('user');
+
+        return view('admin.mail-logs.show', [
+            'log' => $mailLog,
+        ]);
+    }
+
+    public function destroy(MailLog $mailLog): RedirectResponse
+    {
+        $this->mailLogService->delete($mailLog);
+
+        return redirect()->route('admin.mail-logs.index')
+            ->with('success', 'Mail kaydı başarıyla silindi.');
+    }
+}

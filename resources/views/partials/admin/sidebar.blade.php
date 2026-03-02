@@ -13,13 +13,31 @@
             <i class="bi bi-grid-1x2-fill"></i> Dashboard
         </a>
 
+        <div class="nav-section-title">İçerik Yönetimi</div>
+        <a href="{{ route('admin.posts.index') }}" class="nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
+            <i class="bi bi-file-earmark-text-fill"></i> İçerikler
+        </a>
+        <a href="{{ route('admin.categories.index') }}" class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+            <i class="bi bi-folder-fill"></i> Kategoriler
+        </a>
+        <a href="{{ route('admin.pages.index') }}" class="nav-link {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
+            <i class="bi bi-file-earmark-richtext-fill"></i> Sayfalar
+        </a>
+
         <div class="nav-section-title">Yönetim</div>
         <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
             <i class="bi bi-people-fill"></i> Kullanıcılar
         </a>
 
+        <a href="{{ route('admin.menus.index') }}" class="nav-link {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
+            <i class="bi bi-list-nested"></i> Menüler
+        </a>
+
         <div class="nav-section-title">Sistem</div>
-        <a href="{{ route('admin.dashboard') }}" class="nav-link">
+        <a href="{{ route('admin.mail-logs.index') }}" class="nav-link {{ request()->routeIs('admin.mail-logs.*') ? 'active' : '' }}">
+            <i class="bi bi-envelope-fill"></i> Mail Logları
+        </a>
+        <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
             <i class="bi bi-gear-fill"></i> Ayarlar
         </a>
     </nav>
