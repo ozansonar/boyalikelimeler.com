@@ -146,6 +146,18 @@
                     </div>
                 </div>
                 <div class="card-body-custom">
+                    @if($work->status === \App\Enums\LiteraryWorkStatus::Unpublished)
+                        <div class="mb-3 p-3 rounded" style="background: rgba(234, 179, 8, .08); border: 1px solid rgba(234, 179, 8, .2);">
+                            <div class="d-flex align-items-start gap-2">
+                                <i class="bi bi-eye-slash text-neon-yellow mt-1"></i>
+                                <div>
+                                    <strong class="text-neon-yellow">Yazar Tarafından Kaldırıldı</strong>
+                                    <p class="text-muted small mb-0 mt-1">Bu eser yazar tarafından yayından kaldırılmıştır. Tekrar yayınlamak için yazarın panelinden talep göndermesi gerekmektedir.</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="d-grid gap-2">
                         @if($work->status !== \App\Enums\LiteraryWorkStatus::Approved)
                             <form method="POST" action="{{ route('admin.literary-works.approve', $work) }}">
@@ -157,7 +169,7 @@
                             </form>
                         @endif
 
-                        @if($work->status !== \App\Enums\LiteraryWorkStatus::Rejected)
+                        @if(!in_array($work->status, [\App\Enums\LiteraryWorkStatus::Rejected, \App\Enums\LiteraryWorkStatus::Unpublished]))
                             <form method="POST" action="{{ route('admin.literary-works.reject', $work) }}">
                                 @csrf
                                 @method('PATCH')
@@ -167,9 +179,11 @@
                             </form>
                         @endif
 
-                        <button type="button" class="btn-glass w-100" onclick="toggleRevisionForm()">
-                            <i class="bi bi-arrow-repeat me-1"></i>Revize İste
-                        </button>
+                        @if($work->status !== \App\Enums\LiteraryWorkStatus::Unpublished)
+                            <button type="button" class="btn-glass w-100" onclick="toggleRevisionForm()">
+                                <i class="bi bi-arrow-repeat me-1"></i>Revize İste
+                            </button>
+                        @endif
                     </div>
 
                     <!-- Revize Form (hidden by default) -->

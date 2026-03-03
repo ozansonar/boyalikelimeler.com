@@ -30,7 +30,7 @@ enum LiteraryWorkStatus: string
             self::Approved          => 'active',
             self::Rejected          => 'inactive',
             self::RevisionRequested => 'info',
-            self::Unpublished       => 'inactive',
+            self::Unpublished       => 'unpublished',
         };
     }
 }
