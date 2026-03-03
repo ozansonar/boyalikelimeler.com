@@ -234,6 +234,9 @@
         @include('front.myposts._unpublish-modal')
     @endif
 
+    {{-- Editor Image Gallery Modal --}}
+    <x-editor-image-gallery />
+
 @endsection
 
 @push('scripts')
@@ -241,6 +244,8 @@
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
     <!-- TinyMCE 7 -->
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js"></script>
+    <!-- Editor Image Gallery JS (must load before write-post.js) -->
+    <script src="{{ asset('js/editor-image-gallery.js') }}"></script>
     <!-- Write Post JS -->
     <script src="{{ asset('js/write-post.js') }}"></script>
     @if($work?->status === \App\Enums\LiteraryWorkStatus::Approved)

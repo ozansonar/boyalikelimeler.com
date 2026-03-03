@@ -80,6 +80,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(LiteraryWork::class);
     }
 
+    public function editorImages(): HasMany
+    {
+        return $this->hasMany(EditorImage::class);
+    }
+
     public function hasRole(RoleSlug $role): bool
     {
         return $this->role?->slug === $role->value;

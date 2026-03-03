@@ -161,10 +161,14 @@
         </div>
     </form>
 
+    {{-- Editor Image Gallery Modal --}}
+    <x-editor-image-gallery />
+
 @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js"></script>
+    <script src="{{ asset('js/editor-image-gallery.js') }}"></script>
     <script>
     tinymce.init({
         selector: '#bodyEditor',
@@ -176,6 +180,11 @@
         toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link image | code fullscreen',
         branding: false,
         promotion: false,
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        images_upload_handler: window.editorImagesUploadHandler,
+        file_picker_callback: window.editorImagesFilePicker,
     });
     </script>
 @endpush
