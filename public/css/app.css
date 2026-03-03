@@ -13083,16 +13083,20 @@ p {
 }
 
 /* =============================================================
-   Editor Image Gallery (TinyMCE Modal)
+   Editor Image Gallery (TinyMCE Modal) — Compact
    ============================================================= */
 .eig-upload__dropzone {
-    border: 2px dashed rgba(212, 175, 55, .3);
-    border-radius: .75rem;
-    padding: 1.5rem;
+    border: 1px dashed rgba(212, 175, 55, .35);
+    border-radius: .5rem;
+    padding: .5rem .75rem;
     text-align: center;
     cursor: pointer;
     transition: border-color .2s, background .2s;
     background: rgba(42, 42, 47, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .25rem;
 }
 
 .eig-upload__dropzone:hover,
@@ -13103,29 +13107,33 @@ p {
 
 .eig-upload__placeholder {
     color: var(--color-silver);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .eig-upload__placeholder i {
     color: var(--color-gold);
+    font-size: 1rem;
 }
 
 .eig-card {
-    border-radius: .5rem;
+    border-radius: .375rem;
     overflow: hidden;
     background: var(--color-black-card);
     cursor: pointer;
     border: 2px solid transparent;
-    transition: border-color .2s, transform .15s;
+    transition: border-color .15s;
+    position: relative;
 }
 
 .eig-card:hover {
     border-color: rgba(212, 175, 55, .3);
-    transform: translateY(-2px);
 }
 
 .eig-card--selected {
     border-color: var(--color-gold) !important;
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, .25);
 }
 
 .eig-card__thumb {
@@ -13141,57 +13149,58 @@ p {
     object-fit: cover;
 }
 
-.eig-card__overlay {
+.eig-card__check {
     position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, .6);
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    color: var(--color-black-sweet);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: .6rem;
+}
+
+.eig-card--selected .eig-card__check {
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding: .5rem;
-    opacity: 0;
-    transition: opacity .2s;
 }
 
-.eig-card:hover .eig-card__overlay {
-    opacity: 1;
-}
-
-.eig-card__delete-btn {
-    background: rgba(239, 68, 68, .9);
+.eig-card__del {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(220, 53, 69, .85);
     border: none;
     color: #fff;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
+    font-size: .55rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: .75rem;
     cursor: pointer;
-    transition: background .2s;
+    opacity: 0;
+    transition: opacity .15s;
 }
 
-.eig-card__delete-btn:hover {
-    background: #ef4444;
+.eig-card:hover .eig-card__del {
+    opacity: 1;
 }
 
-.eig-card__info {
-    padding: .5rem .625rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+.eig-card__del:hover {
+    background: #dc3545;
 }
 
 .eig-card__name {
-    font-size: .75rem;
+    font-size: .65rem;
     color: var(--color-white);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.eig-card__meta {
-    font-size: .65rem;
-    color: var(--color-silver-dark);
+    padding: 3px 4px;
+    line-height: 1.2;
 }
