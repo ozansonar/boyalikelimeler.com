@@ -23790,6 +23790,15 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
 }
 
 /* =============================================================
+   Literary Work Body — Rich Content
+   ============================================================= */
+.literary-work-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: .375rem;
+}
+
+/* =============================================================
    Editor Image Gallery (TinyMCE Modal) — Compact
    ============================================================= */
 .eig-upload__dropzone {
