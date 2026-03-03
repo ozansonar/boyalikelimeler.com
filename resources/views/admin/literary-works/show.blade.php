@@ -19,11 +19,12 @@
             <a href="{{ route('admin.literary-works.index') }}" class="btn-glass" title="Geri Dön"><i class="bi bi-arrow-left"></i></a>
             <div>
                 <h1 class="page-title mb-0">Eser Detayı</h1>
-                <p class="page-subtitle mb-0">Eseri inceleyin ve onay durumunu belirleyin</p>
+                <p class="page-subtitle mb-0">Eseri inceleyin ve yönetin</p>
             </div>
         </div>
         <div class="d-flex gap-2 flex-wrap">
             <span class="usr-status-badge {{ $work->status->badgeClass() }}">{{ $work->status->label() }}</span>
+            <a href="{{ route('admin.literary-works.edit', $work) }}" class="btn-glass"><i class="bi bi-pencil me-1"></i>Düzenle</a>
         </div>
     </div>
 
@@ -101,7 +102,7 @@
             @endif
         </div>
 
-        <!-- Sağ: Yazar Bilgisi + Aksiyon Butonları -->
+        <!-- Sağ: Yazar Bilgisi + İstatistik + Aksiyonlar -->
         <div class="col-lg-4">
 
             <!-- Yazar Bilgisi -->
@@ -123,24 +124,29 @@
                             <div class="text-muted small">{{ $work->author?->email ?? '-' }}</div>
                         </div>
                     </div>
-                    <div class="text-muted small">
-                        <i class="bi bi-calendar me-1"></i>Gönderim: {{ $work->created_at->format('d.m.Y H:i') }}
-                    </div>
-                    @if($work->published_at)
-                        <div class="text-muted small mt-1">
-                            <i class="bi bi-check-circle me-1"></i>Yayın: {{ $work->published_at->format('d.m.Y H:i') }}
+                    <div class="d-flex flex-column gap-1">
+                        <div class="text-muted small">
+                            <i class="bi bi-calendar me-1"></i>Gönderim: {{ $work->created_at->format('d.m.Y H:i') }}
                         </div>
-                    @endif
+                        @if($work->published_at)
+                            <div class="text-muted small">
+                                <i class="bi bi-check-circle me-1"></i>Yayın: {{ $work->published_at->format('d.m.Y H:i') }}
+                            </div>
+                        @endif
+                        <div class="text-muted small">
+                            <i class="bi bi-eye me-1"></i>Görüntülenme: <strong class="text-teal">{{ number_format($work->view_count) }}</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Aksiyonlar -->
+            <!-- Durum İşlemleri -->
             <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="card-header-custom">
                     <div class="form-section-header mb-0">
                         <div class="form-section-icon bg-icon-purple"><i class="bi bi-lightning"></i></div>
                         <div>
-                            <h6 class="mb-0">İşlemler</h6>
+                            <h6 class="mb-0">Durum İşlemleri</h6>
                             <small class="text-muted">Eser durumunu değiştirin</small>
                         </div>
                     </div>
@@ -152,7 +158,7 @@
                                 <i class="bi bi-eye-slash text-neon-yellow mt-1"></i>
                                 <div>
                                     <strong class="text-neon-yellow">Yazar Tarafından Kaldırıldı</strong>
-                                    <p class="text-muted small mb-0 mt-1">Bu eser yazar tarafından yayından kaldırılmıştır. Tekrar yayınlamak için yazarın panelinden talep göndermesi gerekmektedir.</p>
+                                    <p class="text-muted small mb-0 mt-1">Bu eser yazar tarafından yayından kaldırılmıştır.</p>
                                 </div>
                             </div>
                         </div>
@@ -160,23 +166,21 @@
 
                     <div class="d-grid gap-2">
                         @if($work->status !== \App\Enums\LiteraryWorkStatus::Approved)
-                            <form method="POST" action="{{ route('admin.literary-works.approve', $work) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn-teal w-100" onclick="return confirm('Bu eseri onaylamak istediğinize emin misiniz?')">
-                                    <i class="bi bi-check-circle me-1"></i>Onayla
-                                </button>
-                            </form>
+                            <button type="button" class="btn-teal w-100" onclick="openShowConfirmModal('approve')">
+                                <i class="bi bi-check-circle me-1"></i>Onayla
+                            </button>
+                        @endif
+
+                        @if($work->status === \App\Enums\LiteraryWorkStatus::Approved)
+                            <button type="button" class="btn-glass w-100 text-neon-yellow" onclick="openShowConfirmModal('unpublish')">
+                                <i class="bi bi-eye-slash me-1"></i>Yayından Kaldır
+                            </button>
                         @endif
 
                         @if(!in_array($work->status, [\App\Enums\LiteraryWorkStatus::Rejected, \App\Enums\LiteraryWorkStatus::Unpublished]))
-                            <form method="POST" action="{{ route('admin.literary-works.reject', $work) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn-glass w-100 text-danger" onclick="return confirm('Bu eseri reddetmek istediğinize emin misiniz?')">
-                                    <i class="bi bi-x-circle me-1"></i>Reddet
-                                </button>
-                            </form>
+                            <button type="button" class="btn-glass w-100 text-danger" onclick="openShowConfirmModal('reject')">
+                                <i class="bi bi-x-circle me-1"></i>Reddet
+                            </button>
                         @endif
 
                         @if($work->status !== \App\Enums\LiteraryWorkStatus::Unpublished)
@@ -209,8 +213,119 @@
                 </div>
             </div>
 
+            <!-- Tehlikeli İşlemler -->
+            <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="150">
+                <div class="card-header-custom">
+                    <div class="form-section-header mb-0">
+                        <div class="form-section-icon bg-icon-red"><i class="bi bi-shield-exclamation"></i></div>
+                        <div>
+                            <h6 class="mb-0">Tehlikeli İşlemler</h6>
+                            <small class="text-muted">Dikkatli olun, bu işlemler geri alınamaz</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body-custom">
+                    <button type="button" class="btn-glass w-100 text-danger" onclick="openShowConfirmModal('delete')">
+                        <i class="bi bi-trash me-1"></i>Eseri Kalıcı Olarak Sil
+                    </button>
+                </div>
+            </div>
+
         </div>
 
+    </div>
+
+    <!-- Approve Confirm Modal -->
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon success">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Eseri Onayla</h5>
+                    <p class="cl-modal-body-text">Bu eseri onaylamak ve yayına almak istediğinize emin misiniz?</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <form method="POST" action="{{ route('admin.literary-works.approve', $work) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn-teal"><i class="bi bi-check-circle me-1"></i>Onayla</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Confirm Modal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon danger">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Eseri Reddet</h5>
+                    <p class="cl-modal-body-text">Bu eseri reddetmek istediğinize emin misiniz?</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <form method="POST" action="{{ route('admin.literary-works.reject', $work) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn-teal btn-danger-gradient"><i class="bi bi-x-circle me-1"></i>Reddet</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unpublish Confirm Modal -->
+    <div class="modal fade" id="unpublishModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon warning">
+                        <i class="bi bi-eye-slash"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Yayından Kaldır</h5>
+                    <p class="cl-modal-body-text">Bu eseri yayından kaldırmak istediğinize emin misiniz?</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <form method="POST" action="{{ route('admin.literary-works.unpublish', $work) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn-teal btn-warning-gradient"><i class="bi bi-eye-slash me-1"></i>Kaldır</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon danger">
+                        <i class="bi bi-trash"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Eseri Sil</h5>
+                    <p class="cl-modal-body-text">Bu eseri kalıcı olarak silmek istediğinize emin misiniz?</p>
+                    <p class="cl-modal-warning"><i class="bi bi-exclamation-triangle me-1"></i>Bu işlem geri alınamaz.</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <form method="POST" action="{{ route('admin.literary-works.destroy', $work) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-teal btn-danger-gradient"><i class="bi bi-trash me-1"></i>Sil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection
@@ -222,6 +337,14 @@ function toggleRevisionForm() {
     form.classList.toggle('d-none');
     if (!form.classList.contains('d-none')) {
         form.querySelector('textarea').focus();
+    }
+}
+
+function openShowConfirmModal(type) {
+    var modal = document.getElementById(type + 'Modal');
+    if (modal) {
+        var bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
     }
 }
 </script>
