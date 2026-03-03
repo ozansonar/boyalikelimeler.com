@@ -192,13 +192,22 @@
         });
     }
 
+    // ─── Get page title for alt text ───────────────────────
+    function getPageTitle() {
+        var titleEl = document.getElementById('title') || document.getElementById('postTitle');
+        return (titleEl && titleEl.value && titleEl.value.trim()) ? titleEl.value.trim() : '';
+    }
+
     // ─── Insert Images ──────────────────────────────────────
     document.addEventListener('click', function (e) {
         if (!e.target || !e.target.closest('#eigInsertBtn')) return;
         if (selectedImages.length === 0 || !activeEditor) return;
 
+        var altText = getPageTitle();
+
         var html = selectedImages.map(function (img) {
-            return '<img src="' + esc(img.url) + '" alt="' + esc(img.name) + '" class="img-fluid" loading="lazy" />';
+            var alt = altText || img.name;
+            return '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="img-fluid" loading="lazy" />';
         }).join('\n');
 
         activeEditor.insertContent(html);
