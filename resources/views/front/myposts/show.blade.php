@@ -121,7 +121,7 @@
 
                     <!-- Article Content -->
                     <div class="cdetail-content">
-                        {!! responsive_body($work->body) !!}
+                        {!! $work->body !!}
                     </div>
 
                     <!-- Action Buttons -->

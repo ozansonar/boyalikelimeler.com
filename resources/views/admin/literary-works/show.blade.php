@@ -59,7 +59,7 @@
                     @endif
 
                     <div class="literary-work-body">
-                        {!! responsive_body($work->body) !!}
+                        {!! $work->body !!}
                     </div>
                 </div>
             </div>

@@ -107,7 +107,7 @@
                             </p>
                         @endif
 
-                        {!! responsive_body($post->body) !!}
+                        {!! $post->body !!}
                     </div>
 
                     <!-- Share Bar -->
