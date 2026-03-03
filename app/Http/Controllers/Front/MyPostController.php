@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\LiteraryWorkStoreRequest;
 use App\Http\Requests\Front\LiteraryWorkUpdateRequest;
+use App\Enums\LiteraryWorkStatus;
 use App\Models\LiteraryWork;
 use App\Services\LiteraryCategoryService;
 use App\Services\LiteraryWorkService;
@@ -104,6 +105,7 @@ final class MyPostController extends Controller
     {
         $user = auth()->user();
         $validated = $request->validated();
+        $wasApproved = $work->status === LiteraryWorkStatus::Approved;
 
         $updatedWork = $this->workService->updateWork(
             $user,
@@ -116,9 +118,13 @@ final class MyPostController extends Controller
             abort(403, 'Bu eseri güncelleme yetkiniz yok.');
         }
 
+        $successMessage = $wasApproved
+            ? 'Eseriniz güncellendi. Yayından kaldırılmış olup editör onayından sonra tekrar yayınlanacaktır.'
+            : 'Eseriniz başarıyla güncellendi ve tekrar incelemeye gönderildi.';
+
         $redirect = redirect()
             ->route('myposts.index')
-            ->with('success', 'Eseriniz başarıyla güncellendi ve tekrar incelemeye gönderildi.');
+            ->with('success', $successMessage);
 
         if (! $this->workService->wasMailSent()) {
             $redirect->with('warning', 'Editörlere bildirim maili gönderilemedi, ancak eseriniz güncellendi.');

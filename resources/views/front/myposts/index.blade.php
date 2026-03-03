@@ -170,11 +170,16 @@
                                             <a href="{{ route('myposts.show', $work) }}" class="myposts-action-btn myposts-action-btn--view" title="Görüntüle">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>
-                                            @if($work->status !== \App\Enums\LiteraryWorkStatus::Approved)
-                                                <a href="{{ route('myposts.edit', $work) }}" class="myposts-action-btn myposts-action-btn--edit" title="{{ $work->status === \App\Enums\LiteraryWorkStatus::RevisionRequested ? 'Revize Et' : 'Düzenle' }}">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                </a>
-                                            @endif
+                                            @php
+                                                $editTitle = match($work->status) {
+                                                    \App\Enums\LiteraryWorkStatus::Approved => 'Güncelle',
+                                                    \App\Enums\LiteraryWorkStatus::RevisionRequested => 'Revize Et',
+                                                    default => 'Düzenle',
+                                                };
+                                            @endphp
+                                            <a href="{{ route('myposts.edit', $work) }}" class="myposts-action-btn myposts-action-btn--edit" title="{{ $editTitle }}">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
                                             <button type="button"
                                                     class="myposts-action-btn myposts-action-btn--delete"
                                                     title="Sil"
@@ -260,24 +265,28 @@
     {{-- Delete Confirmation Modal --}}
     <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="background: var(--color-black-card); border: 1px solid rgba(255,255,255,.08);">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title" id="deleteModalLabel">
-                        <i class="fa-solid fa-triangle-exclamation me-2 text-danger"></i>Eseri Sil
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            <div class="modal-content delete-modal">
+                <div class="delete-modal__icon-wrap">
+                    <div class="delete-modal__icon-ring">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <p><strong id="deleteItemName"></strong> eserini silmek istediğinize emin misiniz?</p>
-                    <p class="text-muted small">Bu işlem geri alınamaz.</p>
-                </div>
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">İptal</button>
+                <h5 class="delete-modal__title" id="deleteModalLabel">Eseri Silmek İstiyor musunuz?</h5>
+                <p class="delete-modal__desc">
+                    <strong id="deleteItemName"></strong> başlıklı eseriniz kalıcı olarak silinecektir.
+                </p>
+                <p class="delete-modal__warning">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i>Bu işlem geri alınamaz.
+                </p>
+                <div class="delete-modal__actions">
+                    <button type="button" class="delete-modal__btn delete-modal__btn--cancel" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-xmark me-1"></i>Vazgeç
+                    </button>
                     <form id="deleteForm" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            <i class="fa-solid fa-trash-can me-1"></i>Sil
+                        <button type="submit" class="delete-modal__btn delete-modal__btn--confirm">
+                            <i class="fa-solid fa-trash-can me-1"></i>Evet, Sil
                         </button>
                     </form>
                 </div>
