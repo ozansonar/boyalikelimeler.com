@@ -1,0 +1,315 @@
+@extends('layouts.front')
+
+@section('title', 'İletişim — Boyalı Kelimeler')
+@section('meta_description', 'Boyalı Kelimeler ile iletişime geçin. Sorularınız, önerileriniz ve iş birliği talepleriniz için bize ulaşın.')
+@section('canonical', route('contact.show'))
+
+@section('og')
+    <meta property="og:title" content="İletişim — Boyalı Kelimeler">
+    <meta property="og:description" content="Boyalı Kelimeler ile iletişime geçin. Sorularınız ve önerileriniz için bize ulaşın.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ route('contact.show') }}">
+@endsection
+
+@section('content')
+
+    <!-- Page Header -->
+    <section class="page-header" aria-label="Sayfa başlığı">
+        <div class="container">
+            <h1 class="page-header__title">İletişim</h1>
+            <div class="page-header__divider"></div>
+            <p class="page-header__desc">
+                Sorularınız, önerileriniz ve iş birliği talepleriniz için bize ulaşın.<br>
+                Her mesajınız bizim için değerlidir.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="section section--dark contact-section" aria-label="İletişim formu ve bilgiler">
+        <div class="container">
+            <div class="row g-4 g-lg-5">
+
+                <!-- Left: Contact Form -->
+                <div class="col-lg-7" data-aos="fade-up">
+                    <div class="contact-card">
+                        <div class="contact-card__header">
+                            <div class="contact-card__icon">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </div>
+                            <h2 class="contact-card__title">Bize Yazın</h2>
+                            <p class="contact-card__subtitle">Formu doldurarak mesajınızı iletebilirsiniz</p>
+                        </div>
+
+                        <form class="contact-form" id="contactForm" novalidate>
+                            @csrf
+                            <div class="row g-3">
+                                <!-- Ad Soyad -->
+                                <div class="col-md-6">
+                                    <div class="contact-form__group">
+                                        <label class="contact-form__label" for="fullname">
+                                            <i class="fa-solid fa-user me-1"></i>Ad Soyad
+                                        </label>
+                                        <input type="text"
+                                               class="contact-form__input"
+                                               id="fullname"
+                                               name="fullname"
+                                               placeholder="Adınız ve soyadınız"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <!-- E-posta -->
+                                <div class="col-md-6">
+                                    <div class="contact-form__group">
+                                        <label class="contact-form__label" for="email">
+                                            <i class="fa-solid fa-envelope me-1"></i>E-posta
+                                        </label>
+                                        <input type="email"
+                                               class="contact-form__input"
+                                               id="email"
+                                               name="email"
+                                               placeholder="ornek@email.com"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <!-- Konu -->
+                                <div class="col-12">
+                                    <div class="contact-form__group">
+                                        <label class="contact-form__label" for="subject">
+                                            <i class="fa-solid fa-tag me-1"></i>Konu
+                                        </label>
+                                        <select class="contact-form__input contact-form__select"
+                                                id="subject"
+                                                name="subject"
+                                                required>
+                                            <option value="" disabled selected>Konu seçiniz</option>
+                                            <option value="genel">Genel Bilgi</option>
+                                            <option value="isbirligi">İş Birliği Talebi</option>
+                                            <option value="yarisma">Yarışma Hakkında</option>
+                                            <option value="teknik">Teknik Destek</option>
+                                            <option value="oneri">Öneri / Şikayet</option>
+                                            <option value="diger">Diğer</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Mesaj -->
+                                <div class="col-12">
+                                    <div class="contact-form__group">
+                                        <label class="contact-form__label" for="message">
+                                            <i class="fa-solid fa-message me-1"></i>Mesajınız
+                                        </label>
+                                        <textarea class="contact-form__input contact-form__textarea"
+                                                  id="message"
+                                                  name="message"
+                                                  placeholder="Mesajınızı buraya yazın..."
+                                                  rows="6"
+                                                  required></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Submit -->
+                                <div class="col-12">
+                                    <button type="submit" class="contact-form__submit" id="contactSubmitBtn">
+                                        <i class="fa-solid fa-paper-plane me-2"></i>Mesajı Gönder
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right: Contact Info -->
+                <div class="col-lg-5" data-aos="fade-up" data-aos-delay="100">
+
+                    <!-- Info Cards -->
+                    <div class="contact-info">
+                        <div class="contact-info__card">
+                            <div class="contact-info__icon-wrap">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div class="contact-info__body">
+                                <h3 class="contact-info__title">E-posta</h3>
+                                <a href="mailto:info@boyalikelimeler.com" class="contact-info__link">info@boyalikelimeler.com</a>
+                                <a href="mailto:yarisma@boyalikelimeler.com" class="contact-info__link">yarisma@boyalikelimeler.com</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-info__card">
+                            <div class="contact-info__icon-wrap">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div class="contact-info__body">
+                                <h3 class="contact-info__title">WhatsApp</h3>
+                                <a href="#" class="contact-info__link">+90 (555) 123 45 67</a>
+                                <p class="contact-info__note">Hafta içi 09:00 – 18:00</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info__card">
+                            <div class="contact-info__icon-wrap">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="contact-info__body">
+                                <h3 class="contact-info__title">Adres</h3>
+                                <p class="contact-info__text">
+                                    Boyalı Kelimeler Sanat Merkezi<br>
+                                    İstanbul, Türkiye
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info__card">
+                            <div class="contact-info__icon-wrap">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="contact-info__body">
+                                <h3 class="contact-info__title">Çalışma Saatleri</h3>
+                                <p class="contact-info__text">
+                                    Pazartesi – Cuma: 09:00 – 18:00<br>
+                                    Cumartesi: 10:00 – 14:00
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="contact-social">
+                        <h3 class="contact-social__title">Sosyal Medya</h3>
+                        <p class="contact-social__desc">Bizi takip edin, sanatın nabzını birlikte tutalım.</p>
+                        <div class="contact-social__links">
+                            <a href="#" class="contact-social__link" aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="#" class="contact-social__link" aria-label="Twitter">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+                            <a href="#" class="contact-social__link" aria-label="YouTube">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                            <a href="#" class="contact-social__link" aria-label="Facebook">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="contact-social__link" aria-label="TikTok">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section section--surface" aria-label="Sıkça sorulan sorular">
+        <div class="container">
+            <h2 class="section__title" data-aos="fade-up">Sıkça Sorulan Sorular</h2>
+            <div class="section__divider"></div>
+            <p class="section__slogan" data-aos="fade-up">"Merak ettikleriniz, bir tık uzağınızda."</p>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                    <div class="accordion contact-faq" id="contactFaq">
+
+                        <div class="accordion-item contact-faq__item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button contact-faq__button" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#faq1"
+                                        aria-expanded="true" aria-controls="faq1">
+                                    <i class="fa-solid fa-circle-question me-2"></i>
+                                    Boyalı Kelimeler'e nasıl yazar olarak katılabilirim?
+                                </button>
+                            </h3>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#contactFaq">
+                                <div class="accordion-body contact-faq__body">
+                                    Ücretsiz kayıt olduktan sonra profil sayfanızdan yazar başvurusu yapabilirsiniz.
+                                    Editoryal ekibimiz başvurunuzu inceleyip size en kısa sürede dönüş yapacaktır.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item contact-faq__item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button contact-faq__button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#faq2"
+                                        aria-expanded="false" aria-controls="faq2">
+                                    <i class="fa-solid fa-circle-question me-2"></i>
+                                    Yarışmalara kimler katılabilir?
+                                </button>
+                            </h3>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                <div class="accordion-body contact-faq__body">
+                                    Altın Kalem ve Altın Fırça yarışmalarımız herkese açıktır. Yaş ve deneyim
+                                    fark etmeksizin tüm sanat severler katılabilir. Detaylı bilgi için yarışma
+                                    sayfalarını ziyaret edebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item contact-faq__item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button contact-faq__button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#faq3"
+                                        aria-expanded="false" aria-controls="faq3">
+                                    <i class="fa-solid fa-circle-question me-2"></i>
+                                    İş birliği ve reklam taleplerim için ne yapmalıyım?
+                                </button>
+                            </h3>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                <div class="accordion-body contact-faq__body">
+                                    İş birliği ve reklam talepleriniz için yukarıdaki iletişim formunu "İş Birliği Talebi"
+                                    konusuyla doldurabilir veya doğrudan info@boyalikelimeler.com adresine e-posta
+                                    gönderebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item contact-faq__item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button contact-faq__button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#faq4"
+                                        aria-expanded="false" aria-controls="faq4">
+                                    <i class="fa-solid fa-circle-question me-2"></i>
+                                    Mesajıma ne kadar sürede dönüş yapılır?
+                                </button>
+                            </h3>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                <div class="accordion-body contact-faq__body">
+                                    Mesajlarınıza en geç 48 saat içinde dönüş sağlamaya çalışıyoruz.
+                                    Acil konularda WhatsApp hattımızı kullanabilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item contact-faq__item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button contact-faq__button collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#faq5"
+                                        aria-expanded="false" aria-controls="faq5">
+                                    <i class="fa-solid fa-circle-question me-2"></i>
+                                    Eserlerimin telif hakkı korunuyor mu?
+                                </button>
+                            </h3>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                                <div class="accordion-body contact-faq__body">
+                                    Evet, platformumuza yüklediğiniz tüm eserlerin telif hakkı size aittir.
+                                    Boyalı Kelimeler yalnızca platform içinde sergileme hakkına sahiptir.
+                                    Detaylar için Gizlilik Politikası sayfamızı inceleyebilirsiniz.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+@endsection
+
+@push('scripts')
+    <script src="{{ asset('js/contact.js') }}"></script>
+@endpush
