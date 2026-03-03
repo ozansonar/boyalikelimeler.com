@@ -267,10 +267,7 @@
                                     <div class="profile-post__inner">
                                         @if($work->cover_image)
                                             <div class="profile-post__thumb">
-                                                <img src="{{ upload_url($work->cover_image) }}"
-                                                     alt="{{ $work->title }} görseli"
-                                                     class="profile-post__thumb-img"
-                                                     loading="lazy">
+                                                <x-responsive-image :path="$work->cover_image" :alt="$work->title . ' görseli'" size="sm" class="profile-post__thumb-img" />
                                                 @if($work->category)
                                                     <span class="profile-post__category">{{ $work->category->name }}</span>
                                                 @endif
@@ -324,10 +321,7 @@
                                 <div class="profile-post__inner">
                                     @if($post->cover_image)
                                         <div class="profile-post__thumb">
-                                            <img src="{{ upload_url($post->cover_image) }}"
-                                                 alt="{{ $post->title }} görseli"
-                                                 class="profile-post__thumb-img"
-                                                 loading="lazy">
+                                            <x-responsive-image :path="$post->cover_image" :alt="$post->title . ' görseli'" size="sm" class="profile-post__thumb-img" />
                                             @if($post->category)
                                                 <span class="profile-post__category">{{ $post->category->name }}</span>
                                             @endif

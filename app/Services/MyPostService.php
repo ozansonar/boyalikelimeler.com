@@ -11,12 +11,14 @@ use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 final class MyPostService
 {
     use GeneratesUniqueSlug;
+
+    public function __construct(
+        private readonly UploadService $uploadService,
+    ) {}
 
     protected function slugModel(): string
     {
@@ -71,7 +73,7 @@ final class MyPostService
                 'status'           => PostStatus::Draft,
                 'meta_title'       => $data['title'],
                 'meta_description' => $data['excerpt'] ?? null,
-                'cover_image'      => $coverImage ? $this->storeCoverImage($coverImage) : null,
+                'cover_image'      => $coverImage ? $this->storeCoverImage($coverImage, $data['title']) : null,
             ]);
 
             return $post;
@@ -97,7 +99,7 @@ final class MyPostService
 
             if ($coverImage) {
                 $this->deleteOldCover($post->cover_image);
-                $updateData['cover_image'] = $this->storeCoverImage($coverImage);
+                $updateData['cover_image'] = $this->storeCoverImage($coverImage, $data['title']);
             }
 
             if (! empty($data['remove_cover']) && ! $coverImage) {
@@ -120,31 +122,14 @@ final class MyPostService
         return $post->load('category');
     }
 
-    private function storeCoverImage(UploadedFile $file): string
+    private function storeCoverImage(UploadedFile $file, ?string $title = null): string
     {
-        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $directory = public_path('uploads/posts');
-
-        if (! File::isDirectory($directory)) {
-            File::makeDirectory($directory, 0755, true);
-        }
-
-        $file->move($directory, $filename);
-
-        return 'posts/' . $filename;
+        return $this->uploadService->uploadImage($file, 'posts', $title);
     }
 
     private function deleteOldCover(?string $path): void
     {
-        if (! $path) {
-            return;
-        }
-
-        $fullPath = public_path('uploads/' . $path);
-
-        if (File::exists($fullPath)) {
-            File::delete($fullPath);
-        }
+        $this->uploadService->deleteImage($path);
     }
 
     public function deletePost(User $user, Post $post): bool

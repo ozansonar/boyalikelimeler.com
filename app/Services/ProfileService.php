@@ -10,12 +10,13 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 final class ProfileService
 {
+    public function __construct(
+        private readonly UploadService $uploadService,
+    ) {}
     /**
      * @return array{posts: Collection, works: Collection, stats: array}
      */
@@ -88,9 +89,8 @@ final class ProfileService
 
     public function uploadAvatar(User $user, UploadedFile $file): string
     {
-        $this->deleteOldFile($user->avatar);
-
-        $path = $this->storeFile($file, 'avatars');
+        $slug = \Illuminate\Support\Str::slug($user->name);
+        $path = $this->uploadService->replaceImage($file, 'avatars', $user->avatar, $slug);
         $user->update(['avatar' => $path]);
 
         return $path;
@@ -98,38 +98,10 @@ final class ProfileService
 
     public function uploadCover(User $user, UploadedFile $file): string
     {
-        $this->deleteOldFile($user->cover_image);
-
-        $path = $this->storeFile($file, 'covers');
+        $slug = \Illuminate\Support\Str::slug($user->name);
+        $path = $this->uploadService->replaceImage($file, 'covers', $user->cover_image, $slug);
         $user->update(['cover_image' => $path]);
 
         return $path;
-    }
-
-    private function storeFile(UploadedFile $file, string $folder): string
-    {
-        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $directory = public_path('uploads/' . $folder);
-
-        if (! File::isDirectory($directory)) {
-            File::makeDirectory($directory, 0755, true);
-        }
-
-        $file->move($directory, $filename);
-
-        return $folder . '/' . $filename;
-    }
-
-    private function deleteOldFile(?string $path): void
-    {
-        if (! $path) {
-            return;
-        }
-
-        $fullPath = public_path('uploads/' . $path);
-
-        if (File::exists($fullPath)) {
-            File::delete($fullPath);
-        }
     }
 }

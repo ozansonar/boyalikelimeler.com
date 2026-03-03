@@ -69,13 +69,37 @@ kod yorumları ve değişken isimleri İngilizce olsun.
 
 - Tüm dosya yüklemeleri **`public/uploads/`** dizinine yapılır → ZORUNLU
 - `Storage::disk('public')` veya `storage/` dizini → YASAK, kullanılmaz
-- Dosya yükleme işlemleri **`App\Services\UploadService`** üzerinden yapılır → ZORUNLU
-- `UploadService::uploadImage()` → Görselleri WebP'ye çevirir, responsive varyantlar oluşturur (thumb, sm, md, lg)
-- `UploadService::replaceImage()` → Eski görseli siler, yenisini yükler
-- `UploadService::deleteImage()` → Görseli ve tüm varyantlarını siler
-- URL oluşturma: `upload_url($path, $size)` helper veya `UploadService::url($path, $size)`
-- Responsive img: `<x-responsive-image :path="$path" :alt="$alt" size="md" />` Blade component'i
-- View'lerde görsel URL: `{{ upload_url($path) }}` veya `/uploads/{$path}` → `asset('storage/...')` YASAK
+- Tüm yükleme işlemleri **`App\Services\UploadService`** üzerinden yapılır → ZORUNLU
+- Controller veya başka serviste doğrudan `$file->move()` / `$file->store()` → YASAK
+
+### Dosya Adlandırma
+- Format: `{slug}-{YmdHis}-{uniq5}.webp`
+- `{slug}` → İçerik başlığının slugify hali (varsa), yoksa yükleyen kullanıcının adı-soyadı slugify
+- `{YmdHis}` → Yükleme tarihi (ör: 20260303143025)
+- `{uniq5}` → 5 karakterlik rastgele unique key
+- Örnek: `kahve-falinda-gorunen-sehir-20260303143025-a7xk2.webp`
+
+### Görsel İşleme
+- Orijinal dosya **`originals/`** alt dizininde saklanır (orijinal format korunur)
+- WebP dönüşümü → ZORUNLU (GD ile)
+- Responsive varyantlar → ZORUNLU:
+  - `thumb` → 150x150 (kare, crop)
+  - `sm` → max 480px genişlik
+  - `md` → max 768px genişlik
+  - `lg` → max 1200px genişlik
+- Varyant adlandırma: `{slug}-{YmdHis}-{uniq5}-{size}.webp`
+
+### Görsel Gösterim
+- View'lerde: `<x-responsive-image>` Blade component'i → ZORUNLU
+- Fallback: `upload_url($path, $size)` helper
+- `asset('storage/...')` → YASAK
+- Her `<img>` etiketinde `loading="lazy"`, `img-fluid`, anlamlı `alt` → ZORUNLU
+
+### UploadService Metotları
+- `uploadImage(UploadedFile $file, string $directory, ?string $slug = null): string`
+- `replaceImage(UploadedFile $file, string $directory, ?string $oldPath, ?string $slug = null): string`
+- `deleteImage(?string $path): void` → Orijinal + tüm varyantları siler
+- `url(string $path, ?string $size = null): string`
 
 ## Dosya Ayrımı (Front vs Admin)
 

@@ -85,10 +85,7 @@
                         <a href="{{ route('literary-works.show', $work->slug) }}" class="clist-card__thumb-link">
                             <div class="clist-card__thumb">
                                 @if($work->cover_image)
-                                    <img src="{{ upload_url($work->cover_image) }}"
-                                         alt="{{ $work->title }}"
-                                         class="clist-card__thumb-img"
-                                         loading="lazy">
+                                    <x-responsive-image :path="$work->cover_image" :alt="$work->title" size="md" class="clist-card__thumb-img" />
                                 @else
                                     <div class="clist-card__thumb-placeholder">
                                         <i class="fa-solid fa-book-open"></i>
