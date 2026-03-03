@@ -41,19 +41,6 @@ final class LiteraryWorkService
         return $this->lastMailSent;
     }
 
-    /**
-     * Apply a Turkish-aware LIKE search on the given column.
-     * MySQL utf8mb4_turkish_ci handles I↔ı and İ↔i correctly.
-     */
-    private function turkishLike(\Illuminate\Database\Eloquent\Builder $query, string $column, string $search, string $boolean = 'and'): \Illuminate\Database\Eloquent\Builder
-    {
-        return $query->whereRaw(
-            "{$column} COLLATE utf8mb4_turkish_ci LIKE ?",
-            ["%{$search}%"],
-            $boolean,
-        );
-    }
-
     // ─── Admin: Stats ───
 
     /**
@@ -93,8 +80,8 @@ final class LiteraryWorkService
         if (! empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search): void {
-                $this->turkishLike($q, 'title', $search);
-                $q->orWhereHas('author', fn ($aq) => $this->turkishLike($aq, 'name', $search));
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhereHas('author', fn ($aq) => $aq->where('name', 'like', "%{$search}%"));
             });
         }
 
@@ -211,7 +198,7 @@ final class LiteraryWorkService
         $query = $user->literaryWorks()->with(['category', 'revisions.admin']);
 
         if (! empty($filters['search'])) {
-            $this->turkishLike($query, 'title', $filters['search']);
+            $query->where('title', 'like', "%{$filters['search']}%");
         }
 
         if (! empty($filters['status'])) {
@@ -502,8 +489,8 @@ final class LiteraryWorkService
         if (! empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search): void {
-                $this->turkishLike($q, 'title', $search);
-                $this->turkishLike($q, 'excerpt', $search, 'or');
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%");
             });
         }
 
