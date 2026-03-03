@@ -44,6 +44,7 @@
   --neon-orange: #f97316;
   --neon-green: #22c55e;
   --neon-red: #ef4444;
+  --neon-yellow: #eab308;
 
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
@@ -83,6 +84,7 @@
   --neon-orange: #ea580c;
   --neon-green: #16a34a;
   --neon-red: #dc2626;
+  --neon-yellow: #ca8a04;
 
   --text-primary: #0f172a;
   --text-secondary: #475569;
@@ -15355,6 +15357,14 @@ a.btn-glass {
   background: color-mix(in srgb, var(--neon-orange) 15%, transparent);
   color: var(--neon-orange);
 }
+.usr-status-badge.unpublished {
+  background: color-mix(in srgb, var(--neon-yellow) 15%, transparent);
+  color: var(--neon-yellow);
+}
+.usr-status-badge.info {
+  background: color-mix(in srgb, var(--neon-blue) 15%, transparent);
+  color: var(--neon-blue);
+}
 
 .usr-meta {
   font-size: 12px;
@@ -18152,6 +18162,7 @@ a.btn-glass {
 .text-neon-purple { color: var(--neon-purple); }
 .text-neon-pink { color: var(--neon-pink); }
 .text-neon-red { color: var(--neon-red); }
+.text-neon-yellow { color: var(--neon-yellow); }
 .text-clr-primary { color: var(--text-primary); }
 .text-clr-secondary { color: var(--text-secondary); }
 .text-clr-muted { color: var(--text-muted); }
@@ -19746,6 +19757,7 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
 .usr-stat-icon-purple { --accent: var(--neon-purple); }
 .usr-stat-icon-pink   { --accent: var(--neon-pink); }
 .usr-stat-icon-red    { --accent: var(--neon-red); }
+.usr-stat-icon-yellow { --accent: var(--neon-yellow); }
 .usr-stat-icon-teal   { --accent: var(--teal-primary); }
 
 /* ==================== AVATAR RING COLOR VARIANTS ==================== */

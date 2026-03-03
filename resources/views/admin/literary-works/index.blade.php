@@ -9,10 +9,11 @@
 
     <!-- Stats -->
     <div class="row g-4 mb-4">
-        <x-admin.stat-card color="blue" icon="bi-journal-text" label="Toplam Eser" :count="$stats['total']" :delay="0" col-class="col-xxl-3 col-xl-6 col-sm-6" />
-        <x-admin.stat-card color="orange" icon="bi-hourglass-split" label="Beklemede" :count="$stats['pending']" :delay="100" col-class="col-xxl-3 col-xl-6 col-sm-6" />
-        <x-admin.stat-card color="green" icon="bi-check-circle-fill" label="Onaylandı" :count="$stats['approved']" :delay="200" col-class="col-xxl-3 col-xl-6 col-sm-6" />
-        <x-admin.stat-card color="purple" icon="bi-arrow-repeat" label="Revize Bekleniyor" :count="$stats['revision_requested']" :delay="300" col-class="col-xxl-3 col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="blue" icon="bi-journal-text" label="Toplam Eser" :count="$stats['total']" :delay="0" col-class="col-xxl col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="orange" icon="bi-hourglass-split" label="Beklemede" :count="$stats['pending']" :delay="100" col-class="col-xxl col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="green" icon="bi-check-circle-fill" label="Onaylandı" :count="$stats['approved']" :delay="200" col-class="col-xxl col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="purple" icon="bi-arrow-repeat" label="Revize Bekleniyor" :count="$stats['revision_requested']" :delay="300" col-class="col-xxl col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="yellow" icon="bi-eye-slash" label="Yayından Kaldırıldı" :count="$stats['unpublished']" :delay="400" col-class="col-xxl col-xl-6 col-sm-6" />
     </div>
 
     <!-- Status Tabs -->
@@ -40,6 +41,11 @@
             <i class="bi bi-x-circle text-neon-red"></i>
             <span>Reddedildi</span>
             <span class="cl-tab-count">{{ $stats['rejected'] }}</span>
+        </a>
+        <a href="{{ route('admin.literary-works.index', array_merge(request()->except('page'), ['status' => 'unpublished'])) }}" class="cl-status-tab {{ ($filters['status'] ?? '') === 'unpublished' ? 'active' : '' }}">
+            <i class="bi bi-eye-slash text-neon-yellow"></i>
+            <span>Yayından Kaldırıldı</span>
+            <span class="cl-tab-count">{{ $stats['unpublished'] }}</span>
         </a>
     </div>
 
