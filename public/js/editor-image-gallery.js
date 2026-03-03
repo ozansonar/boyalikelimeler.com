@@ -3,8 +3,8 @@
  *
  * Handles:
  * - images_upload_handler: auto-upload pasted/dropped images to server
- * - file_picker_callback: open gallery modal for browsing & selecting
- * - Gallery modal: upload, list, select, delete
+ * - Custom toolbar button "imagegallery": opens gallery modal directly (no TinyMCE dialog)
+ * - Gallery modal: upload, list, select, delete, insert into editor
  *
  * Dependencies: Bootstrap 5 Modal, Fetch API, CSRF meta tag
  */
@@ -22,7 +22,7 @@
 
     // ─── State ──────────────────────────────────────────────
     var selectedImage = null;
-    var resolveCallback = null;
+    var activeEditor = null;
     var modalInstance = null;
 
     // ─── DOM Elements ───────────────────────────────────────
@@ -67,19 +67,31 @@
         });
     };
 
-    // ─── TinyMCE File Picker Callback (opens gallery modal) ─
-    window.editorImagesFilePicker = function (callback, _value, _meta) {
-        resolveCallback = callback;
-        selectedImage = null;
+    // ─── TinyMCE Custom Button Setup ────────────────────────
+    // Register a custom toolbar button "imagegallery".
+    // Opens our Bootstrap modal DIRECTLY — no TinyMCE dialog opens.
+    window.editorImagesSetup = function (editor) {
+        editor.ui.registry.addButton('imagegallery', {
+            icon: 'image',
+            tooltip: 'Görsel Galerisi',
+            onAction: function () {
+                activeEditor = editor;
+                selectedImage = null;
 
-        var insertBtn = el('eigInsertBtn');
-        if (insertBtn) insertBtn.disabled = true;
+                var insertBtn = el('eigInsertBtn');
+                if (insertBtn) insertBtn.disabled = true;
 
-        var infoEl = el('eigSelectedInfo');
-        if (infoEl) infoEl.textContent = 'Görsel seçin veya yükleyin';
+                var infoEl = el('eigSelectedInfo');
+                if (infoEl) infoEl.textContent = 'Görsel seçin veya yükleyin';
 
-        openGalleryModal();
-        loadGallery();
+                // Clear previous selection highlight
+                var prev = document.querySelector('.eig-card--selected');
+                if (prev) prev.classList.remove('eig-card--selected');
+
+                openGalleryModal();
+                loadGallery();
+            }
+        });
     };
 
     // ─── Modal ──────────────────────────────────────────────
@@ -130,7 +142,8 @@
             if (loading) loading.classList.add('d-none');
             if (empty) {
                 empty.classList.remove('d-none');
-                empty.querySelector('p').textContent = 'Görseller yüklenirken hata oluştu.';
+                var emptyP = empty.querySelector('p');
+                if (emptyP) emptyP.textContent = 'Görseller yüklenirken hata oluştu.';
             }
         });
     }
@@ -186,7 +199,6 @@
 
     // ─── Select Image ───────────────────────────────────────
     function selectImage(cardEl, img) {
-        // Remove previous selection
         var prev = document.querySelector('.eig-card--selected');
         if (prev) prev.classList.remove('eig-card--selected');
 
@@ -200,12 +212,16 @@
         if (infoEl) infoEl.textContent = img.name + ' (' + img.width + 'x' + img.height + ')';
     }
 
-    // ─── Insert Image ───────────────────────────────────────
+    // ─── Insert Image (via custom button — directly into editor) ─
     document.addEventListener('click', function (e) {
         if (e.target && e.target.closest('#eigInsertBtn')) {
-            if (selectedImage && resolveCallback) {
-                resolveCallback(selectedImage.url, { alt: selectedImage.name });
-                resolveCallback = null;
+            if (selectedImage && activeEditor) {
+                activeEditor.insertContent(
+                    '<img src="' + escapeHtml(selectedImage.url) + '"' +
+                    ' alt="' + escapeHtml(selectedImage.name) + '"' +
+                    ' loading="lazy" />'
+                );
+                activeEditor = null;
                 selectedImage = null;
                 closeGalleryModal();
             }
@@ -228,14 +244,12 @@
             if (data.success) {
                 colEl.remove();
 
-                // Check if grid is now empty
                 var grid = el('eigGrid');
                 var empty = el('eigEmpty');
                 if (grid && grid.children.length === 0 && empty) {
                     empty.classList.remove('d-none');
                 }
 
-                // Clear selection if deleted image was selected
                 if (selectedImage && selectedImage.id === id) {
                     selectedImage = null;
                     var insertBtn = el('eigInsertBtn');
@@ -289,14 +303,13 @@
         });
 
         function uploadFile(file) {
-            // Client-side validations
             if (!file.type.startsWith('image/')) {
                 showError('Sadece görsel dosyaları yüklenebilir.');
                 return;
             }
 
-            if (file.size > 1024 * 1024) {
-                showError('Dosya boyutu en fazla 1 MB olabilir.');
+            if (file.size > 5 * 1024 * 1024) {
+                showError('Dosya boyutu en fazla 5 MB olabilir.');
                 return;
             }
 
@@ -332,7 +345,6 @@
                 if (progress) progress.classList.add('d-none');
 
                 if (data.success) {
-                    // Reload gallery to show new image
                     loadGallery();
                 }
             })

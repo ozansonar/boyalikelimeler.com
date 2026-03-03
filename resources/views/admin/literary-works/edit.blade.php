@@ -177,14 +177,12 @@
         skin: 'oxide-dark',
         content_css: 'dark',
         plugins: 'lists link image code fullscreen',
-        toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link image | code fullscreen',
+        toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link imagegallery | code fullscreen',
         branding: false,
         promotion: false,
-        image_title: true,
         automatic_uploads: true,
-        file_picker_types: 'image',
         images_upload_handler: window.editorImagesUploadHandler,
-        file_picker_callback: window.editorImagesFilePicker,
+        setup: window.editorImagesSetup,
     });
     </script>
 @endpush
