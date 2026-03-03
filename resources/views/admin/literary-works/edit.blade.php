@@ -183,6 +183,8 @@
         automatic_uploads: true,
         images_upload_handler: window.editorImagesUploadHandler,
         setup: window.editorImagesSetup,
+        image_class_list: [{ title: 'Responsive', value: 'img-fluid' }],
+        content_style: 'img { max-width: 100%; height: auto; }',
     });
     </script>
 @endpush

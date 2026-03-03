@@ -198,7 +198,7 @@
         if (selectedImages.length === 0 || !activeEditor) return;
 
         var html = selectedImages.map(function (img) {
-            return '<img src="' + esc(img.url) + '" alt="' + esc(img.name) + '" loading="lazy" />';
+            return '<img src="' + esc(img.url) + '" alt="' + esc(img.name) + '" class="img-fluid" loading="lazy" />';
         }).join('\n');
 
         activeEditor.insertContent(html);
