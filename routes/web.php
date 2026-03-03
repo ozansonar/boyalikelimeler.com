@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Front\BlogController;
+use App\Http\Controllers\Front\MyPostController;
 use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/profil/sifre', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::post('/profil/kapak', [ProfileController::class, 'updateCover'])->name('profile.cover');
+
+    // My Posts
+    Route::get('/yazilarim', [MyPostController::class, 'index'])->name('myposts.index');
+    Route::get('/yazi-gonder', [MyPostController::class, 'create'])->name('myposts.create');
+    Route::post('/yazi-gonder', [MyPostController::class, 'store'])->name('myposts.store');
+    Route::get('/yazi-duzenle/{post}', [MyPostController::class, 'edit'])->name('myposts.edit');
+    Route::put('/yazi-duzenle/{post}', [MyPostController::class, 'update'])->name('myposts.update');
+    Route::delete('/yazilarim/{post}', [MyPostController::class, 'destroy'])->name('myposts.destroy');
 });
 
 // Admin Routes
