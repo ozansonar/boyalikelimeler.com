@@ -40,6 +40,12 @@
             <i class="bi bi-people-fill"></i> Kullanıcılar
         </a>
 
+        <a href="{{ route('admin.comments.index') }}" class="nav-link {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">
+            <i class="bi bi-chat-dots-fill"></i> Yorumlar
+            @if(($pendingComments = app(\App\Services\CommentService::class)->getPendingCount()) > 0)
+                <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingComments }}</span>
+            @endif
+        </a>
         <a href="{{ route('admin.contacts.index') }}" class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
             <i class="bi bi-chat-left-text-fill"></i> Mesajlar
             @if(($unreadMessages = \App\Models\ContactMessage::where('is_read', false)->count()) > 0)

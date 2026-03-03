@@ -575,7 +575,7 @@ final class LiteraryWorkService
 
     public function findPublishedBySlug(string $slug): ?LiteraryWork
     {
-        return LiteraryWork::with(['category', 'author'])
+        return LiteraryWork::with(['category', 'author', 'approvedComments'])
             ->where('slug', $slug)
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at')

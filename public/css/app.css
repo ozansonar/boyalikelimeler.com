@@ -13204,3 +13204,302 @@ p {
     padding: 3px 4px;
     line-height: 1.2;
 }
+
+/* ======================================================================
+   COMMENT SECTION
+   ====================================================================== */
+
+.cmt-section {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* --- Comment List --- */
+.cmt-list {
+    margin-bottom: 2.5rem;
+}
+
+.cmt-list__title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.cmt-list__count {
+    background: var(--color-gold);
+    color: var(--color-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 50px;
+    font-family: var(--font-body);
+}
+
+.cmt-list__avg {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cmt-list__avg-text {
+    font-size: 0.85rem;
+    color: var(--color-gold-light);
+    font-weight: 500;
+}
+
+.cmt-stars {
+    display: flex;
+    gap: 0.15rem;
+    color: #fbbf24;
+    font-size: 0.95rem;
+}
+
+.cmt-stars--sm {
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+}
+
+.cmt-stars--readonly {
+    font-size: 1.05rem;
+}
+
+.cmt-stars .fa-regular {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Comment Card --- */
+.cmt-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.75rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+.cmt-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.cmt-card__avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+    color: var(--color-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cmt-card__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.cmt-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.cmt-card__name {
+    font-weight: 600;
+    color: var(--color-white);
+    font-size: 0.9rem;
+}
+
+.cmt-card__date {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.cmt-card__text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    white-space: pre-line;
+}
+
+/* --- Comment Form --- */
+.cmt-form-wrapper {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.cmt-form__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--color-white);
+    margin-bottom: 0.5rem;
+}
+
+.cmt-form__info {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 1.25rem;
+}
+
+.cmt-form__group {
+    position: relative;
+}
+
+.cmt-form__label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.35rem;
+}
+
+.cmt-form__req {
+    color: #ef4444;
+}
+
+.cmt-form__input,
+.cmt-form__textarea {
+    display: block;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    color: var(--color-white);
+    font-size: 0.88rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cmt-form__input:focus,
+.cmt-form__textarea:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.cmt-form__input::placeholder,
+.cmt-form__textarea::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.cmt-form__textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.cmt-form__charcount {
+    display: block;
+    text-align: right;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 0.25rem;
+}
+
+/* --- Star Rating Buttons --- */
+.cmt-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.cmt-rating__star {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.2);
+    padding: 0.15rem;
+    transition: color 0.15s, transform 0.15s;
+}
+
+.cmt-rating__star:hover {
+    transform: scale(1.15);
+}
+
+.cmt-rating__star i.fa-solid {
+    color: #fbbf24;
+}
+
+/* --- Submit Button --- */
+.cmt-form__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+    color: var(--color-dark);
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.65rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.cmt-form__submit:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.cmt-form__submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* --- Validation Engine Overrides (dark theme) --- */
+.formError .formErrorContent {
+    background: #1e1e2e !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    border-radius: 0.5rem !important;
+    font-size: 0.78rem !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.formError .formErrorArrow div {
+    background: #1e1e2e !important;
+    border: none !important;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 767.98px) {
+    .cmt-card {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .cmt-card__avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 0.7rem;
+    }
+
+    .cmt-form-wrapper {
+        padding: 1rem;
+    }
+
+    .cmt-rating__star {
+        font-size: 1.3rem;
+    }
+}
