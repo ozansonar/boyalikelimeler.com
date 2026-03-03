@@ -12,7 +12,9 @@ class TestMail extends BaseMailable
     public function __construct(
         private readonly string $mailSubject,
         private readonly string $mailBody,
-    ) {}
+    ) {
+        $this->connection = 'sync';
+    }
 
     public function envelope(): Envelope
     {
