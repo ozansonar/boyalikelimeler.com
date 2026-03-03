@@ -124,6 +124,7 @@
                                 <th class="myposts-table__th myposts-table__th--category">Kategori</th>
                                 <th class="myposts-table__th myposts-table__th--date">Tarih</th>
                                 <th class="myposts-table__th myposts-table__th--status">Durum</th>
+                                <th class="myposts-table__th myposts-table__th--views">Görüntülenme</th>
                                 <th class="myposts-table__th myposts-table__th--actions">İşlem</th>
                             </tr>
                         </thead>
@@ -131,7 +132,7 @@
                             @forelse($works as $work)
                                 <tr class="myposts-table__row" data-status="{{ $work->status->value }}">
                                     <td class="myposts-table__td">
-                                        <span class="myposts-table__title-link">{{ $work->title }}</span>
+                                        <a href="{{ route('myposts.show', $work) }}" class="myposts-table__title-link">{{ $work->title }}</a>
                                     </td>
                                     <td class="myposts-table__td">
                                         <span class="myposts-badge myposts-badge--category">{{ $work->category?->name ?? '—' }}</span>
@@ -161,8 +162,14 @@
                                                 @break
                                         @endswitch
                                     </td>
+                                    <td class="myposts-table__td myposts-table__td--muted">
+                                        <i class="fa-solid fa-eye me-1"></i>{{ $work->status === \App\Enums\LiteraryWorkStatus::Approved ? number_format($work->view_count) : '—' }}
+                                    </td>
                                     <td class="myposts-table__td">
                                         <div class="myposts-table__actions">
+                                            <a href="{{ route('myposts.show', $work) }}" class="myposts-action-btn myposts-action-btn--view" title="Görüntüle">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </a>
                                             @if($work->status !== \App\Enums\LiteraryWorkStatus::Approved)
                                                 <a href="{{ route('myposts.edit', $work) }}" class="myposts-action-btn myposts-action-btn--edit" title="{{ $work->status === \App\Enums\LiteraryWorkStatus::RevisionRequested ? 'Revize Et' : 'Düzenle' }}">
                                                     <i class="fa-solid fa-pen-to-square"></i>
@@ -183,7 +190,7 @@
                                     @php $latestRevision = $work->revisions->first(); @endphp
                                     @if($latestRevision)
                                         <tr class="myposts-table__row">
-                                            <td colspan="5" class="myposts-table__td">
+                                            <td colspan="6" class="myposts-table__td">
                                                 <div class="myposts-revision-note">
                                                     <i class="fa-solid fa-triangle-exclamation me-2 text-warning"></i>
                                                     <strong>Editör notu:</strong> {{ $latestRevision->reason }}
@@ -194,7 +201,7 @@
                                 @endif
                             @empty
                                 <tr>
-                                    <td colspan="5" class="myposts-table__td text-center py-5">
+                                    <td colspan="6" class="myposts-table__td text-center py-5">
                                         <i class="fa-solid fa-feather-pointed fa-2x mb-3 d-block" aria-hidden="true"></i>
                                         Henüz eseriniz bulunmuyor. İlk eserinizi gönderin!
                                     </td>

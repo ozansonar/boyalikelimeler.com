@@ -66,6 +66,21 @@ final class MyPostController extends Controller
         return $redirect;
     }
 
+    public function show(LiteraryWork $work): View
+    {
+        $user = auth()->user();
+
+        $workForShow = $this->workService->getWorkForEdit($user, $work);
+
+        if (! $workForShow) {
+            abort(403, 'Bu eseri görüntüleme yetkiniz yok.');
+        }
+
+        return view('front.myposts.show', [
+            'work' => $workForShow,
+        ]);
+    }
+
     public function edit(LiteraryWork $work): View
     {
         $user = auth()->user();

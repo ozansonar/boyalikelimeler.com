@@ -68,6 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // My Literary Works (Eserlerim)
     Route::get('/yazilarim', [MyPostController::class, 'index'])->name('myposts.index');
+    Route::get('/yazilarim/{work}', [MyPostController::class, 'show'])->name('myposts.show');
     Route::get('/yazi-gonder', [MyPostController::class, 'create'])->name('myposts.create');
     Route::post('/yazi-gonder', [MyPostController::class, 'store'])->name('myposts.store');
     Route::get('/yazi-duzenle/{work}', [MyPostController::class, 'edit'])->name('myposts.edit');
