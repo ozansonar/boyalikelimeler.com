@@ -248,3 +248,13 @@
     </article>
 
 @endsection
+
+@push('scripts')
+<script>
+document.querySelectorAll('.cdetail-content img').forEach(function(img) {
+    img.setAttribute('loading', 'lazy');
+    img.removeAttribute('width');
+    img.removeAttribute('height');
+});
+</script>
+@endpush
