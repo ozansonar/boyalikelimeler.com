@@ -45,12 +45,20 @@
     /* -------------------------------------------------------
        Cover Photo Upload (AJAX)
     ------------------------------------------------------- */
+    var MAX_FILE_SIZE = 1024 * 1024; // 1 MB
+
     var coverInput = document.getElementById('coverInput');
     var coverImg = document.getElementById('coverPreviewImg');
     if (coverInput && coverImg) {
         coverInput.addEventListener('change', function () {
             var file = this.files[0];
             if (!file) return;
+
+            if (file.size > MAX_FILE_SIZE) {
+                if (window.BkModal) window.BkModal.danger('Kapak resmi en fazla 1 MB olabilir.');
+                this.value = '';
+                return;
+            }
 
             /* Preview */
             var reader = new FileReader();
@@ -69,7 +77,10 @@
                 },
                 body: formData
             })
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+                if (!r.ok) return r.json().then(function (d) { throw d; });
+                return r.json();
+            })
             .then(function (data) {
                 if (data.success && data.url) {
                     coverImg.src = data.url;
@@ -78,8 +89,11 @@
                     if (window.BkModal) window.BkModal.danger(data.message);
                 }
             })
-            .catch(function () {
-                if (window.BkModal) window.BkModal.danger('Kapak fotoğrafı yüklenirken bir hata oluştu.');
+            .catch(function (err) {
+                var msg = 'Kapak fotoğrafı yüklenirken bir hata oluştu.';
+                if (err && err.errors && err.errors.cover) msg = err.errors.cover[0];
+                else if (err && err.message) msg = err.message;
+                if (window.BkModal) window.BkModal.danger(msg);
             });
         });
     }
@@ -93,6 +107,12 @@
         avatarInput.addEventListener('change', function () {
             var file = this.files[0];
             if (!file) return;
+
+            if (file.size > MAX_FILE_SIZE) {
+                if (window.BkModal) window.BkModal.danger('Profil resmi en fazla 1 MB olabilir.');
+                this.value = '';
+                return;
+            }
 
             /* Preview */
             var reader = new FileReader();
@@ -111,7 +131,10 @@
                 },
                 body: formData
             })
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+                if (!r.ok) return r.json().then(function (d) { throw d; });
+                return r.json();
+            })
             .then(function (data) {
                 if (data.success && data.url) {
                     avatarImg.src = data.url;
@@ -120,8 +143,11 @@
                     if (window.BkModal) window.BkModal.danger(data.message);
                 }
             })
-            .catch(function () {
-                if (window.BkModal) window.BkModal.danger('Profil fotoğrafı yüklenirken bir hata oluştu.');
+            .catch(function (err) {
+                var msg = 'Profil fotoğrafı yüklenirken bir hata oluştu.';
+                if (err && err.errors && err.errors.avatar) msg = err.errors.avatar[0];
+                else if (err && err.message) msg = err.message;
+                if (window.BkModal) window.BkModal.danger(msg);
             });
         });
     }
