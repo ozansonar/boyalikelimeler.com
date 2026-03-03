@@ -131,12 +131,17 @@
                                     <span>Yayında Gör</span>
                                 </a>
                             @endif
-                            @if($work->status !== \App\Enums\LiteraryWorkStatus::Approved)
-                                <a href="{{ route('myposts.edit', $work) }}" class="cdetail-actions__btn">
-                                    <i class="fa-solid fa-pen-to-square me-1"></i>
-                                    <span>{{ $work->status === \App\Enums\LiteraryWorkStatus::RevisionRequested ? 'Revize Et' : 'Düzenle' }}</span>
-                                </a>
-                            @endif
+                            @php
+                                $editLabel = match($work->status) {
+                                    \App\Enums\LiteraryWorkStatus::Approved => 'Güncelle',
+                                    \App\Enums\LiteraryWorkStatus::RevisionRequested => 'Revize Et',
+                                    default => 'Düzenle',
+                                };
+                            @endphp
+                            <a href="{{ route('myposts.edit', $work) }}" class="cdetail-actions__btn">
+                                <i class="fa-solid fa-pen-to-square me-1"></i>
+                                <span>{{ $editLabel }}</span>
+                            </a>
                         </div>
                         <div class="cdetail-actions__right">
                             <a href="{{ route('myposts.index') }}" class="cdetail-actions__btn">

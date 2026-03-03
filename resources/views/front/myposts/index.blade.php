@@ -170,11 +170,16 @@
                                             <a href="{{ route('myposts.show', $work) }}" class="myposts-action-btn myposts-action-btn--view" title="Görüntüle">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>
-                                            @if($work->status !== \App\Enums\LiteraryWorkStatus::Approved)
-                                                <a href="{{ route('myposts.edit', $work) }}" class="myposts-action-btn myposts-action-btn--edit" title="{{ $work->status === \App\Enums\LiteraryWorkStatus::RevisionRequested ? 'Revize Et' : 'Düzenle' }}">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                </a>
-                                            @endif
+                                            @php
+                                                $editTitle = match($work->status) {
+                                                    \App\Enums\LiteraryWorkStatus::Approved => 'Güncelle',
+                                                    \App\Enums\LiteraryWorkStatus::RevisionRequested => 'Revize Et',
+                                                    default => 'Düzenle',
+                                                };
+                                            @endphp
+                                            <a href="{{ route('myposts.edit', $work) }}" class="myposts-action-btn myposts-action-btn--edit" title="{{ $editTitle }}">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
                                             <button type="button"
                                                     class="myposts-action-btn myposts-action-btn--delete"
                                                     title="Sil"

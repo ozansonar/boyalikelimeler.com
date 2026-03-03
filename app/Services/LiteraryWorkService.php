@@ -10,6 +10,7 @@ use App\Mail\LiteraryWorkRejectedMail;
 use App\Mail\LiteraryWorkRevisionRequestedMail;
 use App\Mail\LiteraryWorkSubmittedMail;
 use App\Mail\LiteraryWorkRevisedMail;
+use App\Mail\LiteraryWorkUpdatedMail;
 use App\Models\LiteraryCategory;
 use App\Models\LiteraryRevision;
 use App\Models\LiteraryWork;
@@ -239,8 +240,9 @@ final class LiteraryWorkService
         }
 
         $wasRevisionRequested = $work->status === LiteraryWorkStatus::RevisionRequested;
+        $wasApproved = $work->status === LiteraryWorkStatus::Approved;
 
-        $updatedWork = DB::transaction(function () use ($work, $data, $coverImage, $wasRevisionRequested): LiteraryWork {
+        $updatedWork = DB::transaction(function () use ($work, $data, $coverImage, $wasRevisionRequested, $wasApproved): LiteraryWork {
             $updateData = [
                 'title'                => $data['title'],
                 'slug'                 => $this->generateUniqueSlug($data['title'], $work->id),
@@ -251,6 +253,10 @@ final class LiteraryWorkService
                 'meta_title'           => $data['title'],
                 'meta_description'     => $data['excerpt'] ?? null,
             ];
+
+            if ($wasApproved) {
+                $updateData['published_at'] = null;
+            }
 
             if ($coverImage) {
                 $this->deleteOldCover($work->cover_image);
@@ -279,7 +285,9 @@ final class LiteraryWorkService
 
         $this->clearCache();
 
-        if ($wasRevisionRequested) {
+        if ($wasApproved) {
+            $this->lastMailSent = $this->notifyAdminsUpdated($updatedWork);
+        } elseif ($wasRevisionRequested) {
             $this->lastMailSent = $this->notifyAdminsRevised($updatedWork);
         }
 
@@ -352,6 +360,25 @@ final class LiteraryWorkService
             $sent = $this->sendMailSafely(
                 fn () => Mail::to($admin)->send(new LiteraryWorkSubmittedMail($work)),
                 'notifyAdminsNewSubmission',
+                $work,
+            );
+            if (! $sent) {
+                $allSent = false;
+            }
+        }
+
+        return $allSent;
+    }
+
+    private function notifyAdminsUpdated(LiteraryWork $work): bool
+    {
+        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $allSent = true;
+
+        foreach ($admins as $admin) {
+            $sent = $this->sendMailSafely(
+                fn () => Mail::to($admin)->send(new LiteraryWorkUpdatedMail($work)),
+                'notifyAdminsUpdated',
                 $work,
             );
             if (! $sent) {
