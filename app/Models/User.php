@@ -100,11 +100,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasRole(RoleSlug::Yazar);
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'username';
-    }
-
     public function getAvatarUrlAttribute(): ?string
     {
         return $this->avatar ? upload_url($this->avatar) : null;
