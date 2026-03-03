@@ -171,8 +171,7 @@
                                 <i class="fa-solid fa-image me-2"></i>Kapak Görseli
                             </h3>
                             <div class="wpost-cover-upload" id="coverDropZone">
-                                <div class="wpost-cover-upload__placeholder" id="coverPlaceholder"
-                                     @if($work?->cover_image) style="display:none" @endif>
+                                <div class="wpost-cover-upload__placeholder @if($work?->cover_image) d-none @endif" id="coverPlaceholder">
                                     <i class="fa-solid fa-cloud-arrow-up"></i>
                                     <span>Görsel yüklemek için tıklayın<br>veya sürükleyip bırakın</span>
                                     <small>JPG, PNG veya WebP — Maks. 5MB</small>
