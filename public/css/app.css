@@ -12346,75 +12346,380 @@ p {
 }
 
 /* ============================================================
-   STATUS MODAL — Global success / danger modal
+   GLOBAL MODAL — Modern status modal (success/danger/warning/info)
    ============================================================ */
-.status-modal {
-    background: var(--color-black-card);
-    border: var(--border-gold);
-    border-radius: 12px;
-    overflow: hidden;
-}
 
-.status-modal__header {
-    padding: 1.25rem 1.5rem;
-}
-
-.status-modal__header--success {
-    background: linear-gradient(135deg, #198754 0%, #157347 100%);
-    color: #fff;
-}
-
-.status-modal__header--danger {
-    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
-    color: #fff;
-}
-
-.status-modal__title {
-    font-family: var(--font-heading);
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin: 0;
-    color: #fff;
-}
-
-.status-modal__body {
-    padding: 1.5rem;
-    color: var(--color-white);
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-.status-modal__footer {
-    padding: 0 1.5rem 1.25rem;
+/* Overlay */
+.gmodal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+    visibility: hidden;
+    opacity: 0;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease, opacity 0.3s ease, visibility 0s 0.4s;
+    padding: 1rem;
 }
 
-.status-modal__btn {
-    min-width: 120px;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 0.5rem 1.5rem;
+.gmodal-overlay--active {
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    visibility: visible;
+    opacity: 1;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease, opacity 0.3s ease, visibility 0s 0s;
+}
+
+/* Modal Box */
+.gmodal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-black-card);
+    border-radius: 20px;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    transform: scale(0.85) translateY(30px);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+}
+
+.gmodal-overlay--active .gmodal {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Close Button */
+.gmodal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
-    color: #fff;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-white-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
     transition: var(--transition-base);
 }
 
-.status-modal__btn--success {
-    background: #198754;
+.gmodal__close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--color-white);
 }
 
-.status-modal__btn--success:hover {
-    background: #157347;
+/* Icon Wrap */
+.gmodal__icon-wrap {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 1.5rem;
+}
+
+/* Icon Ring */
+.gmodal__icon-ring {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
     color: #fff;
+    z-index: 2;
+    animation: gmodalIconBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
 }
 
-.status-modal__btn--danger {
-    background: #dc3545;
+/* Particles (decorative circles) */
+.gmodal__icon-particles {
+    position: absolute;
+    inset: -8px;
+    z-index: 1;
 }
 
-.status-modal__btn--danger:hover {
-    background: #b02a37;
+.gmodal__icon-particles span {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    opacity: 0;
+    animation: gmodalParticle 0.8s ease-out 0.3s forwards;
+}
+
+.gmodal__icon-particles span:nth-child(1) { top: 0; left: 50%; transform: translate(-50%, 0); }
+.gmodal__icon-particles span:nth-child(2) { top: 15%; right: 5%; }
+.gmodal__icon-particles span:nth-child(3) { bottom: 15%; right: 5%; }
+.gmodal__icon-particles span:nth-child(4) { bottom: 0; left: 50%; transform: translate(-50%, 0); }
+.gmodal__icon-particles span:nth-child(5) { bottom: 15%; left: 5%; }
+.gmodal__icon-particles span:nth-child(6) { top: 15%; left: 5%; }
+
+/* Pulse ring behind icon */
+.gmodal__icon-ring::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    opacity: 0.25;
+    animation: gmodalPulse 2s ease-in-out infinite;
+}
+
+/* Title */
+.gmodal__title {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    color: var(--color-white);
+}
+
+/* Message */
+.gmodal__message {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--color-white-muted);
+    margin-bottom: 1.75rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.gmodal__message ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.gmodal__message ul li {
+    padding: 0.35rem 0;
+    padding-left: 1.25rem;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gmodal__message ul li:last-child {
+    border-bottom: none;
+}
+
+.gmodal__message ul li::before {
+    content: '\f06a';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    font-size: 0.7rem;
+    opacity: 0.6;
+}
+
+/* Button */
+.gmodal__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    padding: 0.7rem 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
     color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.gmodal__btn:hover {
+    transform: translateY(-2px);
+}
+
+.gmodal__btn:active {
+    transform: translateY(0);
+}
+
+/* ── Type: Success ─────────────────────── */
+.gmodal--success .gmodal__icon-ring {
+    background: linear-gradient(145deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.35);
+}
+
+.gmodal--success .gmodal__icon-ring::before {
+    background: #22c55e;
+}
+
+.gmodal--success .gmodal__icon-particles span {
+    background: #22c55e;
+}
+
+.gmodal--success .gmodal__title {
+    color: #4ade80;
+}
+
+.gmodal--success .gmodal__message ul li::before {
+    color: #22c55e;
+}
+
+.gmodal--success .gmodal__btn {
+    background: linear-gradient(145deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.gmodal--success .gmodal__btn:hover {
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+/* ── Type: Danger ──────────────────────── */
+.gmodal--danger .gmodal__icon-ring {
+    background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35);
+}
+
+.gmodal--danger .gmodal__icon-ring::before {
+    background: #ef4444;
+}
+
+.gmodal--danger .gmodal__icon-particles span {
+    background: #ef4444;
+}
+
+.gmodal--danger .gmodal__title {
+    color: #f87171;
+}
+
+.gmodal--danger .gmodal__message ul li::before {
+    color: #ef4444;
+}
+
+.gmodal--danger .gmodal__btn {
+    background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.gmodal--danger .gmodal__btn:hover {
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* ── Type: Warning ─────────────────────── */
+.gmodal--warning .gmodal__icon-ring {
+    background: linear-gradient(145deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.35);
+}
+
+.gmodal--warning .gmodal__icon-ring::before {
+    background: #f59e0b;
+}
+
+.gmodal--warning .gmodal__icon-particles span {
+    background: #f59e0b;
+}
+
+.gmodal--warning .gmodal__title {
+    color: #fbbf24;
+}
+
+.gmodal--warning .gmodal__message ul li::before {
+    color: #f59e0b;
+}
+
+.gmodal--warning .gmodal__btn {
+    background: linear-gradient(145deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.gmodal--warning .gmodal__btn:hover {
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+}
+
+/* ── Type: Info ────────────────────────── */
+.gmodal--info .gmodal__icon-ring {
+    background: linear-gradient(145deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.35);
+}
+
+.gmodal--info .gmodal__icon-ring::before {
+    background: #3b82f6;
+}
+
+.gmodal--info .gmodal__icon-particles span {
+    background: #3b82f6;
+}
+
+.gmodal--info .gmodal__title {
+    color: #60a5fa;
+}
+
+.gmodal--info .gmodal__message ul li::before {
+    color: #3b82f6;
+}
+
+.gmodal--info .gmodal__btn {
+    background: linear-gradient(145deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.gmodal--info .gmodal__btn:hover {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+/* ── Animations ────────────────────────── */
+@keyframes gmodalIconBounce {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes gmodalPulse {
+    0%, 100% { transform: scale(1); opacity: 0.25; }
+    50% { transform: scale(1.15); opacity: 0.1; }
+}
+
+@keyframes gmodalParticle {
+    0% { transform: translate(0, 0) scale(0); opacity: 0; }
+    50% { opacity: 0.8; }
+    100% { transform: translate(var(--px, 0), var(--py, -12px)) scale(1); opacity: 0; }
+}
+
+/* ── Responsive ────────────────────────── */
+@media (max-width: 480px) {
+    .gmodal {
+        padding: 2rem 1.5rem 1.5rem;
+        border-radius: 16px;
+        max-width: 95%;
+    }
+
+    .gmodal__icon-wrap {
+        width: 76px;
+        height: 76px;
+        margin-bottom: 1.25rem;
+    }
+
+    .gmodal__icon-ring {
+        width: 76px;
+        height: 76px;
+        font-size: 1.8rem;
+    }
+
+    .gmodal__title {
+        font-size: 1.15rem;
+    }
+
+    .gmodal__message {
+        font-size: 0.88rem;
+    }
+
+    .gmodal__btn {
+        min-width: 140px;
+        padding: 0.6rem 1.5rem;
+    }
 }
 
 /* ============================================================

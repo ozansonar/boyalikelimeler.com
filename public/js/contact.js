@@ -16,12 +16,12 @@
 
         // Basic validation
         if (!fullname || !email || !subject || !message) {
-            showAlert('Lütfen tüm alanları doldurun.', 'danger');
+            if (window.BkModal) window.BkModal.warning('Lütfen tüm alanları doldurun.');
             return;
         }
 
         if (message.length < 10) {
-            showAlert('Mesajınız en az 10 karakter olmalıdır.', 'danger');
+            if (window.BkModal) window.BkModal.warning('Mesajınız en az 10 karakter olmalıdır.');
             return;
         }
 
@@ -49,17 +49,24 @@
         .then(function (response) { return response.json(); })
         .then(function (data) {
             if (data.success) {
-                showAlert(data.message, 'success');
+                if (window.BkModal) window.BkModal.success(data.message);
                 form.reset();
             } else if (data.errors) {
-                var firstError = Object.values(data.errors)[0];
-                showAlert(Array.isArray(firstError) ? firstError[0] : firstError, 'danger');
+                var errorList = [];
+                Object.values(data.errors).forEach(function (errs) {
+                    if (Array.isArray(errs)) {
+                        errs.forEach(function (e) { errorList.push(e); });
+                    } else {
+                        errorList.push(errs);
+                    }
+                });
+                if (window.BkModal) window.BkModal.danger(errorList);
             } else {
-                showAlert(data.message || 'Bir hata oluştu.', 'danger');
+                if (window.BkModal) window.BkModal.danger(data.message || 'Bir hata oluştu.');
             }
         })
         .catch(function () {
-            showAlert('Bir hata oluştu. Lütfen tekrar deneyin.', 'danger');
+            if (window.BkModal) window.BkModal.danger('Bir hata oluştu. Lütfen tekrar deneyin.');
         })
         .finally(function () {
             submitBtn.disabled = false;
@@ -67,26 +74,4 @@
         });
     });
 
-    function showAlert(message, type) {
-        var existing = form.parentElement.querySelector('.contact-alert');
-        if (existing) existing.remove();
-
-        var iconClass = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
-        var alert = document.createElement('div');
-        alert.className = 'alert alert-' + type + ' alert-dismissible fade show contact-alert mt-3';
-        alert.setAttribute('role', 'alert');
-        alert.innerHTML = '<i class="fa-solid ' + iconClass + ' me-2"></i>' + message +
-            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>';
-
-        form.parentElement.insertBefore(alert, form);
-
-        if (type === 'success') {
-            setTimeout(function () {
-                if (alert.parentElement) {
-                    alert.classList.remove('show');
-                    setTimeout(function () { alert.remove(); }, 300);
-                }
-            }, 5000);
-        }
-    }
 })();

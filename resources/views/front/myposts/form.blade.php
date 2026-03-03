@@ -53,20 +53,6 @@
                 @endif
             @endif
 
-            {{-- Validation Errors --}}
-            @if($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                    <i class="fa-solid fa-circle-exclamation me-2"></i>
-                    <strong>Lütfen aşağıdaki hataları düzeltin:</strong>
-                    <ul class="mb-0 mt-2">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
-                </div>
-            @endif
-
             {{-- Form --}}
             <form id="writePostForm"
                   action="{{ $work ? route('myposts.update', $work) : route('myposts.store') }}"

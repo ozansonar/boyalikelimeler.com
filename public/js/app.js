@@ -6,12 +6,135 @@
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    /* -- Global Status Modal (auto-show) --------------------- */
-    var statusModal = document.getElementById('statusModal');
-    if (statusModal) {
-        var bsModal = new bootstrap.Modal(statusModal);
-        bsModal.show();
-    }
+    /* -- Global Modal (BkModal) ------------------------------- */
+    var BkModal = (function () {
+        var overlay = document.getElementById('globalModal');
+        var modal = overlay ? overlay.querySelector('.gmodal') : null;
+        var iconRing = document.getElementById('gmodalIconRing');
+        var iconEl = document.getElementById('gmodalIcon');
+        var titleEl = document.getElementById('gmodalTitle');
+        var messageEl = document.getElementById('gmodalMessage');
+        var btnEl = document.getElementById('gmodalBtn');
+        var closeEl = document.getElementById('gmodalClose');
+        var particlesEl = document.getElementById('gmodalParticles');
+
+        if (!overlay || !modal) return {};
+
+        var typeConfig = {
+            success: { icon: 'fa-circle-check', title: 'Başarılı' },
+            danger: { icon: 'fa-circle-xmark', title: 'Hata' },
+            warning: { icon: 'fa-triangle-exclamation', title: 'Uyarı' },
+            info: { icon: 'fa-circle-info', title: 'Bilgi' }
+        };
+
+        function createParticles(type) {
+            particlesEl.innerHTML = '';
+            var offsets = [
+                { px: '0', py: '-16px' },
+                { px: '14px', py: '-10px' },
+                { px: '14px', py: '10px' },
+                { px: '0', py: '16px' },
+                { px: '-14px', py: '10px' },
+                { px: '-14px', py: '-10px' }
+            ];
+            for (var i = 0; i < 6; i++) {
+                var span = document.createElement('span');
+                span.style.setProperty('--px', offsets[i].px);
+                span.style.setProperty('--py', offsets[i].py);
+                span.style.animationDelay = (0.3 + i * 0.05) + 's';
+                particlesEl.appendChild(span);
+            }
+        }
+
+        function buildMessage(message) {
+            if (Array.isArray(message)) {
+                var html = '<ul>';
+                message.forEach(function (m) {
+                    html += '<li>' + escapeHtml(m) + '</li>';
+                });
+                html += '</ul>';
+                return html;
+            }
+            return '<p class="mb-0">' + escapeHtml(message) + '</p>';
+        }
+
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function show(type, message) {
+            var config = typeConfig[type] || typeConfig.info;
+
+            /* Remove previous type class */
+            modal.className = 'gmodal gmodal--' + type;
+
+            /* Icon */
+            iconEl.className = 'fa-solid ' + config.icon;
+
+            /* Restart icon animation */
+            iconRing.style.animation = 'none';
+            iconRing.offsetHeight;
+            iconRing.style.animation = '';
+
+            /* Title & Message */
+            titleEl.textContent = config.title;
+            messageEl.innerHTML = buildMessage(message);
+
+            /* Particles */
+            createParticles(type);
+
+            /* Show */
+            overlay.classList.add('gmodal-overlay--active');
+            overlay.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+
+            /* Focus trap */
+            btnEl.focus();
+        }
+
+        function hide() {
+            overlay.classList.remove('gmodal-overlay--active');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        /* Close handlers */
+        closeEl.addEventListener('click', hide);
+        btnEl.addEventListener('click', hide);
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) hide();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && overlay.classList.contains('gmodal-overlay--active')) {
+                hide();
+            }
+        });
+
+        /* Auto-show from session flash */
+        var flashScript = document.getElementById('bkFlashData');
+        if (flashScript) {
+            try {
+                var data = JSON.parse(flashScript.textContent);
+                if (data && data.type && data.message) {
+                    setTimeout(function () { show(data.type, data.message); }, 150);
+                }
+            } catch (e) {}
+        }
+
+        return {
+            show: show,
+            hide: hide,
+            success: function (msg) { show('success', msg); },
+            danger: function (msg) { show('danger', msg); },
+            warning: function (msg) { show('warning', msg); },
+            info: function (msg) { show('info', msg); }
+        };
+    })();
+
+    /* Expose globally */
+    window.BkModal = BkModal;
 
     /* -- Navbar Scroll Effect -------------------------------- */
     const navbar = document.querySelector('.navbar-bk');

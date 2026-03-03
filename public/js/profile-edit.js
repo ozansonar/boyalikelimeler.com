@@ -73,9 +73,14 @@
             .then(function (data) {
                 if (data.success && data.url) {
                     coverImg.src = data.url;
+                    if (window.BkModal) window.BkModal.success('Kapak fotoğrafı güncellendi.');
+                } else if (data.message) {
+                    if (window.BkModal) window.BkModal.danger(data.message);
                 }
             })
-            .catch(function () {});
+            .catch(function () {
+                if (window.BkModal) window.BkModal.danger('Kapak fotoğrafı yüklenirken bir hata oluştu.');
+            });
         });
     }
 
@@ -110,9 +115,14 @@
             .then(function (data) {
                 if (data.success && data.url) {
                     avatarImg.src = data.url;
+                    if (window.BkModal) window.BkModal.success('Profil fotoğrafı güncellendi.');
+                } else if (data.message) {
+                    if (window.BkModal) window.BkModal.danger(data.message);
                 }
             })
-            .catch(function () {});
+            .catch(function () {
+                if (window.BkModal) window.BkModal.danger('Profil fotoğrafı yüklenirken bir hata oluştu.');
+            });
         });
     }
 
