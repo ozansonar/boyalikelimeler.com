@@ -86,7 +86,7 @@
     function showCoverPreview(file) {
         if (!file || !file.type.startsWith('image/')) return;
         if (file.size > MAX_COVER_SIZE) {
-            alert('Kapak görseli en fazla 2 MB olabilir.');
+            if (window.BkModal) window.BkModal.warning('Kapak görseli en fazla 2 MB olabilir.');
             coverInput.value = '';
             return;
         }
