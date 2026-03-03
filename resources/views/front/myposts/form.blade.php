@@ -1,8 +1,8 @@
 @extends('layouts.front')
 
 @section('title', $pageTitle . ' — Boyalı Kelimeler')
-@section('meta_description', 'Boyalı Kelimeler\'de yazınızı paylaşın. Şiir, hikaye, deneme ve daha fazlası.')
-@section('canonical', $post ? route('myposts.edit', $post) : route('myposts.create'))
+@section('meta_description', 'Boyalı Kelimeler\'de eserinizi paylaşın. Şiir, hikaye, deneme ve daha fazlası.')
+@section('canonical', $work ? route('myposts.edit', $work) : route('myposts.create'))
 
 @push('styles')
     <!-- Tom Select CSS -->
@@ -18,7 +18,7 @@
             <div class="wpost-header">
                 <div class="wpost-header__left">
                     <a href="{{ route('myposts.index') }}" class="wpost-header__back">
-                        <i class="fa-solid fa-arrow-left me-2"></i>Yazılarıma Dön
+                        <i class="fa-solid fa-arrow-left me-2"></i>Eserlerime Dön
                     </a>
                     <h1 class="wpost-header__title">
                         <i class="fa-solid fa-feather-pointed me-2"></i>{{ $pageTitle }}
@@ -29,10 +29,24 @@
                         <i class="fa-solid fa-xmark me-1"></i>İptal
                     </a>
                     <button type="submit" form="writePostForm" class="wpost-btn wpost-btn--primary">
-                        <i class="fa-solid fa-paper-plane me-1"></i>{{ $post ? 'Yazıyı Güncelle' : 'Yazıyı Gönder' }}
+                        <i class="fa-solid fa-paper-plane me-1"></i>{{ $work ? 'Eseri Güncelle' : 'Eseri Gönder' }}
                     </button>
                 </div>
             </div>
+
+            {{-- Revision Note --}}
+            @if($work?->status === \App\Enums\LiteraryWorkStatus::RevisionRequested)
+                @php $latestRevision = $work->revisions->first(); @endphp
+                @if($latestRevision)
+                    <div class="alert alert-warning mb-4" role="alert">
+                        <h6 class="alert-heading mb-2">
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>Revize Talebi
+                        </h6>
+                        <p class="mb-1"><strong>Editör ({{ $latestRevision->admin?->name ?? 'Admin' }}):</strong></p>
+                        <p class="mb-0">{{ $latestRevision->reason }}</p>
+                    </div>
+                @endif
+            @endif
 
             {{-- Validation Errors --}}
             @if($errors->any())
@@ -50,12 +64,12 @@
 
             {{-- Form --}}
             <form id="writePostForm"
-                  action="{{ $post ? route('myposts.update', $post) : route('myposts.store') }}"
+                  action="{{ $work ? route('myposts.update', $work) : route('myposts.store') }}"
                   method="POST"
                   enctype="multipart/form-data"
                   novalidate>
                 @csrf
-                @if($post)
+                @if($work)
                     @method('PUT')
                 @endif
 
@@ -67,19 +81,19 @@
                         {{-- Title --}}
                         <div class="wpost-card">
                             <h3 class="wpost-card__title">
-                                <i class="fa-solid fa-heading me-2"></i>Yazı Başlığı
+                                <i class="fa-solid fa-heading me-2"></i>Eser Başlığı
                             </h3>
                             <div class="wpost-form__group">
                                 <input type="text"
                                        class="wpost-form__input"
                                        id="postTitle"
                                        name="title"
-                                       value="{{ old('title', $post?->title) }}"
-                                       placeholder="Yazınıza etkileyici bir başlık verin..."
+                                       value="{{ old('title', $work?->title) }}"
+                                       placeholder="Eserinize etkileyici bir başlık verin..."
                                        required
                                        maxlength="200">
                                 <div class="wpost-form__char-count">
-                                    <span id="titleCharCount">{{ mb_strlen(old('title', $post?->title ?? '')) }}</span> / 200
+                                    <span id="titleCharCount">{{ mb_strlen(old('title', $work?->title ?? '')) }}</span> / 200
                                 </div>
                             </div>
                         </div>
@@ -87,16 +101,35 @@
                         {{-- Content Editor --}}
                         <div class="wpost-card">
                             <h3 class="wpost-card__title">
-                                <i class="fa-solid fa-pen-nib me-2"></i>Yazı Detayı
+                                <i class="fa-solid fa-pen-nib me-2"></i>Eser Detayı
                             </h3>
                             <div class="wpost-editor-wrap">
-                                <textarea id="postEditor" name="body">{{ old('body', $post?->body) }}</textarea>
+                                <textarea id="postEditor" name="body">{{ old('body', $work?->body) }}</textarea>
                             </div>
                             <p class="wpost-form__hint">
                                 <i class="fa-solid fa-circle-info me-1"></i>
-                                Yazınızı zengin metin editörü ile biçimlendirebilirsiniz. Başlık, kalın, italik, liste, link ve görsel ekleyebilirsiniz.
+                                Eserinizi zengin metin editörü ile biçimlendirebilirsiniz. Başlık, kalın, italik, liste, link ve görsel ekleyebilirsiniz.
                             </p>
                         </div>
+
+                        {{-- Author Note (only for revision) --}}
+                        @if($work?->status === \App\Enums\LiteraryWorkStatus::RevisionRequested)
+                            <div class="wpost-card">
+                                <h3 class="wpost-card__title">
+                                    <i class="fa-solid fa-comment me-2"></i>Editöre Not
+                                </h3>
+                                <div class="wpost-form__group">
+                                    <textarea class="wpost-form__input wpost-form__textarea"
+                                              name="author_note"
+                                              placeholder="Yaptığınız değişiklikleri kısaca açıklayın (isteğe bağlı)..."
+                                              rows="3"
+                                              maxlength="1000">{{ old('author_note') }}</textarea>
+                                    <div class="wpost-form__char-count">
+                                        <span id="noteCharCount">{{ mb_strlen(old('author_note', '')) }}</span> / 1000
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                     </div>
 
@@ -110,16 +143,16 @@
                             </h3>
                             <div class="wpost-form__group">
                                 <label class="wpost-form__label" for="postCategory">
-                                    <i class="fa-solid fa-tag me-1"></i>Yazı Kategorisi
+                                    <i class="fa-solid fa-tag me-1"></i>Eser Kategorisi
                                 </label>
                                 <select id="postCategory"
-                                        name="category_id"
+                                        name="literary_category_id"
                                         placeholder="Kategori arayın veya seçin..."
                                         required>
                                     <option value="">Kategori seçiniz</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}"
-                                            @selected(old('category_id', $post?->category_id) == $category->id)>
+                                            @selected(old('literary_category_id', $work?->literary_category_id) == $category->id)>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -134,13 +167,13 @@
                             </h3>
                             <div class="wpost-cover-upload" id="coverDropZone">
                                 <div class="wpost-cover-upload__placeholder" id="coverPlaceholder"
-                                     @if($post?->cover_image) style="display:none" @endif>
+                                     @if($work?->cover_image) style="display:none" @endif>
                                     <i class="fa-solid fa-cloud-arrow-up"></i>
                                     <span>Görsel yüklemek için tıklayın<br>veya sürükleyip bırakın</span>
                                     <small>JPG, PNG veya WebP — Maks. 5MB</small>
                                 </div>
-                                <div class="wpost-cover-upload__preview @if($post?->cover_image) wpost-cover-upload__preview--active @endif" id="coverPreview">
-                                    <img src="{{ $post?->cover_image ? upload_url($post->cover_image) : '' }}"
+                                <div class="wpost-cover-upload__preview @if($work?->cover_image) wpost-cover-upload__preview--active @endif" id="coverPreview">
+                                    <img src="{{ $work?->cover_image ? upload_url($work->cover_image) : '' }}"
                                          alt="Kapak görseli önizleme"
                                          id="coverPreviewImg"
                                          loading="lazy">
@@ -155,7 +188,7 @@
                                        accept="image/jpeg,image/png,image/webp"
                                        aria-label="Kapak görseli seç">
                             </div>
-                            @if($post?->cover_image)
+                            @if($work?->cover_image)
                                 <input type="hidden" name="remove_cover" id="removeCoverFlag" value="0">
                             @endif
                         </div>
@@ -163,7 +196,7 @@
                         {{-- Publish Settings --}}
                         <div class="wpost-card">
                             <h3 class="wpost-card__title">
-                                <i class="fa-solid fa-gear me-2"></i>Yayın Ayarları
+                                <i class="fa-solid fa-gear me-2"></i>Ayarlar
                             </h3>
 
                             <div class="wpost-form__group">
@@ -173,39 +206,23 @@
                                 <textarea class="wpost-form__input wpost-form__textarea"
                                           id="postExcerpt"
                                           name="excerpt"
-                                          placeholder="Yazınızın kısa özetini girin..."
+                                          placeholder="Eserinizin kısa özetini girin..."
                                           rows="3"
-                                          maxlength="300">{{ old('excerpt', $post?->excerpt) }}</textarea>
+                                          maxlength="300">{{ old('excerpt', $work?->excerpt) }}</textarea>
                                 <div class="wpost-form__char-count">
-                                    <span id="excerptCharCount">{{ mb_strlen(old('excerpt', $post?->excerpt ?? '')) }}</span> / 300
+                                    <span id="excerptCharCount">{{ mb_strlen(old('excerpt', $work?->excerpt ?? '')) }}</span> / 300
                                 </div>
-                            </div>
-
-                            <div class="wpost-form__group">
-                                <label class="wpost-form__label" for="postTags">
-                                    <i class="fa-solid fa-hashtag me-1"></i>Etiketler
-                                </label>
-                                <input type="text"
-                                       class="wpost-form__input"
-                                       id="postTags"
-                                       name="tags"
-                                       value="{{ old('tags') }}"
-                                       placeholder="Etiket yazıp Enter'a basın...">
-                                <p class="wpost-form__hint">
-                                    <i class="fa-solid fa-circle-info me-1"></i>
-                                    Virgül ile ayırarak birden fazla etiket ekleyebilirsiniz.
-                                </p>
                             </div>
                         </div>
 
                         {{-- Submit (Mobile sticky) --}}
                         <div class="wpost-submit-bar">
                             <button type="submit" form="writePostForm" class="wpost-btn wpost-btn--primary wpost-btn--block">
-                                <i class="fa-solid fa-paper-plane me-1"></i>{{ $post ? 'Yazıyı Güncelle' : 'Yazıyı Gönder' }}
+                                <i class="fa-solid fa-paper-plane me-1"></i>{{ $work ? 'Eseri Güncelle' : 'Eseri Gönder' }}
                             </button>
                             <p class="wpost-submit-bar__note">
                                 <i class="fa-solid fa-shield-halved me-1"></i>
-                                Yazınız editör onayından sonra yayınlanacaktır.
+                                Eseriniz editör onayından sonra yayınlanacaktır.
                             </p>
                         </div>
 

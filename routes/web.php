@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LiteraryCategoryController;
+use App\Http\Controllers\Admin\LiteraryWorkController;
 use App\Http\Controllers\Admin\MailLogController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
@@ -61,13 +63,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::post('/profil/kapak', [ProfileController::class, 'updateCover'])->name('profile.cover');
 
-    // My Posts
+    // My Literary Works (Eserlerim)
     Route::get('/yazilarim', [MyPostController::class, 'index'])->name('myposts.index');
     Route::get('/yazi-gonder', [MyPostController::class, 'create'])->name('myposts.create');
     Route::post('/yazi-gonder', [MyPostController::class, 'store'])->name('myposts.store');
-    Route::get('/yazi-duzenle/{post}', [MyPostController::class, 'edit'])->name('myposts.edit');
-    Route::put('/yazi-duzenle/{post}', [MyPostController::class, 'update'])->name('myposts.update');
-    Route::delete('/yazilarim/{post}', [MyPostController::class, 'destroy'])->name('myposts.destroy');
+    Route::get('/yazi-duzenle/{work}', [MyPostController::class, 'edit'])->name('myposts.edit');
+    Route::put('/yazi-duzenle/{work}', [MyPostController::class, 'update'])->name('myposts.update');
+    Route::delete('/yazilarim/{work}', [MyPostController::class, 'destroy'])->name('myposts.destroy');
 });
 
 // Admin Routes
@@ -121,6 +123,16 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('mail-logs', [MailLogController::class, 'index'])->name('mail-logs.index');
     Route::get('mail-logs/{mailLog}', [MailLogController::class, 'show'])->name('mail-logs.show');
     Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy');
+
+    // Literary Category Management (Edebiyat Kategorileri)
+    Route::resource('literary-categories', LiteraryCategoryController::class)->except(['show']);
+
+    // Literary Work Management (Edebiyat Eserleri)
+    Route::get('literary-works', [LiteraryWorkController::class, 'index'])->name('literary-works.index');
+    Route::get('literary-works/{id}', [LiteraryWorkController::class, 'show'])->name('literary-works.show')->where('id', '[0-9]+');
+    Route::patch('literary-works/{literaryWork}/approve', [LiteraryWorkController::class, 'approve'])->name('literary-works.approve');
+    Route::patch('literary-works/{literaryWork}/reject', [LiteraryWorkController::class, 'reject'])->name('literary-works.reject');
+    Route::post('literary-works/{literaryWork}/revision', [LiteraryWorkController::class, 'requestRevision'])->name('literary-works.revision');
 });
 
 // Contact (Frontend)

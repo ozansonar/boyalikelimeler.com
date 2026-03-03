@@ -1,0 +1,78 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\LiteraryWorkRevisionRequest;
+use App\Models\LiteraryWork;
+use App\Services\LiteraryCategoryService;
+use App\Services\LiteraryWorkService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+final class LiteraryWorkController extends Controller
+{
+    public function __construct(
+        private readonly LiteraryWorkService $workService,
+        private readonly LiteraryCategoryService $categoryService,
+    ) {}
+
+    public function index(Request $request): View
+    {
+        $perPage = in_array((int) $request->input('per_page'), [10, 25, 50, 100], true)
+            ? (int) $request->input('per_page')
+            : 10;
+
+        $filters = $request->only(['search', 'status', 'category']);
+
+        return view('admin.literary-works.index', [
+            'works'      => $this->workService->adminPaginate($perPage, $filters),
+            'stats'      => $this->workService->getAdminStats(),
+            'categories' => $this->categoryService->activeList(),
+            'filters'    => $filters,
+            'perPage'    => $perPage,
+        ]);
+    }
+
+    public function show(int $id): View
+    {
+        $work = $this->workService->findForAdmin($id);
+
+        if (! $work) {
+            abort(404);
+        }
+
+        return view('admin.literary-works.show', compact('work'));
+    }
+
+    public function approve(LiteraryWork $literaryWork): RedirectResponse
+    {
+        $this->workService->approve($literaryWork);
+
+        return redirect()->route('admin.literary-works.index')
+            ->with('success', 'Eser onaylandı ve yazara bildirim gönderildi.');
+    }
+
+    public function reject(LiteraryWork $literaryWork): RedirectResponse
+    {
+        $this->workService->reject($literaryWork);
+
+        return redirect()->route('admin.literary-works.index')
+            ->with('success', 'Eser reddedildi ve yazara bildirim gönderildi.');
+    }
+
+    public function requestRevision(LiteraryWorkRevisionRequest $request, LiteraryWork $literaryWork): RedirectResponse
+    {
+        $this->workService->requestRevision(
+            $literaryWork,
+            auth()->user(),
+            $request->validated()['reason'],
+        );
+
+        return redirect()->route('admin.literary-works.index')
+            ->with('success', 'Revize talebi gönderildi ve yazar bilgilendirildi.');
+    }
+}

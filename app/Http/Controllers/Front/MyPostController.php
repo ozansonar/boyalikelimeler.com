@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Front\PostStoreRequest;
-use App\Http\Requests\Front\PostUpdateRequest;
-use App\Models\Category;
-use App\Models\Post;
-use App\Services\MyPostService;
+use App\Http\Requests\Front\LiteraryWorkStoreRequest;
+use App\Http\Requests\Front\LiteraryWorkUpdateRequest;
+use App\Models\LiteraryWork;
+use App\Services\LiteraryCategoryService;
+use App\Services\LiteraryWorkService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -17,40 +17,39 @@ use Illuminate\View\View;
 final class MyPostController extends Controller
 {
     public function __construct(
-        private readonly MyPostService $myPostService,
+        private readonly LiteraryWorkService $workService,
+        private readonly LiteraryCategoryService $categoryService,
     ) {}
 
     public function index(Request $request): View
     {
         $user = auth()->user();
-        $stats = $this->myPostService->getStats($user);
-        $posts = $this->myPostService->paginate($user, 10, [
+        $stats = $this->workService->getAuthorStats($user);
+        $works = $this->workService->authorPaginate($user, 10, [
             'search' => $request->query('search'),
             'status' => $request->query('status'),
         ]);
 
-        return view('front.myposts.index', compact('stats', 'posts'));
+        return view('front.myposts.index', compact('stats', 'works'));
     }
 
     public function create(): View
     {
-        $categories = Category::where('is_active', true)
-            ->orderBy('name')
-            ->get(['id', 'name']);
+        $categories = $this->categoryService->activeList();
 
         return view('front.myposts.form', [
-            'post'       => null,
+            'work'       => null,
             'categories' => $categories,
-            'pageTitle'  => 'Yazı Gönder',
+            'pageTitle'  => 'Eser Gönder',
         ]);
     }
 
-    public function store(PostStoreRequest $request): RedirectResponse
+    public function store(LiteraryWorkStoreRequest $request): RedirectResponse
     {
         $user = auth()->user();
         $validated = $request->validated();
 
-        $this->myPostService->createPost(
+        $this->workService->createWork(
             $user,
             $validated,
             $request->file('cover_image'),
@@ -58,61 +57,59 @@ final class MyPostController extends Controller
 
         return redirect()
             ->route('myposts.index')
-            ->with('success', 'Yazınız başarıyla gönderildi. Editör onayından sonra yayınlanacaktır.');
+            ->with('success', 'Eseriniz başarıyla gönderildi. Editör onayından sonra yayınlanacaktır.');
     }
 
-    public function edit(Post $post): View
+    public function edit(LiteraryWork $work): View
     {
         $user = auth()->user();
 
-        $postForEdit = $this->myPostService->getPostForEdit($user, $post);
+        $workForEdit = $this->workService->getWorkForEdit($user, $work);
 
-        if (! $postForEdit) {
+        if (! $workForEdit) {
             abort(403);
         }
 
-        $categories = Category::where('is_active', true)
-            ->orderBy('name')
-            ->get(['id', 'name']);
+        $categories = $this->categoryService->activeList();
 
         return view('front.myposts.form', [
-            'post'       => $postForEdit,
+            'work'       => $workForEdit,
             'categories' => $categories,
-            'pageTitle'  => 'Yazıyı Düzenle',
+            'pageTitle'  => 'Eseri Düzenle',
         ]);
     }
 
-    public function update(PostUpdateRequest $request, Post $post): RedirectResponse
+    public function update(LiteraryWorkUpdateRequest $request, LiteraryWork $work): RedirectResponse
     {
         $user = auth()->user();
         $validated = $request->validated();
 
-        $updatedPost = $this->myPostService->updatePost(
+        $updatedWork = $this->workService->updateWork(
             $user,
-            $post,
+            $work,
             $validated,
             $request->file('cover_image'),
         );
 
-        if (! $updatedPost) {
+        if (! $updatedWork) {
             abort(403);
         }
 
         return redirect()
             ->route('myposts.index')
-            ->with('success', 'Yazınız başarıyla güncellendi.');
+            ->with('success', 'Eseriniz başarıyla güncellendi ve tekrar incelemeye gönderildi.');
     }
 
-    public function destroy(Post $post): RedirectResponse
+    public function destroy(LiteraryWork $work): RedirectResponse
     {
         $user = auth()->user();
 
-        if (! $this->myPostService->deletePost($user, $post)) {
+        if (! $this->workService->deleteWork($user, $work)) {
             abort(403);
         }
 
         return redirect()
             ->route('myposts.index')
-            ->with('success', 'Yazınız başarıyla silindi.');
+            ->with('success', 'Eseriniz başarıyla silindi.');
     }
 }

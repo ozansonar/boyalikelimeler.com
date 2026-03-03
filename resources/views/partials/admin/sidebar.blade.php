@@ -24,6 +24,17 @@
             <i class="bi bi-file-earmark-richtext-fill"></i> Sayfalar
         </a>
 
+        <div class="nav-section-title">Edebiyat</div>
+        <a href="{{ route('admin.literary-works.index') }}" class="nav-link {{ request()->routeIs('admin.literary-works.*') ? 'active' : '' }}">
+            <i class="bi bi-journal-text"></i> Edebiyat Eserleri
+            @if(($pendingWorks = app(\App\Services\LiteraryWorkService::class)->getPendingCount()) > 0)
+                <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingWorks }}</span>
+            @endif
+        </a>
+        <a href="{{ route('admin.literary-categories.index') }}" class="nav-link {{ request()->routeIs('admin.literary-categories.*') ? 'active' : '' }}">
+            <i class="bi bi-bookmark-fill"></i> Edebiyat Kategorileri
+        </a>
+
         <div class="nav-section-title">Yönetim</div>
         <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
             <i class="bi bi-people-fill"></i> Kullanıcılar

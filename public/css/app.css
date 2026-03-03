@@ -12285,3 +12285,27 @@ p {
 .static-page-content a:hover {
     color: var(--color-gold-light);
 }
+
+/* ── Literary Works: Revision Note ── */
+.myposts-revision-note {
+    padding: 10px 14px;
+    border-left: 3px solid #f59e0b;
+    background: rgba(245, 158, 11, .08);
+    border-radius: 0 6px 6px 0;
+    font-size: .875rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .85);
+}
+
+.myposts-badge--rejected {
+    background: rgba(239, 68, 68, .12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, .2);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: .75rem;
+    font-weight: 500;
+}
