@@ -23,7 +23,7 @@ final class PostUpdateRequest extends FormRequest
             'body'         => ['required', 'string', 'min:50'],
             'excerpt'      => ['nullable', 'string', 'max:300'],
             'category_id'  => ['required', 'integer', 'exists:categories,id'],
-            'cover_image'  => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:5120'],
+            'cover_image'  => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
             'remove_cover' => ['nullable', 'boolean'],
             'tags'         => ['nullable', 'string', 'max:500'],
         ];
@@ -44,7 +44,7 @@ final class PostUpdateRequest extends FormRequest
             'category_id.exists'   => 'Seçilen kategori geçersiz.',
             'cover_image.image'    => 'Kapak görseli bir resim dosyası olmalıdır.',
             'cover_image.mimes'    => 'Kapak görseli JPG, PNG veya WebP formatında olmalıdır.',
-            'cover_image.max'      => 'Kapak görseli en fazla 5MB olabilir.',
+            'cover_image.max'      => 'Kapak görseli en fazla 2 MB olabilir.',
         ];
     }
 }

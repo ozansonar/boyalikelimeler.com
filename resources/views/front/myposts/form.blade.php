@@ -165,7 +165,7 @@
                                 <div class="wpost-cover-upload__placeholder @if($work?->cover_image) d-none @endif" id="coverPlaceholder">
                                     <i class="fa-solid fa-cloud-arrow-up"></i>
                                     <span>Görsel yüklemek için tıklayın<br>veya sürükleyip bırakın</span>
-                                    <small>JPG, PNG veya WebP — Maks. 5MB</small>
+                                    <small>JPG, PNG veya WebP — Maks. 2MB</small>
                                 </div>
                                 <div class="wpost-cover-upload__preview @if($work?->cover_image) wpost-cover-upload__preview--active @endif" id="coverPreview">
                                     <img src="{{ $work?->cover_image ? upload_url($work->cover_image) : '' }}"

@@ -121,7 +121,7 @@
                             <div class="form-section-icon bg-icon-pink"><i class="bi bi-image"></i></div>
                             <div>
                                 <h6 class="mb-0">Kapak Görseli</h6>
-                                <small class="text-muted">JPG, PNG veya WebP — Maks. 5MB</small>
+                                <small class="text-muted">JPG, PNG veya WebP — Maks. 2MB</small>
                             </div>
                         </div>
                     </div>
