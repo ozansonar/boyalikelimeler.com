@@ -24,7 +24,7 @@ class LiteraryWorkSubmittedMail extends BaseMailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.literary.submitted',
+            markdown: 'emails.literary.submitted',
         );
     }
 }

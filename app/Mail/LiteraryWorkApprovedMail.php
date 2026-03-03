@@ -24,7 +24,7 @@ class LiteraryWorkApprovedMail extends BaseMailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.literary.approved',
+            markdown: 'emails.literary.approved',
         );
     }
 }
