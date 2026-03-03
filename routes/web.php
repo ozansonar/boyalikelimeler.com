@@ -136,8 +136,12 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     // Literary Work Management (Edebiyat Eserleri)
     Route::get('literary-works', [LiteraryWorkController::class, 'index'])->name('literary-works.index');
     Route::get('literary-works/{id}', [LiteraryWorkController::class, 'show'])->name('literary-works.show')->where('id', '[0-9]+');
+    Route::get('literary-works/{literaryWork}/edit', [LiteraryWorkController::class, 'edit'])->name('literary-works.edit');
+    Route::put('literary-works/{literaryWork}', [LiteraryWorkController::class, 'update'])->name('literary-works.update');
+    Route::delete('literary-works/{literaryWork}', [LiteraryWorkController::class, 'destroy'])->name('literary-works.destroy');
     Route::patch('literary-works/{literaryWork}/approve', [LiteraryWorkController::class, 'approve'])->name('literary-works.approve');
     Route::patch('literary-works/{literaryWork}/reject', [LiteraryWorkController::class, 'reject'])->name('literary-works.reject');
+    Route::patch('literary-works/{literaryWork}/unpublish', [LiteraryWorkController::class, 'unpublish'])->name('literary-works.unpublish');
     Route::post('literary-works/{literaryWork}/revision', [LiteraryWorkController::class, 'requestRevision'])->name('literary-works.revision');
 });
 

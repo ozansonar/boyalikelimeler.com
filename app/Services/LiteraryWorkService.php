@@ -93,6 +93,10 @@ final class LiteraryWorkService
             $query->where('literary_category_id', $filters['category']);
         }
 
+        if (! empty($filters['author'])) {
+            $query->where('user_id', $filters['author']);
+        }
+
         return $query->orderByDesc('created_at')->paginate($perPage)->withQueryString();
     }
 
@@ -198,8 +202,7 @@ final class LiteraryWorkService
         $query = $user->literaryWorks()->with(['category', 'revisions.admin']);
 
         if (! empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where('title', 'like', "%{$search}%");
+            $query->where('title', 'like', "%{$filters['search']}%");
         }
 
         if (! empty($filters['status'])) {
@@ -231,6 +234,77 @@ final class LiteraryWorkService
         $this->lastMailSent = $this->notifyAdminsNewSubmission($work);
 
         return $work;
+    }
+
+    // ─── Admin: Update ───
+
+    public function adminUpdateWork(LiteraryWork $work, array $data, ?UploadedFile $coverImage = null): LiteraryWork
+    {
+        return DB::transaction(function () use ($work, $data, $coverImage): LiteraryWork {
+            $updateData = [
+                'title'                => $data['title'],
+                'slug'                 => $this->generateUniqueSlug($data['title'], $work->id),
+                'body'                 => $data['body'],
+                'excerpt'              => $data['excerpt'] ?? null,
+                'literary_category_id' => $data['literary_category_id'],
+                'meta_title'           => $data['title'],
+                'meta_description'     => $data['excerpt'] ?? null,
+            ];
+
+            if ($coverImage) {
+                $this->deleteOldCover($work->cover_image);
+                $updateData['cover_image'] = $this->storeCoverImage($coverImage);
+            }
+
+            if (! empty($data['remove_cover']) && ! $coverImage) {
+                $this->deleteOldCover($work->cover_image);
+                $updateData['cover_image'] = null;
+            }
+
+            $work->update($updateData);
+            $this->clearCache();
+
+            return $work->fresh();
+        });
+    }
+
+    // ─── Admin: Delete ───
+
+    public function adminDeleteWork(LiteraryWork $work): bool
+    {
+        return DB::transaction(function () use ($work): bool {
+            $this->deleteOldCover($work->cover_image);
+            $work->delete();
+            $this->clearCache();
+            return true;
+        });
+    }
+
+    // ─── Admin: Unpublish ───
+
+    public function adminUnpublishWork(LiteraryWork $work): bool
+    {
+        if ($work->status !== LiteraryWorkStatus::Approved) {
+            return false;
+        }
+
+        return DB::transaction(function () use ($work): bool {
+            $work->update([
+                'status'       => LiteraryWorkStatus::Unpublished,
+                'published_at' => null,
+            ]);
+            $this->clearCache();
+            return true;
+        });
+    }
+
+    // ─── Admin: Authors list (for filter) ───
+
+    public function getAuthorsWithWorks(): \Illuminate\Support\Collection
+    {
+        return User::whereHas('literaryWorks')
+            ->orderBy('name')
+            ->get(['id', 'name']);
     }
 
     // ─── Author: Update (revise) ───

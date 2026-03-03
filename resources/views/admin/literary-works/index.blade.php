@@ -66,6 +66,13 @@
                         @endforeach
                     </select>
 
+                    <select class="cl-filter-select" name="author" onchange="this.form.submit()">
+                        <option value="">Tüm Yazarlar</option>
+                        @foreach($authors as $author)
+                            <option value="{{ $author->id }}" {{ ($filters['author'] ?? '') == $author->id ? 'selected' : '' }}>{{ $author->name }}</option>
+                        @endforeach
+                    </select>
+
                     @if(!empty($filters['status']))
                         <input type="hidden" name="status" value="{{ $filters['status'] }}">
                     @endif
@@ -73,7 +80,7 @@
 
                 <div class="cl-toolbar-actions">
                     <button type="submit" class="btn-glass"><i class="bi bi-funnel me-1"></i>Filtrele</button>
-                    @if(!empty($filters['search']) || !empty($filters['category']))
+                    @if(!empty($filters['search']) || !empty($filters['category']) || !empty($filters['author']))
                         <a href="{{ route('admin.literary-works.index', !empty($filters['status']) ? ['status' => $filters['status']] : []) }}" class="cl-filter-reset" title="Filtreleri Sıfırla">
                             <i class="bi bi-arrow-counterclockwise"></i>
                         </a>
@@ -144,6 +151,11 @@
                                 <td>
                                     <div class="usr-actions">
                                         <a class="usr-action-btn" title="İncele" href="{{ route('admin.literary-works.show', $work->id) }}"><i class="bi bi-eye"></i></a>
+                                        <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.literary-works.edit', $work) }}"><i class="bi bi-pencil"></i></a>
+                                        @if($work->status === \App\Enums\LiteraryWorkStatus::Approved)
+                                            <button class="usr-action-btn warning" title="Yayından Kaldır" onclick="openConfirmModal('unpublish', {{ $work->id }}, '{{ addslashes($work->title) }}')"><i class="bi bi-eye-slash"></i></button>
+                                        @endif
+                                        <button class="usr-action-btn danger" title="Sil" onclick="openConfirmModal('delete', {{ $work->id }}, '{{ addslashes($work->title) }}')"><i class="bi bi-trash"></i></button>
                                     </div>
                                 </td>
                             </tr>
@@ -181,4 +193,84 @@
         </div>
     </div>
 
+    <!-- Delete Confirm Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon danger">
+                        <i class="bi bi-trash"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Eseri Sil</h5>
+                    <p class="cl-modal-body-text"><strong id="deleteItemName"></strong> adlı eseri silmek istediğinize emin misiniz?</p>
+                    <p class="cl-modal-warning"><i class="bi bi-exclamation-triangle me-1"></i>Bu işlem geri alınamaz.</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <form id="deleteForm" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-teal btn-danger-gradient"><i class="bi bi-trash me-1"></i>Sil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unpublish Confirm Modal -->
+    <div class="modal fade" id="unpublishModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon warning">
+                        <i class="bi bi-eye-slash"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Yayından Kaldır</h5>
+                    <p class="cl-modal-body-text"><strong id="unpublishItemName"></strong> adlı eseri yayından kaldırmak istediğinize emin misiniz?</p>
+                    <p class="cl-modal-info"><i class="bi bi-info-circle me-1"></i>Eser sitede görünmeyecek, tekrar yayınlamak için onay gerekecektir.</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <form id="unpublishForm" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn-teal btn-warning-gradient"><i class="bi bi-eye-slash me-1"></i>Kaldır</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
+
+@push('scripts')
+<script>
+function openConfirmModal(type, id, title) {
+    var modalId, formId, nameId, baseUrl;
+
+    if (type === 'delete') {
+        modalId = 'deleteModal';
+        formId = 'deleteForm';
+        nameId = 'deleteItemName';
+        baseUrl = '{{ url("admin/literary-works") }}/' + id;
+    } else if (type === 'unpublish') {
+        modalId = 'unpublishModal';
+        formId = 'unpublishForm';
+        nameId = 'unpublishItemName';
+        baseUrl = '{{ url("admin/literary-works") }}/' + id + '/unpublish';
+    }
+
+    var modal = document.getElementById(modalId);
+    var form = document.getElementById(formId);
+    var nameEl = document.getElementById(nameId);
+
+    if (nameEl) nameEl.textContent = title || '';
+    if (form) form.action = baseUrl;
+
+    if (modal) {
+        var bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
+    }
+}
+</script>
+@endpush

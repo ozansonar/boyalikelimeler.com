@@ -19834,6 +19834,11 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   font-size: 12px;
   margin-bottom: 24px;
 }
+.cl-modal-info {
+  color: var(--neon-blue);
+  font-size: 12px;
+  margin-bottom: 16px;
+}
 
 /* ==================== FORMS PAGE - TAGS INPUT ==================== */
 .fs-tags-wrapper {
