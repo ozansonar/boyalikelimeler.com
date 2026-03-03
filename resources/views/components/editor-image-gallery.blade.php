@@ -16,7 +16,7 @@
                         <div class="eig-upload__placeholder" id="eigPlaceholder">
                             <i class="bi bi-cloud-arrow-up fs-1 mb-2"></i>
                             <p class="mb-1">Görsel yüklemek için tıklayın veya sürükleyin</p>
-                            <small class="text-secondary">JPG, PNG, GIF, WebP — Maks. 1 MB</small>
+                            <small class="text-secondary">JPG, PNG, GIF, WebP — Maks. 5 MB</small>
                         </div>
                         <div class="eig-upload__progress d-none" id="eigProgress">
                             <div class="spinner-border text-warning spinner-border-sm me-2" role="status"></div>

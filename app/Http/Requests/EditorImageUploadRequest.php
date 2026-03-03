@@ -19,7 +19,7 @@ class EditorImageUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:1024'],
+            'file' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
         ];
     }
 
@@ -32,7 +32,7 @@ class EditorImageUploadRequest extends FormRequest
             'file.required' => 'Görsel dosyası gereklidir.',
             'file.image'    => 'Yüklenen dosya bir görsel olmalıdır.',
             'file.mimes'    => 'Sadece JPG, PNG, GIF ve WebP formatları desteklenir.',
-            'file.max'      => 'Görsel boyutu en fazla 1 MB olabilir.',
+            'file.max'      => 'Görsel boyutu en fazla 5 MB olabilir.',
         ];
     }
 }
