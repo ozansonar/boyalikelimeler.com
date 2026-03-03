@@ -209,7 +209,7 @@
                                         <a href="{{ route('literary-works.show', $related->slug) }}" class="cdetail-sidebar__related-item">
                                             <div class="cdetail-sidebar__related-thumb">
                                                 @if($related->cover_image)
-                                                    <img src="{{ upload_url($related->cover_image) }}" alt="{{ $related->title }}" loading="lazy">
+                                                    <img src="{{ upload_url($related->cover_image) }}" alt="{{ $related->title }}" class="img-fluid" loading="lazy">
                                                 @else
                                                     <i class="fa-solid fa-book-open"></i>
                                                 @endif
