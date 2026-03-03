@@ -12,8 +12,12 @@
     var CSRF = document.querySelector('meta[name="csrf-token"]');
     var csrfToken = CSRF ? CSRF.getAttribute('content') : '';
 
+    // Context user ID: allows admin to manage images on behalf of another user
+    var contextUserId = window.editorImageContextUserId || 0;
+    var ctxParam = contextUserId ? '?context_user_id=' + contextUserId : '';
+
     var URLS = {
-        list:   '/editor/images',
+        list:   '/editor/images' + ctxParam,
         upload: '/editor/images',
         delete: '/editor/images/'
     };
@@ -29,6 +33,7 @@
         return new Promise(function (resolve, reject) {
             var formData = new FormData();
             formData.append('file', blobInfo.blob(), blobInfo.filename());
+            if (contextUserId) formData.append('context_user_id', contextUserId);
 
             fetch(URLS.upload, {
                 method: 'POST',
@@ -220,7 +225,7 @@
     function deleteImage(id, colEl) {
         if (!confirm('Bu görseli silmek istediğinize emin misiniz?')) return;
 
-        fetch(URLS.delete + id, {
+        fetch(URLS.delete + id + ctxParam, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
         })
@@ -297,6 +302,7 @@
             queue.forEach(function (file) {
                 var fd = new FormData();
                 fd.append('file', file);
+                if (contextUserId) fd.append('context_user_id', contextUserId);
 
                 fetch(URLS.upload, {
                     method: 'POST',

@@ -168,6 +168,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js"></script>
+    <script>window.editorImageContextUserId = {{ $work->user_id }};</script>
     <script src="{{ asset('js/editor-image-gallery.js') }}"></script>
     <script>
     tinymce.init({

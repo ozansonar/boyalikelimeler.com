@@ -6,8 +6,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EditorImageUploadRequest;
 use App\Models\EditorImage;
+use App\Models\User;
 use App\Services\EditorImageService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 final class EditorImageController extends Controller
 {
@@ -20,7 +22,7 @@ final class EditorImageController extends Controller
      */
     public function store(EditorImageUploadRequest $request): JsonResponse
     {
-        $user = $request->user();
+        $user = $this->resolveContextUser($request);
         $image = $this->editorImageService->upload($user, $request->file('file'));
 
         return response()->json([
@@ -42,9 +44,9 @@ final class EditorImageController extends Controller
     /**
      * GET /editor/images — List current user's editor images.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $user = auth()->user();
+        $user = $this->resolveContextUser($request);
         $images = $this->editorImageService->listForUser($user);
 
         $data = $images->map(fn (EditorImage $img) => [
@@ -67,9 +69,9 @@ final class EditorImageController extends Controller
     /**
      * DELETE /editor/images/{editorImage} — Delete an editor image.
      */
-    public function destroy(EditorImage $editorImage): JsonResponse
+    public function destroy(EditorImage $editorImage, Request $request): JsonResponse
     {
-        $user = auth()->user();
+        $user = $this->resolveContextUser($request);
         $deleted = $this->editorImageService->delete($user, $editorImage);
 
         if (! $deleted) {
@@ -77,5 +79,29 @@ final class EditorImageController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Resolve the target user for editor images.
+     *
+     * Admin/SuperAdmin can pass context_user_id to manage images
+     * on behalf of another user (e.g. when editing a literary work).
+     */
+    private function resolveContextUser(Request $request): User
+    {
+        $authUser = $request->user();
+
+        $contextUserId = (int) $request->input('context_user_id', 0);
+
+        if ($contextUserId > 0 && $contextUserId !== (int) $authUser->id) {
+            if ($authUser->isAdmin() || $authUser->isSuperAdmin()) {
+                $contextUser = User::find($contextUserId);
+                if ($contextUser) {
+                    return $contextUser;
+                }
+            }
+        }
+
+        return $authUser;
     }
 }
