@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MailLogController;
 use App\Http\Controllers\Admin\MenuController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Front\BlogController;
+use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\MyPostController;
 use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\ProfileController;
@@ -106,11 +108,24 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
     Route::post('settings/send-test-mail', [SettingController::class, 'sendTestMail'])->name('settings.send-test-mail');
 
+    // Contact Messages
+    Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
+    Route::patch('contacts/mark-all-read', [AdminContactController::class, 'markAllRead'])->name('contacts.mark-all-read');
+    Route::get('contacts/{id}', [AdminContactController::class, 'show'])->name('contacts.show')->where('id', '[0-9]+');
+    Route::post('contacts/{id}/reply', [AdminContactController::class, 'reply'])->name('contacts.reply')->where('id', '[0-9]+');
+    Route::patch('contacts/{id}/star', [AdminContactController::class, 'toggleStar'])->name('contacts.star')->where('id', '[0-9]+');
+    Route::patch('contacts/{id}/archive', [AdminContactController::class, 'archive'])->name('contacts.archive')->where('id', '[0-9]+');
+    Route::delete('contacts/{id}', [AdminContactController::class, 'destroy'])->name('contacts.destroy')->where('id', '[0-9]+');
+
     // Mail Logs
     Route::get('mail-logs', [MailLogController::class, 'index'])->name('mail-logs.index');
     Route::get('mail-logs/{mailLog}', [MailLogController::class, 'show'])->name('mail-logs.show');
     Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy');
 });
+
+// Contact (Frontend)
+Route::get('/iletisim', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.store')->middleware('throttle:5,1');
 
 // Static Pages (catch-all — MUST be LAST route)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')->where('slug', '[a-z0-9\-]+');

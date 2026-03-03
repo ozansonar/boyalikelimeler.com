@@ -29,6 +29,12 @@
             <i class="bi bi-people-fill"></i> Kullanıcılar
         </a>
 
+        <a href="{{ route('admin.contacts.index') }}" class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
+            <i class="bi bi-chat-left-text-fill"></i> Mesajlar
+            @if(($unreadMessages = \App\Models\ContactMessage::where('is_read', false)->count()) > 0)
+                <span class="badge bg-danger rounded-pill ms-auto">{{ $unreadMessages }}</span>
+            @endif
+        </a>
         <a href="{{ route('admin.menus.index') }}" class="nav-link {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
             <i class="bi bi-list-nested"></i> Menüler
         </a>
