@@ -108,19 +108,14 @@
                     @endif
 
                     <!-- Cover Image -->
-                    <div class="cdetail-cover">
-                        @if($work->cover_image)
+                    @if($work->cover_image)
+                        <div class="cdetail-cover">
                             <img src="{{ upload_url($work->cover_image) }}"
                                  alt="{{ $work->title }}"
                                  class="cdetail-cover__img img-fluid"
                                  loading="lazy">
-                        @else
-                            <div class="cdetail-cover__placeholder">
-                                <i class="fa-solid fa-book-open"></i>
-                                <span>Kapak Görseli</span>
-                            </div>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
 
                     <!-- Article Content -->
                     <div class="cdetail-content">
