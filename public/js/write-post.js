@@ -81,8 +81,15 @@
     var coverRemoveBtn = document.getElementById('coverRemoveBtn');
     var removeCoverFlag = document.getElementById('removeCoverFlag');
 
+    var MAX_COVER_SIZE = 2 * 1024 * 1024; // 2 MB
+
     function showCoverPreview(file) {
         if (!file || !file.type.startsWith('image/')) return;
+        if (file.size > MAX_COVER_SIZE) {
+            alert('Kapak görseli en fazla 2 MB olabilir.');
+            coverInput.value = '';
+            return;
+        }
         var reader = new FileReader();
         reader.onload = function (e) {
             coverPreviewImg.src = e.target.result;
