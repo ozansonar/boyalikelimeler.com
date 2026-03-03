@@ -33,9 +33,11 @@ class LiteraryWork extends Model
     protected function casts(): array
     {
         return [
-            'status'       => LiteraryWorkStatus::class,
-            'view_count'   => 'integer',
-            'published_at' => 'datetime',
+            'user_id'              => 'integer',
+            'literary_category_id' => 'integer',
+            'status'               => LiteraryWorkStatus::class,
+            'view_count'           => 'integer',
+            'published_at'         => 'datetime',
         ];
     }
 
