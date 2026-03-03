@@ -24,7 +24,7 @@ class LiteraryWorkRevisedMail extends BaseMailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.literary.revised',
+            markdown: 'emails.literary.revised',
         );
     }
 }
