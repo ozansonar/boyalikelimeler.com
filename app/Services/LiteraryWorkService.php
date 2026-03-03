@@ -10,6 +10,7 @@ use App\Mail\LiteraryWorkRejectedMail;
 use App\Mail\LiteraryWorkRevisionRequestedMail;
 use App\Mail\LiteraryWorkSubmittedMail;
 use App\Mail\LiteraryWorkRevisedMail;
+use App\Models\LiteraryCategory;
 use App\Models\LiteraryRevision;
 use App\Models\LiteraryWork;
 use App\Models\User;
@@ -19,6 +20,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -26,9 +28,16 @@ final class LiteraryWorkService
 {
     use GeneratesUniqueSlug;
 
+    private bool $lastMailSent = true;
+
     protected function slugModel(): string
     {
         return LiteraryWork::class;
+    }
+
+    public function wasMailSent(): bool
+    {
+        return $this->lastMailSent;
     }
 
     // ─── Admin: Stats ───
@@ -94,7 +103,7 @@ final class LiteraryWorkService
 
     // ─── Admin: Approve ───
 
-    public function approve(LiteraryWork $work): void
+    public function approve(LiteraryWork $work): bool
     {
         DB::transaction(function () use ($work): void {
             $work->update([
@@ -105,12 +114,16 @@ final class LiteraryWorkService
             $this->clearCache();
         });
 
-        Mail::to($work->author)->send(new LiteraryWorkApprovedMail($work));
+        return $this->sendMailSafely(
+            fn () => Mail::to($work->author)->send(new LiteraryWorkApprovedMail($work)),
+            'approve',
+            $work,
+        );
     }
 
     // ─── Admin: Reject ───
 
-    public function reject(LiteraryWork $work): void
+    public function reject(LiteraryWork $work): bool
     {
         DB::transaction(function () use ($work): void {
             $work->update([
@@ -120,12 +133,16 @@ final class LiteraryWorkService
             $this->clearCache();
         });
 
-        Mail::to($work->author)->send(new LiteraryWorkRejectedMail($work));
+        return $this->sendMailSafely(
+            fn () => Mail::to($work->author)->send(new LiteraryWorkRejectedMail($work)),
+            'reject',
+            $work,
+        );
     }
 
     // ─── Admin: Request Revision ───
 
-    public function requestRevision(LiteraryWork $work, User $admin, string $reason): void
+    public function requestRevision(LiteraryWork $work, User $admin, string $reason): bool
     {
         DB::transaction(function () use ($work, $admin, $reason): void {
             $work->update([
@@ -142,7 +159,12 @@ final class LiteraryWorkService
         });
 
         $work->load('revisions.admin');
-        Mail::to($work->author)->send(new LiteraryWorkRevisionRequestedMail($work, $reason));
+
+        return $this->sendMailSafely(
+            fn () => Mail::to($work->author)->send(new LiteraryWorkRevisionRequestedMail($work, $reason)),
+            'requestRevision',
+            $work,
+        );
     }
 
     // ─── Author: Stats ───
@@ -203,7 +225,7 @@ final class LiteraryWorkService
         });
 
         $this->clearCache();
-        $this->notifyAdminsNewSubmission($work);
+        $this->lastMailSent = $this->notifyAdminsNewSubmission($work);
 
         return $work;
     }
@@ -258,7 +280,7 @@ final class LiteraryWorkService
         $this->clearCache();
 
         if ($wasRevisionRequested) {
-            $this->notifyAdminsRevised($updatedWork);
+            $this->lastMailSent = $this->notifyAdminsRevised($updatedWork);
         }
 
         return $updatedWork;
@@ -321,22 +343,142 @@ final class LiteraryWorkService
 
     // ─── Notification Helpers ───
 
-    private function notifyAdminsNewSubmission(LiteraryWork $work): void
+    private function notifyAdminsNewSubmission(LiteraryWork $work): bool
     {
         $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $allSent = true;
 
         foreach ($admins as $admin) {
-            Mail::to($admin)->send(new LiteraryWorkSubmittedMail($work));
+            $sent = $this->sendMailSafely(
+                fn () => Mail::to($admin)->send(new LiteraryWorkSubmittedMail($work)),
+                'notifyAdminsNewSubmission',
+                $work,
+            );
+            if (! $sent) {
+                $allSent = false;
+            }
+        }
+
+        return $allSent;
+    }
+
+    private function notifyAdminsRevised(LiteraryWork $work): bool
+    {
+        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $allSent = true;
+
+        foreach ($admins as $admin) {
+            $sent = $this->sendMailSafely(
+                fn () => Mail::to($admin)->send(new LiteraryWorkRevisedMail($work)),
+                'notifyAdminsRevised',
+                $work,
+            );
+            if (! $sent) {
+                $allSent = false;
+            }
+        }
+
+        return $allSent;
+    }
+
+    /**
+     * Send mail inside try-catch. Returns true on success, false on failure.
+     */
+    private function sendMailSafely(\Closure $mailCallback, string $action, LiteraryWork $work): bool
+    {
+        try {
+            $mailCallback();
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::error("Mail gönderilemedi [{$action}] — Eser #{$work->id} ({$work->title}): {$e->getMessage()}");
+
+            return false;
         }
     }
 
-    private function notifyAdminsRevised(LiteraryWork $work): void
-    {
-        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+    // ─── Front: Paginate published works ───
 
-        foreach ($admins as $admin) {
-            Mail::to($admin)->send(new LiteraryWorkRevisedMail($work));
+    public function frontPaginate(int $perPage, array $filters = []): LengthAwarePaginator
+    {
+        $query = LiteraryWork::with(['category', 'author'])
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->whereNotNull('published_at');
+
+        if (! empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search): void {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%");
+            });
         }
+
+        if (! empty($filters['category'])) {
+            $categoryId = LiteraryCategory::where('slug', $filters['category'])->value('id');
+            if ($categoryId) {
+                $query->where('literary_category_id', $categoryId);
+            }
+        }
+
+        $sort = $filters['sort'] ?? 'newest';
+        $query = match ($sort) {
+            'popular' => $query->orderByDesc('view_count'),
+            default   => $query->orderByDesc('published_at'),
+        };
+
+        return $query->paginate($perPage)->withQueryString();
+    }
+
+    // ─── Front: Single work by slug ───
+
+    public function findPublishedBySlug(string $slug): ?LiteraryWork
+    {
+        return LiteraryWork::with(['category', 'author'])
+            ->where('slug', $slug)
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->whereNotNull('published_at')
+            ->first();
+    }
+
+    // ─── Front: Increment view count ───
+
+    public function incrementViews(LiteraryWork $work): void
+    {
+        $work->increment('view_count');
+    }
+
+    // ─── Front: Related works (same category) ───
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, LiteraryWork>
+     */
+    public function getRelatedWorks(LiteraryWork $work, int $limit = 4): \Illuminate\Database\Eloquent\Collection
+    {
+        return LiteraryWork::with(['author'])
+            ->where('literary_category_id', $work->literary_category_id)
+            ->where('id', '!=', $work->id)
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->whereNotNull('published_at')
+            ->orderByDesc('published_at')
+            ->limit($limit)
+            ->get();
+    }
+
+    // ─── Front: Stats (published) ───
+
+    /**
+     * @return array{work_count: int, author_count: int, total_views: int}
+     */
+    public function getPublishedStats(): array
+    {
+        return Cache::remember('literary_works.front_stats', 300, function (): array {
+            return [
+                'work_count'   => LiteraryWork::where('status', LiteraryWorkStatus::Approved)->count(),
+                'author_count' => LiteraryWork::where('status', LiteraryWorkStatus::Approved)
+                    ->distinct('user_id')->count('user_id'),
+                'total_views'  => (int) LiteraryWork::where('status', LiteraryWorkStatus::Approved)->sum('view_count'),
+            ];
+        });
     }
 
     // ─── Cache ───
@@ -345,5 +487,6 @@ final class LiteraryWorkService
     {
         Cache::forget('literary_works.admin_stats');
         Cache::forget('literary_works.pending_count');
+        Cache::forget('literary_works.front_stats');
     }
 }

@@ -55,9 +55,30 @@ final class MyPostController extends Controller
             $request->file('cover_image'),
         );
 
-        return redirect()
+        $redirect = redirect()
             ->route('myposts.index')
             ->with('success', 'Eseriniz başarıyla gönderildi. Editör onayından sonra yayınlanacaktır.');
+
+        if (! $this->workService->wasMailSent()) {
+            $redirect->with('warning', 'Editörlere bildirim maili gönderilemedi, ancak eseriniz kaydedildi.');
+        }
+
+        return $redirect;
+    }
+
+    public function show(LiteraryWork $work): View
+    {
+        $user = auth()->user();
+
+        $workForShow = $this->workService->getWorkForEdit($user, $work);
+
+        if (! $workForShow) {
+            abort(403, 'Bu eseri görüntüleme yetkiniz yok.');
+        }
+
+        return view('front.myposts.show', [
+            'work' => $workForShow,
+        ]);
     }
 
     public function edit(LiteraryWork $work): View
@@ -95,9 +116,15 @@ final class MyPostController extends Controller
             abort(403, 'Bu eseri güncelleme yetkiniz yok.');
         }
 
-        return redirect()
+        $redirect = redirect()
             ->route('myposts.index')
             ->with('success', 'Eseriniz başarıyla güncellendi ve tekrar incelemeye gönderildi.');
+
+        if (! $this->workService->wasMailSent()) {
+            $redirect->with('warning', 'Editörlere bildirim maili gönderilemedi, ancak eseriniz güncellendi.');
+        }
+
+        return $redirect;
     }
 
     public function destroy(LiteraryWork $work): RedirectResponse
