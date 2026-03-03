@@ -1,11 +1,22 @@
-{{-- Global Status Modal — success / error --}}
-@if(session('success') || session('error'))
+{{-- Global Status Modal — success / warning / error --}}
+@if(session('success') || session('warning') || session('error'))
     @php
-        $isSuccess = session()->has('success');
-        $modalType = $isSuccess ? 'success' : 'danger';
-        $modalTitle = $isSuccess ? 'Başarılı' : 'Hata';
-        $modalIcon = $isSuccess ? 'fa-circle-check' : 'fa-circle-xmark';
-        $modalMessage = $isSuccess ? session('success') : session('error');
+        if (session()->has('success')) {
+            $modalType = 'success';
+            $modalTitle = 'Başarılı';
+            $modalIcon = 'fa-circle-check';
+            $modalMessage = session('success');
+        } elseif (session()->has('warning')) {
+            $modalType = 'warning';
+            $modalTitle = 'Uyarı';
+            $modalIcon = 'fa-triangle-exclamation';
+            $modalMessage = session('warning');
+        } else {
+            $modalType = 'danger';
+            $modalTitle = 'Hata';
+            $modalIcon = 'fa-circle-xmark';
+            $modalMessage = session('error');
+        }
     @endphp
 
     <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">

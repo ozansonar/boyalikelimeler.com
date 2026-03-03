@@ -20,6 +20,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -27,9 +28,16 @@ final class LiteraryWorkService
 {
     use GeneratesUniqueSlug;
 
+    private bool $lastMailSent = true;
+
     protected function slugModel(): string
     {
         return LiteraryWork::class;
+    }
+
+    public function wasMailSent(): bool
+    {
+        return $this->lastMailSent;
     }
 
     // ─── Admin: Stats ───
@@ -95,7 +103,7 @@ final class LiteraryWorkService
 
     // ─── Admin: Approve ───
 
-    public function approve(LiteraryWork $work): void
+    public function approve(LiteraryWork $work): bool
     {
         DB::transaction(function () use ($work): void {
             $work->update([
@@ -106,12 +114,16 @@ final class LiteraryWorkService
             $this->clearCache();
         });
 
-        Mail::to($work->author)->send(new LiteraryWorkApprovedMail($work));
+        return $this->sendMailSafely(
+            fn () => Mail::to($work->author)->send(new LiteraryWorkApprovedMail($work)),
+            'approve',
+            $work,
+        );
     }
 
     // ─── Admin: Reject ───
 
-    public function reject(LiteraryWork $work): void
+    public function reject(LiteraryWork $work): bool
     {
         DB::transaction(function () use ($work): void {
             $work->update([
@@ -121,12 +133,16 @@ final class LiteraryWorkService
             $this->clearCache();
         });
 
-        Mail::to($work->author)->send(new LiteraryWorkRejectedMail($work));
+        return $this->sendMailSafely(
+            fn () => Mail::to($work->author)->send(new LiteraryWorkRejectedMail($work)),
+            'reject',
+            $work,
+        );
     }
 
     // ─── Admin: Request Revision ───
 
-    public function requestRevision(LiteraryWork $work, User $admin, string $reason): void
+    public function requestRevision(LiteraryWork $work, User $admin, string $reason): bool
     {
         DB::transaction(function () use ($work, $admin, $reason): void {
             $work->update([
@@ -143,7 +159,12 @@ final class LiteraryWorkService
         });
 
         $work->load('revisions.admin');
-        Mail::to($work->author)->send(new LiteraryWorkRevisionRequestedMail($work, $reason));
+
+        return $this->sendMailSafely(
+            fn () => Mail::to($work->author)->send(new LiteraryWorkRevisionRequestedMail($work, $reason)),
+            'requestRevision',
+            $work,
+        );
     }
 
     // ─── Author: Stats ───
@@ -204,7 +225,7 @@ final class LiteraryWorkService
         });
 
         $this->clearCache();
-        $this->notifyAdminsNewSubmission($work);
+        $this->lastMailSent = $this->notifyAdminsNewSubmission($work);
 
         return $work;
     }
@@ -259,7 +280,7 @@ final class LiteraryWorkService
         $this->clearCache();
 
         if ($wasRevisionRequested) {
-            $this->notifyAdminsRevised($updatedWork);
+            $this->lastMailSent = $this->notifyAdminsRevised($updatedWork);
         }
 
         return $updatedWork;
@@ -322,21 +343,57 @@ final class LiteraryWorkService
 
     // ─── Notification Helpers ───
 
-    private function notifyAdminsNewSubmission(LiteraryWork $work): void
+    private function notifyAdminsNewSubmission(LiteraryWork $work): bool
     {
         $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $allSent = true;
 
         foreach ($admins as $admin) {
-            Mail::to($admin)->send(new LiteraryWorkSubmittedMail($work));
+            $sent = $this->sendMailSafely(
+                fn () => Mail::to($admin)->send(new LiteraryWorkSubmittedMail($work)),
+                'notifyAdminsNewSubmission',
+                $work,
+            );
+            if (! $sent) {
+                $allSent = false;
+            }
         }
+
+        return $allSent;
     }
 
-    private function notifyAdminsRevised(LiteraryWork $work): void
+    private function notifyAdminsRevised(LiteraryWork $work): bool
     {
         $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $allSent = true;
 
         foreach ($admins as $admin) {
-            Mail::to($admin)->send(new LiteraryWorkRevisedMail($work));
+            $sent = $this->sendMailSafely(
+                fn () => Mail::to($admin)->send(new LiteraryWorkRevisedMail($work)),
+                'notifyAdminsRevised',
+                $work,
+            );
+            if (! $sent) {
+                $allSent = false;
+            }
+        }
+
+        return $allSent;
+    }
+
+    /**
+     * Send mail inside try-catch. Returns true on success, false on failure.
+     */
+    private function sendMailSafely(\Closure $mailCallback, string $action, LiteraryWork $work): bool
+    {
+        try {
+            $mailCallback();
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::error("Mail gönderilemedi [{$action}] — Eser #{$work->id} ({$work->title}): {$e->getMessage()}");
+
+            return false;
         }
     }
 

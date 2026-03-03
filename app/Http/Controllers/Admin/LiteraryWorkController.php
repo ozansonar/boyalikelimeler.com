@@ -50,29 +50,32 @@ final class LiteraryWorkController extends Controller
 
     public function approve(LiteraryWork $literaryWork): RedirectResponse
     {
-        $this->workService->approve($literaryWork);
+        $mailSent = $this->workService->approve($literaryWork);
 
         return redirect()->route('admin.literary-works.index')
-            ->with('success', 'Eser onaylandı ve yazara bildirim gönderildi.');
+            ->with('success', 'Eser başarıyla onaylandı.')
+            ->when(! $mailSent, fn ($r) => $r->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.'));
     }
 
     public function reject(LiteraryWork $literaryWork): RedirectResponse
     {
-        $this->workService->reject($literaryWork);
+        $mailSent = $this->workService->reject($literaryWork);
 
         return redirect()->route('admin.literary-works.index')
-            ->with('success', 'Eser reddedildi ve yazara bildirim gönderildi.');
+            ->with('success', 'Eser reddedildi.')
+            ->when(! $mailSent, fn ($r) => $r->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.'));
     }
 
     public function requestRevision(LiteraryWorkRevisionRequest $request, LiteraryWork $literaryWork): RedirectResponse
     {
-        $this->workService->requestRevision(
+        $mailSent = $this->workService->requestRevision(
             $literaryWork,
             auth()->user(),
             $request->validated()['reason'],
         );
 
         return redirect()->route('admin.literary-works.index')
-            ->with('success', 'Revize talebi gönderildi ve yazar bilgilendirildi.');
+            ->with('success', 'Revize talebi başarıyla oluşturuldu.')
+            ->when(! $mailSent, fn ($r) => $r->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.'));
     }
 }
