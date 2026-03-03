@@ -30,11 +30,12 @@ final class UploadService
     /**
      * Upload an image: save original, convert to WebP, create responsive variants.
      *
-     * @param  string       $directory  Sub-directory under public/uploads (e.g. "literary", "avatars")
-     * @param  string|null  $slug       SEO-friendly slug for filename (falls back to random)
+     * @param  string       $directory   Sub-directory under public/uploads (e.g. "literary", "avatars")
+     * @param  string|null  $slug        SEO-friendly slug for filename (falls back to random)
+     * @param  array|null   $dimensions  Target dimensions for the main file ['width' => int, 'height' => int, 'crop' => bool]
      * @return string  Relative path stored in DB (e.g. "literary/kahve-fali-20260303143025-a7xk2.webp")
      */
-    public function uploadImage(UploadedFile $file, string $directory, ?string $slug = null): string
+    public function uploadImage(UploadedFile $file, string $directory, ?string $slug = null, ?array $dimensions = null): string
     {
         $baseName = $this->generateBaseName($slug);
         $this->ensureDirectory($directory);
@@ -45,10 +46,21 @@ final class UploadService
         $originalName = $baseName . '.' . $originalExt;
         $file->move($this->uploadsPath($directory . '/originals'), $originalName);
 
-        // Convert to WebP (main file)
+        // Convert to WebP (main file — optionally resize/crop to target dimensions)
         $webpName = $baseName . '.webp';
         $originalFullPath = $this->uploadsPath($directory . '/originals/' . $originalName);
-        $this->convertToWebp($originalFullPath, $this->uploadsPath($directory . '/' . $webpName));
+
+        if ($dimensions) {
+            $this->convertToWebp(
+                $originalFullPath,
+                $this->uploadsPath($directory . '/' . $webpName),
+                $dimensions['width'],
+                $dimensions['height'],
+                $dimensions['crop'] ?? true,
+            );
+        } else {
+            $this->convertToWebp($originalFullPath, $this->uploadsPath($directory . '/' . $webpName));
+        }
 
         // Create responsive variants
         $this->createVariants($originalFullPath, $directory, $baseName);
@@ -64,10 +76,11 @@ final class UploadService
         string $directory,
         ?string $oldPath,
         ?string $slug = null,
+        ?array $dimensions = null,
     ): string {
         $this->deleteImage($oldPath);
 
-        return $this->uploadImage($file, $directory, $slug);
+        return $this->uploadImage($file, $directory, $slug, $dimensions);
     }
 
     /**

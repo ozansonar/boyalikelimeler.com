@@ -72,7 +72,9 @@ final class ProfileController extends Controller
     public function updateAvatar(Request $request): JsonResponse
     {
         $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:1024'],
+        ], [
+            'avatar.max' => 'Profil resmi en fazla 1 MB olabilir.',
         ]);
 
         $user = auth()->user();
@@ -80,14 +82,16 @@ final class ProfileController extends Controller
 
         return response()->json([
             'success' => true,
-            'url'     => upload_url($path),
+            'url'     => upload_url($path, 'thumb'),
         ]);
     }
 
     public function updateCover(Request $request): JsonResponse
     {
         $request->validate([
-            'cover' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'cover' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:1024'],
+        ], [
+            'cover.max' => 'Kapak resmi en fazla 1 MB olabilir.',
         ]);
 
         $user = auth()->user();

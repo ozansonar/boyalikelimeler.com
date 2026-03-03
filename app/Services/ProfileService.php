@@ -90,7 +90,13 @@ final class ProfileService
     public function uploadAvatar(User $user, UploadedFile $file): string
     {
         $slug = \Illuminate\Support\Str::slug($user->name);
-        $path = $this->uploadService->replaceImage($file, 'avatars', $user->avatar, $slug);
+        $path = $this->uploadService->replaceImage(
+            $file,
+            'avatars',
+            $user->avatar,
+            $slug,
+            ['width' => 400, 'height' => 400, 'crop' => true],
+        );
         $user->update(['avatar' => $path]);
 
         return $path;
@@ -99,7 +105,13 @@ final class ProfileService
     public function uploadCover(User $user, UploadedFile $file): string
     {
         $slug = \Illuminate\Support\Str::slug($user->name);
-        $path = $this->uploadService->replaceImage($file, 'covers', $user->cover_image, $slug);
+        $path = $this->uploadService->replaceImage(
+            $file,
+            'covers',
+            $user->cover_image,
+            $slug,
+            ['width' => 1920, 'height' => 400, 'crop' => true],
+        );
         $user->update(['cover_image' => $path]);
 
         return $path;
