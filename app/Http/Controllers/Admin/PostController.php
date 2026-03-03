@@ -50,14 +50,7 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = $request->file('cover_image')
-                ->store('posts/covers', 'public_uploads');
-        }
-
-        $this->postService->create($data);
+        $this->postService->create($request->validated(), $request->file('cover_image'));
 
         return redirect()->route('admin.posts.index')
             ->with('success', 'İçerik başarıyla oluşturuldu.');
@@ -75,14 +68,7 @@ class PostController extends Controller
 
     public function update(PostUpdateRequest $request, Post $post): RedirectResponse
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = $request->file('cover_image')
-                ->store('posts/covers', 'public_uploads');
-        }
-
-        $this->postService->update($post, $data);
+        $this->postService->update($post, $request->validated(), $request->file('cover_image'));
 
         return redirect()->route('admin.posts.index')
             ->with('success', 'İçerik başarıyla güncellendi.');

@@ -75,10 +75,7 @@
                     <!-- Cover Image -->
                     <div class="cdetail-cover">
                         @if($work->cover_image)
-                            <img src="{{ upload_url($work->cover_image) }}"
-                                 alt="{{ $work->title }}"
-                                 class="cdetail-cover__img img-fluid"
-                                 loading="lazy">
+                            <x-responsive-image :path="$work->cover_image" :alt="$work->title" size="lg" class="cdetail-cover__img img-fluid" />
                         @else
                             <div class="cdetail-cover__placeholder">
                                 <i class="fa-solid fa-book-open"></i>
@@ -209,7 +206,7 @@
                                         <a href="{{ route('literary-works.show', $related->slug) }}" class="cdetail-sidebar__related-item">
                                             <div class="cdetail-sidebar__related-thumb">
                                                 @if($related->cover_image)
-                                                    <img src="{{ upload_url($related->cover_image) }}" alt="{{ $related->title }}" class="img-fluid" loading="lazy">
+                                                    <img src="{{ upload_url($related->cover_image, 'thumb') }}" alt="{{ $related->title }}" class="img-fluid" loading="lazy">
                                                 @else
                                                     <i class="fa-solid fa-book-open"></i>
                                                 @endif

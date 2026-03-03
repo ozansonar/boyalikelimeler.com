@@ -20,7 +20,6 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -30,6 +29,10 @@ final class LiteraryWorkService
     use GeneratesUniqueSlug;
 
     private bool $lastMailSent = true;
+
+    public function __construct(
+        private readonly UploadService $uploadService,
+    ) {}
 
     protected function slugModel(): string
     {
@@ -226,7 +229,7 @@ final class LiteraryWorkService
                 'status'               => LiteraryWorkStatus::Pending,
                 'meta_title'           => $data['title'],
                 'meta_description'     => $data['excerpt'] ?? null,
-                'cover_image'          => $coverImage ? $this->storeCoverImage($coverImage) : null,
+                'cover_image'          => $coverImage ? $this->storeCoverImage($coverImage, $data['title']) : null,
             ]);
         });
 
@@ -253,7 +256,7 @@ final class LiteraryWorkService
 
             if ($coverImage) {
                 $this->deleteOldCover($work->cover_image);
-                $updateData['cover_image'] = $this->storeCoverImage($coverImage);
+                $updateData['cover_image'] = $this->storeCoverImage($coverImage, $data['title']);
             }
 
             if (! empty($data['remove_cover']) && ! $coverImage) {
@@ -336,7 +339,7 @@ final class LiteraryWorkService
 
             if ($coverImage) {
                 $this->deleteOldCover($work->cover_image);
-                $updateData['cover_image'] = $this->storeCoverImage($coverImage);
+                $updateData['cover_image'] = $this->storeCoverImage($coverImage, $data['title']);
             }
 
             if (! empty($data['remove_cover']) && ! $coverImage) {
@@ -451,31 +454,14 @@ final class LiteraryWorkService
 
     // ─── File Helpers ───
 
-    private function storeCoverImage(UploadedFile $file): string
+    private function storeCoverImage(UploadedFile $file, ?string $title = null): string
     {
-        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $directory = public_path('uploads/literary');
-
-        if (! File::isDirectory($directory)) {
-            File::makeDirectory($directory, 0755, true);
-        }
-
-        $file->move($directory, $filename);
-
-        return 'literary/' . $filename;
+        return $this->uploadService->uploadImage($file, 'literary', $title);
     }
 
     private function deleteOldCover(?string $path): void
     {
-        if (! $path) {
-            return;
-        }
-
-        $fullPath = public_path('uploads/' . $path);
-
-        if (File::exists($fullPath)) {
-            File::delete($fullPath);
-        }
+        $this->uploadService->deleteImage($path);
     }
 
     // ─── Notification Helpers ───

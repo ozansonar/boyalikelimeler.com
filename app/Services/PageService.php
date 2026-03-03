@@ -7,12 +7,17 @@ namespace App\Services;
 use App\Models\Page;
 use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 final class PageService
 {
     use GeneratesUniqueSlug;
+
+    public function __construct(
+        private readonly UploadService $uploadService,
+    ) {}
 
     protected function slugModel(): string
     {
@@ -51,11 +56,15 @@ final class PageService
         return $query->orderBy('sort_order')->orderByDesc('created_at')->paginate($perPage)->withQueryString();
     }
 
-    public function create(array $data): Page
+    public function create(array $data, ?UploadedFile $coverImage = null): Page
     {
-        return DB::transaction(function () use ($data): Page {
+        return DB::transaction(function () use ($data, $coverImage): Page {
             $data['slug'] = $this->generateUniqueSlug($data['title']);
             $data['user_id'] = auth()->id();
+
+            if ($coverImage) {
+                $data['cover_image'] = $this->uploadService->uploadImage($coverImage, 'pages', $data['title']);
+            }
 
             $page = Page::create($data);
 
@@ -65,11 +74,15 @@ final class PageService
         });
     }
 
-    public function update(Page $page, array $data): Page
+    public function update(Page $page, array $data, ?UploadedFile $coverImage = null): Page
     {
-        return DB::transaction(function () use ($page, $data): Page {
+        return DB::transaction(function () use ($page, $data, $coverImage): Page {
             if ($page->title !== $data['title']) {
                 $data['slug'] = $this->generateUniqueSlug($data['title'], $page->id);
+            }
+
+            if ($coverImage) {
+                $data['cover_image'] = $this->uploadService->replaceImage($coverImage, 'pages', $page->cover_image, $data['title']);
             }
 
             $page->update($data);
@@ -83,6 +96,7 @@ final class PageService
     public function delete(Page $page): void
     {
         DB::transaction(function () use ($page): void {
+            $this->uploadService->deleteImage($page->cover_image);
             $page->delete();
             $this->clearCache();
         });

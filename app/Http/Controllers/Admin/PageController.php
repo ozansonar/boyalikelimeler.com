@@ -42,14 +42,7 @@ class PageController extends Controller
 
     public function store(PageStoreRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = $request->file('cover_image')
-                ->store('pages/covers', 'public_uploads');
-        }
-
-        $this->pageService->create($data);
+        $this->pageService->create($request->validated(), $request->file('cover_image'));
 
         return redirect()->route('admin.pages.index')
             ->with('success', 'Sayfa başarıyla oluşturuldu.');
@@ -66,14 +59,7 @@ class PageController extends Controller
 
     public function update(PageUpdateRequest $request, Page $page): RedirectResponse
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = $request->file('cover_image')
-                ->store('pages/covers', 'public_uploads');
-        }
-
-        $this->pageService->update($page, $data);
+        $this->pageService->update($page, $request->validated(), $request->file('cover_image'));
 
         return redirect()->route('admin.pages.index')
             ->with('success', 'Sayfa başarıyla güncellendi.');

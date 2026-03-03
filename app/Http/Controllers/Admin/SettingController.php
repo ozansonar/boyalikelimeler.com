@@ -7,10 +7,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\TestMail;
 use App\Services\SettingService;
+use App\Services\UploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
@@ -18,6 +18,7 @@ class SettingController extends Controller
 {
     public function __construct(
         private readonly SettingService $settingService,
+        private readonly UploadService $uploadService,
     ) {}
 
     public function index(Request $request): View
@@ -45,14 +46,14 @@ class SettingController extends Controller
 
         if ($request->hasFile('logo')) {
             $request->validate(['logo' => 'image|max:2048']);
-            $data['logo'] = $request->file('logo')
-                ->store('settings', 'public_uploads');
+            $oldLogo = $this->settingService->getGroup('general')['logo'] ?? null;
+            $data['logo'] = $this->uploadService->replaceImage($request->file('logo'), 'settings', $oldLogo, 'site-logo');
         }
 
         if ($request->hasFile('favicon')) {
             $request->validate(['favicon' => 'file|max:512']);
-            $data['favicon'] = $request->file('favicon')
-                ->store('settings', 'public_uploads');
+            $oldFavicon = $this->settingService->getGroup('general')['favicon'] ?? null;
+            $data['favicon'] = $this->uploadService->replaceImage($request->file('favicon'), 'settings', $oldFavicon, 'site-favicon');
         }
 
         $this->settingService->updateGroup('general', $data);
@@ -126,14 +127,8 @@ class SettingController extends Controller
 
         if ($request->hasFile('mail_logo')) {
             $request->validate(['mail_logo' => 'image|mimes:png,jpg,jpeg|max:1024']);
-
             $oldLogo = $this->settingService->getGroup('smtp')['mail_logo'] ?? null;
-            if ($oldLogo && File::exists(public_path('uploads/' . $oldLogo))) {
-                File::delete(public_path('uploads/' . $oldLogo));
-            }
-
-            $data['mail_logo'] = $request->file('mail_logo')
-                ->store('settings', 'public_uploads');
+            $data['mail_logo'] = $this->uploadService->replaceImage($request->file('mail_logo'), 'settings', $oldLogo, 'mail-logo');
         }
 
         $this->settingService->updateGroup('smtp', $data);
@@ -145,12 +140,7 @@ class SettingController extends Controller
     public function removeMailLogo(): RedirectResponse
     {
         $smtp = $this->settingService->getGroup('smtp');
-        $logo = $smtp['mail_logo'] ?? null;
-
-        if ($logo && File::exists(public_path('uploads/' . $logo))) {
-            File::delete(public_path('uploads/' . $logo));
-        }
-
+        $this->uploadService->deleteImage($smtp['mail_logo'] ?? null);
         $this->settingService->set('smtp', 'mail_logo', null);
 
         return redirect()->route('admin.settings.index', ['tab' => 'smtp'])
@@ -173,6 +163,8 @@ class SettingController extends Controller
 
     public function removeLogo(): RedirectResponse
     {
+        $general = $this->settingService->getGroup('general');
+        $this->uploadService->deleteImage($general['logo'] ?? null);
         $this->settingService->set('general', 'logo', null);
 
         return redirect()->route('admin.settings.index', ['tab' => 'general'])
@@ -181,6 +173,8 @@ class SettingController extends Controller
 
     public function removeFavicon(): RedirectResponse
     {
+        $general = $this->settingService->getGroup('general');
+        $this->uploadService->deleteImage($general['favicon'] ?? null);
         $this->settingService->set('general', 'favicon', null);
 
         return redirect()->route('admin.settings.index', ['tab' => 'general'])

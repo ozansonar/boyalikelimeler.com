@@ -102,12 +102,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->avatar ? upload_url($this->avatar) : null;
+        return $this->avatar ? upload_url($this->avatar, 'thumb') : null;
     }
 
     public function getCoverImageUrlAttribute(): ?string
     {
-        return $this->cover_image ? upload_url($this->cover_image) : null;
+        return $this->cover_image ? upload_url($this->cover_image, 'lg') : null;
     }
 
     public function getProfileUrlAttribute(): string

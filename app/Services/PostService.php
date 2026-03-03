@@ -8,12 +8,17 @@ use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 final class PostService
 {
     use GeneratesUniqueSlug;
+
+    public function __construct(
+        private readonly UploadService $uploadService,
+    ) {}
 
     protected function slugModel(): string
     {
@@ -85,14 +90,18 @@ final class PostService
         return $query->orderBy($sortField, $sortDir)->paginate($perPage)->withQueryString();
     }
 
-    public function create(array $data): Post
+    public function create(array $data, ?UploadedFile $coverImage = null): Post
     {
-        return DB::transaction(function () use ($data): Post {
+        return DB::transaction(function () use ($data, $coverImage): Post {
             $data['slug'] = $this->generateUniqueSlug($data['title']);
             $data['user_id'] = auth()->id();
 
             if (($data['status'] ?? 'draft') === PostStatus::Published->value) {
                 $data['published_at'] = $data['published_at'] ?? now();
+            }
+
+            if ($coverImage) {
+                $data['cover_image'] = $this->uploadService->uploadImage($coverImage, 'posts', $data['title']);
             }
 
             $post = Post::create($data);
@@ -103,9 +112,9 @@ final class PostService
         });
     }
 
-    public function update(Post $post, array $data): Post
+    public function update(Post $post, array $data, ?UploadedFile $coverImage = null): Post
     {
-        return DB::transaction(function () use ($post, $data): Post {
+        return DB::transaction(function () use ($post, $data, $coverImage): Post {
             if ($post->title !== $data['title']) {
                 $data['slug'] = $this->generateUniqueSlug($data['title'], $post->id);
             }
@@ -115,6 +124,10 @@ final class PostService
                 && $post->published_at === null
             ) {
                 $data['published_at'] = $data['published_at'] ?? now();
+            }
+
+            if ($coverImage) {
+                $data['cover_image'] = $this->uploadService->replaceImage($coverImage, 'posts', $post->cover_image, $data['title']);
             }
 
             $post->update($data);
@@ -128,6 +141,7 @@ final class PostService
     public function delete(Post $post): void
     {
         DB::transaction(function () use ($post): void {
+            $this->uploadService->deleteImage($post->cover_image);
             $post->delete();
             $this->clearCache();
         });

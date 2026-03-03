@@ -115,10 +115,7 @@
                     <!-- Cover Image -->
                     @if($work->cover_image)
                         <div class="cdetail-cover">
-                            <img src="{{ upload_url($work->cover_image) }}"
-                                 alt="{{ $work->title }}"
-                                 class="cdetail-cover__img img-fluid"
-                                 loading="lazy">
+                            <x-responsive-image :path="$work->cover_image" :alt="$work->title" size="lg" class="cdetail-cover__img img-fluid" />
                         </div>
                     @endif
 
