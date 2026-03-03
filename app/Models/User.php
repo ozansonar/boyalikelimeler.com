@@ -75,6 +75,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class);
     }
 
+    public function literaryWorks(): HasMany
+    {
+        return $this->hasMany(LiteraryWork::class);
+    }
+
     public function hasRole(RoleSlug $role): bool
     {
         return $this->role?->slug === $role->value;
