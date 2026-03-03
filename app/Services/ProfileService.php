@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\LiteraryWorkStatus;
 use App\Enums\PostStatus;
-use App\Models\Post;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -16,31 +17,41 @@ use Illuminate\Support\Str;
 final class ProfileService
 {
     /**
-     * @return array{posts: \Illuminate\Database\Eloquent\Collection, stats: array}
+     * @return array{posts: Collection, works: Collection, stats: array}
      */
-    public function getProfileData(User $user, int $limit = 6): array
+    public function getProfileData(User $user, int $postLimit = 6, int $workLimit = 10): array
     {
         $posts = $user->posts()
             ->with('category')
             ->where('status', PostStatus::Published)
             ->orderByDesc('published_at')
-            ->limit($limit)
+            ->limit($postLimit)
+            ->get();
+
+        $works = $user->literaryWorks()
+            ->with('category')
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->orderByDesc('published_at')
+            ->limit($workLimit)
             ->get();
 
         $stats = $this->getWriterStats($user);
 
-        return compact('posts', 'stats');
+        return compact('posts', 'works', 'stats');
     }
 
     /**
-     * @return array{total_posts: int, published_posts: int, total_views: int}
+     * @return array{total_posts: int, published_posts: int, total_views: int, total_works: int, approved_works: int, total_work_views: int}
      */
     public function getWriterStats(User $user): array
     {
         return [
-            'total_posts'     => $user->posts()->count(),
-            'published_posts' => $user->posts()->where('status', PostStatus::Published)->count(),
-            'total_views'     => (int) $user->posts()->sum('view_count'),
+            'total_posts'      => $user->posts()->count(),
+            'published_posts'  => $user->posts()->where('status', PostStatus::Published)->count(),
+            'total_views'      => (int) $user->posts()->sum('view_count'),
+            'total_works'      => $user->literaryWorks()->count(),
+            'approved_works'   => $user->literaryWorks()->where('status', LiteraryWorkStatus::Approved)->count(),
+            'total_work_views' => (int) $user->literaryWorks()->sum('view_count'),
         ];
     }
 
