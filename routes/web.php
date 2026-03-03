@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\EditorImageController;
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\HomeController;
@@ -65,6 +66,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/profil/sifre', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::post('/profil/kapak', [ProfileController::class, 'updateCover'])->name('profile.cover');
+
+    // Editor Image Upload (TinyMCE)
+    Route::get('/editor/images', [EditorImageController::class, 'index'])->name('editor.images.index');
+    Route::post('/editor/images', [EditorImageController::class, 'store'])->name('editor.images.store');
+    Route::delete('/editor/images/{editorImage}', [EditorImageController::class, 'destroy'])->name('editor.images.destroy');
 
     // My Literary Works (Eserlerim)
     Route::get('/yazilarim', [MyPostController::class, 'index'])->name('myposts.index');
