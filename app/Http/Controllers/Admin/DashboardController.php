@@ -15,7 +15,7 @@ class DashboardController extends Controller
     {
         $userCount = User::count();
         $roleCount = Role::count();
-        $users     = User::with('role')->get();
+        $users     = User::with('role')->latest()->limit(10)->get();
 
         return view('admin.dashboard', compact('userCount', 'roleCount', 'users'));
     }

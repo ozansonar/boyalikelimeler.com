@@ -45,13 +45,25 @@ final class ProfileService
      */
     public function getWriterStats(User $user): array
     {
+        $postStats = $user->posts()->selectRaw("
+            COUNT(*) as total,
+            SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as published,
+            COALESCE(SUM(view_count), 0) as views
+        ", [PostStatus::Published->value])->first();
+
+        $workStats = $user->literaryWorks()->selectRaw("
+            COUNT(*) as total,
+            SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as approved,
+            COALESCE(SUM(view_count), 0) as views
+        ", [LiteraryWorkStatus::Approved->value])->first();
+
         return [
-            'total_posts'      => $user->posts()->count(),
-            'published_posts'  => $user->posts()->where('status', PostStatus::Published)->count(),
-            'total_views'      => (int) $user->posts()->sum('view_count'),
-            'total_works'      => $user->literaryWorks()->count(),
-            'approved_works'   => $user->literaryWorks()->where('status', LiteraryWorkStatus::Approved)->count(),
-            'total_work_views' => (int) $user->literaryWorks()->sum('view_count'),
+            'total_posts'      => (int) $postStats->total,
+            'published_posts'  => (int) $postStats->published,
+            'total_views'      => (int) $postStats->views,
+            'total_works'      => (int) $workStats->total,
+            'approved_works'   => (int) $workStats->approved,
+            'total_work_views' => (int) $workStats->views,
         ];
     }
 

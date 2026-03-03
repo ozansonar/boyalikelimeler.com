@@ -21,11 +21,18 @@ final class ContactService
      */
     public function getStats(): array
     {
+        $row = ContactMessage::selectRaw("
+            COUNT(*) as total,
+            SUM(CASE WHEN is_read = 0 THEN 1 ELSE 0 END) as unread,
+            SUM(CASE WHEN is_starred = 1 THEN 1 ELSE 0 END) as starred,
+            SUM(CASE WHEN replied_at IS NOT NULL THEN 1 ELSE 0 END) as replied
+        ")->first();
+
         return [
-            'total'   => ContactMessage::count(),
-            'unread'  => ContactMessage::where('is_read', false)->count(),
-            'starred' => ContactMessage::where('is_starred', true)->count(),
-            'replied' => ContactMessage::whereNotNull('replied_at')->count(),
+            'total'   => (int) $row->total,
+            'unread'  => (int) $row->unread,
+            'starred' => (int) $row->starred,
+            'replied' => (int) $row->replied,
         ];
     }
 

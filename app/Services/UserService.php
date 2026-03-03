@@ -20,11 +20,18 @@ final class UserService
     public function getAdminStats(): array
     {
         return Cache::remember('admin.users.stats', 300, function (): array {
+            $row = User::selectRaw("
+                COUNT(*) as total,
+                SUM(CASE WHEN email_verified_at IS NOT NULL THEN 1 ELSE 0 END) as verified,
+                SUM(CASE WHEN email_verified_at IS NULL THEN 1 ELSE 0 END) as unverified,
+                SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) as this_month
+            ", [now()->startOfMonth()])->first();
+
             return [
-                'total'        => User::count(),
-                'verified'     => User::whereNotNull('email_verified_at')->count(),
-                'unverified'   => User::whereNull('email_verified_at')->count(),
-                'this_month'   => User::where('created_at', '>=', now()->startOfMonth())->count(),
+                'total'      => (int) $row->total,
+                'verified'   => (int) $row->verified,
+                'unverified' => (int) $row->unverified,
+                'this_month' => (int) $row->this_month,
             ];
         });
     }
@@ -35,10 +42,17 @@ final class UserService
     public function getRoleCounts(): array
     {
         return Cache::remember('admin.users.role_counts', 300, function (): array {
+            $rows = User::join('roles', 'users.role_id', '=', 'roles.id')
+                ->selectRaw('roles.slug, COUNT(*) as cnt')
+                ->whereNull('users.deleted_at')
+                ->groupBy('roles.slug')
+                ->pluck('cnt', 'slug');
+
             $counts = [];
             foreach (RoleSlug::cases() as $roleSlug) {
-                $counts[$roleSlug->value] = User::whereHas('role', fn ($q) => $q->where('slug', $roleSlug->value))->count();
+                $counts[$roleSlug->value] = (int) ($rows[$roleSlug->value] ?? 0);
             }
+
             return $counts;
         });
     }
