@@ -34,6 +34,9 @@ Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('
 Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
 // Email Verification
+Route::get('/email/dogrula', fn () => view('auth.verify'))
+    ->middleware('auth')
+    ->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
     ->middleware('signed')
     ->name('verification.verify');

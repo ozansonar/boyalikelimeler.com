@@ -16,11 +16,15 @@ final class MailLogService
     public function getAdminStats(): array
     {
         return Cache::remember('admin.mail_logs.stats', 300, function (): array {
+            $counts = MailLog::selectRaw("status, COUNT(*) as cnt")
+                ->groupBy('status')
+                ->pluck('cnt', 'status');
+
             return [
-                'total'   => MailLog::count(),
-                'sent'    => MailLog::where('status', 'sent')->count(),
-                'failed'  => MailLog::where('status', 'failed')->count(),
-                'pending' => MailLog::where('status', 'pending')->count(),
+                'total'   => (int) $counts->sum(),
+                'sent'    => (int) ($counts['sent'] ?? 0),
+                'failed'  => (int) ($counts['failed'] ?? 0),
+                'pending' => (int) ($counts['pending'] ?? 0),
             ];
         });
     }

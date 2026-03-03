@@ -67,7 +67,7 @@ final class MyPostController extends Controller
         $workForEdit = $this->workService->getWorkForEdit($user, $work);
 
         if (! $workForEdit) {
-            abort(403);
+            abort(403, 'Bu eseri düzenleme yetkiniz yok.');
         }
 
         $categories = $this->categoryService->activeList();
@@ -92,7 +92,7 @@ final class MyPostController extends Controller
         );
 
         if (! $updatedWork) {
-            abort(403);
+            abort(403, 'Bu eseri güncelleme yetkiniz yok.');
         }
 
         return redirect()
@@ -105,7 +105,7 @@ final class MyPostController extends Controller
         $user = auth()->user();
 
         if (! $this->workService->deleteWork($user, $work)) {
-            abort(403);
+            abort(403, 'Bu eseri silme yetkiniz yok.');
         }
 
         return redirect()

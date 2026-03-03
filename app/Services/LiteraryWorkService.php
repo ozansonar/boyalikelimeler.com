@@ -212,7 +212,7 @@ final class LiteraryWorkService
 
     public function updateWork(User $user, LiteraryWork $work, array $data, ?UploadedFile $coverImage = null): ?LiteraryWork
     {
-        if ($work->user_id !== $user->id) {
+        if ((int) $work->user_id !== (int) $user->id) {
             return null;
         }
 
@@ -268,7 +268,7 @@ final class LiteraryWorkService
 
     public function getWorkForEdit(User $user, LiteraryWork $work): ?LiteraryWork
     {
-        if ($work->user_id !== $user->id) {
+        if ((int) $work->user_id !== (int) $user->id) {
             return null;
         }
 
@@ -279,7 +279,7 @@ final class LiteraryWorkService
 
     public function deleteWork(User $user, LiteraryWork $work): bool
     {
-        if ($work->user_id !== $user->id) {
+        if ((int) $work->user_id !== (int) $user->id) {
             return false;
         }
 
