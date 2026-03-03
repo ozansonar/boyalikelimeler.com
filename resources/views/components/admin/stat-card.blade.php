@@ -8,7 +8,7 @@
 ])
 
 <div class="{{ $colClass }}" data-aos="fade-up" data-aos-delay="{{ $delay }}">
-    <div class="usr-stat-card">
+    <div class="usr-stat-card h-100">
         <div class="usr-stat-icon usr-stat-icon-{{ $color }}">
             <i class="bi {{ $icon }}"></i>
         </div>

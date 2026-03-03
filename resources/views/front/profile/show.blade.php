@@ -262,49 +262,51 @@
                         </div>
 
                         @foreach($works as $work)
-                            <article class="profile-post">
-                                <div class="profile-post__inner">
-                                    @if($work->cover_image)
-                                        <div class="profile-post__thumb">
-                                            <img src="{{ upload_url($work->cover_image) }}"
-                                                 alt="{{ $work->title }} görseli"
-                                                 class="profile-post__thumb-img"
-                                                 loading="lazy">
-                                            @if($work->category)
-                                                <span class="profile-post__category">{{ $work->category->name }}</span>
-                                            @endif
-                                        </div>
-                                    @else
-                                        @if($work->category)
+                            <a href="{{ route('literary-works.show', $work->slug) }}" class="profile-post__link">
+                                <article class="profile-post">
+                                    <div class="profile-post__inner">
+                                        @if($work->cover_image)
                                             <div class="profile-post__thumb">
-                                                <div class="profile-post__thumb-placeholder">
-                                                    <i class="fa-solid fa-feather-pointed fa-2x"></i>
-                                                </div>
-                                                <span class="profile-post__category">{{ $work->category->name }}</span>
+                                                <img src="{{ upload_url($work->cover_image) }}"
+                                                     alt="{{ $work->title }} görseli"
+                                                     class="profile-post__thumb-img"
+                                                     loading="lazy">
+                                                @if($work->category)
+                                                    <span class="profile-post__category">{{ $work->category->name }}</span>
+                                                @endif
                                             </div>
+                                        @else
+                                            @if($work->category)
+                                                <div class="profile-post__thumb">
+                                                    <div class="profile-post__thumb-placeholder">
+                                                        <i class="fa-solid fa-feather-pointed fa-2x"></i>
+                                                    </div>
+                                                    <span class="profile-post__category">{{ $work->category->name }}</span>
+                                                </div>
+                                            @endif
                                         @endif
-                                    @endif
-                                    <div class="profile-post__body">
-                                        <h3 class="profile-post__title">{{ $work->title }}</h3>
-                                        @if($work->excerpt)
-                                            <p class="profile-post__excerpt">{{ Str::limit($work->excerpt, 200) }}</p>
-                                        @endif
-                                        <div class="profile-post__meta">
-                                            <span class="profile-post__date">
-                                                <i class="fa-regular fa-calendar me-1"></i>{{ $work->published_at?->translatedFormat('d F Y') }}
-                                            </span>
-                                            <span class="profile-post__read-time">
-                                                <i class="fa-regular fa-clock me-1"></i>{{ $work->readingTime() }} dk okuma
-                                            </span>
-                                        </div>
-                                        <div class="profile-post__stats">
-                                            <span class="profile-post__stat">
-                                                <i class="fa-regular fa-eye me-1"></i>{{ number_format($work->view_count) }}
-                                            </span>
+                                        <div class="profile-post__body">
+                                            <h3 class="profile-post__title">{{ $work->title }}</h3>
+                                            @if($work->excerpt)
+                                                <p class="profile-post__excerpt">{{ Str::limit($work->excerpt, 200) }}</p>
+                                            @endif
+                                            <div class="profile-post__meta">
+                                                <span class="profile-post__date">
+                                                    <i class="fa-regular fa-calendar me-1"></i>{{ $work->published_at?->translatedFormat('d F Y') }}
+                                                </span>
+                                                <span class="profile-post__read-time">
+                                                    <i class="fa-regular fa-clock me-1"></i>{{ $work->readingTime() }} dk okuma
+                                                </span>
+                                            </div>
+                                            <div class="profile-post__stats">
+                                                <span class="profile-post__stat">
+                                                    <i class="fa-regular fa-eye me-1"></i>{{ number_format($work->view_count) }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </article>
+                                </article>
+                            </a>
                         @endforeach
                     @endif
 

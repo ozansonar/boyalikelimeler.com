@@ -3915,6 +3915,11 @@ p {
 }
 
 /* -- Post Cards --------------------------------------------- */
+.profile-post__link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
 .profile-post {
     background-color: var(--color-black-card);
     border: 1px solid rgba(200, 169, 110, 0.08);
@@ -8435,6 +8440,15 @@ p {
 
 .cdetail-content {
     margin-bottom: 2rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+.cdetail-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.25rem auto;
+    border-radius: 0.5rem;
 }
 
 .cdetail-content__lead {
