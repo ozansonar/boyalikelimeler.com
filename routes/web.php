@@ -17,7 +17,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\EditorImageController;
+use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Front\BlogController;
+use App\Http\Controllers\Front\CommentController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\LiteraryWorkController as FrontLiteraryWorkController;
@@ -122,6 +124,12 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
     Route::post('settings/send-test-mail', [SettingController::class, 'sendTestMail'])->name('settings.send-test-mail');
 
+    // Comment Management
+    Route::get('comments', [AdminCommentController::class, 'index'])->name('comments.index');
+    Route::patch('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
+    Route::patch('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
+    Route::delete('comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');
+
     // Contact Messages
     Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
     Route::patch('contacts/mark-all-read', [AdminContactController::class, 'markAllRead'])->name('contacts.mark-all-read');
@@ -150,6 +158,9 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::patch('literary-works/{literaryWork}/unpublish', [LiteraryWorkController::class, 'unpublish'])->name('literary-works.unpublish');
     Route::post('literary-works/{literaryWork}/revision', [LiteraryWorkController::class, 'requestRevision'])->name('literary-works.revision');
 });
+
+// Comments (Frontend)
+Route::post('/yorum', [CommentController::class, 'store'])->name('comment.store')->middleware('throttle:5,1');
 
 // Contact (Frontend)
 Route::get('/iletisim', [ContactController::class, 'show'])->name('contact.show');

@@ -139,6 +139,9 @@
                         </div>
                     </div>
 
+                    <!-- Comment Section -->
+                    @include('partials.front.comment-section', ['commentable' => $post, 'commentableType' => 'post'])
+
                 </div>
 
                 <!-- SAĞ KOLON — SIDEBAR -->

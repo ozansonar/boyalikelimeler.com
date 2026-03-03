@@ -107,6 +107,9 @@
                         </div>
                     </div>
 
+                    <!-- Comment Section -->
+                    @include('partials.front.comment-section', ['commentable' => $work, 'commentableType' => 'literary_work'])
+
                     <!-- Author Box -->
                     <div class="cdetail-author-box">
                         <div class="cdetail-author-box__avatar">
