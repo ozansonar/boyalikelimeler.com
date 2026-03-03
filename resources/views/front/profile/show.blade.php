@@ -77,6 +77,9 @@
                                 <i class="fa-solid fa-pen-to-square me-1"></i>Düzenle
                             </a>
                             @if($user->isYazar() || $user->isAdmin() || $user->isSuperAdmin())
+                                <a href="{{ route('myposts.index') }}" class="profile-header__btn profile-header__btn--outline">
+                                    <i class="fa-solid fa-list me-1"></i>Yazılarım
+                                </a>
                                 <a href="{{ route('myposts.create') }}" class="profile-header__btn profile-header__btn--primary">
                                     <i class="fa-solid fa-feather-pointed me-1"></i>Yazı Gönder
                                 </a>
@@ -88,13 +91,20 @@
 
             {{-- Stats Bar --}}
             <div class="profile-stats">
+                @if($stats['approved_works'] > 0)
+                    <div class="profile-stats__item">
+                        <span class="profile-stats__number">{{ $stats['approved_works'] }}</span>
+                        <span class="profile-stats__label">Eser</span>
+                    </div>
+                    <div class="profile-stats__divider"></div>
+                @endif
                 <div class="profile-stats__item">
                     <span class="profile-stats__number">{{ $stats['published_posts'] }}</span>
                     <span class="profile-stats__label">Yazı</span>
                 </div>
                 <div class="profile-stats__divider"></div>
                 <div class="profile-stats__item">
-                    <span class="profile-stats__number">{{ number_format($stats['total_views']) }}</span>
+                    <span class="profile-stats__number">{{ number_format($stats['total_views'] + $stats['total_work_views']) }}</span>
                     <span class="profile-stats__label">Görüntülenme</span>
                 </div>
             </div>
@@ -242,50 +252,125 @@
                 {{-- RIGHT: Content Feed --}}
                 <div class="col-lg-8 order-lg-2 order-1">
 
-                    {{-- Posts --}}
-                    @forelse($posts as $post)
-                        <article class="profile-post">
-                            <div class="profile-post__inner">
-                                @if($post->cover_image)
-                                    <div class="profile-post__thumb">
-                                        <img src="{{ upload_url($post->cover_image) }}"
-                                             alt="{{ $post->title }} görseli"
-                                             class="profile-post__thumb-img"
-                                             loading="lazy">
-                                        @if($post->category)
-                                            <span class="profile-post__category">{{ $post->category->name }}</span>
+                    {{-- Edebiyat Eserleri --}}
+                    @if($works->isNotEmpty())
+                        <div class="profile-card mb-3">
+                            <h3 class="profile-card__title">
+                                <i class="fa-solid fa-book-open me-2"></i>Edebiyat Eserleri
+                                <span class="profile-tabs__count ms-2">{{ $stats['approved_works'] }}</span>
+                            </h3>
+                        </div>
+
+                        @foreach($works as $work)
+                            <article class="profile-post">
+                                <div class="profile-post__inner">
+                                    @if($work->cover_image)
+                                        <div class="profile-post__thumb">
+                                            <img src="{{ upload_url($work->cover_image) }}"
+                                                 alt="{{ $work->title }} görseli"
+                                                 class="profile-post__thumb-img"
+                                                 loading="lazy">
+                                            @if($work->category)
+                                                <span class="profile-post__category">{{ $work->category->name }}</span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        @if($work->category)
+                                            <div class="profile-post__thumb">
+                                                <div class="profile-post__thumb-placeholder">
+                                                    <i class="fa-solid fa-feather-pointed fa-2x"></i>
+                                                </div>
+                                                <span class="profile-post__category">{{ $work->category->name }}</span>
+                                            </div>
                                         @endif
-                                    </div>
-                                @endif
-                                <div class="profile-post__body">
-                                    <h3 class="profile-post__title">
-                                        <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
-                                    </h3>
-                                    @if($post->excerpt)
-                                        <p class="profile-post__excerpt">{{ Str::limit($post->excerpt, 200) }}</p>
                                     @endif
-                                    <div class="profile-post__meta">
-                                        <span class="profile-post__date">
-                                            <i class="fa-regular fa-calendar me-1"></i>{{ $post->published_at?->translatedFormat('d F Y') }}
-                                        </span>
-                                        <span class="profile-post__read-time">
-                                            <i class="fa-regular fa-clock me-1"></i>{{ $post->readingTime() }} dk okuma
-                                        </span>
-                                    </div>
-                                    <div class="profile-post__stats">
-                                        <span class="profile-post__stat">
-                                            <i class="fa-regular fa-eye me-1"></i>{{ number_format($post->view_count) }}
-                                        </span>
+                                    <div class="profile-post__body">
+                                        <h3 class="profile-post__title">{{ $work->title }}</h3>
+                                        @if($work->excerpt)
+                                            <p class="profile-post__excerpt">{{ Str::limit($work->excerpt, 200) }}</p>
+                                        @endif
+                                        <div class="profile-post__meta">
+                                            <span class="profile-post__date">
+                                                <i class="fa-regular fa-calendar me-1"></i>{{ $work->published_at?->translatedFormat('d F Y') }}
+                                            </span>
+                                            <span class="profile-post__read-time">
+                                                <i class="fa-regular fa-clock me-1"></i>{{ $work->readingTime() }} dk okuma
+                                            </span>
+                                        </div>
+                                        <div class="profile-post__stats">
+                                            <span class="profile-post__stat">
+                                                <i class="fa-regular fa-eye me-1"></i>{{ number_format($work->view_count) }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </article>
-                    @empty
+                            </article>
+                        @endforeach
+                    @endif
+
+                    {{-- Blog Yazıları --}}
+                    @if($posts->isNotEmpty())
+                        <div class="profile-card mb-3">
+                            <h3 class="profile-card__title">
+                                <i class="fa-solid fa-newspaper me-2"></i>Blog Yazıları
+                                <span class="profile-tabs__count ms-2">{{ $stats['published_posts'] }}</span>
+                            </h3>
+                        </div>
+
+                        @foreach($posts as $post)
+                            <article class="profile-post">
+                                <div class="profile-post__inner">
+                                    @if($post->cover_image)
+                                        <div class="profile-post__thumb">
+                                            <img src="{{ upload_url($post->cover_image) }}"
+                                                 alt="{{ $post->title }} görseli"
+                                                 class="profile-post__thumb-img"
+                                                 loading="lazy">
+                                            @if($post->category)
+                                                <span class="profile-post__category">{{ $post->category->name }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                    <div class="profile-post__body">
+                                        <h3 class="profile-post__title">
+                                            <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                                        </h3>
+                                        @if($post->excerpt)
+                                            <p class="profile-post__excerpt">{{ Str::limit($post->excerpt, 200) }}</p>
+                                        @endif
+                                        <div class="profile-post__meta">
+                                            <span class="profile-post__date">
+                                                <i class="fa-regular fa-calendar me-1"></i>{{ $post->published_at?->translatedFormat('d F Y') }}
+                                            </span>
+                                            <span class="profile-post__read-time">
+                                                <i class="fa-regular fa-clock me-1"></i>{{ $post->readingTime() }} dk okuma
+                                            </span>
+                                        </div>
+                                        <div class="profile-post__stats">
+                                            <span class="profile-post__stat">
+                                                <i class="fa-regular fa-eye me-1"></i>{{ number_format($post->view_count) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        @endforeach
+                    @endif
+
+                    {{-- Boş durum --}}
+                    @if($works->isEmpty() && $posts->isEmpty())
                         <div class="profile-card text-center">
                             <i class="fa-solid fa-feather-pointed fa-3x mb-3" aria-hidden="true"></i>
-                            <p class="profile-card__text">Henüz yayınlanmış yazı bulunmuyor.</p>
+                            <p class="profile-card__text">Henüz yayınlanmış içerik bulunmuyor.</p>
+                            @auth
+                                @if(auth()->id() === $user->id && ($user->isYazar() || $user->isAdmin() || $user->isSuperAdmin()))
+                                    <a href="{{ route('myposts.create') }}" class="profile-header__btn profile-header__btn--primary mt-3">
+                                        <i class="fa-solid fa-feather-pointed me-1"></i>İlk Eserini Gönder
+                                    </a>
+                                @endif
+                            @endauth
                         </div>
-                    @endforelse
+                    @endif
 
                 </div>
             </div>

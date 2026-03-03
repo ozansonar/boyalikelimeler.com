@@ -27,6 +27,7 @@ final class ProfileController extends Controller
         return view('front.profile.show', [
             'user'  => $user,
             'posts' => $data['posts'],
+            'works' => $data['works'],
             'stats' => $data['stats'],
         ]);
     }
