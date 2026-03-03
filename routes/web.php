@@ -18,14 +18,13 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\ContactController;
+use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\MyPostController;
 use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
