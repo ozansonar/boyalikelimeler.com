@@ -10,6 +10,7 @@ use App\Mail\LiteraryWorkRejectedMail;
 use App\Mail\LiteraryWorkRevisionRequestedMail;
 use App\Mail\LiteraryWorkSubmittedMail;
 use App\Mail\LiteraryWorkRevisedMail;
+use App\Models\LiteraryCategory;
 use App\Models\LiteraryRevision;
 use App\Models\LiteraryWork;
 use App\Models\User;
@@ -339,11 +340,96 @@ final class LiteraryWorkService
         }
     }
 
+    // ─── Front: Paginate published works ───
+
+    public function frontPaginate(int $perPage, array $filters = []): LengthAwarePaginator
+    {
+        $query = LiteraryWork::with(['category', 'author'])
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->whereNotNull('published_at');
+
+        if (! empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search): void {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%");
+            });
+        }
+
+        if (! empty($filters['category'])) {
+            $categoryId = LiteraryCategory::where('slug', $filters['category'])->value('id');
+            if ($categoryId) {
+                $query->where('literary_category_id', $categoryId);
+            }
+        }
+
+        $sort = $filters['sort'] ?? 'newest';
+        $query = match ($sort) {
+            'popular' => $query->orderByDesc('view_count'),
+            default   => $query->orderByDesc('published_at'),
+        };
+
+        return $query->paginate($perPage)->withQueryString();
+    }
+
+    // ─── Front: Single work by slug ───
+
+    public function findPublishedBySlug(string $slug): ?LiteraryWork
+    {
+        return LiteraryWork::with(['category', 'author'])
+            ->where('slug', $slug)
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->whereNotNull('published_at')
+            ->first();
+    }
+
+    // ─── Front: Increment view count ───
+
+    public function incrementViews(LiteraryWork $work): void
+    {
+        $work->increment('view_count');
+    }
+
+    // ─── Front: Related works (same category) ───
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, LiteraryWork>
+     */
+    public function getRelatedWorks(LiteraryWork $work, int $limit = 4): \Illuminate\Database\Eloquent\Collection
+    {
+        return LiteraryWork::with(['author'])
+            ->where('literary_category_id', $work->literary_category_id)
+            ->where('id', '!=', $work->id)
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->whereNotNull('published_at')
+            ->orderByDesc('published_at')
+            ->limit($limit)
+            ->get();
+    }
+
+    // ─── Front: Stats (published) ───
+
+    /**
+     * @return array{work_count: int, author_count: int, total_views: int}
+     */
+    public function getPublishedStats(): array
+    {
+        return Cache::remember('literary_works.front_stats', 300, function (): array {
+            return [
+                'work_count'   => LiteraryWork::where('status', LiteraryWorkStatus::Approved)->count(),
+                'author_count' => LiteraryWork::where('status', LiteraryWorkStatus::Approved)
+                    ->distinct('user_id')->count('user_id'),
+                'total_views'  => (int) LiteraryWork::where('status', LiteraryWorkStatus::Approved)->sum('view_count'),
+            ];
+        });
+    }
+
     // ─── Cache ───
 
     private function clearCache(): void
     {
         Cache::forget('literary_works.admin_stats');
         Cache::forget('literary_works.pending_count');
+        Cache::forget('literary_works.front_stats');
     }
 }

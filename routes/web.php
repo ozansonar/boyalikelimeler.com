@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\LiteraryWorkController as FrontLiteraryWorkController;
 use App\Http\Controllers\Front\MyPostController;
 use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\ProfileController;
@@ -140,6 +141,10 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 // Contact (Frontend)
 Route::get('/iletisim', [ContactController::class, 'show'])->name('contact.show');
 Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.store')->middleware('throttle:5,1');
+
+// Literary Works (Frontend — İçerikler)
+Route::get('/icerikler', [FrontLiteraryWorkController::class, 'index'])->name('literary-works.index');
+Route::get('/icerik/{slug}', [FrontLiteraryWorkController::class, 'show'])->name('literary-works.show');
 
 // Static Pages (catch-all — MUST be LAST route)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')->where('slug', '[a-z0-9\-]+');
