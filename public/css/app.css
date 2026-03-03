@@ -6994,6 +6994,144 @@ p {
     }
 }
 
+/* -- Delete Confirmation Modal -------------------------------- */
+
+.delete-modal {
+    background: var(--color-black-card);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    border-radius: 1rem;
+    padding: 2.25rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: visible;
+}
+
+.delete-modal__icon-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.delete-modal__icon-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(220, 53, 69, 0.1);
+    border: 2px solid rgba(220, 53, 69, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #dc3545;
+    animation: deleteIconPulse 2s ease-in-out infinite;
+}
+
+@keyframes deleteIconPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.25); }
+    50% { box-shadow: 0 0 0 12px rgba(220, 53, 69, 0); }
+}
+
+.delete-modal__title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+.delete-modal__desc {
+    font-size: 0.9rem;
+    color: var(--color-silver-light);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.delete-modal__desc strong {
+    color: var(--color-gold-light);
+}
+
+.delete-modal__warning {
+    font-size: 0.78rem;
+    color: #f87171;
+    background: rgba(220, 53, 69, 0.08);
+    border: 1px solid rgba(220, 53, 69, 0.15);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.delete-modal__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.delete-modal__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.625rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.delete-modal__btn--cancel {
+    background: rgba(155, 158, 163, 0.1);
+    border: 1px solid rgba(155, 158, 163, 0.2);
+    color: var(--color-silver-light);
+}
+
+.delete-modal__btn--cancel:hover {
+    background: rgba(155, 158, 163, 0.18);
+    border-color: rgba(155, 158, 163, 0.35);
+    color: var(--color-white);
+}
+
+.delete-modal__btn--confirm {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.delete-modal__btn--confirm:hover {
+    background: linear-gradient(135deg, #e8414f 0%, #c9303d 100%);
+    box-shadow: 0 4px 16px rgba(220, 53, 69, 0.4);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 575.98px) {
+    .delete-modal {
+        padding: 1.75rem 1.25rem 1.5rem;
+        margin: 0 0.5rem;
+    }
+
+    .delete-modal__icon-ring {
+        width: 60px;
+        height: 60px;
+        font-size: 1.25rem;
+    }
+
+    .delete-modal__title {
+        font-size: 1.05rem;
+    }
+
+    .delete-modal__actions {
+        flex-direction: column-reverse;
+    }
+
+    .delete-modal__btn {
+        width: 100%;
+    }
+}
+
 /* ============================================================
    STATS — İstatistiklerim (Charts, Cards, Divider)
    ============================================================ */
