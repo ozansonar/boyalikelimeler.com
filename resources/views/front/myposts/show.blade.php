@@ -68,6 +68,11 @@
                                         <i class="fa-solid fa-circle me-1"></i>Revize Bekliyor
                                     </span>
                                     @break
+                                @case(\App\Enums\LiteraryWorkStatus::Unpublished)
+                                    <span class="myposts-badge myposts-badge--unpublished">
+                                        <i class="fa-solid fa-circle me-1"></i>Yayından Kaldırıldı
+                                    </span>
+                                    @break
                             @endswitch
                         </div>
 
@@ -131,17 +136,35 @@
                                     <span>Yayında Gör</span>
                                 </a>
                             @endif
-                            @php
-                                $editLabel = match($work->status) {
-                                    \App\Enums\LiteraryWorkStatus::Approved => 'Güncelle',
-                                    \App\Enums\LiteraryWorkStatus::RevisionRequested => 'Revize Et',
-                                    default => 'Düzenle',
-                                };
-                            @endphp
-                            <a href="{{ route('myposts.edit', $work) }}" class="cdetail-actions__btn">
-                                <i class="fa-solid fa-pen-to-square me-1"></i>
-                                <span>{{ $editLabel }}</span>
-                            </a>
+                            @if($work->status !== \App\Enums\LiteraryWorkStatus::Unpublished)
+                                @php
+                                    $editLabel = match($work->status) {
+                                        \App\Enums\LiteraryWorkStatus::Approved => 'Güncelle',
+                                        \App\Enums\LiteraryWorkStatus::RevisionRequested => 'Revize Et',
+                                        default => 'Düzenle',
+                                    };
+                                @endphp
+                                <a href="{{ route('myposts.edit', $work) }}" class="cdetail-actions__btn">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i>
+                                    <span>{{ $editLabel }}</span>
+                                </a>
+                            @endif
+                            @if($work->status === \App\Enums\LiteraryWorkStatus::Approved)
+                                <button type="button" class="cdetail-actions__btn cdetail-actions__btn--warning" onclick="openUnpublishModal({{ $work->id }}, '{{ addslashes($work->title) }}')">
+                                    <i class="fa-solid fa-eye-slash me-1"></i>
+                                    <span>Yayından Kaldır</span>
+                                </button>
+                            @endif
+                            @if($work->status === \App\Enums\LiteraryWorkStatus::Unpublished)
+                                <form action="{{ route('myposts.republish', $work) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="cdetail-actions__btn cdetail-actions__btn--success">
+                                        <i class="fa-solid fa-rotate-right me-1"></i>
+                                        <span>Tekrar Yayına Gönder</span>
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                         <div class="cdetail-actions__right">
                             <a href="{{ route('myposts.index') }}" class="cdetail-actions__btn">
@@ -247,4 +270,13 @@
         </div>
     </article>
 
+    {{-- Unpublish Confirmation Modal (shared partial) --}}
+    @if($work->status === \App\Enums\LiteraryWorkStatus::Approved)
+        @include('front.myposts._unpublish-modal')
+    @endif
+
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/myposts.js') }}"></script>
+@endpush

@@ -1,6 +1,7 @@
 /**
  * My Posts Page JS
  * - Delete modal handling
+ * - Unpublish modal handling
  * - Search submit on enter
  */
 (function () {
@@ -16,6 +17,22 @@
 
         if (nameEl) nameEl.textContent = title || '';
         if (form) form.action = '/yazilarim/' + id;
+        if (modal) {
+            var bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+        }
+    };
+
+    /* -------------------------------------------------------
+       Unpublish Modal
+    ------------------------------------------------------- */
+    window.openUnpublishModal = function (id, title) {
+        var modal = document.getElementById('unpublishConfirmModal');
+        var form = document.getElementById('unpublishForm');
+        var nameEl = document.getElementById('unpublishItemName');
+
+        if (nameEl) nameEl.textContent = title || '';
+        if (form) form.action = '/yazilarim/' + id + '/yayindan-kaldir';
         if (modal) {
             var bsModal = new bootstrap.Modal(modal);
             bsModal.show();

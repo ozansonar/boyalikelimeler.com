@@ -25,6 +25,11 @@
                     </h1>
                 </div>
                 <div class="wpost-header__actions">
+                    @if($work?->status === \App\Enums\LiteraryWorkStatus::Approved)
+                        <button type="button" class="wpost-btn wpost-btn--warning" onclick="openUnpublishModal({{ $work->id }}, '{{ addslashes($work->title) }}')">
+                            <i class="fa-solid fa-eye-slash me-1"></i>Yayından Kaldır
+                        </button>
+                    @endif
                     <a href="{{ route('myposts.index') }}" class="wpost-btn wpost-btn--ghost">
                         <i class="fa-solid fa-xmark me-1"></i>İptal
                     </a>
@@ -224,6 +229,11 @@
         </div>
     </section>
 
+    {{-- Unpublish Confirmation Modal (shared partial) --}}
+    @if($work?->status === \App\Enums\LiteraryWorkStatus::Approved)
+        @include('front.myposts._unpublish-modal')
+    @endif
+
 @endsection
 
 @push('scripts')
@@ -233,4 +243,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js"></script>
     <!-- Write Post JS -->
     <script src="{{ asset('js/write-post.js') }}"></script>
+    @if($work?->status === \App\Enums\LiteraryWorkStatus::Approved)
+        <script src="{{ asset('js/myposts.js') }}"></script>
+    @endif
 @endpush

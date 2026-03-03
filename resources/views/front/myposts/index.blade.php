@@ -97,6 +97,7 @@
                             <option value="approved" @selected(request('status') === 'approved')>Onaylandı</option>
                             <option value="rejected" @selected(request('status') === 'rejected')>Reddedildi</option>
                             <option value="revision_requested" @selected(request('status') === 'revision_requested')>Revize Bekliyor</option>
+                            <option value="unpublished" @selected(request('status') === 'unpublished')>Yayından Kaldırıldı</option>
                         </select>
                     </div>
                 </form>
@@ -146,6 +147,11 @@
                                                     <i class="fa-solid fa-circle me-1"></i>Revize Bekliyor
                                                 </span>
                                                 @break
+                                            @case(\App\Enums\LiteraryWorkStatus::Unpublished)
+                                                <span class="myposts-badge myposts-badge--unpublished">
+                                                    <i class="fa-solid fa-circle me-1"></i>Yayından Kaldırıldı
+                                                </span>
+                                                @break
                                         @endswitch
                                     </td>
                                     <td class="myposts-table__td myposts-table__td--muted">
@@ -156,16 +162,37 @@
                                             <a href="{{ route('myposts.show', $work) }}" class="myposts-action-btn myposts-action-btn--view" title="Görüntüle">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>
-                                            @php
-                                                $editTitle = match($work->status) {
-                                                    \App\Enums\LiteraryWorkStatus::Approved => 'Güncelle',
-                                                    \App\Enums\LiteraryWorkStatus::RevisionRequested => 'Revize Et',
-                                                    default => 'Düzenle',
-                                                };
-                                            @endphp
-                                            <a href="{{ route('myposts.edit', $work) }}" class="myposts-action-btn myposts-action-btn--edit" title="{{ $editTitle }}">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </a>
+                                            @if($work->status !== \App\Enums\LiteraryWorkStatus::Unpublished)
+                                                @php
+                                                    $editTitle = match($work->status) {
+                                                        \App\Enums\LiteraryWorkStatus::Approved => 'Güncelle',
+                                                        \App\Enums\LiteraryWorkStatus::RevisionRequested => 'Revize Et',
+                                                        default => 'Düzenle',
+                                                    };
+                                                @endphp
+                                                <a href="{{ route('myposts.edit', $work) }}" class="myposts-action-btn myposts-action-btn--edit" title="{{ $editTitle }}">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                            @endif
+                                            @if($work->status === \App\Enums\LiteraryWorkStatus::Approved)
+                                                <button type="button"
+                                                        class="myposts-action-btn myposts-action-btn--unpublish"
+                                                        title="Yayından Kaldır"
+                                                        onclick="openUnpublishModal({{ $work->id }}, '{{ addslashes($work->title) }}')">
+                                                    <i class="fa-solid fa-eye-slash"></i>
+                                                </button>
+                                            @endif
+                                            @if($work->status === \App\Enums\LiteraryWorkStatus::Unpublished)
+                                                <form action="{{ route('myposts.republish', $work) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                            class="myposts-action-btn myposts-action-btn--republish"
+                                                            title="Tekrar Yayına Gönder">
+                                                        <i class="fa-solid fa-rotate-right"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                             <button type="button"
                                                     class="myposts-action-btn myposts-action-btn--delete"
                                                     title="Sil"
@@ -279,6 +306,9 @@
             </div>
         </div>
     </div>
+
+    {{-- Unpublish Confirmation Modal (shared partial) --}}
+    @include('front.myposts._unpublish-modal')
 
 @endsection
 

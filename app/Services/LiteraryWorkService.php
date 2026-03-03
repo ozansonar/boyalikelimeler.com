@@ -44,7 +44,7 @@ final class LiteraryWorkService
     // ─── Admin: Stats ───
 
     /**
-     * @return array{total: int, pending: int, approved: int, rejected: int, revision_requested: int}
+     * @return array{total: int, pending: int, approved: int, rejected: int, revision_requested: int, unpublished: int}
      */
     public function getAdminStats(): array
     {
@@ -59,6 +59,7 @@ final class LiteraryWorkService
                 'approved'           => (int) ($counts[LiteraryWorkStatus::Approved->value] ?? 0),
                 'rejected'           => (int) ($counts[LiteraryWorkStatus::Rejected->value] ?? 0),
                 'revision_requested' => (int) ($counts[LiteraryWorkStatus::RevisionRequested->value] ?? 0),
+                'unpublished'        => (int) ($counts[LiteraryWorkStatus::Unpublished->value] ?? 0),
             ];
         });
     }
@@ -186,6 +187,7 @@ final class LiteraryWorkService
             'approved'           => (int) ($counts[LiteraryWorkStatus::Approved->value] ?? 0),
             'rejected'           => (int) ($counts[LiteraryWorkStatus::Rejected->value] ?? 0),
             'revision_requested' => (int) ($counts[LiteraryWorkStatus::RevisionRequested->value] ?? 0),
+            'unpublished'        => (int) ($counts[LiteraryWorkStatus::Unpublished->value] ?? 0),
         ];
     }
 
@@ -303,6 +305,59 @@ final class LiteraryWorkService
         }
 
         return $work->load(['category', 'revisions.admin']);
+    }
+
+    // ─── Author: Unpublish ───
+
+    public function unpublishWork(User $user, LiteraryWork $work): bool
+    {
+        if ((int) $work->user_id !== (int) $user->id) {
+            return false;
+        }
+
+        if ($work->status !== LiteraryWorkStatus::Approved) {
+            return false;
+        }
+
+        return DB::transaction(function () use ($work): bool {
+            $work->update([
+                'status'       => LiteraryWorkStatus::Unpublished,
+                'published_at' => null,
+            ]);
+
+            $this->clearCache();
+
+            return true;
+        });
+    }
+
+    // ─── Author: Republish (sends to admin review) ───
+
+    public function republishWork(User $user, LiteraryWork $work): bool
+    {
+        if ((int) $work->user_id !== (int) $user->id) {
+            return false;
+        }
+
+        if ($work->status !== LiteraryWorkStatus::Unpublished) {
+            return false;
+        }
+
+        $result = DB::transaction(function () use ($work): bool {
+            $work->update([
+                'status' => LiteraryWorkStatus::Pending,
+            ]);
+
+            $this->clearCache();
+
+            return true;
+        });
+
+        if ($result) {
+            $this->lastMailSent = $this->notifyAdminsUpdated($work);
+        }
+
+        return $result;
     }
 
     // ─── Author: Delete ───
