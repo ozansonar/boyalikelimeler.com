@@ -38,12 +38,17 @@
             @if($work?->status === \App\Enums\LiteraryWorkStatus::RevisionRequested)
                 @php $latestRevision = $work->revisions->first(); @endphp
                 @if($latestRevision)
-                    <div class="alert alert-warning mb-4" role="alert">
-                        <h6 class="alert-heading mb-2">
-                            <i class="fa-solid fa-triangle-exclamation me-2"></i>Revize Talebi
-                        </h6>
-                        <p class="mb-1"><strong>Editör ({{ $latestRevision->admin?->name ?? 'Admin' }}):</strong></p>
-                        <p class="mb-0">{{ $latestRevision->reason }}</p>
+                    <div class="wpost-revision" role="alert">
+                        <div class="wpost-revision__header">
+                            <div class="wpost-revision__icon">
+                                <i class="fa-solid fa-pen-ruler"></i>
+                            </div>
+                            <h6 class="wpost-revision__title">Revize Talebi</h6>
+                        </div>
+                        <p class="wpost-revision__editor">
+                            <i class="fa-solid fa-user-pen me-1"></i>Editör: {{ $latestRevision->admin?->name ?? 'Admin' }}
+                        </p>
+                        <p class="wpost-revision__reason">{{ $latestRevision->reason }}</p>
                     </div>
                 @endif
             @endif
