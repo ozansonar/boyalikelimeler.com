@@ -68,7 +68,7 @@
                                id="pageTitle" name="title"
                                value="{{ old('title', $page->title ?? '') }}"
                                placeholder="Örn: Hakkımızda, Gizlilik Politikası..."
-                               oninput="generatePageSlug(this.value); updateCharCounter(this, 120)" required>
+                               oninput="generateSlug(this.value, 'pageSlug', 'seoPreviewSlug', 'yeni-sayfa'); updateCharCounter(this, 120)" required>
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

@@ -4,66 +4,19 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3" data-aos="fade-down">
-        <div>
-            <h1 class="page-title">İçerik Yönetimi</h1>
-            <p class="page-subtitle">Tüm içerikleri listeleyin, filtreleyin, düzenleyin ve yönetin</p>
-        </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('admin.posts.create') }}" class="btn-teal">
-                <i class="bi bi-plus-lg"></i> Yeni İçerik
-            </a>
-        </div>
-    </div>
+    <x-admin.page-header title="İçerik Yönetimi" subtitle="Tüm içerikleri listeleyin, filtreleyin, düzenleyin ve yönetin">
+        <a href="{{ route('admin.posts.create') }}" class="btn-teal">
+            <i class="bi bi-plus-lg"></i> Yeni İçerik
+        </a>
+    </x-admin.page-header>
 
 
     <!-- ==================== SECTION 1: STATS ==================== -->
     <div class="row g-4 mb-4">
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="0">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-blue">
-                    <i class="bi bi-file-earmark-text-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Toplam İçerik</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['total'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-green">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Yayında</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['published'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-orange">
-                    <i class="bi bi-file-earmark-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Taslak</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['draft'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-purple">
-                    <i class="bi bi-eye-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Toplam Görüntülenme</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['views'] }}">0</h3>
-                </div>
-            </div>
-        </div>
+        <x-admin.stat-card color="blue" icon="bi-file-earmark-text-fill" label="Toplam İçerik" :count="$stats['total']" :delay="0" col-class="col-xxl-3 col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="green" icon="bi-check-circle-fill" label="Yayında" :count="$stats['published']" :delay="100" col-class="col-xxl-3 col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="orange" icon="bi-file-earmark-fill" label="Taslak" :count="$stats['draft']" :delay="200" col-class="col-xxl-3 col-xl-6 col-sm-6" />
+        <x-admin.stat-card color="purple" icon="bi-eye-fill" label="Toplam Görüntülenme" :count="$stats['views']" :delay="300" col-class="col-xxl-3 col-xl-6 col-sm-6" />
     </div>
 
 
@@ -219,12 +172,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-clr-muted">
-                                    <i class="bi bi-file-earmark-text fs-1 d-block mb-2 opacity-50"></i>
-                                    Henüz içerik oluşturulmamış.
-                                </td>
-                            </tr>
+                            <x-admin.table-empty :colspan="7" icon="bi-file-earmark-text" message="Henüz içerik oluşturulmamış." />
                         @endforelse
                     </tbody>
                 </table>
@@ -258,31 +206,7 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body text-center py-4">
-                    <div class="status-modal-icon danger">
-                        <i class="bi bi-exclamation-triangle"></i>
-                    </div>
-                    <h5 class="cl-modal-heading">Silme Onayı</h5>
-                    <p class="cl-modal-body-text">Bu içeriği silmek istediğinizden emin misiniz?</p>
-                    <p class="cl-modal-content-name" id="deleteContentTitle"></p>
-                    <div class="d-flex gap-2 justify-content-center">
-                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
-                        <form id="deleteForm" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-teal btn-danger-gradient">
-                                <i class="bi bi-trash me-1"></i>Evet, Sil
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal message="Bu içeriği silmek istediğinizden emin misiniz?" />
 
 @endsection
 

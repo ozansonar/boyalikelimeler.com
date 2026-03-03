@@ -4,55 +4,18 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3" data-aos="fade-down">
-        <div>
-            <h1 class="page-title">Sayfa Yönetimi</h1>
-            <p class="page-subtitle">Statik sayfaları yönetin — Hakkımızda, Gizlilik Politikası, SSS vb.</p>
-        </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('admin.pages.create') }}" class="btn-teal">
-                <i class="bi bi-plus-lg"></i> Yeni Sayfa
-            </a>
-        </div>
-    </div>
+    <x-admin.page-header title="Sayfa Yönetimi" subtitle="Statik sayfaları yönetin — Hakkımızda, Gizlilik Politikası, SSS vb.">
+        <a href="{{ route('admin.pages.create') }}" class="btn-teal">
+            <i class="bi bi-plus-lg"></i> Yeni Sayfa
+        </a>
+    </x-admin.page-header>
 
 
     <!-- ==================== SECTION 1: STATS ==================== -->
     <div class="row g-4 mb-4">
-        <div class="col-xxl-4 col-sm-6" data-aos="fade-up" data-aos-delay="0">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-blue">
-                    <i class="bi bi-file-earmark-richtext-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Toplam Sayfa</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['total'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-green">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Aktif</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['active'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xxl-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-orange">
-                    <i class="bi bi-eye-slash-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Pasif</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['inactive'] }}">0</h3>
-                </div>
-            </div>
-        </div>
+        <x-admin.stat-card color="blue" icon="bi-file-earmark-richtext-fill" label="Toplam Sayfa" :count="$stats['total']" :delay="0" col-class="col-xxl-4 col-sm-6" />
+        <x-admin.stat-card color="green" icon="bi-check-circle-fill" label="Aktif" :count="$stats['active']" :delay="100" col-class="col-xxl-4 col-sm-6" />
+        <x-admin.stat-card color="orange" icon="bi-eye-slash-fill" label="Pasif" :count="$stats['inactive']" :delay="200" col-class="col-xxl-4 col-sm-6" />
     </div>
 
 
@@ -160,12 +123,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-clr-muted">
-                                    <i class="bi bi-file-earmark-richtext fs-1 d-block mb-2 opacity-50"></i>
-                                    Henüz sayfa oluşturulmamış.
-                                </td>
-                            </tr>
+                            <x-admin.table-empty :colspan="7" icon="bi-file-earmark-richtext" message="Henüz sayfa oluşturulmamış." />
                         @endforelse
                     </tbody>
                 </table>
@@ -199,31 +157,7 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body text-center py-4">
-                    <div class="status-modal-icon danger">
-                        <i class="bi bi-exclamation-triangle"></i>
-                    </div>
-                    <h5 class="cl-modal-heading">Silme Onayı</h5>
-                    <p class="cl-modal-body-text">Bu sayfayı silmek istediğinizden emin misiniz?</p>
-                    <p class="cl-modal-content-name" id="deleteContentTitle"></p>
-                    <div class="d-flex gap-2 justify-content-center">
-                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
-                        <form id="deleteForm" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-teal btn-danger-gradient">
-                                <i class="bi bi-trash me-1"></i>Evet, Sil
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal message="Bu sayfayı silmek istediğinizden emin misiniz?" />
 
 @endsection
 

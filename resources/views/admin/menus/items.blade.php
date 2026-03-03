@@ -101,7 +101,7 @@
                                     <td>
                                         <div class="usr-actions">
                                             <button class="usr-action-btn" title="Düzenle" onclick="openEditModal({{ $item->id }}, '{{ addslashes($item->title) }}', '{{ addslashes($item->url) }}', '{{ addslashes($item->icon ?? '') }}', '{{ $item->target }}', {{ $item->is_active ? 'true' : 'false' }}, {{ $item->sort_order }}, {{ $item->parent_id ?? 'null' }})"><i class="bi bi-pencil"></i></button>
-                                            <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $item->id }}, '{{ addslashes($item->title) }}')"><i class="bi bi-trash"></i></button>
+                                            <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $item->id }}, '{{ addslashes($item->title) }}', '{{ route('admin.menus.items.destroy', [$menu, $item]) }}')"><i class="bi bi-trash"></i></button>
                                         </div>
                                     </td>
                                 </tr>

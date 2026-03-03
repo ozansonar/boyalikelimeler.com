@@ -1,26 +1,7 @@
 /**
  * Menus Management — Admin JS
- * Counter animation, delete/edit modals, sortable drag-drop
+ * Edit modal, sortable drag-drop
  */
-
-/* ==================== Delete Modal (Menus index + Items) ==================== */
-function openDeleteModal(id, title) {
-    var titleEl = document.getElementById('deleteContentTitle');
-    var formEl = document.getElementById('deleteForm');
-
-    if (titleEl) titleEl.textContent = title;
-
-    if (formEl) {
-        if (typeof ITEM_BASE_URL !== 'undefined') {
-            formEl.action = ITEM_BASE_URL + '/items/' + id;
-        } else {
-            formEl.action = window.location.pathname.replace(/\/[^\/]*$/, '') + '/' + id;
-        }
-    }
-
-    var modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
-    modal.show();
-}
 
 /* ==================== Edit Item Modal ==================== */
 function openEditModal(id, title, url, icon, target, isActive, sortOrder, parentId) {
@@ -75,4 +56,3 @@ function initSortable() {
         }
     });
 }
-

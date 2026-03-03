@@ -12,60 +12,14 @@
         </ol>
     </nav>
 
-    <!-- Page Header -->
-    <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3" data-aos="fade-down">
-        <div>
-            <h1 class="page-title">Mail Logları</h1>
-            <p class="page-subtitle">Sistemden gönderilen tüm e-postaların kayıtları</p>
-        </div>
-    </div>
+    <x-admin.page-header title="Mail Logları" subtitle="Sistemden gönderilen tüm e-postaların kayıtları" />
 
     <!-- Stat Cards -->
     <div class="row g-4 mb-4">
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="0">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-blue">
-                    <i class="bi bi-envelope-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Toplam Mail</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['total'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-green">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Gönderilen</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['sent'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-red">
-                    <i class="bi bi-x-circle-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Başarısız</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['failed'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-orange">
-                    <i class="bi bi-hourglass-split"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Bekliyor</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['pending'] }}">0</h3>
-                </div>
-            </div>
-        </div>
+        <x-admin.stat-card color="blue" icon="bi-envelope-fill" label="Toplam Mail" :count="$stats['total']" :delay="0" />
+        <x-admin.stat-card color="green" icon="bi-check-circle-fill" label="Gönderilen" :count="$stats['sent']" :delay="100" />
+        <x-admin.stat-card color="red" icon="bi-x-circle-fill" label="Başarısız" :count="$stats['failed']" :delay="200" />
+        <x-admin.stat-card color="orange" icon="bi-hourglass-split" label="Bekliyor" :count="$stats['pending']" :delay="300" />
     </div>
 
     <!-- Status Tabs -->
@@ -184,12 +138,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                <i class="bi bi-envelope-x fs-1 d-block mb-2"></i>
-                                Henüz mail kaydı bulunmuyor.
-                            </td>
-                        </tr>
+                        <x-admin.table-empty :colspan="6" icon="bi-envelope-x" message="Henüz mail kaydı bulunmuyor." />
                     @endforelse
                 </tbody>
             </table>

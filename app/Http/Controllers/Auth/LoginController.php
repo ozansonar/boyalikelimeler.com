@@ -23,9 +23,11 @@ class LoginController extends Controller
             /** @var \App\Models\User $user */
             $user = auth()->user();
 
-            return $user->isAdmin() || $user->isSuperAdmin()
-                ? redirect()->route('admin.dashboard')
-                : redirect()->route('home');
+            if ($user->isAdmin() || $user->isSuperAdmin()) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect($user->profile_url);
         }
 
         return view('auth.login');
@@ -53,7 +55,7 @@ class LoginController extends Controller
             return redirect()->intended(route('admin.dashboard'));
         }
 
-        return redirect()->intended(route('home'));
+        return redirect()->intended($user->profile_url);
     }
 
     public function logout(Request $request): RedirectResponse

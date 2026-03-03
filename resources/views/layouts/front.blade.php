@@ -92,9 +92,9 @@
 
                 <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
                     @auth
-                        <span class="navbar-bk__auth-link">
+                        <a href="{{ auth()->user()->profile_url }}" class="navbar-bk__auth-link">
                             <i class="fa-solid fa-user me-1"></i>{{ auth()->user()->name }}
-                        </span>
+                        </a>
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="navbar-bk__auth-btn">

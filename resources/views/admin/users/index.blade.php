@@ -4,66 +4,19 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3" data-aos="fade-down">
-        <div>
-            <h1 class="page-title">Kullanıcı Yönetimi</h1>
-            <p class="page-subtitle">Sistemdeki tüm kullanıcıları yönetin, roller atayın ve erişimleri kontrol edin</p>
-        </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('admin.users.create') }}" class="btn-teal">
-                <i class="bi bi-person-plus me-1"></i> Yeni Kullanıcı
-            </a>
-        </div>
-    </div>
+    <x-admin.page-header title="Kullanıcı Yönetimi" subtitle="Sistemdeki tüm kullanıcıları yönetin, roller atayın ve erişimleri kontrol edin">
+        <a href="{{ route('admin.users.create') }}" class="btn-teal">
+            <i class="bi bi-person-plus me-1"></i> Yeni Kullanıcı
+        </a>
+    </x-admin.page-header>
 
 
     <!-- ==================== SECTION 1: STATS ==================== -->
     <div class="row g-4 mb-4">
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="0">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-blue">
-                    <i class="bi bi-people-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Toplam Kullanıcı</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['total'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-green">
-                    <i class="bi bi-person-check-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">E-posta Doğrulanmış</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['verified'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-orange">
-                    <i class="bi bi-person-plus-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Bu Ay Yeni</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['this_month'] }}">0</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="usr-stat-card">
-                <div class="usr-stat-icon usr-stat-icon-pink">
-                    <i class="bi bi-person-dash-fill"></i>
-                </div>
-                <div class="usr-stat-info">
-                    <span class="usr-stat-label">Doğrulanmamış</span>
-                    <h3 class="usr-stat-value" data-count="{{ $stats['unverified'] }}">0</h3>
-                </div>
-            </div>
-        </div>
+        <x-admin.stat-card color="blue" icon="bi-people-fill" label="Toplam Kullanıcı" :count="$stats['total']" :delay="0" />
+        <x-admin.stat-card color="green" icon="bi-person-check-fill" label="E-posta Doğrulanmış" :count="$stats['verified']" :delay="100" />
+        <x-admin.stat-card color="orange" icon="bi-person-plus-fill" label="Bu Ay Yeni" :count="$stats['this_month']" :delay="200" />
+        <x-admin.stat-card color="pink" icon="bi-person-dash-fill" label="Doğrulanmamış" :count="$stats['unverified']" :delay="300" />
     </div>
 
 
@@ -197,12 +150,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="5" class="text-center py-5 text-clr-muted">
-                                    <i class="bi bi-people fs-1 d-block mb-2 opacity-50"></i>
-                                    Kullanıcı bulunamadı.
-                                </td>
-                            </tr>
+                            <x-admin.table-empty :colspan="5" icon="bi-people" message="Kullanıcı bulunamadı." />
                         @endforelse
                     </tbody>
                 </table>

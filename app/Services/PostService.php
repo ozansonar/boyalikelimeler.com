@@ -6,13 +6,19 @@ namespace App\Services;
 
 use App\Enums\PostStatus;
 use App\Models\Post;
+use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 final class PostService
 {
+    use GeneratesUniqueSlug;
+
+    protected function slugModel(): string
+    {
+        return Post::class;
+    }
     /**
      * @return array<string, int>
      */
@@ -184,20 +190,6 @@ final class PostService
                 'total_views'      => (int) Post::where('status', PostStatus::Published)->sum('view_count'),
             ];
         });
-    }
-
-    private function generateUniqueSlug(string $title, ?int $ignoreId = null): string
-    {
-        $slug = Str::slug($title);
-        $original = $slug;
-        $counter = 1;
-
-        while (Post::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
-            $slug = $original . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
     }
 
     private function clearCache(): void

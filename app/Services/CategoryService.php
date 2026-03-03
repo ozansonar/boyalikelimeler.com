@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Category;
+use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 final class CategoryService
 {
+    use GeneratesUniqueSlug;
+
+    protected function slugModel(): string
+    {
+        return Category::class;
+    }
     public function all(): Collection
     {
         return Category::orderBy('sort_order')->orderBy('name')->get();
@@ -83,17 +89,4 @@ final class CategoryService
         });
     }
 
-    private function generateUniqueSlug(string $name, ?int $ignoreId = null): string
-    {
-        $slug = Str::slug($name);
-        $original = $slug;
-        $counter = 1;
-
-        while (Category::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
-            $slug = $original . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
-    }
 }

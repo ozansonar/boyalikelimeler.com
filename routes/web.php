@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\PageController;
+use App\Http\Controllers\Front\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,6 +46,18 @@ Route::post('/sifre-sifirla', [ResetPasswordController::class, 'reset'])->name('
 // Blog (Frontend)
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+// Profile (public)
+Route::get('/yazar/{user:username}', [ProfileController::class, 'show'])->name('profile.show');
+
+// User Panel (auth required)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profil/duzenle', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profil/duzenle', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profil/sifre', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::post('/profil/kapak', [ProfileController::class, 'updateCover'])->name('profile.cover');
+});
 
 // Admin Routes
 Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
