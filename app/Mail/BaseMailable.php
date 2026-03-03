@@ -8,13 +8,18 @@ use App\Models\MailLog;
 use App\Models\User;
 use App\Services\MailLogService;
 use App\Services\SettingService;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\SentMessage;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Mime\Email;
 
-abstract class BaseMailable extends Mailable
+abstract class BaseMailable extends Mailable implements ShouldQueue
 {
+    use Queueable;
+    use SerializesModels;
     private bool $isDebugRedirect = false;
     private string $originalToEmail = '';
 

@@ -52,18 +52,28 @@ final class LiteraryWorkController extends Controller
     {
         $mailSent = $this->workService->approve($literaryWork);
 
-        return redirect()->route('admin.literary-works.index')
-            ->with('success', 'Eser başarıyla onaylandı.')
-            ->when(! $mailSent, fn ($r) => $r->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.'));
+        $redirect = redirect()->route('admin.literary-works.index')
+            ->with('success', 'Eser başarıyla onaylandı.');
+
+        if (! $mailSent) {
+            $redirect->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.');
+        }
+
+        return $redirect;
     }
 
     public function reject(LiteraryWork $literaryWork): RedirectResponse
     {
         $mailSent = $this->workService->reject($literaryWork);
 
-        return redirect()->route('admin.literary-works.index')
-            ->with('success', 'Eser reddedildi.')
-            ->when(! $mailSent, fn ($r) => $r->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.'));
+        $redirect = redirect()->route('admin.literary-works.index')
+            ->with('success', 'Eser reddedildi.');
+
+        if (! $mailSent) {
+            $redirect->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.');
+        }
+
+        return $redirect;
     }
 
     public function requestRevision(LiteraryWorkRevisionRequest $request, LiteraryWork $literaryWork): RedirectResponse
@@ -74,8 +84,13 @@ final class LiteraryWorkController extends Controller
             $request->validated()['reason'],
         );
 
-        return redirect()->route('admin.literary-works.index')
-            ->with('success', 'Revize talebi başarıyla oluşturuldu.')
-            ->when(! $mailSent, fn ($r) => $r->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.'));
+        $redirect = redirect()->route('admin.literary-works.index')
+            ->with('success', 'Revize talebi başarıyla oluşturuldu.');
+
+        if (! $mailSent) {
+            $redirect->with('warning', 'Bildirim maili gönderilemedi. Lütfen mail ayarlarını kontrol edin.');
+        }
+
+        return $redirect;
     }
 }
