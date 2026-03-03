@@ -86,7 +86,7 @@
 
                     <!-- Article Content -->
                     <div class="cdetail-content">
-                        {!! $work->body !!}
+                        {!! responsive_body($work->body) !!}
                     </div>
 
                     <!-- Action Bar (Like, Share, Bookmark) -->
