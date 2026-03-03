@@ -73,6 +73,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/yazi-gonder', [MyPostController::class, 'store'])->name('myposts.store');
     Route::get('/yazi-duzenle/{work}', [MyPostController::class, 'edit'])->name('myposts.edit');
     Route::put('/yazi-duzenle/{work}', [MyPostController::class, 'update'])->name('myposts.update');
+    Route::patch('/yazilarim/{work}/yayindan-kaldir', [MyPostController::class, 'unpublish'])->name('myposts.unpublish');
+    Route::patch('/yazilarim/{work}/tekrar-yayinla', [MyPostController::class, 'republish'])->name('myposts.republish');
     Route::delete('/yazilarim/{work}', [MyPostController::class, 'destroy'])->name('myposts.destroy');
 });
 

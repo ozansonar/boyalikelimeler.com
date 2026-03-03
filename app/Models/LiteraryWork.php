@@ -76,6 +76,11 @@ class LiteraryWork extends Model
         return $this->status === LiteraryWorkStatus::RevisionRequested;
     }
 
+    public function isUnpublished(): bool
+    {
+        return $this->status === LiteraryWorkStatus::Unpublished;
+    }
+
     public function readingTime(): int
     {
         $wordCount = str_word_count(strip_tags((string) $this->body));

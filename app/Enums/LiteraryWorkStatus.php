@@ -10,6 +10,7 @@ enum LiteraryWorkStatus: string
     case Approved          = 'approved';
     case Rejected          = 'rejected';
     case RevisionRequested = 'revision_requested';
+    case Unpublished       = 'unpublished';
 
     public function label(): string
     {
@@ -18,6 +19,7 @@ enum LiteraryWorkStatus: string
             self::Approved          => 'Onaylandı',
             self::Rejected          => 'Reddedildi',
             self::RevisionRequested => 'Revize Bekleniyor',
+            self::Unpublished       => 'Yayından Kaldırıldı',
         };
     }
 
@@ -28,6 +30,7 @@ enum LiteraryWorkStatus: string
             self::Approved          => 'active',
             self::Rejected          => 'inactive',
             self::RevisionRequested => 'info',
+            self::Unpublished       => 'inactive',
         };
     }
 }

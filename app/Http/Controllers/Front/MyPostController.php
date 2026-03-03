@@ -133,6 +133,38 @@ final class MyPostController extends Controller
         return $redirect;
     }
 
+    public function unpublish(LiteraryWork $work): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if (! $this->workService->unpublishWork($user, $work)) {
+            abort(403, 'Bu eseri yayından kaldırma yetkiniz yok.');
+        }
+
+        return redirect()
+            ->route('myposts.index')
+            ->with('success', 'Eseriniz yayından kaldırıldı. Tekrar yayınlamak istediğinizde editör onayı gerekecektir.');
+    }
+
+    public function republish(LiteraryWork $work): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if (! $this->workService->republishWork($user, $work)) {
+            abort(403, 'Bu eseri tekrar yayına gönderme yetkiniz yok.');
+        }
+
+        $redirect = redirect()
+            ->route('myposts.index')
+            ->with('success', 'Eseriniz tekrar incelemeye gönderildi. Editör onayından sonra yayınlanacaktır.');
+
+        if (! $this->workService->wasMailSent()) {
+            $redirect->with('warning', 'Editörlere bildirim maili gönderilemedi, ancak eseriniz incelemeye gönderildi.');
+        }
+
+        return $redirect;
+    }
+
     public function destroy(LiteraryWork $work): RedirectResponse
     {
         $user = auth()->user();
