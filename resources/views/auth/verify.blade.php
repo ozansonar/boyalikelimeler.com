@@ -20,13 +20,6 @@
                         </p>
                     </div>
 
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
-                        </div>
-                    @endif
-
                     <p class="text-center mt-3 mb-3">
                         E-posta almadıysanız, aşağıdaki butona tıklayarak tekrar gönderebilirsiniz.
                     </p>

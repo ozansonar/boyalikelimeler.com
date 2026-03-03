@@ -89,13 +89,13 @@
             if (data.success) {
                 var bsModal = bootstrap.Modal.getInstance(modal);
                 if (bsModal) bsModal.hide();
-                alert('Başvurunuz başarıyla gönderildi! E-posta ile bilgilendirileceksiniz.');
+                if (window.BkModal) window.BkModal.success('Başvurunuz başarıyla gönderildi! E-posta ile bilgilendirileceksiniz.');
             } else {
-                alert(data.message || 'Bir hata oluştu. Lütfen tekrar deneyin.');
+                if (window.BkModal) window.BkModal.danger(data.message || 'Bir hata oluştu. Lütfen tekrar deneyin.');
             }
         })
         .catch(function () {
-            alert('Bağlantı hatası. Lütfen tekrar deneyin.');
+            if (window.BkModal) window.BkModal.danger('Bağlantı hatası. Lütfen tekrar deneyin.');
         });
     });
 

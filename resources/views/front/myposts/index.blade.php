@@ -28,20 +28,6 @@
                 </div>
             </div>
 
-            {{-- Flash Messages --}}
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                    <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
-                </div>
-            @endif
-            @if(session('warning'))
-                <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ session('warning') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
-                </div>
-            @endif
-
             {{-- Stats Summary --}}
             <div class="row g-3 mb-4">
                 <div class="col-6 col-md-3">
