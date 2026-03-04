@@ -67,7 +67,7 @@ final class AuthorService
                 $startMonth->addMonth();
             }
 
-            return array_reverse($months);
+            return $months;
         });
     }
 
