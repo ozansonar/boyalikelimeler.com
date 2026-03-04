@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthorsPageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -110,6 +111,10 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::put('menus/{menu}/items/{item}', [MenuController::class, 'updateItem'])->name('menus.items.update');
     Route::delete('menus/{menu}/items/{item}', [MenuController::class, 'destroyItem'])->name('menus.items.destroy');
     Route::post('menus/{menu}/items/reorder', [MenuController::class, 'reorderItems'])->name('menus.items.reorder');
+
+    // Authors Page Settings
+    Route::get('authors-page', [AuthorsPageController::class, 'index'])->name('authors-page.index');
+    Route::put('authors-page', [AuthorsPageController::class, 'update'])->name('authors-page.update');
 
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

@@ -23,6 +23,9 @@
         <a href="{{ route('admin.pages.index') }}" class="nav-link {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
             <i class="bi bi-file-earmark-richtext-fill"></i> Sayfalar
         </a>
+        <a href="{{ route('admin.authors-page.index') }}" class="nav-link {{ request()->routeIs('admin.authors-page.*') ? 'active' : '' }}">
+            <i class="bi bi-pen-fill"></i> Yazarlar
+        </a>
 
         <div class="nav-section-title">Edebiyat</div>
         <a href="{{ route('admin.literary-works.index') }}" class="nav-link {{ request()->routeIs('admin.literary-works.*') ? 'active' : '' }}">
