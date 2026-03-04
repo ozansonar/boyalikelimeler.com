@@ -81,15 +81,25 @@
                     </div>
                 @empty
                     <div class="col-12">
-                        <div class="member-no-result member-no-result--visible">
-                            <i class="fa-solid fa-pen-nib member-no-result__icon"></i>
-                            <p class="member-no-result__text">
+                        <div class="golden-empty">
+                            <div class="golden-empty__icon-wrap">
+                                <div class="golden-empty__circle">
+                                    <i class="fa-solid fa-pen-nib golden-empty__icon"></i>
+                                </div>
+                            </div>
+                            <h2 class="golden-empty__title">Henüz Belirlenmedi</h2>
+                            <div class="golden-empty__divider"></div>
+                            <p class="golden-empty__text">
                                 Bu ay için Altın Kalem yazarı henüz belirlenmemiştir.
                                 Değerlendirme sürecimiz devam ediyor; lütfen daha sonra tekrar ziyaret ediniz.
-                                Edebiyatın ışığı her ay yeni kalemleri aydınlatmaya devam edecek.
                             </p>
-                            <a href="{{ route('authors.index') }}" class="btn btn-outline-primary mt-3">
-                                <i class="fa-solid fa-users me-1"></i>Tüm Yazarlarımız
+                            <p class="golden-empty__sub">
+                                <i class="fa-solid fa-quote-left me-1"></i>
+                                Edebiyatın ışığı her ay yeni kalemleri aydınlatmaya devam edecek.
+                                <i class="fa-solid fa-quote-right ms-1"></i>
+                            </p>
+                            <a href="{{ route('authors.index') }}" class="golden-empty__btn">
+                                <i class="fa-solid fa-users me-2"></i>Tüm Yazarlarımız
                             </a>
                         </div>
                     </div>

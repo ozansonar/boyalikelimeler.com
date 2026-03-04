@@ -901,6 +901,118 @@ p {
     margin-bottom: 0;
 }
 
+/* -- Golden Empty State ------------------------------------- */
+.golden-empty {
+    text-align: center;
+    padding: 3rem 1rem 4rem;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+.golden-empty__icon-wrap {
+    margin-bottom: 1.75rem;
+}
+
+.golden-empty__circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+    border: 2px solid var(--color-gold-dark);
+    position: relative;
+}
+
+.golden-empty__circle::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px dashed var(--color-gold-glow);
+}
+
+.golden-empty__icon {
+    font-size: 2.5rem;
+    color: var(--color-gold);
+    opacity: 0.7;
+}
+
+.golden-empty__title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-silver-light);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+.golden-empty__divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    margin: 0 auto 1.25rem;
+}
+
+.golden-empty__text {
+    font-size: 1rem;
+    color: var(--color-silver);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+}
+
+.golden-empty__sub {
+    font-size: 0.875rem;
+    color: var(--color-gold-dark);
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.golden-empty__sub i {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    vertical-align: middle;
+}
+
+.golden-empty__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.625rem 1.75rem;
+    background: transparent;
+    border: 1px solid var(--color-gold-dark);
+    color: var(--color-gold);
+    font-size: 0.9rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.golden-empty__btn:hover {
+    background: var(--color-gold);
+    color: var(--color-black-deep);
+    border-color: var(--color-gold);
+}
+
+@media (max-width: 575.98px) {
+    .golden-empty {
+        padding: 2rem 1rem 3rem;
+    }
+
+    .golden-empty__circle {
+        width: 80px;
+        height: 80px;
+    }
+
+    .golden-empty__icon {
+        font-size: 2rem;
+    }
+
+    .golden-empty__title {
+        font-size: 1.25rem;
+    }
+}
+
 /* -- Member Pagination -------------------------------------- */
 .member-pagination {
     display: flex;
