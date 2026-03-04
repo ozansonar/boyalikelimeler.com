@@ -13733,6 +13733,251 @@ a.page-box-card:hover .page-box-card__link-hint {
     margin-top: 4px;
 }
 
+/* -- Featured Author Card ----------------------------------- */
+.authors-featured {
+    background-color: var(--color-black-card);
+    border: var(--border-gold);
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.authors-featured:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-gold);
+}
+
+.authors-featured__badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #D4AF37, #C8A96E);
+    color: var(--color-black-deep);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 1rem;
+    border-radius: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.25rem;
+}
+
+.authors-featured__avatar-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.authors-featured__avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 3px solid rgba(200, 169, 110, 0.4);
+    background: linear-gradient(135deg, rgba(200, 169, 110, 0.12), rgba(200, 169, 110, 0.04));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--transition-base);
+}
+
+.authors-featured__avatar::after {
+    content: attr(data-initials);
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    opacity: 0.6;
+    letter-spacing: 2px;
+}
+
+.authors-featured__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.authors-featured__golden {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #D4AF37, #C8A96E);
+    color: var(--color-black-sweet);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 3px solid var(--color-black-card);
+    z-index: 2;
+}
+
+.authors-featured__name {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+}
+
+.authors-featured__line {
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    margin: 0 auto 0.75rem;
+    opacity: 0.6;
+}
+
+.authors-featured__stats {
+    font-size: 0.85rem;
+    color: var(--color-silver);
+    margin-bottom: 0.5rem;
+}
+
+.authors-featured__sep {
+    color: var(--color-silver);
+    margin: 0 4px;
+}
+
+.authors-featured__bio {
+    font-size: 0.85rem;
+    color: var(--color-silver-light);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* -- Authors Page Content (Editor) -------------------------- */
+.authors-content {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-white);
+}
+
+.authors-content h2,
+.authors-content h3,
+.authors-content h4 {
+    color: var(--color-gold);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.authors-content p {
+    margin-bottom: 1rem;
+    color: var(--color-silver-light);
+}
+
+.authors-content blockquote {
+    border-left: 3px solid var(--color-gold);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--color-silver-light);
+}
+
+.authors-content a {
+    color: var(--color-gold);
+    text-decoration: underline;
+}
+
+.authors-content a:hover {
+    color: var(--color-gold-light);
+}
+
+/* -- Golden Pen Slider -------------------------------------- */
+.golden-slider {
+    margin-bottom: 1rem;
+}
+
+.golden-slider__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.golden-slider__title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin-bottom: 0;
+}
+
+.golden-slider__title i {
+    color: var(--color-gold);
+}
+
+.golden-slider__nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.golden-slider__nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(200, 169, 110, 0.3);
+    background: transparent;
+    color: var(--color-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.golden-slider__nav-btn:hover {
+    background-color: var(--color-gold);
+    color: var(--color-black-deep);
+    border-color: var(--color-gold);
+}
+
+.golden-slider__nav-btn.swiper-button-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.golden-slider__swiper .swiper-slide {
+    height: auto;
+}
+
+.golden-slider__swiper .member-card {
+    height: 100%;
+}
+
+@media (max-width: 575.98px) {
+    .authors-featured__avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .authors-featured__avatar::after {
+        font-size: 1.75rem;
+    }
+
+    .authors-featured__name {
+        font-size: 1.05rem;
+    }
+
+    .golden-slider__title {
+        font-size: 1.15rem;
+    }
+
+    .golden-slider__nav-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 0.8rem;
+    }
+}
+
 /* Golden pen badge on member card */
 .member-card__golden-badge {
     position: absolute;

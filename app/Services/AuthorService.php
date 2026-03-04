@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Enums\RoleSlug;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -36,6 +37,57 @@ final class AuthorService
                 'total_works'     => (int) $row->total_works,
                 'total_views'     => (int) $row->total_views,
             ];
+        });
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getGoldenPenAuthors(): Collection
+    {
+        $today = now()->toDateString();
+
+        return Cache::remember('front.authors.golden_pen', 300, function () use ($today): Collection {
+            return User::query()
+                ->join('roles', 'users.role_id', '=', 'roles.id')
+                ->where('roles.slug', RoleSlug::Yazar->value)
+                ->whereNotNull('users.email_verified_at')
+                ->whereExists(function ($q) use ($today): void {
+                    $q->select(DB::raw(1))
+                      ->from('golden_pen_periods')
+                      ->whereColumn('golden_pen_periods.user_id', 'users.id')
+                      ->whereNull('golden_pen_periods.deleted_at')
+                      ->where('golden_pen_periods.starts_at', '<=', $today)
+                      ->where('golden_pen_periods.ends_at', '>=', $today);
+                })
+                ->with(['activeGoldenPenPeriod'])
+                ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
+                    $q->where('status', 'approved');
+                }])
+                ->select('users.*')
+                ->orderBy('users.name')
+                ->get();
+        });
+    }
+
+    public function getFeaturedAuthor(?string $userId): ?User
+    {
+        if (empty($userId)) {
+            return null;
+        }
+
+        return Cache::remember("front.authors.featured.{$userId}", 300, function () use ($userId): ?User {
+            return User::query()
+                ->where('id', (int) $userId)
+                ->whereNotNull('email_verified_at')
+                ->with(['activeGoldenPenPeriod'])
+                ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
+                    $q->where('status', 'approved');
+                }])
+                ->withSum(['literaryWorks as total_views' => function ($q): void {
+                    $q->where('status', 'approved');
+                }], 'view_count')
+                ->first();
         });
     }
 

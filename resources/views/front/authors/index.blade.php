@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
-@section('title', 'Yazarlarımız — Boyalı Kelimeler')
-@section('meta_description', 'Boyalı Kelimeler yazarları ile tanışın. Şairler, hikayeciler ve deneme yazarlarımız.')
+@section('title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız — Boyalı Kelimeler')
+@section('meta_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazarları ile tanışın. Şairler, hikayeciler ve deneme yazarlarımız.')
 @section('canonical', route('authors.index'))
-@section('og_title', 'Yazarlarımız — Boyalı Kelimeler')
-@section('og_description', 'Boyalı Kelimeler yazarları ile tanışın. Şairler, hikayeciler ve deneme yazarlarımız.')
+@section('og_title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız — Boyalı Kelimeler')
+@section('og_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazarları ile tanışın. Şairler, hikayeciler ve deneme yazarlarımız.')
 
 @section('content')
 
@@ -15,15 +15,71 @@
         <div class="container">
             <div class="page-header__inner">
                 <h1 class="page-header__title">
-                    <i class="fa-solid fa-feather-pointed me-2"></i>Yazarlarımız
+                    <i class="fa-solid fa-feather-pointed me-2"></i>{{ $pageSettings['title'] ?? 'Yazarlarımız' }}
                 </h1>
                 <div class="page-header__divider"></div>
                 <p class="page-header__desc">
-                    Kelimelerin büyüsüne inanan, kalemleriyle dünyalar kuran yazarlarımızla tanışın.
+                    {{ $pageSettings['description'] ?? 'Kelimelerin büyüsüne inanan, kalemleriyle dünyalar kuran yazarlarımızla tanışın.' }}
                 </p>
             </div>
         </div>
     </section>
+
+    <!-- =======================================================
+         FEATURED AUTHOR + EDITOR CONTENT
+    ======================================================= -->
+    @if($featuredAuthor || !empty($pageSettings['body']))
+        <section class="section pt-0">
+            <div class="container">
+                <div class="row g-4 align-items-center">
+                    @if($featuredAuthor)
+                        <div class="col-lg-4" data-aos="fade-right">
+                            <a href="{{ $featuredAuthor->profile_url }}" class="text-decoration-none">
+                                <article class="authors-featured">
+                                    <div class="authors-featured__badge">
+                                        <i class="fa-solid fa-crown me-1"></i> Öne Çıkan Yazar
+                                    </div>
+                                    <div class="authors-featured__avatar-wrap">
+                                        <div class="authors-featured__avatar" data-initials="{{ mb_strtoupper(mb_substr($featuredAuthor->name, 0, 1)) . mb_strtoupper(mb_substr(explode(' ', $featuredAuthor->name)[1] ?? '', 0, 1)) }}">
+                                            @if($featuredAuthor->avatar)
+                                                <img src="{{ upload_url($featuredAuthor->avatar, 'md') }}"
+                                                     alt="{{ $featuredAuthor->name }}"
+                                                     class="authors-featured__photo img-fluid"
+                                                     loading="lazy">
+                                            @endif
+                                        </div>
+                                        @if($featuredAuthor->hasActiveGoldenPen())
+                                            <div class="authors-featured__golden" title="Altın Kalem">
+                                                <i class="fa-solid fa-pen-nib"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <h2 class="authors-featured__name">{{ $featuredAuthor->name }}</h2>
+                                    <div class="authors-featured__line"></div>
+                                    <p class="authors-featured__stats">
+                                        {{ $featuredAuthor->approved_works_count ?? 0 }} eser
+                                        <span class="authors-featured__sep">·</span>
+                                        {{ number_format((int) ($featuredAuthor->total_views ?? 0)) }} okunma
+                                    </p>
+                                    @if($featuredAuthor->bio)
+                                        <p class="authors-featured__bio">{{ Str::limit($featuredAuthor->bio, 150) }}</p>
+                                    @endif
+                                </article>
+                            </a>
+                        </div>
+                    @endif
+
+                    @if(!empty($pageSettings['body']))
+                        <div class="{{ $featuredAuthor ? 'col-lg-8' : 'col-12' }}" data-aos="fade-left">
+                            <div class="authors-content">
+                                {!! $pageSettings['body'] !!}
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </section>
+    @endif
 
     <!-- =======================================================
          STATS
@@ -70,6 +126,62 @@
             </div>
         </div>
     </section>
+
+    <!-- =======================================================
+         GOLDEN PEN AUTHORS — SWIPER SLIDER
+    ======================================================= -->
+    @if($goldenPenAuthors->isNotEmpty())
+        <section class="section section--dark pt-0" data-aos="fade-up">
+            <div class="container">
+                <div class="golden-slider">
+                    <div class="golden-slider__header">
+                        <h2 class="golden-slider__title">
+                            <i class="fa-solid fa-pen-nib me-2"></i>Altın Kalemlerimiz
+                        </h2>
+                        <div class="golden-slider__nav">
+                            <button class="golden-slider__nav-btn golden-slider__nav-btn--prev" type="button" aria-label="Önceki yazarlar">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button class="golden-slider__nav-btn golden-slider__nav-btn--next" type="button" aria-label="Sonraki yazarlar">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="swiper golden-slider__swiper">
+                        <div class="swiper-wrapper">
+                            @foreach($goldenPenAuthors as $gpAuthor)
+                                <div class="swiper-slide">
+                                    <a href="{{ $gpAuthor->profile_url }}" class="text-decoration-none">
+                                        <article class="member-card">
+                                            <div class="member-card__avatar-wrap">
+                                                <div class="member-card__avatar" data-initials="{{ mb_strtoupper(mb_substr($gpAuthor->name, 0, 1)) . mb_strtoupper(mb_substr(explode(' ', $gpAuthor->name)[1] ?? '', 0, 1)) }}">
+                                                    @if($gpAuthor->avatar)
+                                                        <img src="{{ upload_url($gpAuthor->avatar, 'thumb') }}"
+                                                             alt="{{ $gpAuthor->name }}"
+                                                             class="member-card__photo"
+                                                             loading="lazy">
+                                                    @endif
+                                                </div>
+                                                <div class="member-card__glow"></div>
+                                                <div class="member-card__golden-badge" title="Altın Kalem">
+                                                    <i class="fa-solid fa-pen-nib"></i>
+                                                </div>
+                                            </div>
+                                            <h3 class="member-card__name">{{ $gpAuthor->name }}</h3>
+                                            <div class="member-card__line"></div>
+                                            <p class="member-card__role">
+                                                {{ $gpAuthor->approved_works_count ?? 0 }} eser
+                                            </p>
+                                        </article>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <!-- =======================================================
          AUTHORS LIST

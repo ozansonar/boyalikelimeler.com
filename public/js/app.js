@@ -369,6 +369,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /* -- Golden Pen Authors Swiper Slider -------------------- */
+    var goldenSwiperEl = document.querySelector('.golden-slider__swiper');
+    if (goldenSwiperEl && typeof Swiper !== 'undefined') {
+        new Swiper('.golden-slider__swiper', {
+            slidesPerView: 4,
+            spaceBetween: 16,
+            grabCursor: true,
+            navigation: {
+                prevEl: '.golden-slider__nav-btn--prev',
+                nextEl: '.golden-slider__nav-btn--next'
+            },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 10
+                },
+                480: {
+                    slidesPerView: 2.5,
+                    spaceBetween: 12
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 14
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 16
+                }
+            }
+        });
+    }
+
     /* -- Video Modal (YouTube Embed) ------------------------- */
     var videoModal = document.getElementById('videoModal');
     var videoIframe = document.getElementById('videoIframe');
