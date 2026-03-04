@@ -133,8 +133,8 @@ final class UserService
 
             $user->update($updateData);
 
-            if (isset($data['golden_pen_periods'])) {
-                $this->goldenPenPeriodService->syncPeriods($user, $data['golden_pen_periods']);
+            if (isset($data['golden_pen_periods_sent'])) {
+                $this->goldenPenPeriodService->syncPeriods($user, $data['golden_pen_periods'] ?? []);
             }
 
             Cache::forget('admin.users.stats');
