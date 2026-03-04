@@ -23,14 +23,30 @@ class AuthorController extends Controller
         $pageSettings = $this->settingService->getGroup('authors_page');
 
         $featuredAuthor = $this->authorService->getFeaturedAuthor($pageSettings['featured_author_id'] ?? null);
-        $monthlyGoldenPen = $this->authorService->getMonthlyGoldenPenAuthors();
+        $goldenPenMonths = $this->authorService->getGoldenPenMonths();
 
         return view('front.authors.index', [
             'authors'          => $this->authorService->paginate(12, $filters),
             'filters'          => $filters,
             'pageSettings'     => $pageSettings,
             'featuredAuthor'   => $featuredAuthor,
-            'monthlyGoldenPen' => $monthlyGoldenPen,
+            'goldenPenMonths'  => $goldenPenMonths,
+        ]);
+    }
+
+    public function goldenPenMonth(string $yearMonth): View
+    {
+        $pageSettings = $this->settingService->getGroup('authors_page');
+        $monthData = $this->authorService->getGoldenPenAuthorsByMonth($yearMonth);
+
+        if ($monthData === null) {
+            abort(404);
+        }
+
+        return view('front.authors.golden-pen-month', [
+            'monthData'    => $monthData,
+            'yearMonth'    => $yearMonth,
+            'pageSettings' => $pageSettings,
         ]);
     }
 }

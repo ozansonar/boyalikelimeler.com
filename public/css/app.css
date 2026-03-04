@@ -13918,33 +13918,99 @@ a.page-box-card:hover .page-box-card__link-hint {
 
 .golden-slider__swiper .swiper-slide {
     height: auto;
-    width: 100% !important;
 }
 
-.golden-slider__swiper .member-card {
+/* -- Golden Month Card -------------------------------------- */
+.golden-month-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(200, 169, 110, 0.2);
+    background: var(--color-black-card);
+    transition: all var(--transition-base);
+    cursor: pointer;
     height: 100%;
+    min-height: 180px;
 }
 
-/* -- Golden Month Slide ------------------------------------- */
-.golden-month {
-    padding: 0.5rem 0;
+.golden-month-card:hover {
+    border-color: var(--color-gold);
+    box-shadow: var(--shadow-gold);
+    transform: translateY(-4px);
 }
 
-.golden-month__label {
+.golden-month-card__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-gold-dark), var(--color-gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: var(--color-black-deep);
+}
+
+.golden-month-card__label {
     font-family: var(--font-heading);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--color-gold-light);
-    text-align: center;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid rgba(200, 169, 110, 0.15);
+    margin-bottom: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
 }
 
-.golden-month__label i {
+.golden-month-card__action {
+    font-size: 0.8rem;
+    color: var(--color-silver);
+    transition: color var(--transition-base);
+}
+
+.golden-month-card:hover .golden-month-card__action {
     color: var(--color-gold);
+}
+
+/* -- Golden Breadcrumb -------------------------------------- */
+.golden-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 1rem 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.golden-breadcrumb__item::before {
+    content: '/';
+    color: var(--color-silver-dark);
+    margin-right: 0.5rem;
+}
+
+.golden-breadcrumb__item:first-child::before {
+    content: '';
+    margin-right: 0;
+}
+
+.golden-breadcrumb__link {
+    color: var(--color-gold);
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+.golden-breadcrumb__link:hover {
+    color: var(--color-gold-light);
+}
+
+.golden-breadcrumb__item--active {
+    color: var(--color-silver);
 }
 
 /* -- Authors List Section Title ----------------------------- */
@@ -13986,8 +14052,23 @@ a.page-box-card:hover .page-box-card__link-hint {
         font-size: 0.8rem;
     }
 
-    .golden-month__label {
-        font-size: 0.9rem;
+    .golden-month-card {
+        min-height: 140px;
+        padding: 1.25rem 0.75rem;
+    }
+
+    .golden-month-card__icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+    }
+
+    .golden-month-card__label {
+        font-size: 0.8rem;
+    }
+
+    .golden-month-card__action {
+        font-size: 0.7rem;
     }
 
     .authors-list__title {

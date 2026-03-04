@@ -369,16 +369,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* -- Golden Pen Monthly Swiper Slider -------------------- */
+    /* -- Golden Pen Monthly Cards Swiper Slider --------------- */
     var goldenSwiperEl = document.querySelector('.golden-slider__swiper');
     if (goldenSwiperEl && typeof Swiper !== 'undefined') {
         new Swiper('.golden-slider__swiper', {
-            slidesPerView: 1,
-            spaceBetween: 0,
+            slidesPerView: 2,
+            spaceBetween: 16,
             grabCursor: true,
             navigation: {
                 prevEl: '.golden-slider__nav-btn--prev',
                 nextEl: '.golden-slider__nav-btn--next'
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 16
+                },
+                992: {
+                    slidesPerView: 4,
+                    spaceBetween: 20
+                }
             }
         });
     }

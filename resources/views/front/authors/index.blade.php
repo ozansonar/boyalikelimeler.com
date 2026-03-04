@@ -72,9 +72,9 @@
     @endif
 
     <!-- =======================================================
-         GOLDEN PEN AUTHORS — MONTHLY SWIPER SLIDER
+         GOLDEN PEN MONTHS — MONTHLY CARDS SLIDER
     ======================================================= -->
-    @if(!empty($monthlyGoldenPen))
+    @if(!empty($goldenPenMonths))
         <section class="section section--surface" data-aos="fade-up">
             <div class="container">
                 <div class="golden-slider">
@@ -99,42 +99,20 @@
 
                     <div class="swiper golden-slider__swiper">
                         <div class="swiper-wrapper">
-                            @foreach($monthlyGoldenPen as $monthKey => $monthData)
+                            @foreach($goldenPenMonths as $month)
                                 <div class="swiper-slide">
-                                    <div class="golden-month">
-                                        <h3 class="golden-month__label">
-                                            <i class="fa-solid fa-calendar-alt me-2"></i>{{ $monthData['label'] }}
-                                        </h3>
-                                        <div class="row g-3 justify-content-center">
-                                            @foreach($monthData['authors'] as $gpAuthor)
-                                                <div class="col-lg-3 col-md-4 col-6">
-                                                    <a href="{{ $gpAuthor->profile_url }}" class="text-decoration-none">
-                                                        <article class="member-card">
-                                                            <div class="member-card__avatar-wrap">
-                                                                <div class="member-card__avatar" data-initials="{{ mb_strtoupper(mb_substr($gpAuthor->name, 0, 1)) . mb_strtoupper(mb_substr(explode(' ', $gpAuthor->name)[1] ?? '', 0, 1)) }}">
-                                                                    @if($gpAuthor->avatar)
-                                                                        <img src="{{ upload_url($gpAuthor->avatar, 'thumb') }}"
-                                                                             alt="{{ $gpAuthor->name }}"
-                                                                             class="member-card__photo"
-                                                                             loading="lazy">
-                                                                    @endif
-                                                                </div>
-                                                                <div class="member-card__glow"></div>
-                                                                <div class="member-card__golden-badge" title="Altın Kalem">
-                                                                    <i class="fa-solid fa-pen-nib"></i>
-                                                                </div>
-                                                            </div>
-                                                            <h3 class="member-card__name">{{ $gpAuthor->name }}</h3>
-                                                            <div class="member-card__line"></div>
-                                                            <p class="member-card__role">
-                                                                {{ $gpAuthor->approved_works_count ?? 0 }} eser
-                                                            </p>
-                                                        </article>
-                                                    </a>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
+                                    <a href="{{ route('authors.golden-pen-month', $month['key']) }}" class="text-decoration-none">
+                                        <article class="golden-month-card">
+                                            <div class="golden-month-card__icon">
+                                                <i class="fa-solid fa-pen-nib"></i>
+                                            </div>
+                                            <h3 class="golden-month-card__label">{{ $month['label'] }}</h3>
+                                            <div class="golden-month-card__action">
+                                                <span>Yazarları Gör</span>
+                                                <i class="fa-solid fa-arrow-right ms-2"></i>
+                                            </div>
+                                        </article>
+                                    </a>
                                 </div>
                             @endforeach
                         </div>
