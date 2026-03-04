@@ -13939,7 +13939,7 @@ a.page-box-card:hover .page-box-card__link-hint {
     background-color: var(--color-black-card);
     border: var(--border-gold);
     border-radius: 1rem;
-    padding: 2.5rem 2rem 2rem;
+    padding: 3.5rem 2rem 2.5rem;
     text-align: center;
     position: relative;
     transition: transform var(--transition-base), box-shadow var(--transition-base);
@@ -13959,12 +13959,12 @@ a.page-box-card:hover .page-box-card__link-hint {
 .authors-featured__avatar-wrap {
     position: relative;
     display: inline-block;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .authors-featured__badge {
     position: absolute;
-    top: -12px;
+    top: -18px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 3;
