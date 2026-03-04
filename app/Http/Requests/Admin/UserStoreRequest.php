@@ -22,6 +22,7 @@ class UserStoreRequest extends FormRequest
             'password'        => ['required', 'string', 'min:8', 'confirmed'],
             'role_id'         => ['required', 'exists:roles,id'],
             'email_verified'       => ['nullable', 'boolean'],
+            'golden_pen_periods_sent'         => ['nullable'],
             'golden_pen_periods'              => ['nullable', 'array'],
             'golden_pen_periods.*.starts_at'  => ['required', 'date'],
             'golden_pen_periods.*.ends_at'    => ['required', 'date', 'after_or_equal:golden_pen_periods.*.starts_at'],

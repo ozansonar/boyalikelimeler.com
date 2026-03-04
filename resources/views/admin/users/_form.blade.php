@@ -238,6 +238,9 @@
                     <span>Birden fazla dönem ekleyerek yazarın altın kalem tarihçesini yönetebilirsiniz.</span>
                 </div>
 
+                {{-- Ensure key is always sent even when all periods are removed --}}
+                <input type="hidden" name="golden_pen_periods_sent" value="1">
+
                 <div id="goldenPenPeriodsContainer">
                     @php
                         $periods = old('golden_pen_periods', ($isEdit && $user->goldenPenPeriods) ? $user->goldenPenPeriods->map(fn($p) => [
