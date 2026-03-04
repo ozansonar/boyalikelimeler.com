@@ -43,10 +43,13 @@ class AuthorController extends Controller
             abort(404);
         }
 
+        $hasAuthors = $monthData['authors']->isNotEmpty();
+
         return view('front.authors.golden-pen-month', [
             'monthData'    => $monthData,
             'yearMonth'    => $yearMonth,
             'pageSettings' => $pageSettings,
+            'hasAuthors'   => $hasAuthors,
         ]);
     }
 }

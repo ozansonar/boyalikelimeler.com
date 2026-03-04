@@ -81,9 +81,17 @@ final class AuthorService
         }
 
         return Cache::remember("front.authors.golden_pen.{$yearMonth}", 300, function () use ($yearMonth): ?array {
-            $date = Carbon::createFromFormat('Y-m', $yearMonth)?->startOfDay();
+            [$yearStr, $monthStr] = explode('-', $yearMonth);
+            $year = (int) $yearStr;
+            $month = (int) $monthStr;
 
-            if ($date === null || $date->gt(now()->startOfMonth()) || $date->lt(Carbon::create(2026, 1, 1)->startOfDay())) {
+            if ($month < 1 || $month > 12) {
+                return null;
+            }
+
+            $date = Carbon::create($year, $month, 1)->startOfDay();
+
+            if ($date->gt(now()->startOfMonth()) || $date->lt(Carbon::create(2026, 1, 1)->startOfDay())) {
                 return null;
             }
 

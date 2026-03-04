@@ -83,7 +83,14 @@
                     <div class="col-12">
                         <div class="member-no-result member-no-result--visible">
                             <i class="fa-solid fa-pen-nib member-no-result__icon"></i>
-                            <p class="member-no-result__text">Bu ay için altın kalem yazarı bulunamadı.</p>
+                            <p class="member-no-result__text">
+                                Bu ay için Altın Kalem yazarı henüz belirlenmemiştir.
+                                Değerlendirme sürecimiz devam ediyor; lütfen daha sonra tekrar ziyaret ediniz.
+                                Edebiyatın ışığı her ay yeni kalemleri aydınlatmaya devam edecek.
+                            </p>
+                            <a href="{{ route('authors.index') }}" class="btn btn-outline-primary mt-3">
+                                <i class="fa-solid fa-users me-1"></i>Tüm Yazarlarımız
+                            </a>
                         </div>
                     </div>
                 @endforelse
