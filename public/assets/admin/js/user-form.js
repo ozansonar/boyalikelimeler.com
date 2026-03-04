@@ -53,11 +53,45 @@ function initRoleCards() {
     }
 }
 
+/* -- Golden Pen Toggle -- */
+function initGoldenPen() {
+    var toggle = document.getElementById('goldenPenToggle');
+    var datesContainer = document.getElementById('goldenPenDates');
+
+    if (!toggle || !datesContainer) return;
+
+    toggle.addEventListener('change', function () {
+        if (this.checked) {
+            datesContainer.style.display = '';
+        } else {
+            datesContainer.style.display = 'none';
+        }
+    });
+
+    var startInput = document.getElementById('goldenPenStartsAt');
+    var endInput = document.getElementById('goldenPenEndsAt');
+
+    if (startInput && endInput) {
+        startInput.addEventListener('change', function () {
+            if (this.value && (!endInput.value || endInput.value < this.value)) {
+                endInput.min = this.value;
+            }
+        });
+
+        endInput.addEventListener('change', function () {
+            if (this.value && startInput.value && this.value < startInput.value) {
+                this.value = startInput.value;
+            }
+        });
+    }
+}
+
 /* -- Init -- */
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
     initRoleCards();
+    initGoldenPen();
 
     /* Password strength */
     var passwordInput = document.getElementById('password');

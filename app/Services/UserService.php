@@ -96,11 +96,14 @@ final class UserService
     {
         return DB::transaction(function () use ($data): User {
             $user = User::create([
-                'name'              => $data['first_name'] . ' ' . $data['last_name'],
-                'email'             => $data['email'],
-                'password'          => $data['password'],
-                'role_id'           => $data['role_id'],
-                'email_verified_at' => ! empty($data['email_verified']) ? now() : null,
+                'name'                 => $data['first_name'] . ' ' . $data['last_name'],
+                'email'                => $data['email'],
+                'password'             => $data['password'],
+                'role_id'              => $data['role_id'],
+                'email_verified_at'    => ! empty($data['email_verified']) ? now() : null,
+                'is_golden_pen'        => ! empty($data['is_golden_pen']),
+                'golden_pen_starts_at' => ! empty($data['is_golden_pen']) ? ($data['golden_pen_starts_at'] ?? null) : null,
+                'golden_pen_ends_at'   => ! empty($data['is_golden_pen']) ? ($data['golden_pen_ends_at'] ?? null) : null,
             ]);
 
             Cache::forget('admin.users.stats');
@@ -114,10 +117,13 @@ final class UserService
     {
         return DB::transaction(function () use ($user, $data): User {
             $updateData = [
-                'name'              => $data['first_name'] . ' ' . $data['last_name'],
-                'email'             => $data['email'],
-                'role_id'           => $data['role_id'],
-                'email_verified_at' => ! empty($data['email_verified']) ? ($user->email_verified_at ?? now()) : null,
+                'name'                 => $data['first_name'] . ' ' . $data['last_name'],
+                'email'                => $data['email'],
+                'role_id'              => $data['role_id'],
+                'email_verified_at'    => ! empty($data['email_verified']) ? ($user->email_verified_at ?? now()) : null,
+                'is_golden_pen'        => ! empty($data['is_golden_pen']),
+                'golden_pen_starts_at' => ! empty($data['is_golden_pen']) ? ($data['golden_pen_starts_at'] ?? null) : null,
+                'golden_pen_ends_at'   => ! empty($data['is_golden_pen']) ? ($data['golden_pen_ends_at'] ?? null) : null,
             ];
 
             if (! empty($data['password'])) {

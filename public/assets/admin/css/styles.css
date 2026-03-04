@@ -16391,6 +16391,26 @@ a.btn-glass {
   -webkit-backdrop-filter: blur(12px);
 }
 
+/* Golden Pen Status */
+.uf-golden-pen-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+.uf-golden-pen-active {
+  background: rgba(var(--neon-green-rgb, 34, 197, 94), 0.1);
+  border: 1px solid rgba(var(--neon-green-rgb, 34, 197, 94), 0.3);
+  color: var(--neon-green, #22c55e);
+}
+.uf-golden-pen-expired {
+  background: rgba(var(--neon-orange-rgb, 249, 115, 22), 0.1);
+  border: 1px solid rgba(var(--neon-orange-rgb, 249, 115, 22), 0.3);
+  color: var(--neon-orange, #f97316);
+}
+
 /* Responsive */
 @media (max-width: 767.98px) {
   .uf-avatar-section {
