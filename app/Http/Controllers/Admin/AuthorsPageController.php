@@ -39,12 +39,14 @@ class AuthorsPageController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'title'              => 'nullable|string|max:200',
-            'description'        => 'nullable|string|max:500',
-            'body'               => 'nullable|string|max:50000',
-            'featured_author_id' => 'nullable|integer|exists:users,id',
-            'meta_title'         => 'nullable|string|max:70',
-            'meta_description'   => 'nullable|string|max:170',
+            'title'                  => 'nullable|string|max:200',
+            'description'            => 'nullable|string|max:500',
+            'featured_author_id'     => 'nullable|integer|exists:users,id',
+            'golden_pen_title'       => 'nullable|string|max:200',
+            'golden_pen_description' => 'nullable|string|max:500',
+            'authors_list_title'     => 'nullable|string|max:200',
+            'meta_title'             => 'nullable|string|max:70',
+            'meta_description'       => 'nullable|string|max:170',
         ]);
 
         $this->settingService->updateGroup('authors_page', $data);

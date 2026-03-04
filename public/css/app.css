@@ -13854,43 +13854,6 @@ a.page-box-card:hover .page-box-card__link-hint {
     margin-bottom: 0;
 }
 
-/* -- Authors Page Content (Editor) -------------------------- */
-.authors-content {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: var(--color-white);
-}
-
-.authors-content h2,
-.authors-content h3,
-.authors-content h4 {
-    color: var(--color-gold);
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.authors-content p {
-    margin-bottom: 1rem;
-    color: var(--color-silver-light);
-}
-
-.authors-content blockquote {
-    border-left: 3px solid var(--color-gold);
-    padding-left: 1rem;
-    margin: 1.5rem 0;
-    font-style: italic;
-    color: var(--color-silver-light);
-}
-
-.authors-content a {
-    color: var(--color-gold);
-    text-decoration: underline;
-}
-
-.authors-content a:hover {
-    color: var(--color-gold-light);
-}
-
 /* -- Golden Pen Slider -------------------------------------- */
 .golden-slider {
     margin-bottom: 1rem;
@@ -13913,6 +13876,14 @@ a.page-box-card:hover .page-box-card__link-hint {
 
 .golden-slider__title i {
     color: var(--color-gold);
+}
+
+.golden-slider__desc {
+    font-size: 0.9rem;
+    color: var(--color-silver);
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+    max-width: 600px;
 }
 
 .golden-slider__nav {
@@ -13947,10 +13918,48 @@ a.page-box-card:hover .page-box-card__link-hint {
 
 .golden-slider__swiper .swiper-slide {
     height: auto;
+    width: 100% !important;
 }
 
 .golden-slider__swiper .member-card {
     height: 100%;
+}
+
+/* -- Golden Month Slide ------------------------------------- */
+.golden-month {
+    padding: 0.5rem 0;
+}
+
+.golden-month__label {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-gold-light);
+    text-align: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(200, 169, 110, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.golden-month__label i {
+    color: var(--color-gold);
+}
+
+/* -- Authors List Section Title ----------------------------- */
+.authors-list__title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(200, 169, 110, 0.15);
+}
+
+.authors-list__title i {
+    color: var(--color-gold);
 }
 
 @media (max-width: 575.98px) {
@@ -13974,6 +13983,18 @@ a.page-box-card:hover .page-box-card__link-hint {
     .golden-slider__nav-btn {
         width: 34px;
         height: 34px;
+        font-size: 0.8rem;
+    }
+
+    .golden-month__label {
+        font-size: 0.9rem;
+    }
+
+    .authors-list__title {
+        font-size: 1.15rem;
+    }
+
+    .golden-slider__desc {
         font-size: 0.8rem;
     }
 }

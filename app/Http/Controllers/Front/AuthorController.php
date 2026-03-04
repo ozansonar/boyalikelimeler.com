@@ -23,7 +23,7 @@ class AuthorController extends Controller
         $pageSettings = $this->settingService->getGroup('authors_page');
 
         $featuredAuthor = $this->authorService->getFeaturedAuthor($pageSettings['featured_author_id'] ?? null);
-        $goldenPenAuthors = $this->authorService->getGoldenPenAuthors();
+        $monthlyGoldenPen = $this->authorService->getMonthlyGoldenPenAuthors();
 
         return view('front.authors.index', [
             'authors'          => $this->authorService->paginate(12, $filters),
@@ -31,7 +31,7 @@ class AuthorController extends Controller
             'filters'          => $filters,
             'pageSettings'     => $pageSettings,
             'featuredAuthor'   => $featuredAuthor,
-            'goldenPenAuthors' => $goldenPenAuthors,
+            'monthlyGoldenPen' => $monthlyGoldenPen,
         ]);
     }
 }
