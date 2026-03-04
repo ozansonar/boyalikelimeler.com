@@ -202,9 +202,13 @@
                 <div id="boxesContainer">
                     @if($isEdit && $page->boxes->count())
                         @foreach($page->boxes as $i => $box)
-                            <div class="pb-box-item" data-index="{{ $i }}">
+                            <div class="pb-box-item" data-index="{{ $i }}" data-type="{{ $box->type }}">
                                 <div class="pb-box-header">
                                     <span class="pb-box-number">#<span class="pb-box-num-val">{{ $i + 1 }}</span></span>
+                                    <span class="pb-box-type-badge pb-box-type-badge--{{ $box->type }}">
+                                        <i class="bi {{ $box->isVideo() ? 'bi-youtube' : 'bi-image' }}"></i>
+                                        {{ $box->isVideo() ? 'Video' : 'Görsel' }}
+                                    </span>
                                     <span class="pb-box-title-preview">{{ $box->title }}</span>
                                     <div class="pb-box-actions">
                                         <button type="button" class="pb-box-toggle" title="Aç/Kapat"><i class="bi bi-chevron-up"></i></button>
@@ -215,6 +219,20 @@
                                     <input type="hidden" name="boxes[{{ $i }}][id]" value="{{ $box->id }}">
                                     <input type="hidden" name="boxes[{{ $i }}][existing_image]" value="{{ $box->image }}">
                                     <div class="row g-3">
+                                        <!-- Tip Seçici -->
+                                        <div class="col-12">
+                                            <label class="form-label">Kutu Tipi</label>
+                                            <div class="pb-box-type-selector">
+                                                <label class="pb-type-option {{ $box->isImage() ? 'active' : '' }}">
+                                                    <input type="radio" name="boxes[{{ $i }}][type]" value="image" class="pb-type-radio" {{ $box->isImage() ? 'checked' : '' }}>
+                                                    <i class="bi bi-image"></i> Görsel Kutu
+                                                </label>
+                                                <label class="pb-type-option {{ $box->isVideo() ? 'active' : '' }}">
+                                                    <input type="radio" name="boxes[{{ $i }}][type]" value="video" class="pb-type-radio" {{ $box->isVideo() ? 'checked' : '' }}>
+                                                    <i class="bi bi-youtube"></i> Video Kutu
+                                                </label>
+                                            </div>
+                                        </div>
                                         <div class="col-12">
                                             <label class="form-label">Kutu Başlığı <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control pb-box-title-input" name="boxes[{{ $i }}][title]" value="{{ $box->title }}" placeholder="Kutu başlığı" required>
@@ -255,7 +273,8 @@
                                                 <option value="12" {{ $box->col_mobile === 12 ? 'selected' : '' }}>12/12 — Tam</option>
                                             </select>
                                         </div>
-                                        <div class="col-12">
+                                        <!-- Görsel Alanı -->
+                                        <div class="col-12 pb-field-image" {!! $box->isVideo() ? 'style="display:none"' : '' !!}>
                                             <label class="form-label">Kutu Görseli</label>
                                             @if($box->image)
                                                 <div class="pb-box-img-preview mb-2">
@@ -265,6 +284,22 @@
                                             @endif
                                             <input type="file" class="form-control" name="box_images[{{ $i }}]" accept="image/png,image/jpeg,image/webp">
                                             <div class="form-text">PNG, JPG, WebP | Maks. 1 MB</div>
+                                        </div>
+                                        <!-- Video Alanı -->
+                                        <div class="col-12 pb-field-video" {!! $box->isImage() ? 'style="display:none"' : '' !!}>
+                                            <label class="form-label">YouTube URL <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-youtube"></i></span>
+                                                <input type="url" class="form-control pb-video-url-input" name="boxes[{{ $i }}][video_url]" value="{{ $box->video_url }}" placeholder="https://www.youtube.com/watch?v=...">
+                                            </div>
+                                            <div class="form-text">youtube.com/watch?v=, youtu.be/, youtube.com/shorts/ desteklenir</div>
+                                            @if($box->isVideo() && $box->youtubeId())
+                                                <div class="pb-video-preview mt-2">
+                                                    <div class="ratio ratio-16x9">
+                                                        <iframe src="https://www.youtube.com/embed/{{ $box->youtubeId() }}" allowfullscreen loading="lazy"></iframe>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">Kutu Açıklaması</label>
