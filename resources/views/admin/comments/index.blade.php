@@ -133,7 +133,14 @@
                                 </td>
                                 <td class="d-none d-md-table-cell">
                                     <span class="cl-category-badge tech">{{ $comment->contentTypeLabel() }}</span>
-                                    <span class="cl-content-meta d-block mt-1">{{ Str::limit($comment->contentTitle(), 30) }}</span>
+                                    @if($comment->commentable)
+                                        <a href="{{ $comment->contentType() === 'icerik' ? route('literary-works.show', $comment->commentable->slug) : route('blog.show', $comment->commentable->slug) }}"
+                                           target="_blank" class="cl-content-meta d-block mt-1 text-teal" title="İçeriği yeni sekmede aç">
+                                            {{ Str::limit($comment->contentTitle(), 30) }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                        </a>
+                                    @else
+                                        <span class="cl-content-meta d-block mt-1">{{ Str::limit($comment->contentTitle(), 30) }}</span>
+                                    @endif
                                 </td>
                                 <td class="d-none d-lg-table-cell">
                                     <div class="cmt-admin-stars">
@@ -154,16 +161,18 @@
                                 </td>
                                 <td>
                                     <div class="usr-actions">
+                                        <a class="usr-action-btn" title="Detay" href="{{ route('admin.comments.show', $comment) }}"><i class="bi bi-eye"></i></a>
+                                        <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.comments.edit', $comment) }}"><i class="bi bi-pencil"></i></a>
                                         @if(!$comment->is_approved)
-                                            <button class="usr-action-btn success" title="Onayla" onclick="approveComment({{ $comment->id }})">
+                                            <button class="usr-action-btn success" title="Onayla" onclick="openApproveModal({{ $comment->id }}, '{{ addslashes($comment->fullName()) }}')">
                                                 <i class="bi bi-check-lg"></i>
                                             </button>
                                         @else
-                                            <button class="usr-action-btn warning" title="Reddet" onclick="rejectComment({{ $comment->id }})">
+                                            <button class="usr-action-btn warning" title="Reddet" onclick="openRejectModal({{ $comment->id }}, '{{ addslashes($comment->fullName()) }}')">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
                                         @endif
-                                        <button class="usr-action-btn danger" title="Sil" onclick="deleteComment({{ $comment->id }}, '{{ addslashes($comment->fullName()) }}')">
+                                        <button class="usr-action-btn danger" title="Sil" onclick="openDeleteCommentModal({{ $comment->id }}, '{{ addslashes($comment->fullName()) }}')">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
@@ -176,7 +185,6 @@
                 </table>
             </div>
 
-            <!-- Pagination -->
             @if($comments->hasPages())
                 <div class="cl-pagination-wrapper">
                     <div class="cl-pagination-info">
@@ -204,7 +212,70 @@
         </div>
     </div>
 
-    <x-admin.delete-modal message="Bu yorumu silmek istediğinizden emin misiniz?" />
+    <!-- Approve Confirm Modal -->
+    <div class="modal fade" id="approveCommentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon success">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Yorumu Onayla</h5>
+                    <p class="cl-modal-body-text">
+                        <strong id="approveCommentName"></strong> adlı kişinin yorumunu onaylamak istediğinize emin misiniz?
+                    </p>
+                    <p class="cl-modal-body-text small text-muted">Onaylanan yorum ilgili içeriğin altında görünecek ve yazara bildirim gönderilecektir.</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="button" class="btn-teal" id="approveCommentBtn"><i class="bi bi-check-circle me-1"></i>Onayla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Confirm Modal -->
+    <div class="modal fade" id="rejectCommentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon danger">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Yorumu Reddet</h5>
+                    <p class="cl-modal-body-text">
+                        <strong id="rejectCommentName"></strong> adlı kişinin yorumunu reddetmek istediğinize emin misiniz?
+                    </p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="button" class="btn-teal btn-danger-gradient" id="rejectCommentBtn"><i class="bi bi-x-circle me-1"></i>Reddet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="status-modal-icon danger">
+                        <i class="bi bi-trash"></i>
+                    </div>
+                    <h5 class="cl-modal-heading">Yorumu Sil</h5>
+                    <p class="cl-modal-body-text">
+                        <strong id="deleteCommentName"></strong> adlı kişinin yorumunu silmek istediğinize emin misiniz?
+                    </p>
+                    <p class="cl-modal-warning"><i class="bi bi-exclamation-triangle me-1"></i>Bu işlem geri alınamaz.</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn-glass" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="button" class="btn-teal btn-danger-gradient" id="deleteCommentBtn"><i class="bi bi-trash me-1"></i>Sil</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 

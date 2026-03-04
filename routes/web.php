@@ -126,6 +126,9 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 
     // Comment Management
     Route::get('comments', [AdminCommentController::class, 'index'])->name('comments.index');
+    Route::get('comments/{comment}', [AdminCommentController::class, 'show'])->name('comments.show');
+    Route::get('comments/{comment}/edit', [AdminCommentController::class, 'edit'])->name('comments.edit');
+    Route::put('comments/{comment}', [AdminCommentController::class, 'update'])->name('comments.update');
     Route::patch('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
     Route::patch('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
     Route::delete('comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');

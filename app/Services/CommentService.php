@@ -55,6 +55,21 @@ final class CommentService
         ]);
     }
 
+    public function findById(int $id): ?Comment
+    {
+        return Comment::with(['commentable', 'approver'])->find($id);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function update(Comment $comment, array $data): Comment
+    {
+        $comment->update($data);
+
+        return $comment;
+    }
+
     public function destroy(Comment $comment): void
     {
         $comment->delete();
