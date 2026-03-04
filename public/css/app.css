@@ -7963,6 +7963,19 @@ p {
 .clist-card__thumb {
     position: relative;
     overflow: hidden;
+    aspect-ratio: 16 / 10;
+}
+
+.clist-card__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.clist-card__thumb-link:hover .clist-card__thumb-img {
+    transform: scale(1.05);
+    transition: transform var(--transition-slow);
 }
 
 .clist-card__thumb-placeholder {
@@ -13850,34 +13863,47 @@ a.page-box-card:hover .page-box-card__link-hint {
     background-color: var(--color-black-card);
     border: var(--border-gold);
     border-radius: 1rem;
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 2rem 2rem;
     text-align: center;
     position: relative;
     transition: transform var(--transition-base), box-shadow var(--transition-base);
+    overflow: visible;
 }
 
 .authors-featured:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-gold);
+    box-shadow: 0 8px 32px rgba(200, 169, 110, 0.18);
 }
 
-.authors-featured__badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #D4AF37, #C8A96E);
-    color: var(--color-black-deep);
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.3rem 1rem;
-    border-radius: 2rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 1.25rem;
+.authors-featured:hover .authors-featured__avatar {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
 }
 
 .authors-featured__avatar-wrap {
     position: relative;
     display: inline-block;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.authors-featured__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #D4AF37, #C8A96E);
+    color: var(--color-black-deep);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.25rem 0.85rem;
+    border-radius: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
 .authors-featured__avatar {
@@ -13891,7 +13917,7 @@ a.page-box-card:hover .page-box-card__link-hint {
     justify-content: center;
     overflow: hidden;
     position: relative;
-    transition: border-color var(--transition-base);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .authors-featured__avatar::after {
@@ -13917,8 +13943,8 @@ a.page-box-card:hover .page-box-card__link-hint {
 
 .authors-featured__golden {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 4px;
+    right: 4px;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -13934,18 +13960,17 @@ a.page-box-card:hover .page-box-card__link-hint {
 
 .authors-featured__name {
     font-family: var(--font-heading);
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--color-gold);
     margin-bottom: 0.5rem;
 }
 
 .authors-featured__line {
-    width: 50px;
+    width: 60px;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
     margin: 0 auto 0.75rem;
-    opacity: 0.6;
 }
 
 .authors-featured__stats {
@@ -14043,16 +14068,26 @@ a.page-box-card:hover .page-box-card__link-hint {
     border-radius: 12px;
     border: 1px solid rgba(200, 169, 110, 0.2);
     background: var(--color-black-card);
-    transition: all var(--transition-base);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
     cursor: pointer;
     height: 100%;
     min-height: 180px;
+    outline: none;
 }
 
 .golden-month-card:hover {
     border-color: var(--color-gold);
-    box-shadow: var(--shadow-gold);
+    box-shadow: 0 4px 24px rgba(200, 169, 110, 0.2);
     transform: translateY(-4px);
+}
+
+.golden-slider__swiper a:focus,
+.golden-slider__swiper a:focus-visible {
+    outline: none;
+}
+
+.golden-slider__swiper .swiper-slide {
+    overflow: visible;
 }
 
 .golden-month-card__icon {

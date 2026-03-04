@@ -35,10 +35,10 @@
                     <div class="col-lg-5 col-md-7 col-10" data-aos="fade-up">
                         <a href="{{ $featuredAuthor->profile_url }}" class="text-decoration-none">
                             <article class="authors-featured">
-                                <div class="authors-featured__badge">
-                                    <i class="fa-solid fa-crown me-1"></i> Öne Çıkan Yazar
-                                </div>
                                 <div class="authors-featured__avatar-wrap">
+                                    <div class="authors-featured__badge">
+                                        <i class="fa-solid fa-crown me-1"></i> Öne Çıkan Yazar
+                                    </div>
                                     <div class="authors-featured__avatar" data-initials="{{ mb_strtoupper(mb_substr($featuredAuthor->name, 0, 1)) . mb_strtoupper(mb_substr(explode(' ', $featuredAuthor->name)[1] ?? '', 0, 1)) }}">
                                         @if($featuredAuthor->avatar)
                                             <img src="{{ upload_url($featuredAuthor->avatar, 'md') }}"
