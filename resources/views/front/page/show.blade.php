@@ -57,7 +57,16 @@
                                     <div class="page-box-card">
                                 @endif
 
-                                    @if($box->image)
+                                    @if($box->isVideo() && $box->youtubeId())
+                                        <div class="page-box-card__video-wrap">
+                                            <div class="ratio ratio-16x9">
+                                                <iframe src="https://www.youtube.com/embed/{{ $box->youtubeId() }}"
+                                                        title="{{ $box->title }}"
+                                                        allowfullscreen
+                                                        loading="lazy"></iframe>
+                                            </div>
+                                        </div>
+                                    @elseif($box->isImage() && $box->image)
                                         <div class="page-box-card__img-wrap">
                                             <img src="{{ asset('uploads/' . $box->image) }}"
                                                  alt="{{ $box->title }}"
@@ -67,7 +76,7 @@
                                     @else
                                         <div class="page-box-card__img-wrap">
                                             <span class="page-box-card__icon-placeholder">
-                                                <i class="bi bi-bookmark-star"></i>
+                                                <i class="bi {{ $box->isVideo() ? 'bi-play-circle' : 'bi-bookmark-star' }}"></i>
                                             </span>
                                         </div>
                                     @endif

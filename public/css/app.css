@@ -13636,6 +13636,16 @@ a.page-box-card:hover .page-box-card__icon-placeholder {
     background: rgba(200, 169, 110, 0.1);
     transform: scale(1.08);
 }
+.page-box-card__video-wrap {
+    padding: 16px 16px 0;
+}
+.page-box-card__video-wrap .ratio {
+    border-radius: 8px;
+    overflow: hidden;
+}
+.page-box-card__video-wrap iframe {
+    border: 0;
+}
 .page-box-card__body {
     padding: 20px;
     flex: 1;

@@ -15,11 +15,13 @@ class PageBox extends Model
 
     protected $fillable = [
         'page_id',
+        'type',
         'title',
         'description',
         'link',
         'link_target',
         'image',
+        'video_url',
         'col_desktop',
         'col_tablet',
         'col_mobile',
@@ -39,6 +41,38 @@ class PageBox extends Model
     public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class);
+    }
+
+    public function isVideo(): bool
+    {
+        return $this->type === 'video';
+    }
+
+    public function isImage(): bool
+    {
+        return $this->type === 'image';
+    }
+
+    public function youtubeId(): ?string
+    {
+        if (! $this->video_url) {
+            return null;
+        }
+
+        $patterns = [
+            '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/',
+            '/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/',
+            '/youtu\.be\/([a-zA-Z0-9_-]{11})/',
+            '/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $this->video_url, $matches)) {
+                return $matches[1];
+            }
+        }
+
+        return null;
     }
 
     public function bootstrapColClass(): string
