@@ -90,6 +90,7 @@
     function createBoxHtml(index) {
         return '<div class="pb-box-item" data-index="' + index + '" data-type="image">' +
             '<div class="pb-box-header">' +
+                '<span class="pb-box-drag-handle" title="Sırayı değiştirmek için sürükle"><i class="bi bi-grip-vertical"></i></span>' +
                 '<span class="pb-box-number">#<span class="pb-box-num-val">' + (index + 1) + '</span></span>' +
                 '<span class="pb-box-type-badge pb-box-type-badge--image"><i class="bi bi-image"></i> Görsel</span>' +
                 '<span class="pb-box-title-preview">Yeni Kutu</span>' +
@@ -308,5 +309,156 @@
             }, 500);
         }
     });
+
+    /* ============================================================
+       DRAG & DROP SORTING
+       ============================================================ */
+    var dragItem = null;
+    var placeholder = null;
+    var dragOffsetY = 0;
+    var startY = 0;
+    var isDragging = false;
+
+    function createPlaceholder(height) {
+        var el = document.createElement('div');
+        el.className = 'pb-box-placeholder';
+        el.style.height = height + 'px';
+        return el;
+    }
+
+    function getMiddleY(el) {
+        var rect = el.getBoundingClientRect();
+        return rect.top + rect.height / 2;
+    }
+
+    /* Mouse events on drag handle */
+    container.addEventListener('mousedown', function (e) {
+        var handle = e.target.closest('.pb-box-drag-handle');
+        if (!handle) return;
+
+        e.preventDefault();
+        var item = handle.closest('.pb-box-item');
+        if (!item) return;
+
+        isDragging = true;
+        dragItem = item;
+        startY = e.clientY;
+
+        var rect = item.getBoundingClientRect();
+        dragOffsetY = e.clientY - rect.top;
+
+        placeholder = createPlaceholder(rect.height);
+
+        dragItem.classList.add('pb-box-dragging');
+        dragItem.style.width = rect.width + 'px';
+        dragItem.style.top = rect.top + 'px';
+        dragItem.style.left = rect.left + 'px';
+
+        item.parentNode.insertBefore(placeholder, item);
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+    function onMouseMove(e) {
+        if (!isDragging || !dragItem) return;
+
+        e.preventDefault();
+        dragItem.style.top = (e.clientY - dragOffsetY) + 'px';
+
+        var items = container.querySelectorAll('.pb-box-item:not(.pb-box-dragging)');
+        var inserted = false;
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i] === placeholder) continue;
+            if (e.clientY < getMiddleY(items[i])) {
+                container.insertBefore(placeholder, items[i]);
+                inserted = true;
+                break;
+            }
+        }
+
+        if (!inserted && placeholder.parentNode === container) {
+            container.appendChild(placeholder);
+        }
+    }
+
+    function onMouseUp(e) {
+        if (!isDragging || !dragItem) return;
+
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+
+        dragItem.classList.remove('pb-box-dragging');
+        dragItem.style.width = '';
+        dragItem.style.top = '';
+        dragItem.style.left = '';
+
+        if (placeholder && placeholder.parentNode) {
+            placeholder.parentNode.insertBefore(dragItem, placeholder);
+            placeholder.remove();
+        }
+
+        placeholder = null;
+        dragItem = null;
+        isDragging = false;
+
+        reindex();
+    }
+
+    /* ---- Touch support for mobile ---- */
+    container.addEventListener('touchstart', function (e) {
+        var handle = e.target.closest('.pb-box-drag-handle');
+        if (!handle) return;
+
+        var item = handle.closest('.pb-box-item');
+        if (!item) return;
+
+        var touch = e.touches[0];
+        isDragging = true;
+        dragItem = item;
+
+        var rect = item.getBoundingClientRect();
+        dragOffsetY = touch.clientY - rect.top;
+
+        placeholder = createPlaceholder(rect.height);
+
+        dragItem.classList.add('pb-box-dragging');
+        dragItem.style.width = rect.width + 'px';
+        dragItem.style.top = rect.top + 'px';
+        dragItem.style.left = rect.left + 'px';
+
+        item.parentNode.insertBefore(placeholder, item);
+    }, { passive: true });
+
+    container.addEventListener('touchmove', function (e) {
+        if (!isDragging || !dragItem) return;
+
+        e.preventDefault();
+        var touch = e.touches[0];
+
+        dragItem.style.top = (touch.clientY - dragOffsetY) + 'px';
+
+        var items = container.querySelectorAll('.pb-box-item:not(.pb-box-dragging)');
+        var inserted = false;
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i] === placeholder) continue;
+            if (touch.clientY < getMiddleY(items[i])) {
+                container.insertBefore(placeholder, items[i]);
+                inserted = true;
+                break;
+            }
+        }
+
+        if (!inserted && placeholder.parentNode === container) {
+            container.appendChild(placeholder);
+        }
+    }, { passive: false });
+
+    container.addEventListener('touchend', function () {
+        if (!isDragging || !dragItem) return;
+        onMouseUp();
+    }, { passive: true });
 
 })();
