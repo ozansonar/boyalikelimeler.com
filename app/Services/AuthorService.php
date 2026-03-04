@@ -61,6 +61,7 @@ final class AuthorService
                 $lastDay = $startMonth->copy()->endOfMonth()->toDateString();
 
                 $authors = User::query()
+                    ->select('users.*')
                     ->join('roles', 'users.role_id', '=', 'roles.id')
                     ->where('roles.slug', RoleSlug::Yazar->value)
                     ->whereNotNull('users.email_verified_at')
@@ -76,7 +77,6 @@ final class AuthorService
                     ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
                         $q->where('status', 'approved');
                     }])
-                    ->select('users.*')
                     ->orderBy('users.name')
                     ->get();
 
@@ -122,6 +122,7 @@ final class AuthorService
         $today = now()->toDateString();
 
         $query = User::query()
+            ->select('users.*')
             ->join('roles', 'users.role_id', '=', 'roles.id')
             ->where('roles.slug', RoleSlug::Yazar->value)
             ->whereNotNull('users.email_verified_at')
@@ -131,8 +132,7 @@ final class AuthorService
             }])
             ->withSum(['literaryWorks as total_views' => function ($q): void {
                 $q->where('status', 'approved');
-            }], 'view_count')
-            ->select('users.*');
+            }], 'view_count');
 
         // Search filter
         if (! empty($filters['search'])) {
