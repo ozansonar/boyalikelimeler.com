@@ -21,7 +21,10 @@ class UserStoreRequest extends FormRequest
             'email'           => ['required', 'email', 'max:255', 'unique:users,email'],
             'password'        => ['required', 'string', 'min:8', 'confirmed'],
             'role_id'         => ['required', 'exists:roles,id'],
-            'email_verified'  => ['nullable', 'boolean'],
+            'email_verified'       => ['nullable', 'boolean'],
+            'is_golden_pen'        => ['nullable', 'boolean'],
+            'golden_pen_starts_at' => ['nullable', 'required_if:is_golden_pen,1', 'date'],
+            'golden_pen_ends_at'   => ['nullable', 'required_if:is_golden_pen,1', 'date', 'after_or_equal:golden_pen_starts_at'],
         ];
     }
 
@@ -38,8 +41,13 @@ class UserStoreRequest extends FormRequest
             'password.required'   => 'Şifre zorunludur.',
             'password.min'        => 'Şifre en az 8 karakter olmalıdır.',
             'password.confirmed'  => 'Şifreler eşleşmiyor.',
-            'role_id.required'    => 'Rol seçimi zorunludur.',
-            'role_id.exists'      => 'Geçersiz rol.',
+            'role_id.required'                => 'Rol seçimi zorunludur.',
+            'role_id.exists'                  => 'Geçersiz rol.',
+            'golden_pen_starts_at.required_if' => 'Altın Kalem etkinleştirildiğinde başlangıç tarihi zorunludur.',
+            'golden_pen_starts_at.date'        => 'Geçerli bir başlangıç tarihi giriniz.',
+            'golden_pen_ends_at.required_if'   => 'Altın Kalem etkinleştirildiğinde bitiş tarihi zorunludur.',
+            'golden_pen_ends_at.date'          => 'Geçerli bir bitiş tarihi giriniz.',
+            'golden_pen_ends_at.after_or_equal' => 'Bitiş tarihi başlangıç tarihinden önce olamaz.',
         ];
     }
 }

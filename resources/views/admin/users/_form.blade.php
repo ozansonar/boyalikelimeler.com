@@ -18,6 +18,9 @@
         <a href="#section-role" class="stg-nav-item" onclick="scrollToSection('section-role', this)">
             <i class="bi bi-shield"></i> Rol & Yetki
         </a>
+        <a href="#section-golden-pen" class="stg-nav-item" onclick="scrollToSection('section-golden-pen', this)">
+            <i class="bi bi-pen"></i> Altın Kalem
+        </a>
     </div>
 
     <!-- Mobile Nav -->
@@ -26,6 +29,7 @@
             <option value="section-personal">Kişisel Bilgiler</option>
             <option value="section-account">Hesap Bilgileri</option>
             <option value="section-role">Rol & Yetki</option>
+            <option value="section-golden-pen">Altın Kalem</option>
         </select>
     </div>
 
@@ -202,6 +206,84 @@
                             @endforeach
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==================== SECTION 4: GOLDEN PEN ==================== -->
+        <div class="card-dark mb-4" id="section-golden-pen" data-aos="fade-up" data-aos-delay="50">
+            <div class="card-header-custom">
+                <div class="form-section-header mb-0">
+                    <div class="form-section-icon"><i class="bi bi-pen-fill"></i></div>
+                    <div>
+                        <h6 class="mb-0">Altın Kalem Unvanı</h6>
+                        <small class="text-muted">Yazara özel altın kalem unvanı verin</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body-custom">
+                <div class="stg-toggle-list">
+                    <div class="stg-toggle-item">
+                        <div class="stg-toggle-info">
+                            <span>Altın Kalem Unvanı Verilsin mi?</span>
+                            <small>Etkinleştirildiğinde yazar, belirlenen tarihler arasında altın kalem unvanına sahip olur.</small>
+                        </div>
+                        <label class="stg-switch">
+                            <input type="checkbox" name="is_golden_pen" value="1" id="goldenPenToggle"
+                                   {{ old('is_golden_pen', ($isEdit && $user->is_golden_pen) ? '1' : '0') == '1' ? 'checked' : '' }}>
+                            <span class="stg-switch-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2" id="goldenPenDates"
+                     {!! old('is_golden_pen', ($isEdit && $user->is_golden_pen) ? '1' : '0') != '1' ? 'style="display:none"' : '' !!}>
+                    <div class="col-md-6">
+                        <label class="stg-label">Başlangıç Tarihi <span class="text-neon-red">*</span></label>
+                        <div class="stg-input-group">
+                            <span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>
+                            <input type="date" class="stg-input @error('golden_pen_starts_at') is-invalid @enderror"
+                                   name="golden_pen_starts_at" id="goldenPenStartsAt"
+                                   value="{{ old('golden_pen_starts_at', ($isEdit && $user->golden_pen_starts_at) ? $user->golden_pen_starts_at->format('Y-m-d') : '') }}">
+                        </div>
+                        @error('golden_pen_starts_at')
+                            <small class="text-neon-red">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label class="stg-label">Bitiş Tarihi <span class="text-neon-red">*</span></label>
+                        <div class="stg-input-group">
+                            <span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>
+                            <input type="date" class="stg-input @error('golden_pen_ends_at') is-invalid @enderror"
+                                   name="golden_pen_ends_at" id="goldenPenEndsAt"
+                                   value="{{ old('golden_pen_ends_at', ($isEdit && $user->golden_pen_ends_at) ? $user->golden_pen_ends_at->format('Y-m-d') : '') }}">
+                        </div>
+                        @error('golden_pen_ends_at')
+                            <small class="text-neon-red">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="col-12">
+                        <div class="uf-info-box">
+                            <i class="bi bi-info-circle-fill text-neon-blue"></i>
+                            <span>Yazar, belirlenen başlangıç ve bitiş tarihleri arasında altın kalem unvanına sahip olacaktır.</span>
+                        </div>
+                    </div>
+                    @if($isEdit && $user->is_golden_pen)
+                        <div class="col-12">
+                            @if($user->hasActiveGoldenPen())
+                                <div class="uf-golden-pen-status uf-golden-pen-active">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Altın Kalem unvanı şu an <strong>aktif</strong>.</span>
+                                </div>
+                            @else
+                                <div class="uf-golden-pen-status uf-golden-pen-expired">
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+                                    <span>Altın Kalem unvanı <strong>tarih aralığı dışında</strong>.</span>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

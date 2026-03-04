@@ -44,6 +44,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'show_email',
         'show_last_seen',
         'allow_messages',
+        'is_golden_pen',
+        'golden_pen_starts_at',
+        'golden_pen_ends_at',
     ];
 
     protected $hidden = [
@@ -58,10 +61,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'password'          => 'hashed',
             'birthdate'         => 'date',
             'interests'         => 'array',
-            'is_public'         => 'boolean',
-            'show_email'        => 'boolean',
-            'show_last_seen'    => 'boolean',
-            'allow_messages'    => 'boolean',
+            'is_public'            => 'boolean',
+            'show_email'           => 'boolean',
+            'show_last_seen'       => 'boolean',
+            'allow_messages'       => 'boolean',
+            'is_golden_pen'        => 'boolean',
+            'golden_pen_starts_at' => 'date',
+            'golden_pen_ends_at'   => 'date',
         ];
     }
 
@@ -103,6 +109,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isYazar(): bool
     {
         return $this->hasRole(RoleSlug::Yazar);
+    }
+
+    public function hasActiveGoldenPen(): bool
+    {
+        if (! $this->is_golden_pen) {
+            return false;
+        }
+
+        $today = now()->toDateString();
+
+        return $this->golden_pen_starts_at?->toDateString() <= $today
+            && $this->golden_pen_ends_at?->toDateString() >= $today;
     }
 
     public function getAvatarUrlAttribute(): ?string
