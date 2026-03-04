@@ -100,6 +100,11 @@
                                                 @if($user->isSuperAdmin())
                                                     <i class="bi bi-patch-check-fill text-teal-xs"></i>
                                                 @endif
+                                                @if($user->hasActiveGoldenPen())
+                                                    <span class="usr-golden-pen-badge" title="Altın Kalem — {{ $user->golden_pen_starts_at->format('d.m.Y') }} / {{ $user->golden_pen_ends_at->format('d.m.Y') }}">
+                                                        <i class="bi bi-pen-fill"></i>
+                                                    </span>
+                                                @endif
                                             </span>
                                             <span class="usr-user-email">{{ $user->email }}</span>
                                         </div>
