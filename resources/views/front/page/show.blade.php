@@ -45,6 +45,49 @@
 
                 </div>
             </div>
+
+            @if($page->boxes->count())
+                <div class="page-boxes-section mt-5">
+                    <div class="row g-4">
+                        @foreach($page->boxes as $box)
+                            <div class="{{ $box->bootstrapColClass() }}">
+                                @if($box->link)
+                                    <a href="{{ $box->link }}" target="{{ $box->link_target }}" class="page-box-card" rel="{{ $box->link_target === '_blank' ? 'noopener noreferrer' : '' }}">
+                                @else
+                                    <div class="page-box-card">
+                                @endif
+
+                                    @if($box->image)
+                                        <div class="page-box-card__img-wrap">
+                                            <img src="{{ asset('uploads/' . $box->image) }}"
+                                                 alt="{{ $box->title }}"
+                                                 class="page-box-card__img img-fluid"
+                                                 loading="lazy">
+                                        </div>
+                                    @endif
+                                    <div class="page-box-card__body">
+                                        <h3 class="page-box-card__title">{{ $box->title }}</h3>
+                                        @if($box->description)
+                                            <p class="page-box-card__desc">{{ $box->description }}</p>
+                                        @endif
+                                        @if($box->link)
+                                            <span class="page-box-card__link-hint">
+                                                <i class="bi bi-arrow-right"></i>
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                @if($box->link)
+                                    </a>
+                                @else
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
         </div>
     </section>
 

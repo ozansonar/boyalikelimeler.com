@@ -45,4 +45,5 @@
 @push('scripts')
 <script src="{{ asset('assets/admin/js/content-add.js') }}"></script>
 <script src="{{ asset('assets/admin/js/pages.js') }}"></script>
+<script src="{{ asset('assets/admin/js/page-boxes.js') }}"></script>
 @endpush

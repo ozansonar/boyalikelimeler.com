@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Page;
+use App\Models\PageBox;
 use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
@@ -56,9 +57,9 @@ final class PageService
         return $query->orderBy('sort_order')->orderByDesc('created_at')->paginate($perPage)->withQueryString();
     }
 
-    public function create(array $data, ?UploadedFile $coverImage = null): Page
+    public function create(array $data, ?UploadedFile $coverImage = null, array $boxes = [], array $boxImages = []): Page
     {
-        return DB::transaction(function () use ($data, $coverImage): Page {
+        return DB::transaction(function () use ($data, $coverImage, $boxes, $boxImages): Page {
             $data['slug'] = $this->generateUniqueSlug($data['title']);
             $data['user_id'] = auth()->id();
 
@@ -68,15 +69,17 @@ final class PageService
 
             $page = Page::create($data);
 
+            $this->syncBoxes($page, $boxes, $boxImages);
+
             $this->clearCache();
 
             return $page;
         });
     }
 
-    public function update(Page $page, array $data, ?UploadedFile $coverImage = null): Page
+    public function update(Page $page, array $data, ?UploadedFile $coverImage = null, array $boxes = [], array $boxImages = []): Page
     {
-        return DB::transaction(function () use ($page, $data, $coverImage): Page {
+        return DB::transaction(function () use ($page, $data, $coverImage, $boxes, $boxImages): Page {
             if ($page->title !== $data['title']) {
                 $data['slug'] = $this->generateUniqueSlug($data['title'], $page->id);
             }
@@ -86,6 +89,8 @@ final class PageService
             }
 
             $page->update($data);
+
+            $this->syncBoxes($page, $boxes, $boxImages);
 
             $this->clearCache();
 
@@ -104,9 +109,63 @@ final class PageService
 
     public function findActiveBySlug(string $slug): ?Page
     {
-        return Page::where('slug', $slug)
+        return Page::with('boxes')
+            ->where('slug', $slug)
             ->where('is_active', true)
             ->first();
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $boxes
+     * @param array<int, UploadedFile|null>     $boxImages
+     */
+    private function syncBoxes(Page $page, array $boxes, array $boxImages): void
+    {
+        $incomingIds = [];
+
+        foreach ($boxes as $index => $boxData) {
+            $existingId = ! empty($boxData['id']) ? (int) $boxData['id'] : null;
+
+            $imageFile = $boxImages[$index] ?? null;
+            $imagePath = $boxData['existing_image'] ?? null;
+
+            if ($imageFile instanceof UploadedFile) {
+                if ($existingId && $imagePath) {
+                    $imagePath = $this->uploadService->replaceImage($imageFile, 'page-boxes', $imagePath, $boxData['title'] ?? 'box');
+                } else {
+                    $imagePath = $this->uploadService->uploadImage($imageFile, 'page-boxes', $boxData['title'] ?? 'box');
+                }
+            }
+
+            $attributes = [
+                'title'       => $boxData['title'],
+                'description' => $boxData['description'] ?? null,
+                'link'        => $boxData['link'] ?? null,
+                'link_target' => $boxData['link_target'] ?? '_blank',
+                'image'       => $imagePath,
+                'col_desktop' => (int) ($boxData['col_desktop'] ?? 4),
+                'col_tablet'  => (int) ($boxData['col_tablet'] ?? 6),
+                'col_mobile'  => (int) ($boxData['col_mobile'] ?? 12),
+                'sort_order'  => $index,
+            ];
+
+            if ($existingId) {
+                $box = $page->boxes()->find($existingId);
+                if ($box) {
+                    $box->update($attributes);
+                    $incomingIds[] = $box->id;
+                }
+            } else {
+                $newBox = $page->boxes()->create($attributes);
+                $incomingIds[] = $newBox->id;
+            }
+        }
+
+        // Delete removed boxes
+        $page->boxes()->whereNotIn('id', $incomingIds)->each(function (PageBox $box): void {
+            $this->uploadService->deleteImage($box->image);
+            $box->delete();
+        });
     }
 
     private function clearCache(): void
