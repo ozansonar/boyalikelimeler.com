@@ -72,52 +72,6 @@
     @endif
 
     <!-- =======================================================
-         STATS
-    ======================================================= -->
-    <section class="section pt-0">
-        <div class="container">
-            <div class="row g-3 mb-4">
-                <div class="col-6 col-md-3">
-                    <div class="author-stat-card" data-aos="fade-up" data-aos-delay="0">
-                        <div class="author-stat-card__icon">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                        <div class="author-stat-card__value">{{ number_format($stats['author_count']) }}</div>
-                        <div class="author-stat-card__label">Yazar</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="author-stat-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="author-stat-card__icon author-stat-card__icon--gold">
-                            <i class="fa-solid fa-pen-nib"></i>
-                        </div>
-                        <div class="author-stat-card__value">{{ number_format($stats['golden_pen_count']) }}</div>
-                        <div class="author-stat-card__label">Altın Kalem</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="author-stat-card" data-aos="fade-up" data-aos-delay="200">
-                        <div class="author-stat-card__icon">
-                            <i class="fa-solid fa-book-open"></i>
-                        </div>
-                        <div class="author-stat-card__value">{{ number_format($stats['total_works']) }}</div>
-                        <div class="author-stat-card__label">Eser</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="author-stat-card" data-aos="fade-up" data-aos-delay="300">
-                        <div class="author-stat-card__icon">
-                            <i class="fa-solid fa-eye"></i>
-                        </div>
-                        <div class="author-stat-card__value">{{ number_format($stats['total_views']) }}</div>
-                        <div class="author-stat-card__label">Okunma</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- =======================================================
          GOLDEN PEN AUTHORS — MONTHLY SWIPER SLIDER
     ======================================================= -->
     @if(!empty($monthlyGoldenPen))
