@@ -25,9 +25,10 @@ class UserUpdateRequest extends FormRequest
             'password'        => ['nullable', 'string', 'min:8', 'confirmed'],
             'role_id'         => ['required', 'exists:roles,id'],
             'email_verified'       => ['nullable', 'boolean'],
-            'is_golden_pen'        => ['nullable', 'boolean'],
-            'golden_pen_starts_at' => ['nullable', 'required_if:is_golden_pen,1', 'date'],
-            'golden_pen_ends_at'   => ['nullable', 'required_if:is_golden_pen,1', 'date', 'after_or_equal:golden_pen_starts_at'],
+            'golden_pen_periods'              => ['nullable', 'array'],
+            'golden_pen_periods.*.starts_at'  => ['required', 'date'],
+            'golden_pen_periods.*.ends_at'    => ['required', 'date', 'after_or_equal:golden_pen_periods.*.starts_at'],
+            'golden_pen_periods.*.note'       => ['nullable', 'string', 'max:500'],
         ];
     }
 
@@ -43,13 +44,13 @@ class UserUpdateRequest extends FormRequest
             'email.unique'        => 'Bu e-posta adresi zaten kayıtlı.',
             'password.min'        => 'Şifre en az 8 karakter olmalıdır.',
             'password.confirmed'  => 'Şifreler eşleşmiyor.',
-            'role_id.required'                => 'Rol seçimi zorunludur.',
-            'role_id.exists'                  => 'Geçersiz rol.',
-            'golden_pen_starts_at.required_if' => 'Altın Kalem etkinleştirildiğinde başlangıç tarihi zorunludur.',
-            'golden_pen_starts_at.date'        => 'Geçerli bir başlangıç tarihi giriniz.',
-            'golden_pen_ends_at.required_if'   => 'Altın Kalem etkinleştirildiğinde bitiş tarihi zorunludur.',
-            'golden_pen_ends_at.date'          => 'Geçerli bir bitiş tarihi giriniz.',
-            'golden_pen_ends_at.after_or_equal' => 'Bitiş tarihi başlangıç tarihinden önce olamaz.',
+            'role_id.required'                         => 'Rol seçimi zorunludur.',
+            'role_id.exists'                           => 'Geçersiz rol.',
+            'golden_pen_periods.*.starts_at.required'  => 'Dönem başlangıç tarihi zorunludur.',
+            'golden_pen_periods.*.starts_at.date'      => 'Geçerli bir başlangıç tarihi giriniz.',
+            'golden_pen_periods.*.ends_at.required'    => 'Dönem bitiş tarihi zorunludur.',
+            'golden_pen_periods.*.ends_at.date'        => 'Geçerli bir bitiş tarihi giriniz.',
+            'golden_pen_periods.*.ends_at.after_or_equal' => 'Bitiş tarihi başlangıç tarihinden önce olamaz.',
         ];
     }
 }

@@ -30,17 +30,61 @@ function toggleGoldenPenSection(isYazar) {
     var section = document.getElementById('section-golden-pen');
     var navItem = document.getElementById('goldenPenNavItem');
     var mobileOption = document.getElementById('goldenPenMobileOption');
-    var toggle = document.getElementById('goldenPenToggle');
 
     if (section) section.style.display = isYazar ? '' : 'none';
     if (navItem) navItem.style.display = isYazar ? '' : 'none';
     if (mobileOption) mobileOption.style.display = isYazar ? '' : 'none';
+}
 
-    if (!isYazar && toggle && toggle.checked) {
-        toggle.checked = false;
-        var datesContainer = document.getElementById('goldenPenDates');
-        if (datesContainer) datesContainer.style.display = 'none';
-    }
+/* -- Golden Pen Periods Management -- */
+var goldenPenPeriodIndex = 0;
+
+function initGoldenPenPeriodIndex() {
+    var rows = document.querySelectorAll('.uf-period-row');
+    goldenPenPeriodIndex = rows.length;
+}
+
+function addGoldenPenPeriod() {
+    var container = document.getElementById('goldenPenPeriodsContainer');
+    if (!container) return;
+
+    var row = document.createElement('div');
+    row.className = 'uf-period-row';
+    row.setAttribute('data-period-index', goldenPenPeriodIndex);
+    row.innerHTML =
+        '<div class="row g-3 align-items-end">' +
+            '<div class="col-md-4">' +
+                '<label class="stg-label">Başlangıç <span class="text-neon-red">*</span></label>' +
+                '<div class="stg-input-group">' +
+                    '<span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>' +
+                    '<input type="date" class="stg-input" name="golden_pen_periods[' + goldenPenPeriodIndex + '][starts_at]" value="">' +
+                '</div>' +
+            '</div>' +
+            '<div class="col-md-4">' +
+                '<label class="stg-label">Bitiş <span class="text-neon-red">*</span></label>' +
+                '<div class="stg-input-group">' +
+                    '<span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>' +
+                    '<input type="date" class="stg-input" name="golden_pen_periods[' + goldenPenPeriodIndex + '][ends_at]" value="">' +
+                '</div>' +
+            '</div>' +
+            '<div class="col-md-3">' +
+                '<label class="stg-label">Not</label>' +
+                '<input type="text" class="stg-input" name="golden_pen_periods[' + goldenPenPeriodIndex + '][note]" value="" placeholder="Opsiyonel not...">' +
+            '</div>' +
+            '<div class="col-md-1 d-flex align-items-end">' +
+                '<button type="button" class="btn-glass btn-sm text-neon-red" onclick="removeGoldenPenPeriod(this)" title="Dönemi sil">' +
+                    '<i class="bi bi-trash"></i>' +
+                '</button>' +
+            '</div>' +
+        '</div>';
+
+    container.appendChild(row);
+    goldenPenPeriodIndex++;
+}
+
+function removeGoldenPenPeriod(btn) {
+    var row = btn.closest('.uf-period-row');
+    if (row) row.remove();
 }
 
 /* -- Role Card Click -- */
@@ -76,41 +120,12 @@ function initRoleCards() {
     }
 }
 
-/* -- Golden Pen Toggle -- */
-function initGoldenPen() {
-    var toggle = document.getElementById('goldenPenToggle');
-    var datesContainer = document.getElementById('goldenPenDates');
-
-    if (!toggle || !datesContainer) return;
-
-    toggle.addEventListener('change', function () {
-        datesContainer.style.display = this.checked ? '' : 'none';
-    });
-
-    var startInput = document.getElementById('goldenPenStartsAt');
-    var endInput = document.getElementById('goldenPenEndsAt');
-
-    if (startInput && endInput) {
-        startInput.addEventListener('change', function () {
-            if (this.value && (!endInput.value || endInput.value < this.value)) {
-                endInput.min = this.value;
-            }
-        });
-
-        endInput.addEventListener('change', function () {
-            if (this.value && startInput.value && this.value < startInput.value) {
-                this.value = startInput.value;
-            }
-        });
-    }
-}
-
 /* -- Init -- */
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
     initRoleCards();
-    initGoldenPen();
+    initGoldenPenPeriodIndex();
 
     /* Password strength */
     var passwordInput = document.getElementById('password');

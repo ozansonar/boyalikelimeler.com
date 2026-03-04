@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,9 +45,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'show_email',
         'show_last_seen',
         'allow_messages',
-        'is_golden_pen',
-        'golden_pen_starts_at',
-        'golden_pen_ends_at',
     ];
 
     protected $hidden = [
@@ -65,9 +63,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'show_email'           => 'boolean',
             'show_last_seen'       => 'boolean',
             'allow_messages'       => 'boolean',
-            'is_golden_pen'        => 'boolean',
-            'golden_pen_starts_at' => 'date',
-            'golden_pen_ends_at'   => 'date',
         ];
     }
 
@@ -89,6 +84,21 @@ class User extends Authenticatable implements MustVerifyEmail
     public function editorImages(): HasMany
     {
         return $this->hasMany(EditorImage::class);
+    }
+
+    public function goldenPenPeriods(): HasMany
+    {
+        return $this->hasMany(GoldenPenPeriod::class);
+    }
+
+    public function activeGoldenPenPeriod(): HasOne
+    {
+        $today = now()->toDateString();
+
+        return $this->hasOne(GoldenPenPeriod::class)
+            ->where('starts_at', '<=', $today)
+            ->where('ends_at', '>=', $today)
+            ->latest('ends_at');
     }
 
     public function hasRole(RoleSlug $role): bool
@@ -113,14 +123,23 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasActiveGoldenPen(): bool
     {
-        if (! $this->is_golden_pen) {
-            return false;
+        if ($this->relationLoaded('activeGoldenPenPeriod')) {
+            return $this->activeGoldenPenPeriod !== null;
         }
 
-        $today = now()->toDateString();
+        if ($this->relationLoaded('goldenPenPeriods')) {
+            $today = now()->toDateString();
 
-        return $this->golden_pen_starts_at?->toDateString() <= $today
-            && $this->golden_pen_ends_at?->toDateString() >= $today;
+            return $this->goldenPenPeriods->contains(function (GoldenPenPeriod $period) use ($today): bool {
+                return $period->starts_at?->toDateString() <= $today
+                    && $period->ends_at?->toDateString() >= $today;
+            });
+        }
+
+        return $this->goldenPenPeriods()
+            ->where('starts_at', '<=', now())
+            ->where('ends_at', '>=', now())
+            ->exists();
     }
 
     public function getAvatarUrlAttribute(): ?string

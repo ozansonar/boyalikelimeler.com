@@ -18,6 +18,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\EditorImageController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
+use App\Http\Controllers\Front\AuthorController;
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\CommentController;
 use App\Http\Controllers\Front\ContactController;
@@ -172,6 +173,9 @@ Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.sto
 // Literary Works (Frontend — İçerikler)
 Route::get('/icerikler', [FrontLiteraryWorkController::class, 'index'])->name('literary-works.index');
 Route::get('/icerik/{slug}', [FrontLiteraryWorkController::class, 'show'])->name('literary-works.show');
+
+// Authors (Frontend — Yazarlar)
+Route::get('/yazarlar', [AuthorController::class, 'index'])->name('authors.index');
 
 // Static Pages (catch-all — MUST be LAST route)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')->where('slug', '[a-z0-9\-]+');
