@@ -24041,6 +24041,45 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   border-radius: 6px;
   white-space: nowrap;
 }
+/* Drag handle */
+.pb-box-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  cursor: grab;
+  color: var(--text-muted);
+  font-size: 16px;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pb-box-drag-handle:hover {
+  opacity: 1;
+  color: var(--teal-primary);
+}
+.pb-box-drag-handle:active {
+  cursor: grabbing;
+}
+/* Dragging state */
+.pb-box-dragging {
+  position: fixed;
+  z-index: 9999;
+  opacity: 0.9;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  transition: none;
+}
+/* Drop placeholder */
+.pb-box-placeholder {
+  border: 2px dashed var(--teal-primary);
+  border-radius: 10px;
+  background: rgba(20, 184, 166, 0.06);
+  margin-bottom: 8px;
+  transition: height 0.2s ease;
+}
 .pb-box-title-preview {
   flex: 1;
   font-size: 13px;

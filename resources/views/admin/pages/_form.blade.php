@@ -204,6 +204,7 @@
                         @foreach($page->boxes as $i => $box)
                             <div class="pb-box-item" data-index="{{ $i }}" data-type="{{ $box->type }}">
                                 <div class="pb-box-header">
+                                    <span class="pb-box-drag-handle" title="Sırayı değiştirmek için sürükle"><i class="bi bi-grip-vertical"></i></span>
                                     <span class="pb-box-number">#<span class="pb-box-num-val">{{ $i + 1 }}</span></span>
                                     <span class="pb-box-type-badge pb-box-type-badge--{{ $box->type }}">
                                         <i class="bi {{ $box->isVideo() ? 'bi-youtube' : 'bi-image' }}"></i>
