@@ -103,7 +103,7 @@
             </div>
             <div class="card-body-custom">
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <label class="stg-label">Şifre @unless($isEdit)<span class="text-neon-red">*</span>@endunless</label>
                         <div class="stg-input-group">
                             <span class="stg-input-prefix"><i class="bi bi-lock"></i></span>
@@ -127,7 +127,7 @@
                             <small class="text-neon-red">{{ $message }}</small>
                         @enderror
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <label class="stg-label">Şifre Tekrar @unless($isEdit)<span class="text-neon-red">*</span>@endunless</label>
                         <div class="stg-input-group">
                             <span class="stg-input-prefix"><i class="bi bi-lock-fill"></i></span>
@@ -147,7 +147,7 @@
                             </div>
                         </div>
                     @endif
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <label class="stg-label">E-posta Doğrulaması</label>
                         <select class="stg-select" name="email_verified">
                             <option value="0" {{ old('email_verified', ($isEdit && $user->hasVerifiedEmail()) ? '1' : '0') === '0' ? 'selected' : '' }}>Doğrulanmamış</option>
@@ -250,7 +250,7 @@
                     @forelse($periods as $index => $period)
                         <div class="uf-period-row" data-period-index="{{ $index }}">
                             <div class="row g-3 align-items-end">
-                                <div class="col-md-4">
+                                <div class="col-sm-6">
                                     <label class="stg-label">Başlangıç <span class="text-neon-red">*</span></label>
                                     <div class="stg-input-group">
                                         <span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>
@@ -259,7 +259,7 @@
                                                value="{{ $period['starts_at'] ?? '' }}">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-sm-6">
                                     <label class="stg-label">Bitiş <span class="text-neon-red">*</span></label>
                                     <div class="stg-input-group">
                                         <span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>
@@ -268,14 +268,14 @@
                                                value="{{ $period['ends_at'] ?? '' }}">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col">
                                     <label class="stg-label">Not</label>
                                     <input type="text" class="stg-input"
                                            name="golden_pen_periods[{{ $index }}][note]"
                                            value="{{ $period['note'] ?? '' }}"
                                            placeholder="Opsiyonel not...">
                                 </div>
-                                <div class="col-md-1 d-flex align-items-end">
+                                <div class="col-auto">
                                     <button type="button" class="btn-glass btn-sm text-neon-red" onclick="removeGoldenPenPeriod(this)" title="Dönemi sil">
                                         <i class="bi bi-trash"></i>
                                     </button>

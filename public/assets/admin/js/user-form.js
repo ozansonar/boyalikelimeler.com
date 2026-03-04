@@ -53,25 +53,25 @@ function addGoldenPenPeriod() {
     row.setAttribute('data-period-index', goldenPenPeriodIndex);
     row.innerHTML =
         '<div class="row g-3 align-items-end">' +
-            '<div class="col-md-4">' +
+            '<div class="col-sm-6">' +
                 '<label class="stg-label">Başlangıç <span class="text-neon-red">*</span></label>' +
                 '<div class="stg-input-group">' +
                     '<span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>' +
                     '<input type="date" class="stg-input" name="golden_pen_periods[' + goldenPenPeriodIndex + '][starts_at]" value="">' +
                 '</div>' +
             '</div>' +
-            '<div class="col-md-4">' +
+            '<div class="col-sm-6">' +
                 '<label class="stg-label">Bitiş <span class="text-neon-red">*</span></label>' +
                 '<div class="stg-input-group">' +
                     '<span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>' +
                     '<input type="date" class="stg-input" name="golden_pen_periods[' + goldenPenPeriodIndex + '][ends_at]" value="">' +
                 '</div>' +
             '</div>' +
-            '<div class="col-md-3">' +
+            '<div class="col">' +
                 '<label class="stg-label">Not</label>' +
                 '<input type="text" class="stg-input" name="golden_pen_periods[' + goldenPenPeriodIndex + '][note]" value="" placeholder="Opsiyonel not...">' +
             '</div>' +
-            '<div class="col-md-1 d-flex align-items-end">' +
+            '<div class="col-auto">' +
                 '<button type="button" class="btn-glass btn-sm text-neon-red" onclick="removeGoldenPenPeriod(this)" title="Dönemi sil">' +
                     '<i class="bi bi-trash"></i>' +
                 '</button>' +
