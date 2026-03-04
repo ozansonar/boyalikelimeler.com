@@ -8293,6 +8293,74 @@ p {
     padding: 0.2rem 0.45rem;
 }
 
+/* -- Empty State --------------------------------------------- */
+
+.clist-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    border-radius: 1rem;
+    border: 1px dashed rgba(200, 169, 110, 0.2);
+    background: var(--color-black-card);
+}
+
+.clist-empty__icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(200, 169, 110, 0.1), rgba(200, 169, 110, 0.04));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--color-gold);
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+}
+
+.clist-empty__title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-gold-light);
+    margin-bottom: 0.75rem;
+}
+
+.clist-empty__desc {
+    font-size: 0.9rem;
+    color: var(--color-silver);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 400px;
+}
+
+.clist-empty__desc strong {
+    color: var(--color-gold-light);
+}
+
+.clist-empty__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-black-deep);
+    background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+    text-decoration: none;
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.clist-empty__btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    color: var(--color-black-deep);
+}
+
 /* -- Pagination ---------------------------------------------- */
 
 .clist-pagination {

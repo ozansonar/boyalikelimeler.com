@@ -130,8 +130,22 @@
                     </article>
                 @empty
                     <div class="clist-empty">
-                        <i class="fa-solid fa-feather-pointed"></i>
-                        <p>Henüz içerik bulunmamaktadır.</p>
+                        <div class="clist-empty__icon">
+                            <i class="fa-solid fa-feather-pointed"></i>
+                        </div>
+                        <h3 class="clist-empty__title">İçerik Bulunamadı</h3>
+                        <p class="clist-empty__desc">
+                            @if(request('kategori'))
+                                <strong>{{ request('kategori') }}</strong> kategorisinde henüz içerik bulunmamaktadır.
+                            @elseif(request('q'))
+                                <strong>"{{ request('q') }}"</strong> araması için sonuç bulunamadı.
+                            @else
+                                Henüz içerik bulunmamaktadır.
+                            @endif
+                        </p>
+                        <a href="{{ route('literary-works.index') }}" class="clist-empty__btn">
+                            <i class="fa-solid fa-arrows-rotate me-2"></i>Tüm İçerikleri Gör
+                        </a>
                     </div>
                 @endforelse
 
