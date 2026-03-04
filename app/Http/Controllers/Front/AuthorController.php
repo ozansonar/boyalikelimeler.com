@@ -27,7 +27,6 @@ class AuthorController extends Controller
 
         return view('front.authors.index', [
             'authors'          => $this->authorService->paginate(12, $filters),
-            'stats'            => $this->authorService->getStats(),
             'filters'          => $filters,
             'pageSettings'     => $pageSettings,
             'featuredAuthor'   => $featuredAuthor,
