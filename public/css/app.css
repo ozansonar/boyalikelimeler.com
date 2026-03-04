@@ -14129,8 +14129,28 @@ a.page-box-card:hover .page-box-card__link-hint {
     cursor: not-allowed;
 }
 
+.golden-slider__swiper {
+    overflow: visible;
+    padding: 8px 0;
+}
+
+.golden-slider__swiper .swiper-wrapper {
+    overflow: visible;
+}
+
 .golden-slider__swiper .swiper-slide {
     height: auto;
+    overflow: visible;
+}
+
+.golden-slider__swiper a {
+    display: block;
+    height: 100%;
+}
+
+.golden-slider__swiper a:focus,
+.golden-slider__swiper a:focus-visible {
+    outline: none;
 }
 
 /* -- Golden Month Card -------------------------------------- */
@@ -14155,15 +14175,6 @@ a.page-box-card:hover .page-box-card__link-hint {
     border-color: var(--color-gold);
     box-shadow: 0 4px 24px rgba(200, 169, 110, 0.2);
     transform: translateY(-4px);
-}
-
-.golden-slider__swiper a:focus,
-.golden-slider__swiper a:focus-visible {
-    outline: none;
-}
-
-.golden-slider__swiper .swiper-slide {
-    overflow: visible;
 }
 
 .golden-month-card__icon {
