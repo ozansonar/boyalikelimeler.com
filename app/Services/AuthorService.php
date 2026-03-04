@@ -8,6 +8,7 @@ use App\Enums\RoleSlug;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -52,7 +53,7 @@ final class AuthorService
     public function getGoldenPenMonths(): array
     {
         return Cache::remember('front.authors.golden_pen_months', 300, function (): array {
-            $startMonth = now()->createFromDate(2026, 1, 1)->startOfMonth();
+            $startMonth = Carbon::create(2026, 1, 1)->startOfDay();
             $currentMonth = now()->startOfMonth();
             $months = [];
 
@@ -80,9 +81,9 @@ final class AuthorService
         }
 
         return Cache::remember("front.authors.golden_pen.{$yearMonth}", 300, function () use ($yearMonth): ?array {
-            $date = now()->createFromFormat('Y-m', $yearMonth)?->startOfMonth();
+            $date = Carbon::createFromFormat('Y-m', $yearMonth)?->startOfDay();
 
-            if ($date === null || $date->gt(now()->startOfMonth()) || $date->lt(now()->createFromDate(2026, 1, 1))) {
+            if ($date === null || $date->gt(now()->startOfMonth()) || $date->lt(Carbon::create(2026, 1, 1)->startOfDay())) {
                 return null;
             }
 
