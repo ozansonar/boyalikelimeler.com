@@ -13618,6 +13618,24 @@ a.page-box-card:hover .page-box-card__img {
     transform: scale(1.08);
     border-color: var(--color-gold);
 }
+.page-box-card__icon-placeholder {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 3px solid rgba(200, 169, 110, 0.15);
+    background: rgba(200, 169, 110, 0.06);
+    font-size: 2rem;
+    color: var(--color-gold);
+    transition: all var(--transition-base);
+}
+a.page-box-card:hover .page-box-card__icon-placeholder {
+    border-color: rgba(200, 169, 110, 0.4);
+    background: rgba(200, 169, 110, 0.1);
+    transform: scale(1.08);
+}
 .page-box-card__body {
     padding: 20px;
     flex: 1;
@@ -13653,10 +13671,10 @@ a.page-box-card:hover .page-box-card__img {
     color: var(--color-gold);
     font-size: 14px;
     transition: all var(--transition-base);
-    align-self: flex-start;
+    align-self: center;
 }
 a.page-box-card:hover .page-box-card__link-hint {
     background: var(--color-gold);
     color: var(--color-black-sweet);
-    transform: translateX(4px);
+    transform: scale(1.15);
 }
