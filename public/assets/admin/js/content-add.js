@@ -158,9 +158,11 @@
 
 
   // ==================== DROPZONE.JS (İçerik Dosyaları) ====================
-  Dropzone.autoDiscover = false;
+  var contentDropzone = null;
+  if (typeof Dropzone !== 'undefined' && document.getElementById('contentDropzone')) {
+    Dropzone.autoDiscover = false;
 
-  var contentDropzone = new Dropzone('#contentDropzone', {
+    contentDropzone = new Dropzone('#contentDropzone', {
     url: '/api/upload',
     paramName: 'file',
     maxFilesize: 10,              // 10 MB
@@ -230,6 +232,7 @@
       });
     }
   });
+  } // end Dropzone guard
 
 
   // ==================== SEO PREVIEW ====================
@@ -317,7 +320,7 @@
       keywords = [];
       renderTags();
       renderKeywords();
-      contentDropzone.removeAllFiles(true);
+      if (contentDropzone) contentDropzone.removeAllFiles(true);
       document.getElementById('coverInput').value = '';
       document.getElementById('contentEditor').innerHTML = '<p>İçeriğinizi buraya yazmaya başlayın...</p>';
       document.getElementById('wordCount').textContent = '0';
