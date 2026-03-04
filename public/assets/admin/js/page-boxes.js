@@ -17,6 +17,7 @@
 
     function reindex() {
         var items = container.querySelectorAll('.pb-box-item');
+        var debugOrder = [];
         items.forEach(function (item, idx) {
             item.setAttribute('data-index', idx);
             var numEl = item.querySelector('.pb-box-num-val');
@@ -25,7 +26,17 @@
             item.querySelectorAll('[name]').forEach(function (el) {
                 el.name = el.name.replace(/\[\d+\]/, '[' + idx + ']');
             });
+
+            var idInput = item.querySelector('input[name*="[id]"]');
+            var titleInput = item.querySelector('.pb-box-title-input');
+            debugOrder.push({
+                idx: idx,
+                id: idInput ? idInput.value : 'new',
+                title: titleInput ? titleInput.value : '?'
+            });
         });
+
+        console.log('[PageBoxes] reindex result:', JSON.stringify(debugOrder));
 
         if (noMsg) {
             noMsg.style.display = items.length ? 'none' : '';
@@ -375,15 +386,43 @@
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
 
+        var dragTitle = dragItem.querySelector('.pb-box-title-input');
+        console.log('[PageBoxes] finishDrag — dragged item:', dragTitle ? dragTitle.value : '?');
+
+        // Log DOM order BEFORE move
+        var beforeItems = container.querySelectorAll('.pb-box-item');
+        var beforeOrder = [];
+        beforeItems.forEach(function (it) {
+            var t = it.querySelector('.pb-box-title-input');
+            beforeOrder.push(t ? t.value : '?');
+        });
+        console.log('[PageBoxes] DOM order BEFORE insert:', JSON.stringify(beforeOrder));
+
         dragItem.classList.remove('pb-box-dragging');
         dragItem.style.width = '';
         dragItem.style.top = '';
         dragItem.style.left = '';
 
         if (placeholder && placeholder.parentNode) {
+            // Log placeholder position
+            var phIndex = Array.from(container.children).indexOf(placeholder);
+            console.log('[PageBoxes] Placeholder at child index:', phIndex);
+            // Move item from body back into container at placeholder position
             placeholder.parentNode.insertBefore(dragItem, placeholder);
             placeholder.remove();
+        } else {
+            // Fallback: just append back to container
+            container.appendChild(dragItem);
         }
+
+        // Log DOM order AFTER move
+        var afterItems = container.querySelectorAll('.pb-box-item');
+        var afterOrder = [];
+        afterItems.forEach(function (it) {
+            var t = it.querySelector('.pb-box-title-input');
+            afterOrder.push(t ? t.value : '?');
+        });
+        console.log('[PageBoxes] DOM order AFTER insert:', JSON.stringify(afterOrder));
 
         placeholder = null;
         dragItem = null;
@@ -400,7 +439,10 @@
         dragOffsetY = clientY - rect.top;
 
         placeholder = createPlaceholder(rect.height);
+        // Replace item with placeholder in DOM, move item to body for visual drag
         item.parentNode.insertBefore(placeholder, item);
+        item.parentNode.removeChild(item);
+        document.body.appendChild(item);
 
         dragItem.classList.add('pb-box-dragging');
         dragItem.style.width = rect.width + 'px';
@@ -475,5 +517,23 @@
     container.addEventListener('touchend', function () {
         finishDrag();
     }, { passive: true });
+
+    /* Debug: log form data on submit */
+    var form = container.closest('form');
+    if (form) {
+        form.addEventListener('submit', function () {
+            var formData = new FormData(form);
+            var boxEntries = [];
+            for (var pair of formData.entries()) {
+                if (pair[0].indexOf('boxes[') === 0 && pair[0].indexOf('[id]') > -1) {
+                    boxEntries.push(pair[0] + '=' + pair[1]);
+                }
+                if (pair[0].indexOf('boxes[') === 0 && pair[0].indexOf('[title]') > -1) {
+                    boxEntries.push(pair[0] + '=' + pair[1]);
+                }
+            }
+            console.log('[PageBoxes] FORM SUBMIT box data:', JSON.stringify(boxEntries));
+        });
+    }
 
 })();
