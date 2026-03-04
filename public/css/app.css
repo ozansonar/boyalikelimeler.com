@@ -13602,23 +13602,29 @@ a.page-box-card:hover {
     color: var(--color-white);
 }
 .page-box-card__img-wrap {
-    overflow: hidden;
-    aspect-ratio: 16 / 10;
+    display: flex;
+    justify-content: center;
+    padding: 24px 24px 0;
 }
 .page-box-card__img {
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid rgba(200, 169, 110, 0.25);
     transition: transform var(--transition-slow);
 }
 a.page-box-card:hover .page-box-card__img {
-    transform: scale(1.05);
+    transform: scale(1.08);
+    border-color: var(--color-gold);
 }
 .page-box-card__body {
     padding: 20px;
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 .page-box-card__title {
     font-family: var(--font-heading);

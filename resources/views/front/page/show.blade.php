@@ -48,7 +48,7 @@
 
             @if($page->boxes->count())
                 <div class="page-boxes-section mt-5">
-                    <div class="row g-4">
+                    <div class="row g-4 justify-content-center">
                         @foreach($page->boxes as $box)
                             <div class="{{ $box->bootstrapColClass() }}">
                                 @if($box->link)
