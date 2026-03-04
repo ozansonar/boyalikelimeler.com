@@ -8,6 +8,7 @@
         <option value="" disabled selected>Bölüme git...</option>
         <option value="section-basic">Temel Bilgiler</option>
         <option value="section-content">İçerik Editörü</option>
+        <option value="section-boxes">Kutular</option>
         <option value="section-media">Medya Yönetimi</option>
         <option value="section-seo">SEO Ayarları</option>
         <option value="section-settings">Sayfa Ayarları</option>
@@ -27,6 +28,10 @@
             <a href="#section-content" class="stg-nav-item" onclick="scrollToSection('section-content', this)">
                 <i class="bi bi-body-text"></i>
                 <div><span>İçerik Editörü</span><small>Ana sayfa içeriği</small></div>
+            </a>
+            <a href="#section-boxes" class="stg-nav-item" onclick="scrollToSection('section-boxes', this)">
+                <i class="bi bi-grid-3x3-gap"></i>
+                <div><span>Kutular</span><small>İçerik kutuları</small></div>
             </a>
             <a href="#section-media" class="stg-nav-item" onclick="scrollToSection('section-media', this)">
                 <i class="bi bi-images"></i>
@@ -179,7 +184,122 @@
         </div>
 
 
-        <!-- ==================== SECTION 3: MEDYA YÖNETİMİ ==================== -->
+        <!-- ==================== SECTION 3: KUTULAR ==================== -->
+        <div class="card-dark mb-4" id="section-boxes">
+            <div class="card-header-custom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="form-section-header mb-0">
+                    <div class="form-section-icon bg-icon-pink"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+                    <div>
+                        <h6 class="mb-0">Kutular</h6>
+                        <small class="text-muted">Sayfaya içerik kutuları ekleyin — birden fazla eklenebilir</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-teal btn-sm" id="addBoxBtn">
+                    <i class="bi bi-plus-lg me-1"></i>Kutu Ekle
+                </button>
+            </div>
+            <div class="card-body-custom">
+                <div id="boxesContainer">
+                    @if($isEdit && $page->boxes->count())
+                        @foreach($page->boxes as $i => $box)
+                            <div class="pb-box-item" data-index="{{ $i }}">
+                                <div class="pb-box-header">
+                                    <span class="pb-box-number">#<span class="pb-box-num-val">{{ $i + 1 }}</span></span>
+                                    <span class="pb-box-title-preview">{{ $box->title }}</span>
+                                    <div class="pb-box-actions">
+                                        <button type="button" class="pb-box-toggle" title="Aç/Kapat"><i class="bi bi-chevron-up"></i></button>
+                                        <button type="button" class="pb-box-remove" title="Kutuyu Sil"><i class="bi bi-trash"></i></button>
+                                    </div>
+                                </div>
+                                <div class="pb-box-body">
+                                    <input type="hidden" name="boxes[{{ $i }}][id]" value="{{ $box->id }}">
+                                    <input type="hidden" name="boxes[{{ $i }}][existing_image]" value="{{ $box->image }}">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">Kutu Başlığı <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control pb-box-title-input" name="boxes[{{ $i }}][title]" value="{{ $box->title }}" placeholder="Kutu başlığı" required>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="form-label">Bağlantı (URL)</label>
+                                            <input type="url" class="form-control" name="boxes[{{ $i }}][link]" value="{{ $box->link }}" placeholder="https://ornek.com">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Link Hedefi</label>
+                                            <select class="form-select" name="boxes[{{ $i }}][link_target]">
+                                                <option value="_blank" {{ $box->link_target === '_blank' ? 'selected' : '' }}>Yeni Sekme</option>
+                                                <option value="_self" {{ $box->link_target === '_self' ? 'selected' : '' }}>Aynı Sekme</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Masaüstü Boyut</label>
+                                            <select class="form-select" name="boxes[{{ $i }}][col_desktop]">
+                                                <option value="2" {{ $box->col_desktop === 2 ? 'selected' : '' }}>2/12 — Çok Küçük</option>
+                                                <option value="3" {{ $box->col_desktop === 3 ? 'selected' : '' }}>3/12 — Küçük</option>
+                                                <option value="4" {{ $box->col_desktop === 4 ? 'selected' : '' }}>4/12 — Orta</option>
+                                                <option value="6" {{ $box->col_desktop === 6 ? 'selected' : '' }}>6/12 — Yarım</option>
+                                                <option value="12" {{ $box->col_desktop === 12 ? 'selected' : '' }}>12/12 — Tam</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Tablet Boyut</label>
+                                            <select class="form-select" name="boxes[{{ $i }}][col_tablet]">
+                                                <option value="4" {{ $box->col_tablet === 4 ? 'selected' : '' }}>4/12 — Küçük</option>
+                                                <option value="6" {{ $box->col_tablet === 6 ? 'selected' : '' }}>6/12 — Yarım</option>
+                                                <option value="12" {{ $box->col_tablet === 12 ? 'selected' : '' }}>12/12 — Tam</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Mobil Boyut</label>
+                                            <select class="form-select" name="boxes[{{ $i }}][col_mobile]">
+                                                <option value="6" {{ $box->col_mobile === 6 ? 'selected' : '' }}>6/12 — Yarım</option>
+                                                <option value="12" {{ $box->col_mobile === 12 ? 'selected' : '' }}>12/12 — Tam</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Kutu Görseli</label>
+                                            @if($box->image)
+                                                <div class="pb-box-img-preview mb-2">
+                                                    <img src="{{ asset('uploads/' . $box->image) }}" alt="" class="img-fluid rounded" loading="lazy">
+                                                </div>
+                                            @endif
+                                            <input type="file" class="form-control" name="box_images[{{ $i }}]" accept="image/png,image/jpeg,image/webp">
+                                            <div class="form-text">PNG, JPG, WebP | Maks. 1 MB</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Kutu Açıklaması</label>
+                                            <textarea class="form-control" name="boxes[{{ $i }}][description]" rows="3" placeholder="Kutu içeriği / açıklama metni...">{{ $box->description }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+
+                <div id="noBoxesMessage" class="text-center text-muted py-4" {!! ($isEdit && $page->boxes->count()) ? 'style="display:none"' : '' !!}>
+                    <i class="bi bi-grid-3x3-gap d-block fs-2 mb-2 opacity-50"></i>
+                    <span>Henüz kutu eklenmedi. Yukarıdaki <strong>"Kutu Ekle"</strong> butonunu kullanın.</span>
+                </div>
+
+                @if($errors->has('boxes.*') || $errors->has('box_images.*'))
+                    <div class="mt-2">
+                        @foreach($errors->get('boxes.*') as $messages)
+                            @foreach($messages as $msg)
+                                <small class="text-danger d-block">{{ $msg }}</small>
+                            @endforeach
+                        @endforeach
+                        @foreach($errors->get('box_images.*') as $messages)
+                            @foreach($messages as $msg)
+                                <small class="text-danger d-block">{{ $msg }}</small>
+                            @endforeach
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </div>
+
+
+        <!-- ==================== SECTION 4: MEDYA YÖNETİMİ ==================== -->
         <div class="card-dark mb-4" id="section-media">
             <div class="card-header-custom">
                 <div class="form-section-header mb-0">

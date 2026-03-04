@@ -25,8 +25,17 @@ class PageStoreRequest extends FormRequest
             'cover_image'      => 'nullable|image|mimes:png,jpg,jpeg,webp|max:1024',
             'meta_title'       => 'nullable|string|max:70',
             'meta_description' => 'nullable|string|max:170',
-            'is_active'        => 'required|boolean',
-            'sort_order'       => 'nullable|integer|min:0|max:999',
+            'is_active'              => 'required|boolean',
+            'sort_order'             => 'nullable|integer|min:0|max:999',
+            'boxes'                  => 'nullable|array|max:20',
+            'boxes.*.title'          => 'required|string|max:200',
+            'boxes.*.description'    => 'nullable|string|max:1000',
+            'boxes.*.link'           => 'nullable|url|max:500',
+            'boxes.*.link_target'    => 'nullable|in:_self,_blank',
+            'boxes.*.col_desktop'    => 'required|integer|in:2,3,4,6,12',
+            'boxes.*.col_tablet'     => 'required|integer|in:4,6,12',
+            'boxes.*.col_mobile'     => 'required|integer|in:6,12',
+            'box_images.*'           => 'nullable|image|mimes:png,jpg,jpeg,webp|max:1024',
         ];
     }
 
@@ -42,8 +51,18 @@ class PageStoreRequest extends FormRequest
             'cover_image.image'    => 'Kapak görseli bir resim dosyası olmalıdır.',
             'cover_image.mimes'    => 'Desteklenen formatlar: PNG, JPG, WebP.',
             'cover_image.max'      => 'Kapak görseli en fazla 1 MB olmalıdır.',
-            'meta_title.max'       => 'Meta başlık en fazla 70 karakter olmalıdır.',
-            'meta_description.max' => 'Meta açıklama en fazla 170 karakter olmalıdır.',
+            'meta_title.max'              => 'Meta başlık en fazla 70 karakter olmalıdır.',
+            'meta_description.max'        => 'Meta açıklama en fazla 170 karakter olmalıdır.',
+            'boxes.*.title.required'      => 'Kutu başlığı zorunludur.',
+            'boxes.*.title.max'           => 'Kutu başlığı en fazla 200 karakter olmalıdır.',
+            'boxes.*.description.max'     => 'Kutu açıklaması en fazla 1000 karakter olmalıdır.',
+            'boxes.*.link.url'            => 'Geçerli bir URL giriniz.',
+            'boxes.*.col_desktop.in'      => 'Geçersiz masaüstü boyut seçimi.',
+            'boxes.*.col_tablet.in'       => 'Geçersiz tablet boyut seçimi.',
+            'boxes.*.col_mobile.in'       => 'Geçersiz mobil boyut seçimi.',
+            'box_images.*.image'          => 'Kutu görseli bir resim dosyası olmalıdır.',
+            'box_images.*.mimes'          => 'Desteklenen formatlar: PNG, JPG, WebP.',
+            'box_images.*.max'            => 'Kutu görseli en fazla 1 MB olmalıdır.',
         ];
     }
 }

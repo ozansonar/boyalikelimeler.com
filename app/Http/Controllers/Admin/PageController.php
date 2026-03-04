@@ -42,7 +42,10 @@ class PageController extends Controller
 
     public function store(PageStoreRequest $request): RedirectResponse
     {
-        $this->pageService->create($request->validated(), $request->file('cover_image'));
+        $boxes = $request->input('boxes', []);
+        $boxImages = $request->file('box_images', []);
+
+        $this->pageService->create($request->validated(), $request->file('cover_image'), $boxes, $boxImages);
 
         return redirect()->route('admin.pages.index')
             ->with('success', 'Sayfa başarıyla oluşturuldu.');
@@ -50,7 +53,7 @@ class PageController extends Controller
 
     public function edit(Page $page): View
     {
-        $page->load('author');
+        $page->load(['author', 'boxes']);
 
         return view('admin.pages.edit', [
             'page' => $page,
@@ -59,7 +62,10 @@ class PageController extends Controller
 
     public function update(PageUpdateRequest $request, Page $page): RedirectResponse
     {
-        $this->pageService->update($page, $request->validated(), $request->file('cover_image'));
+        $boxes = $request->input('boxes', []);
+        $boxImages = $request->file('box_images', []);
+
+        $this->pageService->update($page, $request->validated(), $request->file('cover_image'), $boxes, $boxImages);
 
         return redirect()->route('admin.pages.index')
             ->with('success', 'Sayfa başarıyla güncellendi.');
