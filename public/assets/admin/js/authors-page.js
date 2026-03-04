@@ -1,31 +1,9 @@
 /**
  * Authors Page Management — Admin JS
- * Rich text editor + SEO preview + word counter
+ * SEO preview
  */
 
 document.addEventListener('DOMContentLoaded', function () {
-    var editor = document.getElementById('contentEditor');
-    var hidden = document.getElementById('bodyHidden');
-
-    if (editor && hidden) {
-        /* Sync editor content to hidden textarea on input */
-        editor.addEventListener('input', function () {
-            hidden.value = editor.innerHTML;
-            updateWordCount();
-        });
-
-        /* Sync before form submit */
-        var form = document.getElementById('authorsPageForm');
-        if (form) {
-            form.addEventListener('submit', function () {
-                hidden.value = editor.innerHTML;
-            });
-        }
-
-        /* Initial word count */
-        updateWordCount();
-    }
-
     /* SEO live preview */
     var metaTitleInput = document.getElementById('apMetaTitle');
     var metaDescInput = document.getElementById('apMetaDesc');
@@ -41,23 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         pageTitleInput.addEventListener('input', updateSeoPreview);
     }
 });
-
-/* ==================== Word Count ==================== */
-function updateWordCount() {
-    var editor = document.getElementById('contentEditor');
-    var wordEl = document.getElementById('wordCount');
-    var readEl = document.getElementById('readTime');
-
-    if (!editor || !wordEl) return;
-
-    var text = (editor.innerText || '').trim();
-    var words = text ? text.split(/\s+/).length : 0;
-
-    wordEl.textContent = words;
-    if (readEl) {
-        readEl.textContent = Math.max(1, Math.ceil(words / 200));
-    }
-}
 
 /* ==================== SEO Preview ==================== */
 function updateSeoPreview() {
