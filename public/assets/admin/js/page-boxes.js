@@ -1,5 +1,5 @@
 /* ============================================================
-   PAGE BOXES — Dynamic box add/remove/collapse + video support
+   PAGE BOXES — Dynamic box management + SortableJS drag & drop
    ============================================================ */
 
 (function () {
@@ -175,6 +175,24 @@
         '</div>';
     }
 
+    /* ============================================================
+       SortableJS — Drag & Drop
+       ============================================================ */
+    if (typeof Sortable !== 'undefined') {
+        Sortable.create(container, {
+            handle: '.pb-box-drag-handle',
+            draggable: '.pb-box-item',
+            ghostClass: 'pb-box-ghost',
+            chosenClass: 'pb-box-chosen',
+            dragClass: 'pb-box-drag',
+            animation: 200,
+            forceFallback: false,
+            onEnd: function () {
+                reindex();
+            }
+        });
+    }
+
     /* Add Box */
     addBtn.addEventListener('click', function () {
         if (getBoxCount() >= 20) {
@@ -298,157 +316,5 @@
             }, 500);
         }
     });
-
-    /* ============================================================
-       DRAG & DROP SORTING — Clone approach
-       Item NEVER leaves the form. A visual clone floats on screen.
-       ============================================================ */
-    var dragItem = null;
-    var dragClone = null;
-    var placeholder = null;
-    var dragOffsetY = 0;
-    var isDragging = false;
-
-    function createPlaceholder(height) {
-        var el = document.createElement('div');
-        el.className = 'pb-box-placeholder';
-        el.style.height = height + 'px';
-        return el;
-    }
-
-    function getMiddleY(el) {
-        var rect = el.getBoundingClientRect();
-        return rect.top + rect.height / 2;
-    }
-
-    function getBoxItems() {
-        return container.querySelectorAll('.pb-box-item');
-    }
-
-    function updatePlaceholderPosition(clientY) {
-        var items = getBoxItems();
-        var inserted = false;
-
-        for (var i = 0; i < items.length; i++) {
-            var item = items[i];
-            if (item === dragItem) continue;
-            if (clientY < getMiddleY(item)) {
-                container.insertBefore(placeholder, item);
-                inserted = true;
-                break;
-            }
-        }
-
-        if (!inserted) {
-            container.appendChild(placeholder);
-        }
-    }
-
-    function startDrag(item, clientY) {
-        isDragging = true;
-        dragItem = item;
-
-        var rect = item.getBoundingClientRect();
-        dragOffsetY = clientY - rect.top;
-
-        // Create visual clone for floating effect
-        dragClone = item.cloneNode(true);
-        dragClone.classList.add('pb-box-dragging');
-        dragClone.style.width = rect.width + 'px';
-        dragClone.style.top = rect.top + 'px';
-        dragClone.style.left = rect.left + 'px';
-        document.body.appendChild(dragClone);
-
-        // Replace original with placeholder, keep original hidden
-        placeholder = createPlaceholder(rect.height);
-        item.parentNode.insertBefore(placeholder, item);
-        item.style.display = 'none';
-    }
-
-    function moveDrag(clientY) {
-        if (!isDragging || !dragClone) return;
-
-        dragClone.style.top = (clientY - dragOffsetY) + 'px';
-        updatePlaceholderPosition(clientY);
-
-        // Auto-scroll near edges
-        var winH = window.innerHeight;
-        if (clientY < 80) {
-            window.scrollBy(0, -8);
-        } else if (clientY > winH - 80) {
-            window.scrollBy(0, 8);
-        }
-    }
-
-    function finishDrag() {
-        if (!isDragging || !dragItem) return;
-
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-
-        // Remove visual clone
-        if (dragClone && dragClone.parentNode) {
-            dragClone.parentNode.removeChild(dragClone);
-        }
-
-        // Move original item to placeholder position and show it
-        if (placeholder && placeholder.parentNode) {
-            placeholder.parentNode.insertBefore(dragItem, placeholder);
-            placeholder.remove();
-        }
-        dragItem.style.display = '';
-
-        dragClone = null;
-        placeholder = null;
-        dragItem = null;
-        isDragging = false;
-
-        reindex();
-    }
-
-    /* Mouse events */
-    container.addEventListener('mousedown', function (e) {
-        var handle = e.target.closest('.pb-box-drag-handle');
-        if (!handle) return;
-
-        e.preventDefault();
-        var item = handle.closest('.pb-box-item');
-        if (!item) return;
-
-        startDrag(item, e.clientY);
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    });
-
-    function onMouseMove(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        moveDrag(e.clientY);
-    }
-
-    function onMouseUp() {
-        finishDrag();
-    }
-
-    /* Touch support */
-    container.addEventListener('touchstart', function (e) {
-        var handle = e.target.closest('.pb-box-drag-handle');
-        if (!handle) return;
-
-        var item = handle.closest('.pb-box-item');
-        if (!item) return;
-
-        startDrag(item, e.touches[0].clientY);
-    }, { passive: true });
-
-    container.addEventListener('touchmove', function (e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        moveDrag(e.touches[0].clientY);
-    }, { passive: false });
-
-    container.addEventListener('touchend', function () {
-        finishDrag();
-    }, { passive: true });
 
 })();
