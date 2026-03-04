@@ -121,8 +121,6 @@ final class PageService
      */
     private function syncBoxes(Page $page, array $boxes, array $boxImages): void
     {
-        \Log::info('syncBoxes input', ['boxes' => collect($boxes)->map(fn($b, $i) => ['index' => $i, 'id' => $b['id'] ?? null, 'title' => $b['title'] ?? ''])]);
-
         $incomingIds = [];
 
         foreach ($boxes as $index => $boxData) {
@@ -181,7 +179,6 @@ final class PageService
             $box->delete();
         });
 
-        \Log::info('syncBoxes result', ['boxes' => $page->boxes()->select('id', 'title', 'sort_order')->orderBy('sort_order')->get()->toArray()]);
     }
 
     private function clearCache(): void

@@ -1,5 +1,5 @@
 /* ============================================================
-   PAGE BOXES — Dynamic box add/remove/collapse + video support
+   PAGE BOXES — Dynamic box management + SortableJS drag & drop
    ============================================================ */
 
 (function () {
@@ -17,7 +17,6 @@
 
     function reindex() {
         var items = container.querySelectorAll('.pb-box-item');
-        var debugOrder = [];
         items.forEach(function (item, idx) {
             item.setAttribute('data-index', idx);
             var numEl = item.querySelector('.pb-box-num-val');
@@ -26,17 +25,7 @@
             item.querySelectorAll('[name]').forEach(function (el) {
                 el.name = el.name.replace(/\[\d+\]/, '[' + idx + ']');
             });
-
-            var idInput = item.querySelector('input[name*="[id]"]');
-            var titleInput = item.querySelector('.pb-box-title-input');
-            debugOrder.push({
-                idx: idx,
-                id: idInput ? idInput.value : 'new',
-                title: titleInput ? titleInput.value : '?'
-            });
         });
-
-        console.log('[PageBoxes] reindex result:', JSON.stringify(debugOrder));
 
         if (noMsg) {
             noMsg.style.display = items.length ? 'none' : '';
@@ -91,7 +80,6 @@
                 : '<i class="bi bi-image"></i> Görsel';
         }
 
-        // Update radio active states
         boxItem.querySelectorAll('.pb-type-option').forEach(function (opt) {
             var radio = opt.querySelector('.pb-type-radio');
             opt.classList.toggle('active', radio && radio.value === type);
@@ -112,7 +100,6 @@
             '</div>' +
             '<div class="pb-box-body">' +
                 '<div class="row g-3">' +
-                    '<!-- Tip Seçici -->' +
                     '<div class="col-12">' +
                         '<label class="form-label">Kutu Tipi</label>' +
                         '<div class="pb-box-type-selector">' +
@@ -166,13 +153,11 @@
                             '<option value="12" selected>12/12 — Tam</option>' +
                         '</select>' +
                     '</div>' +
-                    '<!-- Görsel Alanı -->' +
                     '<div class="col-12 pb-field-image">' +
                         '<label class="form-label">Kutu Görseli</label>' +
                         '<input type="file" class="form-control" name="box_images[' + index + ']" accept="image/png,image/jpeg,image/webp">' +
                         '<div class="form-text">PNG, JPG, WebP | Maks. 1 MB</div>' +
                     '</div>' +
-                    '<!-- Video Alanı -->' +
                     '<div class="col-12 pb-field-video" style="display:none">' +
                         '<label class="form-label">YouTube URL <span class="text-danger">*</span></label>' +
                         '<div class="input-group">' +
@@ -188,6 +173,24 @@
                 '</div>' +
             '</div>' +
         '</div>';
+    }
+
+    /* ============================================================
+       SortableJS — Drag & Drop
+       ============================================================ */
+    if (typeof Sortable !== 'undefined') {
+        Sortable.create(container, {
+            handle: '.pb-box-drag-handle',
+            draggable: '.pb-box-item',
+            ghostClass: 'pb-box-ghost',
+            chosenClass: 'pb-box-chosen',
+            dragClass: 'pb-box-drag',
+            animation: 200,
+            forceFallback: false,
+            onEnd: function () {
+                reindex();
+            }
+        });
     }
 
     /* Add Box */
@@ -215,7 +218,6 @@
         var target = e.target.closest('button');
         if (!target) return;
 
-        /* Remove image */
         if (target.classList.contains('pb-box-img-remove')) {
             var imgPreview = target.closest('.pb-box-img-preview');
             var colWrap = target.closest('.col-12');
@@ -232,7 +234,6 @@
             return;
         }
 
-        /* Remove box */
         if (target.classList.contains('pb-box-remove')) {
             var item = target.closest('.pb-box-item');
             if (item) {
@@ -245,7 +246,6 @@
             }
         }
 
-        /* Toggle collapse */
         if (target.classList.contains('pb-box-toggle')) {
             var boxItem = target.closest('.pb-box-item');
             var body = boxItem.querySelector('.pb-box-body');
@@ -261,14 +261,12 @@
 
     /* Delegate change events */
     container.addEventListener('change', function (e) {
-        /* Type radio toggle */
         if (e.target.classList.contains('pb-type-radio')) {
             var boxItem = e.target.closest('.pb-box-item');
             toggleTypeFields(boxItem, e.target.value);
             return;
         }
 
-        /* Image file preview */
         if (e.target.type === 'file' && e.target.accept) {
             var file = e.target.files[0];
             if (!file) return;
@@ -300,7 +298,6 @@
     /* Delegate input events */
     var videoDebounce = null;
     container.addEventListener('input', function (e) {
-        /* Live title preview */
         if (e.target.classList.contains('pb-box-title-input')) {
             var item = e.target.closest('.pb-box-item');
             var preview = item.querySelector('.pb-box-title-preview');
@@ -309,7 +306,6 @@
             }
         }
 
-        /* YouTube URL preview with debounce */
         if (e.target.classList.contains('pb-video-url-input')) {
             clearTimeout(videoDebounce);
             var input = e.target;
@@ -320,220 +316,5 @@
             }, 500);
         }
     });
-
-    /* ============================================================
-       DRAG & DROP SORTING
-       ============================================================ */
-    var dragItem = null;
-    var placeholder = null;
-    var dragOffsetY = 0;
-    var isDragging = false;
-    var scrollSpeed = 8;
-
-    function createPlaceholder(height) {
-        var el = document.createElement('div');
-        el.className = 'pb-box-placeholder';
-        el.style.height = height + 'px';
-        return el;
-    }
-
-    function getSiblings() {
-        var all = [];
-        var children = container.children;
-        for (var i = 0; i < children.length; i++) {
-            var child = children[i];
-            if (child === dragItem) continue;
-            if (child.classList.contains('pb-box-item') || child.classList.contains('pb-box-placeholder')) {
-                all.push(child);
-            }
-        }
-        return all;
-    }
-
-    function getMiddleY(el) {
-        var rect = el.getBoundingClientRect();
-        return rect.top + rect.height / 2;
-    }
-
-    function updatePlaceholderPosition(clientY) {
-        var siblings = getSiblings();
-        var inserted = false;
-
-        for (var i = 0; i < siblings.length; i++) {
-            var sib = siblings[i];
-            if (sib === placeholder) continue;
-            if (clientY < getMiddleY(sib)) {
-                container.insertBefore(placeholder, sib);
-                inserted = true;
-                break;
-            }
-        }
-
-        if (!inserted) {
-            // Place at end — after last pb-box-item
-            var lastItem = container.querySelector('.pb-box-item:last-of-type');
-            if (lastItem && lastItem !== dragItem) {
-                lastItem.after(placeholder);
-            } else {
-                container.appendChild(placeholder);
-            }
-        }
-    }
-
-    function finishDrag() {
-        if (!isDragging || !dragItem) return;
-
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-
-        var dragTitle = dragItem.querySelector('.pb-box-title-input');
-        console.log('[PageBoxes] finishDrag — dragged item:', dragTitle ? dragTitle.value : '?');
-
-        // Log DOM order BEFORE move
-        var beforeItems = container.querySelectorAll('.pb-box-item');
-        var beforeOrder = [];
-        beforeItems.forEach(function (it) {
-            var t = it.querySelector('.pb-box-title-input');
-            beforeOrder.push(t ? t.value : '?');
-        });
-        console.log('[PageBoxes] DOM order BEFORE insert:', JSON.stringify(beforeOrder));
-
-        dragItem.classList.remove('pb-box-dragging');
-        dragItem.style.width = '';
-        dragItem.style.top = '';
-        dragItem.style.left = '';
-
-        if (placeholder && placeholder.parentNode) {
-            // Log placeholder position
-            var phIndex = Array.from(container.children).indexOf(placeholder);
-            console.log('[PageBoxes] Placeholder at child index:', phIndex);
-            // Move item from body back into container at placeholder position
-            placeholder.parentNode.insertBefore(dragItem, placeholder);
-            placeholder.remove();
-        } else {
-            // Fallback: just append back to container
-            container.appendChild(dragItem);
-        }
-
-        // Log DOM order AFTER move
-        var afterItems = container.querySelectorAll('.pb-box-item');
-        var afterOrder = [];
-        afterItems.forEach(function (it) {
-            var t = it.querySelector('.pb-box-title-input');
-            afterOrder.push(t ? t.value : '?');
-        });
-        console.log('[PageBoxes] DOM order AFTER insert:', JSON.stringify(afterOrder));
-
-        placeholder = null;
-        dragItem = null;
-        isDragging = false;
-
-        reindex();
-    }
-
-    function startDrag(item, clientY) {
-        isDragging = true;
-        dragItem = item;
-
-        var rect = item.getBoundingClientRect();
-        dragOffsetY = clientY - rect.top;
-
-        placeholder = createPlaceholder(rect.height);
-        // Replace item with placeholder in DOM, move item to body for visual drag
-        item.parentNode.insertBefore(placeholder, item);
-        item.parentNode.removeChild(item);
-        document.body.appendChild(item);
-
-        dragItem.classList.add('pb-box-dragging');
-        dragItem.style.width = rect.width + 'px';
-        dragItem.style.top = rect.top + 'px';
-        dragItem.style.left = rect.left + 'px';
-    }
-
-    /* Mouse events */
-    container.addEventListener('mousedown', function (e) {
-        var handle = e.target.closest('.pb-box-drag-handle');
-        if (!handle) return;
-
-        e.preventDefault();
-        var item = handle.closest('.pb-box-item');
-        if (!item) return;
-
-        startDrag(item, e.clientY);
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    });
-
-    function onMouseMove(e) {
-        if (!isDragging || !dragItem) return;
-        e.preventDefault();
-
-        var y = e.clientY;
-        dragItem.style.top = (y - dragOffsetY) + 'px';
-
-        updatePlaceholderPosition(y);
-
-        // Auto-scroll near edges
-        var winH = window.innerHeight;
-        if (y < 80) {
-            window.scrollBy(0, -scrollSpeed);
-        } else if (y > winH - 80) {
-            window.scrollBy(0, scrollSpeed);
-        }
-    }
-
-    function onMouseUp() {
-        finishDrag();
-    }
-
-    /* Touch support */
-    container.addEventListener('touchstart', function (e) {
-        var handle = e.target.closest('.pb-box-drag-handle');
-        if (!handle) return;
-
-        var item = handle.closest('.pb-box-item');
-        if (!item) return;
-
-        startDrag(item, e.touches[0].clientY);
-    }, { passive: true });
-
-    container.addEventListener('touchmove', function (e) {
-        if (!isDragging || !dragItem) return;
-        e.preventDefault();
-
-        var y = e.touches[0].clientY;
-        dragItem.style.top = (y - dragOffsetY) + 'px';
-
-        updatePlaceholderPosition(y);
-
-        var winH = window.innerHeight;
-        if (y < 80) {
-            window.scrollBy(0, -scrollSpeed);
-        } else if (y > winH - 80) {
-            window.scrollBy(0, scrollSpeed);
-        }
-    }, { passive: false });
-
-    container.addEventListener('touchend', function () {
-        finishDrag();
-    }, { passive: true });
-
-    /* Debug: log form data on submit */
-    var form = container.closest('form');
-    if (form) {
-        form.addEventListener('submit', function () {
-            var formData = new FormData(form);
-            var boxEntries = [];
-            for (var pair of formData.entries()) {
-                if (pair[0].indexOf('boxes[') === 0 && pair[0].indexOf('[id]') > -1) {
-                    boxEntries.push(pair[0] + '=' + pair[1]);
-                }
-                if (pair[0].indexOf('boxes[') === 0 && pair[0].indexOf('[title]') > -1) {
-                    boxEntries.push(pair[0] + '=' + pair[1]);
-                }
-            }
-            console.log('[PageBoxes] FORM SUBMIT box data:', JSON.stringify(boxEntries));
-        });
-    }
 
 })();
