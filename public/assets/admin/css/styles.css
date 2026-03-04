@@ -18356,6 +18356,25 @@ a.btn-glass {
 /* ---- Misc Text Utilities ---- */
 .text-teal-semibold { color: var(--teal-primary); font-weight: 600; }
 .text-teal-xs { color: var(--teal-primary); font-size: 12px; }
+.usr-golden-pen-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 6px;
+  padding: 2px 5px;
+  margin-left: 4px;
+  vertical-align: middle;
+  cursor: help;
+  transition: all 0.2s ease;
+}
+.usr-golden-pen-badge:hover {
+  background: rgba(245, 158, 11, 0.2);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
 .text-muted-hint { color: var(--text-muted); font-size: 11px; margin-top: 6px; }
 .text-teal-hint { font-size: 11px; color: var(--teal-primary); margin-top: 4px; }
 .text-muted-hint-sm { font-size: 11px; color: var(--text-muted); margin-top: 4px; }

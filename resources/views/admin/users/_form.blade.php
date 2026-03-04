@@ -2,6 +2,9 @@
 @php
     $isEdit = isset($user);
     $nameParts = $isEdit ? explode(' ', $user->name, 2) : ['', ''];
+    $yazarRoleId = $roles->firstWhere('slug', 'yazar')?->id;
+    $currentRoleId = old('role_id', $user->role_id ?? '');
+    $isYazar = (string) $currentRoleId === (string) $yazarRoleId;
 @endphp
 
 <!-- ==================== FORM LAYOUT ==================== -->
@@ -18,18 +21,18 @@
         <a href="#section-role" class="stg-nav-item" onclick="scrollToSection('section-role', this)">
             <i class="bi bi-shield"></i> Rol & Yetki
         </a>
-        <a href="#section-golden-pen" class="stg-nav-item" onclick="scrollToSection('section-golden-pen', this)">
+        <a href="#section-golden-pen" class="stg-nav-item" id="goldenPenNavItem" onclick="scrollToSection('section-golden-pen', this)" {!! !$isYazar ? 'style="display:none"' : '' !!}>
             <i class="bi bi-pen"></i> Altın Kalem
         </a>
     </div>
 
     <!-- Mobile Nav -->
     <div class="d-lg-none mb-3">
-        <select class="stg-select" onchange="scrollToSection(this.value, null)">
+        <select class="stg-select" onchange="scrollToSection(this.value, null)" id="mobileNavSelect">
             <option value="section-personal">Kişisel Bilgiler</option>
             <option value="section-account">Hesap Bilgileri</option>
             <option value="section-role">Rol & Yetki</option>
-            <option value="section-golden-pen">Altın Kalem</option>
+            <option value="section-golden-pen" id="goldenPenMobileOption" {!! !$isYazar ? 'style="display:none"' : '' !!}>Altın Kalem</option>
         </select>
     </div>
 
@@ -212,7 +215,7 @@
 
 
         <!-- ==================== SECTION 4: GOLDEN PEN ==================== -->
-        <div class="card-dark mb-4" id="section-golden-pen" data-aos="fade-up" data-aos-delay="50">
+        <div class="card-dark mb-4" id="section-golden-pen" data-aos="fade-up" data-aos-delay="50" {!! !$isYazar ? 'style="display:none"' : '' !!}>
             <div class="card-header-custom">
                 <div class="form-section-header mb-0">
                     <div class="form-section-icon"><i class="bi bi-pen-fill"></i></div>
