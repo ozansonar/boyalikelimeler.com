@@ -29,7 +29,7 @@
          FEATURED AUTHOR
     ======================================================= -->
     @if($featuredAuthor)
-        <section class="section pt-0">
+        <section class="section">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-5 col-md-7 col-10" data-aos="fade-up">
