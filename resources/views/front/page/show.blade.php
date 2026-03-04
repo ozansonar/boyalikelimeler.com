@@ -64,6 +64,12 @@
                                                  class="page-box-card__img img-fluid"
                                                  loading="lazy">
                                         </div>
+                                    @else
+                                        <div class="page-box-card__img-wrap">
+                                            <span class="page-box-card__icon-placeholder">
+                                                <i class="bi bi-bookmark-star"></i>
+                                            </span>
+                                        </div>
                                     @endif
                                     <div class="page-box-card__body">
                                         <h3 class="page-box-card__title">{{ $box->title }}</h3>
