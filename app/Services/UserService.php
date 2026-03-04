@@ -139,6 +139,7 @@ final class UserService
 
             Cache::forget('admin.users.stats');
             Cache::forget('admin.users.role_counts');
+            Cache::forget('front.authors.stats');
 
             return $user->fresh();
         });
@@ -151,6 +152,7 @@ final class UserService
 
             Cache::forget('admin.users.stats');
             Cache::forget('admin.users.role_counts');
+            Cache::forget('front.authors.stats');
         });
     }
 }
