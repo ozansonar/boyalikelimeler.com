@@ -40,59 +40,84 @@ final class AuthorService
         });
     }
 
+    private const array TURKISH_MONTHS = [
+        1 => 'Ocak', 2 => 'Şubat', 3 => 'Mart', 4 => 'Nisan',
+        5 => 'Mayıs', 6 => 'Haziran', 7 => 'Temmuz', 8 => 'Ağustos',
+        9 => 'Eylül', 10 => 'Ekim', 11 => 'Kasım', 12 => 'Aralık',
+    ];
+
     /**
-     * @return array<string, array{label: string, authors: Collection<int, User>}>
+     * @return array<int, array{key: string, label: string}>
      */
-    public function getMonthlyGoldenPenAuthors(): array
+    public function getGoldenPenMonths(): array
     {
-        return Cache::remember('front.authors.golden_pen_monthly', 300, function (): array {
+        return Cache::remember('front.authors.golden_pen_months', 300, function (): array {
             $startMonth = now()->createFromDate(2026, 1, 1)->startOfMonth();
             $currentMonth = now()->startOfMonth();
             $months = [];
 
-            $turkishMonths = [
-                1 => 'Ocak', 2 => 'Şubat', 3 => 'Mart', 4 => 'Nisan',
-                5 => 'Mayıs', 6 => 'Haziran', 7 => 'Temmuz', 8 => 'Ağustos',
-                9 => 'Eylül', 10 => 'Ekim', 11 => 'Kasım', 12 => 'Aralık',
-            ];
-
             while ($startMonth->lte($currentMonth)) {
-                $firstDay = $startMonth->copy()->startOfMonth()->toDateString();
-                $lastDay = $startMonth->copy()->endOfMonth()->toDateString();
-
-                $authors = User::query()
-                    ->select('users.*')
-                    ->join('roles', 'users.role_id', '=', 'roles.id')
-                    ->where('roles.slug', RoleSlug::Yazar->value)
-                    ->whereNotNull('users.email_verified_at')
-                    ->whereExists(function ($q) use ($firstDay, $lastDay): void {
-                        $q->select(DB::raw(1))
-                          ->from('golden_pen_periods')
-                          ->whereColumn('golden_pen_periods.user_id', 'users.id')
-                          ->whereNull('golden_pen_periods.deleted_at')
-                          ->where('golden_pen_periods.starts_at', '<=', $lastDay)
-                          ->where('golden_pen_periods.ends_at', '>=', $firstDay);
-                    })
-                    ->with(['activeGoldenPenPeriod'])
-                    ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
-                        $q->where('status', 'approved');
-                    }])
-                    ->orderBy('users.name')
-                    ->get();
-
-                if ($authors->isNotEmpty()) {
-                    $key = $startMonth->format('Y-m');
-                    $label = $startMonth->year . ' ' . $turkishMonths[(int) $startMonth->month] . ' Altın Kalemleri';
-                    $months[$key] = [
-                        'label'   => $label,
-                        'authors' => $authors,
-                    ];
-                }
-
+                $key = $startMonth->format('Y-m');
+                $label = $startMonth->year . ' ' . self::TURKISH_MONTHS[(int) $startMonth->month] . ' Altın Kalemleri';
+                $months[] = [
+                    'key'   => $key,
+                    'label' => $label,
+                ];
                 $startMonth->addMonth();
             }
 
-            return array_reverse($months, true);
+            return array_reverse($months);
+        });
+    }
+
+    /**
+     * @return array{label: string, authors: Collection<int, User>}|null
+     */
+    public function getGoldenPenAuthorsByMonth(string $yearMonth): ?array
+    {
+        if (! preg_match('/^\d{4}-\d{2}$/', $yearMonth)) {
+            return null;
+        }
+
+        return Cache::remember("front.authors.golden_pen.{$yearMonth}", 300, function () use ($yearMonth): ?array {
+            $date = now()->createFromFormat('Y-m', $yearMonth)?->startOfMonth();
+
+            if ($date === null || $date->gt(now()->startOfMonth()) || $date->lt(now()->createFromDate(2026, 1, 1))) {
+                return null;
+            }
+
+            $firstDay = $date->copy()->startOfMonth()->toDateString();
+            $lastDay = $date->copy()->endOfMonth()->toDateString();
+
+            $authors = User::query()
+                ->select('users.*')
+                ->join('roles', 'users.role_id', '=', 'roles.id')
+                ->where('roles.slug', RoleSlug::Yazar->value)
+                ->whereNotNull('users.email_verified_at')
+                ->whereExists(function ($q) use ($firstDay, $lastDay): void {
+                    $q->select(DB::raw(1))
+                      ->from('golden_pen_periods')
+                      ->whereColumn('golden_pen_periods.user_id', 'users.id')
+                      ->whereNull('golden_pen_periods.deleted_at')
+                      ->where('golden_pen_periods.starts_at', '<=', $lastDay)
+                      ->where('golden_pen_periods.ends_at', '>=', $firstDay);
+                })
+                ->with(['activeGoldenPenPeriod'])
+                ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
+                    $q->where('status', 'approved');
+                }])
+                ->withSum(['literaryWorks as total_views' => function ($q): void {
+                    $q->where('status', 'approved');
+                }], 'view_count')
+                ->orderBy('users.name')
+                ->get();
+
+            $label = $date->year . ' ' . self::TURKISH_MONTHS[(int) $date->month] . ' Altın Kalemleri';
+
+            return [
+                'label'   => $label,
+                'authors' => $authors,
+            ];
         });
     }
 
