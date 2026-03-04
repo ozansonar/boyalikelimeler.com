@@ -105,7 +105,7 @@
                             <div class="row g-3">
                                 @forelse($latestWorks->take(3) as $work)
                                     <div class="col-md-4">
-                                        <div class="card-bk">
+                                        <a href="{{ route('literary-works.show', $work->slug) }}" class="card-bk card-bk--link">
                                             <div class="card-bk__body">
                                                 <span class="popular-list__category popular-list__category--siir mb-2 d-inline-block">{{ $work->category?->name ?? 'Genel' }}</span>
                                                 <h4 class="card-bk__title">{{ $work->title }}</h4>
@@ -115,7 +115,7 @@
                                                 <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>{{ $work->author?->name ?? 'Anonim' }}</span>
                                                 <span class="card-bk__meta"><i class="fa-regular fa-eye me-1"></i>{{ $work->view_count }}</span>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 @empty
                                     <div class="col-md-4">
