@@ -25,30 +25,53 @@ function checkPasswordStrength(password) {
     return strength;
 }
 
+/* -- Golden Pen Section Visibility -- */
+function toggleGoldenPenSection(isYazar) {
+    var section = document.getElementById('section-golden-pen');
+    var navItem = document.getElementById('goldenPenNavItem');
+    var mobileOption = document.getElementById('goldenPenMobileOption');
+    var toggle = document.getElementById('goldenPenToggle');
+
+    if (section) section.style.display = isYazar ? '' : 'none';
+    if (navItem) navItem.style.display = isYazar ? '' : 'none';
+    if (mobileOption) mobileOption.style.display = isYazar ? '' : 'none';
+
+    if (!isYazar && toggle && toggle.checked) {
+        toggle.checked = false;
+        var datesContainer = document.getElementById('goldenPenDates');
+        if (datesContainer) datesContainer.style.display = 'none';
+    }
+}
+
 /* -- Role Card Click -- */
 function initRoleCards() {
     var roleCards = document.querySelectorAll('.uf-role-card[data-role-id]');
     var roleSelect = document.getElementById('userRole');
+    var yazarRoleId = window.yazarRoleId || '';
+
+    function onRoleChange(roleId) {
+        roleCards.forEach(function (c) { c.classList.remove('active'); });
+        var selected = document.querySelector('.uf-role-card[data-role-id="' + roleId + '"]');
+        if (selected) selected.classList.add('active');
+        toggleGoldenPenSection(String(roleId) === String(yazarRoleId));
+    }
 
     roleCards.forEach(function (card) {
         card.addEventListener('click', function () {
             var roleId = this.getAttribute('data-role-id');
-            if (roleSelect) {
-                roleSelect.value = roleId;
-            }
-            roleCards.forEach(function (c) { c.classList.remove('active'); });
-            this.classList.add('active');
+            if (roleSelect) roleSelect.value = roleId;
+            onRoleChange(roleId);
         });
     });
 
-    if (roleSelect && roleSelect.value) {
-        var activeCard = document.querySelector('.uf-role-card[data-role-id="' + roleSelect.value + '"]');
-        if (activeCard) activeCard.classList.add('active');
+    if (roleSelect) {
+        if (roleSelect.value) {
+            var activeCard = document.querySelector('.uf-role-card[data-role-id="' + roleSelect.value + '"]');
+            if (activeCard) activeCard.classList.add('active');
+        }
 
         roleSelect.addEventListener('change', function () {
-            roleCards.forEach(function (c) { c.classList.remove('active'); });
-            var selected = document.querySelector('.uf-role-card[data-role-id="' + this.value + '"]');
-            if (selected) selected.classList.add('active');
+            onRoleChange(this.value);
         });
     }
 }
@@ -61,11 +84,7 @@ function initGoldenPen() {
     if (!toggle || !datesContainer) return;
 
     toggle.addEventListener('change', function () {
-        if (this.checked) {
-            datesContainer.style.display = '';
-        } else {
-            datesContainer.style.display = 'none';
-        }
+        datesContainer.style.display = this.checked ? '' : 'none';
     });
 
     var startInput = document.getElementById('goldenPenStartsAt');
