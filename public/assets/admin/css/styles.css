@@ -24085,9 +24085,31 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
 }
 .pb-box-img-preview {
   max-width: 200px;
+  position: relative;
+  display: inline-block;
 }
 .pb-box-img-preview img {
   max-height: 120px;
   object-fit: cover;
   border: 1px solid var(--border-color);
+}
+.pb-box-img-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.pb-box-img-remove:hover {
+  background: rgba(220, 38, 38, 1);
 }

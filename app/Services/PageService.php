@@ -127,14 +127,22 @@ final class PageService
             $existingId = ! empty($boxData['id']) ? (int) $boxData['id'] : null;
 
             $imageFile = $boxImages[$index] ?? null;
-            $imagePath = $boxData['existing_image'] ?? null;
+            $existingImage = ! empty($boxData['existing_image']) ? $boxData['existing_image'] : null;
+            $imagePath = $existingImage;
 
             if ($imageFile instanceof UploadedFile) {
-                if ($existingId && $imagePath) {
-                    $imagePath = $this->uploadService->replaceImage($imageFile, 'page-boxes', $imagePath, $boxData['title'] ?? 'box');
+                if ($existingImage) {
+                    $imagePath = $this->uploadService->replaceImage($imageFile, 'page-boxes', $existingImage, $boxData['title'] ?? 'box');
                 } else {
                     $imagePath = $this->uploadService->uploadImage($imageFile, 'page-boxes', $boxData['title'] ?? 'box');
                 }
+            } elseif ($existingId && ! $existingImage) {
+                // Image was removed by user
+                $oldBox = $page->boxes()->find($existingId);
+                if ($oldBox?->image) {
+                    $this->uploadService->deleteImage($oldBox->image);
+                }
+                $imagePath = null;
             }
 
             $attributes = [

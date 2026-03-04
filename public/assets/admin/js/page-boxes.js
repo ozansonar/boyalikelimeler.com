@@ -124,6 +124,27 @@
         var target = e.target.closest('button');
         if (!target) return;
 
+        /* Remove image */
+        if (target.classList.contains('pb-box-img-remove')) {
+            var imgPreview = target.closest('.pb-box-img-preview');
+            var colWrap = target.closest('.col-12');
+            var boxBody = target.closest('.pb-box-body');
+            if (imgPreview) {
+                imgPreview.remove();
+            }
+            // Clear file input
+            if (colWrap) {
+                var fileInput = colWrap.querySelector('input[type="file"]');
+                if (fileInput) fileInput.value = '';
+            }
+            // Clear the existing_image hidden input so backend knows to delete
+            if (boxBody) {
+                var hiddenImg = boxBody.querySelector('input[name*="existing_image"]');
+                if (hiddenImg) hiddenImg.value = '';
+            }
+            return;
+        }
+
         /* Remove */
         if (target.classList.contains('pb-box-remove')) {
             var item = target.closest('.pb-box-item');
@@ -184,7 +205,8 @@
             reader.onload = function (ev) {
                 var div = document.createElement('div');
                 div.className = 'pb-box-img-preview mb-2';
-                div.innerHTML = '<img src="' + ev.target.result + '" alt="" class="img-fluid rounded" loading="lazy">';
+                div.innerHTML = '<img src="' + ev.target.result + '" alt="" class="img-fluid rounded" loading="lazy">' +
+                    '<button type="button" class="pb-box-img-remove" title="Görseli Kaldır"><i class="bi bi-x-lg"></i></button>';
                 wrapper.insertBefore(div, e.target);
             };
             reader.readAsDataURL(file);

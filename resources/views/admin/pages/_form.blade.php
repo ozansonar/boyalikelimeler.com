@@ -260,6 +260,7 @@
                                             @if($box->image)
                                                 <div class="pb-box-img-preview mb-2">
                                                     <img src="{{ asset('uploads/' . $box->image) }}" alt="" class="img-fluid rounded" loading="lazy">
+                                                    <button type="button" class="pb-box-img-remove" title="Görseli Kaldır"><i class="bi bi-x-lg"></i></button>
                                                 </div>
                                             @endif
                                             <input type="file" class="form-control" name="box_images[{{ $i }}]" accept="image/png,image/jpeg,image/webp">
