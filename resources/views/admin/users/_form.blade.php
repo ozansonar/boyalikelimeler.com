@@ -298,7 +298,7 @@
                 @enderror
 
                 <div class="mt-3">
-                    <button type="button" class="btn-glass" id="addGoldenPenPeriod" onclick="addGoldenPenPeriod()">
+                    <button type="button" class="btn-glass" id="btnAddGoldenPenPeriod" onclick="addGoldenPenPeriod()">
                         <i class="bi bi-plus-lg me-1"></i>Yeni Dönem Ekle
                     </button>
                 </div>
