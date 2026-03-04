@@ -39,5 +39,5 @@
 
 @push('scripts')
 <script>window.yazarRoleId = {{ $roles->firstWhere('slug', 'yazar')?->id ?? 0 }};</script>
-<script src="{{ asset('assets/admin/js/user-form.js') }}"></script>
+<script src="{{ asset('assets/admin/js/user-form.js') }}?v={{ filemtime(public_path('assets/admin/js/user-form.js')) }}"></script>
 @endpush
