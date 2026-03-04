@@ -101,7 +101,8 @@
                                                     <i class="bi bi-patch-check-fill text-teal-xs"></i>
                                                 @endif
                                                 @if($user->hasActiveGoldenPen())
-                                                    <span class="usr-golden-pen-badge" title="Altın Kalem — {{ $user->golden_pen_starts_at->format('d.m.Y') }} / {{ $user->golden_pen_ends_at->format('d.m.Y') }}">
+                                                    @php $activePeriod = $user->activeGoldenPenPeriod; @endphp
+                                                    <span class="usr-golden-pen-badge" title="Altın Kalem — {{ $activePeriod?->starts_at?->format('d.m.Y') }} / {{ $activePeriod?->ends_at?->format('d.m.Y') }}">
                                                         <i class="bi bi-pen-fill"></i>
                                                     </span>
                                                 @endif

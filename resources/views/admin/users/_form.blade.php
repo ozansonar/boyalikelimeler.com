@@ -220,73 +220,87 @@
                 <div class="form-section-header mb-0">
                     <div class="form-section-icon"><i class="bi bi-pen-fill"></i></div>
                     <div>
-                        <h6 class="mb-0">Altın Kalem Unvanı</h6>
-                        <small class="text-muted">Yazara özel altın kalem unvanı verin</small>
+                        <h6 class="mb-0">Altın Kalem Dönemleri</h6>
+                        <small class="text-muted">Yazara birden fazla altın kalem dönemi tanımlayabilirsiniz</small>
                     </div>
                 </div>
             </div>
             <div class="card-body-custom">
-                <div class="stg-toggle-list">
-                    <div class="stg-toggle-item">
-                        <div class="stg-toggle-info">
-                            <span>Altın Kalem Unvanı Verilsin mi?</span>
-                            <small>Etkinleştirildiğinde yazar, belirlenen tarihler arasında altın kalem unvanına sahip olur.</small>
-                        </div>
-                        <label class="stg-switch">
-                            <input type="checkbox" name="is_golden_pen" value="1" id="goldenPenToggle"
-                                   {{ old('is_golden_pen', ($isEdit && $user->is_golden_pen) ? '1' : '0') == '1' ? 'checked' : '' }}>
-                            <span class="stg-switch-slider"></span>
-                        </label>
+                @if($isEdit && $user->hasActiveGoldenPen())
+                    <div class="uf-golden-pen-status uf-golden-pen-active mb-3">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Altın Kalem unvanı şu an <strong>aktif</strong>.</span>
                     </div>
+                @endif
+
+                <div class="uf-info-box mb-3">
+                    <i class="bi bi-info-circle-fill text-neon-blue"></i>
+                    <span>Birden fazla dönem ekleyerek yazarın altın kalem tarihçesini yönetebilirsiniz.</span>
                 </div>
 
-                <div class="row g-3 mt-2" id="goldenPenDates"
-                     {!! old('is_golden_pen', ($isEdit && $user->is_golden_pen) ? '1' : '0') != '1' ? 'style="display:none"' : '' !!}>
-                    <div class="col-md-6">
-                        <label class="stg-label">Başlangıç Tarihi <span class="text-neon-red">*</span></label>
-                        <div class="stg-input-group">
-                            <span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>
-                            <input type="date" class="stg-input @error('golden_pen_starts_at') is-invalid @enderror"
-                                   name="golden_pen_starts_at" id="goldenPenStartsAt"
-                                   value="{{ old('golden_pen_starts_at', ($isEdit && $user->golden_pen_starts_at) ? $user->golden_pen_starts_at->format('Y-m-d') : '') }}">
-                        </div>
-                        @error('golden_pen_starts_at')
-                            <small class="text-neon-red">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="col-md-6">
-                        <label class="stg-label">Bitiş Tarihi <span class="text-neon-red">*</span></label>
-                        <div class="stg-input-group">
-                            <span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>
-                            <input type="date" class="stg-input @error('golden_pen_ends_at') is-invalid @enderror"
-                                   name="golden_pen_ends_at" id="goldenPenEndsAt"
-                                   value="{{ old('golden_pen_ends_at', ($isEdit && $user->golden_pen_ends_at) ? $user->golden_pen_ends_at->format('Y-m-d') : '') }}">
-                        </div>
-                        @error('golden_pen_ends_at')
-                            <small class="text-neon-red">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="col-12">
-                        <div class="uf-info-box">
-                            <i class="bi bi-info-circle-fill text-neon-blue"></i>
-                            <span>Yazar, belirlenen başlangıç ve bitiş tarihleri arasında altın kalem unvanına sahip olacaktır.</span>
-                        </div>
-                    </div>
-                    @if($isEdit && $user->is_golden_pen)
-                        <div class="col-12">
-                            @if($user->hasActiveGoldenPen())
-                                <div class="uf-golden-pen-status uf-golden-pen-active">
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    <span>Altın Kalem unvanı şu an <strong>aktif</strong>.</span>
+                <div id="goldenPenPeriodsContainer">
+                    @php
+                        $periods = old('golden_pen_periods', ($isEdit && $user->goldenPenPeriods) ? $user->goldenPenPeriods->map(fn($p) => [
+                            'starts_at' => $p->starts_at->format('Y-m-d'),
+                            'ends_at' => $p->ends_at->format('Y-m-d'),
+                            'note' => $p->note,
+                        ])->toArray() : []);
+                    @endphp
+
+                    @forelse($periods as $index => $period)
+                        <div class="uf-period-row" data-period-index="{{ $index }}">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label class="stg-label">Başlangıç <span class="text-neon-red">*</span></label>
+                                    <div class="stg-input-group">
+                                        <span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>
+                                        <input type="date" class="stg-input"
+                                               name="golden_pen_periods[{{ $index }}][starts_at]"
+                                               value="{{ $period['starts_at'] ?? '' }}">
+                                    </div>
                                 </div>
-                            @else
-                                <div class="uf-golden-pen-status uf-golden-pen-expired">
-                                    <i class="bi bi-exclamation-circle-fill"></i>
-                                    <span>Altın Kalem unvanı <strong>tarih aralığı dışında</strong>.</span>
+                                <div class="col-md-4">
+                                    <label class="stg-label">Bitiş <span class="text-neon-red">*</span></label>
+                                    <div class="stg-input-group">
+                                        <span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>
+                                        <input type="date" class="stg-input"
+                                               name="golden_pen_periods[{{ $index }}][ends_at]"
+                                               value="{{ $period['ends_at'] ?? '' }}">
+                                    </div>
                                 </div>
-                            @endif
+                                <div class="col-md-3">
+                                    <label class="stg-label">Not</label>
+                                    <input type="text" class="stg-input"
+                                           name="golden_pen_periods[{{ $index }}][note]"
+                                           value="{{ $period['note'] ?? '' }}"
+                                           placeholder="Opsiyonel not...">
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn-glass btn-sm text-neon-red" onclick="removeGoldenPenPeriod(this)" title="Dönemi sil">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    @endif
+                    @empty
+                        {{-- No periods yet --}}
+                    @endforelse
+                </div>
+
+                @error('golden_pen_periods')
+                    <small class="text-neon-red">{{ $message }}</small>
+                @enderror
+                @error('golden_pen_periods.*.starts_at')
+                    <small class="text-neon-red">{{ $message }}</small>
+                @enderror
+                @error('golden_pen_periods.*.ends_at')
+                    <small class="text-neon-red">{{ $message }}</small>
+                @enderror
+
+                <div class="mt-3">
+                    <button type="button" class="btn-glass" id="addGoldenPenPeriod" onclick="addGoldenPenPeriod()">
+                        <i class="bi bi-plus-lg me-1"></i>Yeni Dönem Ekle
+                    </button>
                 </div>
             </div>
         </div>

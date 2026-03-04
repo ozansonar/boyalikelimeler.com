@@ -16411,6 +16411,15 @@ a.btn-glass {
   color: var(--neon-orange, #f97316);
 }
 
+/* Golden Pen Period Rows */
+.uf-period-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+}
+.uf-period-row:last-child {
+  border-bottom: none;
+}
+
 /* Responsive */
 @media (max-width: 767.98px) {
   .uf-avatar-section {
