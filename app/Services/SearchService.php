@@ -35,6 +35,7 @@ final class SearchService
     public function searchWorks(string $query, int $limit = 6): \Illuminate\Support\Collection
     {
         return LiteraryWork::with(['category', 'author'])
+            ->whereHas('author')
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at')
             ->where(function ($q) use ($query): void {

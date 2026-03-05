@@ -113,25 +113,16 @@
                                 <p class="clist-card__excerpt">{{ Str::limit($work->excerpt, 120) }}</p>
                             @endif
                             <div class="clist-card__footer">
-                                @if($work->author)
-                                    <a href="{{ route('profile.show', $work->author->username) }}" class="clist-card__author">
-                                        <div class="clist-card__avatar">
-                                            @if($work->author->avatar_url)
-                                                <img src="{{ $work->author->avatar_url }}" alt="{{ $work->author->name }}" loading="lazy">
-                                            @else
-                                                <i class="fa-solid fa-user"></i>
-                                            @endif
-                                        </div>
-                                        <span class="clist-card__author-name">{{ $work->author->name }}</span>
-                                    </a>
-                                @else
-                                    <span class="clist-card__author">
-                                        <div class="clist-card__avatar">
+                                <a href="{{ route('profile.show', $work->author->username) }}" class="clist-card__author">
+                                    <div class="clist-card__avatar">
+                                        @if($work->author->avatar_url)
+                                            <img src="{{ $work->author->avatar_url }}" alt="{{ $work->author->name }}" loading="lazy">
+                                        @else
                                             <i class="fa-solid fa-user"></i>
-                                        </div>
-                                        <span class="clist-card__author-name">Anonim</span>
-                                    </span>
-                                @endif
+                                        @endif
+                                    </div>
+                                    <span class="clist-card__author-name">{{ $work->author->name }}</span>
+                                </a>
                                 <div class="clist-card__stats">
                                     <span class="clist-card__stat"><i class="fa-solid fa-eye me-1"></i>{{ number_format($work->view_count) }}</span>
                                 </div>
