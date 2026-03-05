@@ -104,21 +104,11 @@
                             </button>
                         </div>
                         <div class="cdetail-actions__right">
-                            <button type="button" class="cdetail-actions__btn cdetail-actions__btn--copy"
-                                    title="Bağlantıyı Kopyala" aria-label="Bağlantıyı Kopyala"
-                                    data-url="{{ route('literary-works.show', $work->slug) }}">
-                                <i class="fa-solid fa-link"></i>
-                            </button>
-                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('literary-works.show', $work->slug)) }}&text={{ urlencode($work->title) }}"
-                               target="_blank" rel="noopener noreferrer"
-                               class="cdetail-actions__btn" title="Twitter'da Paylaş" aria-label="Twitter'da Paylaş">
-                                <i class="fa-brands fa-x-twitter"></i>
-                            </a>
-                            <a href="https://api.whatsapp.com/send?text={{ urlencode($work->title . ' ' . route('literary-works.show', $work->slug)) }}"
-                               target="_blank" rel="noopener noreferrer"
-                               class="cdetail-actions__btn" title="WhatsApp'ta Paylaş" aria-label="WhatsApp'ta Paylaş">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </a>
+                            @include('partials.front.share-buttons', [
+                                'shareUrl' => route('literary-works.show', $work->slug),
+                                'shareTitle' => $work->title,
+                                'btnClass' => 'blogd-share__btn',
+                            ])
                         </div>
                     </div>
 
