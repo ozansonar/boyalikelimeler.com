@@ -297,5 +297,8 @@ Route::get('/ara', [SearchController::class, 'index'])->name('search.index');
 // Category (Frontend — Kategori Sayfası)
 Route::get('/kategori/{slug}', [FrontCategoryController::class, 'show'])->name('category.show')->where('slug', '[a-z0-9\-]+');
 
+// Sitemap
+Route::get('/sitemap.xml', [App\Http\Controllers\Front\SitemapController::class, 'index'])->name('sitemap');
+
 // Static Pages (catch-all — MUST be LAST route)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')->where('slug', '[a-z0-9\-]+');

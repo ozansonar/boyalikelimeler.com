@@ -1,2 +1,9 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /profil/
+Disallow: /yazilarim
+Disallow: /yazi-gonder
+Disallow: /yazi-duzenle/
+Disallow: /ara?
+
+Sitemap: https://boyalikelimeler.com/sitemap.xml

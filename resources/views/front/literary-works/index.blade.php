@@ -6,6 +6,43 @@
 @section('og_title', 'İçerikler — Boyalı Kelimeler')
 @section('og_description', 'Yazarlarımızın en güzel eserlerini keşfedin.')
 
+@if(request('kategori') || request('sirala') || request('ara'))
+    @section('robots', 'noindex, follow')
+@endif
+
+@push('seo_links')
+    @if($works->previousPageUrl())
+        <link rel="prev" href="{{ $works->previousPageUrl() }}">
+    @endif
+    @if($works->nextPageUrl())
+        <link rel="next" href="{{ $works->nextPageUrl() }}">
+    @endif
+@endpush
+
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'CollectionPage',
+    'name' => 'İçerikler',
+    'description' => 'Boyalı Kelimeler yazarlarının en güzel yazılarını keşfedin.',
+    'url' => route('literary-works.index'),
+    'isPartOf' => [
+        '@type' => 'WebSite',
+        'name' => 'Boyalı Kelimeler',
+        'url' => url('/'),
+    ],
+    'breadcrumb' => [
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'İçerikler'],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
+
 @section('content')
 
     <!-- Page Hero -->
