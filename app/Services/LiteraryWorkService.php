@@ -564,6 +564,7 @@ final class LiteraryWorkService
 
         $sort = $filters['sort'] ?? 'newest';
         $query = match ($sort) {
+            'oldest'  => $query->orderBy('published_at'),
             'popular' => $query->orderByDesc('view_count'),
             default   => $query->orderByDesc('published_at'),
         };
