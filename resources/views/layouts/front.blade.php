@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    <link rel="alternate" type="application/rss+xml" title="Boyalı Kelimeler — İçerikler" href="{{ route('feed.literary-works') }}">
+    <link rel="alternate" type="application/rss+xml" title="Boyalı Kelimeler — Blog" href="{{ route('feed.blog') }}">
     <title>@yield('title', 'Boyalı Kelimeler')</title>
     <meta name="description" content="@yield('meta_description', 'Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı, fırçaların konuştuğu bir sanat hareketi.')">
     <link rel="canonical" href="@yield('canonical', url()->current())">
