@@ -218,17 +218,7 @@
                             </td>
                             <td class="text-sm-muted">{{ $work->category->name ?? '-' }}</td>
                             <td>
-                                @php
-                                    $statusMap = [
-                                        'pending'            => ['pending', 'Beklemede'],
-                                        'approved'           => ['active', 'Onaylandi'],
-                                        'rejected'           => ['inactive', 'Reddedildi'],
-                                        'revision_requested' => ['info', 'Revizyon'],
-                                        'unpublished'        => ['pending', 'Yayinda Degil'],
-                                    ];
-                                    $s = $statusMap[$work->status] ?? ['pending', $work->status];
-                                @endphp
-                                <span class="status-badge {{ $s[0] }}">{{ $s[1] }}</span>
+                                <span class="status-badge {{ $work->status->badgeClass() }}">{{ $work->status->label() }}</span>
                             </td>
                             <td class="text-sm-muted">{{ $work->created_at->format('d M Y') }}</td>
                         </tr>
