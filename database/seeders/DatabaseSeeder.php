@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             WriterSeeder::class,
             ContactMessageSeeder::class,
             PageSeeder::class,
+            DemoWriterSeeder::class,
+            DemoLiteraryWorkSeeder::class,
         ]);
     }
 }
