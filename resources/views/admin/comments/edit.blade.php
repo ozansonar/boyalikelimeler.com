@@ -48,36 +48,50 @@
                     </div>
                     <div class="card-body-custom">
                         <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="first_name" class="form-label">Ad <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('first_name') is-invalid @enderror"
-                                       id="first_name" name="first_name"
-                                       value="{{ old('first_name', $comment->first_name) }}"
-                                       required maxlength="100">
-                                @error('first_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label for="last_name" class="form-label">Soyad <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('last_name') is-invalid @enderror"
-                                       id="last_name" name="last_name"
-                                       value="{{ old('last_name', $comment->last_name) }}"
-                                       required maxlength="100">
-                                @error('last_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-12">
-                                <label for="email" class="form-label">E-posta <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                       id="email" name="email"
-                                       value="{{ old('email', $comment->email) }}"
-                                       required maxlength="255">
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            @if($comment->isByUser())
+                                <div class="col-12">
+                                    <label class="form-label">Yorumcu</label>
+                                    <div class="d-flex align-items-center gap-2 p-2 rounded" style="background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);">
+                                        <div class="cmt-admin-avatar">{{ $comment->commenterInitials() }}</div>
+                                        <div>
+                                            <strong>{{ $comment->fullName() }}</strong>
+                                            <span class="usr-status-badge usr-status-badge-blue ms-1"><i class="bi bi-person-check"></i></span>
+                                            <div class="text-muted small">{{ $comment->commenterEmail() }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="col-md-6">
+                                    <label for="first_name" class="form-label">Ad <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('first_name') is-invalid @enderror"
+                                           id="first_name" name="first_name"
+                                           value="{{ old('first_name', $comment->first_name) }}"
+                                           required maxlength="100">
+                                    @error('first_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="last_name" class="form-label">Soyad <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('last_name') is-invalid @enderror"
+                                           id="last_name" name="last_name"
+                                           value="{{ old('last_name', $comment->last_name) }}"
+                                           required maxlength="100">
+                                    @error('last_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-12">
+                                    <label for="email" class="form-label">E-posta <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                           id="email" name="email"
+                                           value="{{ old('email', $comment->email) }}"
+                                           required maxlength="255">
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endif
                             <div class="col-12">
                                 <label class="form-label">Puan <span class="text-danger">*</span></label>
                                 <div class="d-flex gap-2">

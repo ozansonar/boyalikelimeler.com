@@ -63,7 +63,7 @@ final class CommentService
 
     public function findById(int $id): ?Comment
     {
-        return Comment::with(['commentable', 'approver'])->find($id);
+        return Comment::with(['commentable', 'approver', 'user'])->find($id);
     }
 
     /**
@@ -88,7 +88,7 @@ final class CommentService
     public function paginate(array $filters = [], int $perPage = 20): LengthAwarePaginator
     {
         return Comment::query()
-            ->with(['commentable'])
+            ->with(['commentable', 'user'])
             ->when($filters['type'] ?? null, function (Builder $q, string $type): void {
                 $morphClass = match ($type) {
                     'icerik' => LiteraryWork::class,
@@ -147,6 +147,7 @@ final class CommentService
 
     private function notifyAdmins(Comment $comment): void
     {
+        $comment->loadMissing('user');
         $admins = User::whereHas('role', fn (Builder $q) => $q->whereIn('slug', ['admin', 'super-admin']))->get();
 
         foreach ($admins as $admin) {

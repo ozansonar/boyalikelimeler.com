@@ -18,13 +18,21 @@ final class CommentUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'first_name' => ['required', 'string', 'max:100'],
-            'last_name'  => ['required', 'string', 'max:100'],
-            'email'      => ['required', 'email', 'max:255'],
-            'body'       => ['required', 'string', 'min:10', 'max:3000'],
-            'rating'     => ['required', 'integer', 'min:1', 'max:5'],
+        $rules = [
+            'body'   => ['required', 'string', 'min:10', 'max:3000'],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
         ];
+
+        /** @var \App\Models\Comment $comment */
+        $comment = $this->route('comment');
+
+        if (!$comment->isByUser()) {
+            $rules['first_name'] = ['required', 'string', 'max:100'];
+            $rules['last_name']  = ['required', 'string', 'max:100'];
+            $rules['email']      = ['required', 'email', 'max:255'];
+        }
+
+        return $rules;
     }
 
     /**

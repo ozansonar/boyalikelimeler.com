@@ -144,8 +144,8 @@ class DemoWriterSeeder extends Seeder
         ];
 
         $users = [];
-        $usedEmails = [];
-        $usedUsernames = [];
+        $usedEmails = User::pluck('email')->toArray();
+        $usedUsernames = User::pluck('username')->filter()->toArray();
         $now = now()->format('Y-m-d H:i:s');
 
         for ($i = 0; $i < 200; $i++) {

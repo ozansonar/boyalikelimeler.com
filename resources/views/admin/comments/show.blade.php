@@ -136,10 +136,20 @@
                 </div>
                 <div class="card-body-custom">
                     <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="cmt-admin-avatar-lg">{{ mb_strtoupper(mb_substr($comment->first_name, 0, 1)) }}{{ mb_strtoupper(mb_substr($comment->last_name, 0, 1)) }}</div>
+                        <div class="cmt-admin-avatar-lg">{{ $comment->commenterInitials() }}</div>
                         <div>
                             <strong>{{ $comment->fullName() }}</strong>
-                            <div class="text-muted small">{{ $comment->email }}</div>
+                            @if($comment->isByUser())
+                                <span class="usr-status-badge usr-status-badge-blue ms-1" title="Kayıtlı Kullanıcı"><i class="bi bi-person-check"></i></span>
+                            @else
+                                <span class="usr-status-badge usr-status-badge-orange ms-1" title="Misafir"><i class="bi bi-person"></i></span>
+                            @endif
+                            <div class="text-muted small">{{ $comment->commenterEmail() }}</div>
+                            @if($comment->isByUser() && $comment->user)
+                                <a href="{{ route('admin.users.show', $comment->user) }}" class="text-teal small">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i>Kullanıcı profilini görüntüle
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="d-flex flex-column gap-1">

@@ -168,7 +168,7 @@ final class PostService
 
     public function findPublishedBySlug(string $slug): ?Post
     {
-        return Post::with(['category', 'author', 'approvedComments'])
+        return Post::with(['category', 'author', 'approvedComments.user'])
             ->where('slug', $slug)
             ->where('status', PostStatus::Published)
             ->first();
