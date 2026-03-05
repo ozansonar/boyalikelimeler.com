@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\MailLogController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -226,6 +227,16 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::post('home-sliders/update-order', [HomeSliderController::class, 'updateOrder'])->name('home-sliders.update-order');
     });
     Route::delete('home-sliders/{home_slider}', [HomeSliderController::class, 'destroy'])->name('home-sliders.destroy')->middleware('permission:home-sliders.delete');
+
+    // Role & Permission Management
+    Route::middleware('permission:roles.view')->group(function () {
+        Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+    });
+    Route::post('roles', [RoleController::class, 'store'])->name('roles.store')->middleware('permission:roles.create');
+    Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update')->middleware('permission:roles.edit');
+    Route::put('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update')->middleware('permission:roles.edit');
+    Route::post('roles/assign', [RoleController::class, 'assignRole'])->name('roles.assign')->middleware('permission:roles.assign');
+    Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy')->middleware('permission:roles.delete');
 
     // Literary Category Management (Edebiyat Kategorileri)
     Route::middleware('permission:literary-categories.view')->group(function () {

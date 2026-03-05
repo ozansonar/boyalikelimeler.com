@@ -7,7 +7,7 @@ Sira sira yapilacak, tamamlanan maddeler isaretlenecektir.
 
 ## Admin Panel Sayfalari (Tema dosyalari mevcut, Blade'e donusturulecek)
 
-- [ ] **Rol & Yetki Yonetimi Sayfasi** — `roles-permissions.html` temasi var, Permission ve Role modelleri mevcut, admin CRUD sayfasi yapilacak
+- [x] **Rol & Yetki Yonetimi Sayfasi** — `roles-permissions.html` temasi var, Permission ve Role modelleri mevcut, admin CRUD sayfasi yapilacak
 - [ ] **Analitik / Istatistik Sayfasi** — `analytics.html` temasi var, ziyaretci sayilari, populer icerikler, istatistikler
 - [ ] **Rapor Sayfasi** — `reports.html` temasi var, en cok okunan yazilar, aktif yazarlar vs.
 - [ ] **Bildirim Sistemi** — `notifications.html` temasi var, kullanicilara bildirim gonderme (yeni yorum, yazi onayi vs.)

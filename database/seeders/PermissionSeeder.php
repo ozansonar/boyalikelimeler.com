@@ -78,6 +78,13 @@ class PermissionSeeder extends Seeder
             // Yazarlar Sayfası
             ['name' => 'Yazarlar Sayfası Yönetimi', 'slug' => 'authors-page.manage', 'group' => 'authors-page', 'sort_order' => 110],
 
+            // Roller & İzinler
+            ['name' => 'Rolleri Görüntüle', 'slug' => 'roles.view', 'group' => 'roles', 'sort_order' => 115],
+            ['name' => 'Rol Oluştur', 'slug' => 'roles.create', 'group' => 'roles', 'sort_order' => 116],
+            ['name' => 'Rol Düzenle', 'slug' => 'roles.edit', 'group' => 'roles', 'sort_order' => 117],
+            ['name' => 'Rol Sil', 'slug' => 'roles.delete', 'group' => 'roles', 'sort_order' => 118],
+            ['name' => 'Rol Ata', 'slug' => 'roles.assign', 'group' => 'roles', 'sort_order' => 119],
+
             // Ayarlar
             ['name' => 'Ayarları Görüntüle', 'slug' => 'settings.view', 'group' => 'settings', 'sort_order' => 120],
             ['name' => 'Ayarları Düzenle', 'slug' => 'settings.edit', 'group' => 'settings', 'sort_order' => 121],
