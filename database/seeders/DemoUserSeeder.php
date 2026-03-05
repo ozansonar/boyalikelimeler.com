@@ -133,8 +133,8 @@ class DemoUserSeeder extends Seeder
         ];
 
         $users = [];
-        $usedEmails = [];
-        $usedUsernames = [];
+        $usedEmails = User::pluck('email')->toArray();
+        $usedUsernames = User::pluck('username')->toArray();
         $now = now()->format('Y-m-d H:i:s');
         $domains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'yandex.com', 'icloud.com'];
 
