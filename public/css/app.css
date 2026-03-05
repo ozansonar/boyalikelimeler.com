@@ -3362,10 +3362,26 @@ p {
 }
 
 /* -- User Dropdown ----------------------------------------- */
+.navbar-bk__auth-link.dropdown-toggle {
+    background: linear-gradient(135deg, var(--color-gold), #b8943d);
+    color: var(--color-black-deep);
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    border-radius: 0.4rem;
+}
+
+.navbar-bk__auth-link.dropdown-toggle:hover,
+.navbar-bk__auth-link.dropdown-toggle:focus,
+.navbar-bk__auth-link.dropdown-toggle.show {
+    color: var(--color-black-deep);
+    background: linear-gradient(135deg, #d4b96a, var(--color-gold));
+    box-shadow: 0 4px 14px rgba(200, 169, 110, 0.35);
+}
+
 .navbar-bk__auth-link.dropdown-toggle::after {
     margin-left: 0.35rem;
     vertical-align: 0.15em;
-    border-top-color: var(--color-gold);
+    border-top-color: var(--color-black-deep);
 }
 
 .navbar-bk__user-dropdown {
