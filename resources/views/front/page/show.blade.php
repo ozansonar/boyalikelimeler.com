@@ -80,8 +80,8 @@
                     <div class="row g-4 justify-content-center">
                         @foreach($page->boxes as $box)
                             <div class="{{ $box->bootstrapColClass() }}">
-                                @if($box->link)
-                                    <a href="{{ $box->link }}" target="{{ $box->link_target->value }}" class="page-box-card" rel="{{ $box->link_target === App\Enums\LinkTarget::Blank ? 'noopener noreferrer' : '' }}">
+                                @if($box->resolvedUrl())
+                                    <a href="{{ $box->resolvedUrl() }}" target="{{ $box->link_target->value }}" class="page-box-card" rel="{{ $box->link_target === App\Enums\LinkTarget::Blank ? 'noopener noreferrer' : '' }}">
                                 @else
                                     <div class="page-box-card">
                                 @endif
@@ -114,14 +114,14 @@
                                         @if($box->description)
                                             <p class="page-box-card__desc">{{ $box->description }}</p>
                                         @endif
-                                        @if($box->link)
+                                        @if($box->resolvedUrl())
                                             <span class="page-box-card__link-hint">
                                                 <i class="bi bi-arrow-right"></i>
                                             </span>
                                         @endif
                                     </div>
 
-                                @if($box->link)
+                                @if($box->resolvedUrl())
                                     </a>
                                 @else
                                     </div>

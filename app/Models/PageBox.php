@@ -79,6 +79,19 @@ class PageBox extends Model
         return null;
     }
 
+    public function resolvedUrl(): ?string
+    {
+        if (! $this->link) {
+            return null;
+        }
+
+        if (str_starts_with($this->link, 'http://') || str_starts_with($this->link, 'https://') || $this->link === '#') {
+            return $this->link;
+        }
+
+        return url($this->link);
+    }
+
     public function bootstrapColClass(): string
     {
         return sprintf('col-%d col-md-%d col-lg-%d', $this->col_mobile, $this->col_tablet, $this->col_desktop);
