@@ -1,7 +1,7 @@
 @extends('layouts.front')
 
 @section('title', $work->title . ' — Eserlerim — Boyalı Kelimeler')
-@section('meta_description', Str::limit(html_entity_decode(strip_tags($work->body)), 160))
+@section('meta_description', Str::limit(strip_tags($work->body), 160))
 @section('canonical', route('myposts.show', $work))
 
 @section('content')

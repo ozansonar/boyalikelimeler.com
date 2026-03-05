@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
 @section('title', ($page->meta_title ?: $page->title) . ' — Boyalı Kelimeler')
-@section('meta_description', $page->meta_description ?: Str::limit(html_entity_decode(strip_tags((string) $page->excerpt)), 160))
+@section('meta_description', $page->meta_description ?: Str::limit(strip_tags((string) $page->excerpt), 160))
 @section('canonical', route('page.show', $page->slug))
 @section('og_title', ($page->meta_title ?: $page->title) . ' — Boyalı Kelimeler')
-@section('og_description', $page->meta_description ?: Str::limit(html_entity_decode(strip_tags((string) $page->excerpt)), 160))
+@section('og_description', $page->meta_description ?: Str::limit(strip_tags((string) $page->excerpt), 160))
 @if($page->cover_image)
     @section('og_image', asset('uploads/' . $page->cover_image))
 @endif

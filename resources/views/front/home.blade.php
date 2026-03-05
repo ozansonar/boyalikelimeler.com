@@ -108,7 +108,7 @@
                                             <div class="card-bk__body">
                                                 <span class="popular-list__category popular-list__category--siir mb-2 d-inline-block">{{ $work->category?->name ?? 'Genel' }}</span>
                                                 <h4 class="card-bk__title">{{ $work->title }}</h4>
-                                                <p class="card-bk__text">{{ Str::limit(html_entity_decode(strip_tags($work->excerpt ?? $work->body)), 80) }}</p>
+                                                <p class="card-bk__text">{{ Str::limit(strip_tags($work->excerpt ?? $work->body), 80) }}</p>
                                             </div>
                                             <div class="card-bk__footer">
                                                 <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>{{ $work->author?->name ?? 'Anonim' }}</span>
