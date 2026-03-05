@@ -5,18 +5,27 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
-use App\Models\User;
+use App\Services\DashboardService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private readonly DashboardService $dashboardService,
+    ) {}
+
     public function index(): View
     {
-        $userCount = User::count();
-        $roleCount = Role::count();
-        $users     = User::with('role')->latest()->limit(10)->get();
-
-        return view('admin.dashboard', compact('userCount', 'roleCount', 'users'));
+        return view('admin.dashboard', [
+            'stats'            => $this->dashboardService->getStats(),
+            'monthlyUsers'     => $this->dashboardService->getMonthlyUserRegistrations(),
+            'monthlyWorks'     => $this->dashboardService->getMonthlyWorks(),
+            'roleDistribution' => $this->dashboardService->getRoleDistribution(),
+            'workStatus'       => $this->dashboardService->getWorkStatusDistribution(),
+            'latestWorks'      => $this->dashboardService->getLatestWorks(),
+            'latestComments'   => $this->dashboardService->getLatestComments(),
+            'latestUsers'      => $this->dashboardService->getLatestUsers(),
+            'topAuthors'       => $this->dashboardService->getTopAuthors(),
+        ]);
     }
 }
