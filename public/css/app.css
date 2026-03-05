@@ -3361,6 +3361,76 @@ p {
     color: var(--color-gold) !important;
 }
 
+/* -- User Dropdown ----------------------------------------- */
+.navbar-bk__auth-link.dropdown-toggle::after {
+    margin-left: 0.35rem;
+    vertical-align: 0.15em;
+    border-top-color: var(--color-gold);
+}
+
+.navbar-bk__user-dropdown {
+    background-color: var(--color-black-rich);
+    border: 1px solid rgba(200, 169, 110, 0.15);
+    border-top: 2px solid var(--color-gold);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0;
+    min-width: 200px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.navbar-bk__user-dropdown .dropdown-item {
+    color: var(--color-silver-light);
+    font-size: 0.85rem;
+    padding: 0.55rem 1.1rem;
+    transition: all 0.15s ease;
+}
+
+.navbar-bk__user-dropdown .dropdown-item:hover,
+.navbar-bk__user-dropdown .dropdown-item:focus {
+    background-color: rgba(200, 169, 110, 0.1);
+    color: var(--color-gold);
+}
+
+.navbar-bk__user-dropdown .dropdown-item i {
+    width: 18px;
+    text-align: center;
+    color: var(--color-gold-muted);
+}
+
+.navbar-bk__user-dropdown .dropdown-item:hover i,
+.navbar-bk__user-dropdown .dropdown-item:focus i {
+    color: var(--color-gold);
+}
+
+.navbar-bk__user-dropdown .dropdown-divider {
+    border-color: rgba(200, 169, 110, 0.12);
+    margin: 0.35rem 0;
+}
+
+.navbar-bk__user-dropdown-logout {
+    color: #e57373 !important;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.navbar-bk__user-dropdown-logout:hover,
+.navbar-bk__user-dropdown-logout:focus {
+    background-color: rgba(229, 115, 115, 0.1) !important;
+    color: #ef5350 !important;
+}
+
+.navbar-bk__user-dropdown-logout i {
+    color: #e57373 !important;
+}
+
 /* -- Login Page Responsive ---------------------------------- */
 @media (max-width: 991.98px) {
     .login-section {
