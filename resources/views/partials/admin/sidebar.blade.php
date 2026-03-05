@@ -113,6 +113,11 @@
                 </a>
             @endif
         @endif
+
+        <div class="nav-section-title">Kısayollar</div>
+        <a href="{{ url('/') }}" target="_blank" class="nav-link">
+            <i class="bi bi-box-arrow-up-right"></i> Siteye Dön
+        </a>
     </nav>
 
     <div class="sidebar-footer">
