@@ -24,6 +24,7 @@ class SettingController extends Controller
     public function index(Request $request): View
     {
         return view('admin.settings.index', [
+            'homepage'    => $this->settingService->getGroup('homepage'),
             'general'     => $this->settingService->getGroup('general'),
             'contact'     => $this->settingService->getGroup('contact'),
             'social'      => $this->settingService->getGroup('social'),
@@ -32,6 +33,21 @@ class SettingController extends Controller
             'maintenance' => $this->settingService->getGroup('maintenance'),
             'tab'         => $request->query('tab', 'general'),
         ]);
+    }
+
+    public function updateHomepage(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'hero_title'       => 'required|string|max:200',
+            'hero_subtitle'    => 'nullable|string|max:300',
+            'hero_tagline'     => 'nullable|string|max:200',
+            'hero_description' => 'nullable|string|max:1000',
+        ]);
+
+        $this->settingService->updateGroup('homepage', $data);
+
+        return redirect()->route('admin.settings.index', ['tab' => 'homepage'])
+            ->with('success', 'Anasayfa ayarları başarıyla güncellendi.');
     }
 
     public function updateGeneral(Request $request): RedirectResponse

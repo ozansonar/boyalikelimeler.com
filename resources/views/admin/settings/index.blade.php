@@ -26,7 +26,11 @@
         <!-- Settings Nav (Desktop) -->
         <div class="stg-nav d-none d-lg-block" data-aos="fade-right" data-aos-delay="100">
             <div class="stg-nav-inner">
-                <a href="#stg-general" class="stg-nav-item {{ ($tab ?? 'general') === 'general' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-general')">
+                <a href="#stg-homepage" class="stg-nav-item {{ ($tab ?? '') === 'homepage' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-homepage')">
+                    <i class="bi bi-house-heart"></i>
+                    <div><span>Anasayfa</span><small>Hero başlık, alt başlık & açıklama</small></div>
+                </a>
+                <a href="#stg-general" class="stg-nav-item {{ ($tab ?? 'general') === 'general' && ($tab ?? '') !== 'homepage' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-general')">
                     <i class="bi bi-sliders2"></i>
                     <div><span>Genel</span><small>Site adı, logo & temel ayarlar</small></div>
                 </a>
@@ -56,7 +60,8 @@
         <!-- Settings Nav (Mobile) -->
         <div class="d-lg-none mb-3">
             <select class="stg-select" onchange="switchSettingsTab(this.value, null)">
-                <option value="stg-general" {{ ($tab ?? 'general') === 'general' ? 'selected' : '' }}>Genel</option>
+                <option value="stg-homepage" {{ ($tab ?? '') === 'homepage' ? 'selected' : '' }}>Anasayfa</option>
+                <option value="stg-general" {{ ($tab ?? 'general') === 'general' && ($tab ?? '') !== 'homepage' ? 'selected' : '' }}>Genel</option>
                 <option value="stg-contact" {{ ($tab ?? '') === 'contact' ? 'selected' : '' }}>İletişim</option>
                 <option value="stg-social" {{ ($tab ?? '') === 'social' ? 'selected' : '' }}>Sosyal Medya</option>
                 <option value="stg-seo" {{ ($tab ?? '') === 'seo' ? 'selected' : '' }}>SEO</option>
@@ -68,8 +73,60 @@
         <!-- Settings Content -->
         <div class="stg-content">
 
+            {{-- ==================== 0. ANASAYFA ==================== --}}
+            <div class="stg-panel {{ ($tab ?? '') === 'homepage' ? 'active' : '' }}" id="stg-homepage">
+                <form action="{{ route('admin.settings.update.homepage') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="stg-panel-header">
+                        <div>
+                            <h5><i class="bi bi-house-heart"></i> Anasayfa Ayarları</h5>
+                            <p>Hero bölümündeki başlık, alt başlık ve açıklama metinlerini yönetin</p>
+                        </div>
+                        <button type="submit" class="stg-save-btn"><i class="bi bi-check-lg"></i> Kaydet</button>
+                    </div>
+
+                    <!-- Hero Bölümü -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Hero Bölümü</h6>
+                            <p>Anasayfanın en üstündeki karşılama alanı metinleri</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Ana Başlık</label>
+                            <input type="text" name="hero_title" class="stg-input" value="{{ old('hero_title', $homepage['hero_title'] ?? '') }}" placeholder="Boyalı Kelimeler">
+                            <small class="stg-hint">Hero bölümündeki büyük başlık (h1)</small>
+                            @error('hero_title') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Alt Başlık</label>
+                            <input type="text" name="hero_subtitle" class="stg-input" value="{{ old('hero_subtitle', $homepage['hero_subtitle'] ?? '') }}" placeholder="Sosyal Çöküntüye Sanatsal Direniş">
+                            <small class="stg-hint">Ana başlığın hemen altındaki açıklama satırı</small>
+                            @error('hero_subtitle') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Etiket (Tagline)</label>
+                            <input type="text" name="hero_tagline" class="stg-input" value="{{ old('hero_tagline', $homepage['hero_tagline'] ?? '') }}" placeholder="— Bir Sanat Hareketi —">
+                            <small class="stg-hint">Çizginin altındaki kısa etiket metni</small>
+                            @error('hero_tagline') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Açıklama Metni</label>
+                            <textarea name="hero_description" class="stg-textarea" rows="3" placeholder="Kelimelerin boyandığı, fırçaların konuştuğu...">{{ old('hero_description', $homepage['hero_description'] ?? '') }}</textarea>
+                            <small class="stg-hint">Hero bölümünün alt kısmındaki tanıtım paragrafı</small>
+                            @error('hero_description') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             {{-- ==================== 1. GENEL AYARLAR ==================== --}}
-            <div class="stg-panel {{ ($tab ?? 'general') === 'general' ? 'active' : '' }}" id="stg-general">
+            <div class="stg-panel {{ ($tab ?? 'general') === 'general' && ($tab ?? '') !== 'homepage' ? 'active' : '' }}" id="stg-general">
                 <form action="{{ route('admin.settings.update.general') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

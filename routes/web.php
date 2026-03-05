@@ -174,6 +174,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     });
     Route::middleware('permission:settings.edit')->group(function () {
+        Route::put('settings/homepage', [SettingController::class, 'updateHomepage'])->name('settings.update.homepage');
         Route::put('settings/general', [SettingController::class, 'updateGeneral'])->name('settings.update.general');
         Route::put('settings/contact', [SettingController::class, 'updateContact'])->name('settings.update.contact');
         Route::put('settings/social', [SettingController::class, 'updateSocial'])->name('settings.update.social');
