@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             WriterSeeder::class,
             ContactMessageSeeder::class,
             PageSeeder::class,
+            DemoUserSeeder::class,
             DemoWriterSeeder::class,
             DemoLiteraryWorkSeeder::class,
         ]);
