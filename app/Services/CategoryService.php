@@ -81,6 +81,13 @@ final class CategoryService
         });
     }
 
+    public function findActiveBySlug(string $slug): ?Category
+    {
+        return Category::where('slug', $slug)
+            ->where('is_active', true)
+            ->first();
+    }
+
     public function delete(Category $category): void
     {
         DB::transaction(function () use ($category): void {

@@ -28,7 +28,7 @@ Sira sira yapilacak, tamamlanan maddeler isaretlenecektir.
 
 ## Frontend Ozellikler
 
-- [ ] **Kategori Sayfasi** — Kategoriye gore yazi listeleme
+- [x] **Kategori Sayfasi** — Kategoriye gore yazi listeleme
 - [ ] **Sosyal Medya Paylasim Butonlari** — Yazi detayinda paylasim
 - [ ] **Newsletter (Bulten)** — E-posta aboneligi sistemi
 - [ ] **KVKK / Gizlilik Politikasi** — Ozel statik sayfalar
