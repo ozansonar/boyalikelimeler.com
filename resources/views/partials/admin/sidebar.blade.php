@@ -13,6 +13,11 @@
             <i class="bi bi-grid-1x2-fill"></i> Dashboard
         </a>
 
+        <div class="nav-section-title">Ana Sayfa</div>
+        <a href="{{ route('admin.home-sliders.index') }}" class="nav-link {{ request()->routeIs('admin.home-sliders.*') ? 'active' : '' }}">
+            <i class="bi bi-display-fill"></i> Slider Yönetimi
+        </a>
+
         <div class="nav-section-title">İçerik Yönetimi</div>
         <a href="{{ route('admin.posts.index') }}" class="nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
             <i class="bi bi-file-earmark-text-fill"></i> İçerikler

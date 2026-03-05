@@ -7,6 +7,9 @@ namespace App\Services;
 use App\Enums\RoleSlug;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Comment;
+use App\Models\LiteraryWork;
+use App\Models\Post;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -143,6 +146,62 @@ final class UserService
 
             return $user->fresh();
         });
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getProfileData(User $user): array
+    {
+        $user->load(['role', 'goldenPenPeriods' => fn ($q) => $q->orderByDesc('ends_at')]);
+
+        $posts = Post::where('user_id', $user->id)
+            ->with('category')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        $literaryWorks = LiteraryWork::where('user_id', $user->id)
+            ->with('category')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        $comments = Comment::where('email', $user->email)
+            ->with('commentable')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        $postStats = Post::where('user_id', $user->id)
+            ->selectRaw("
+                COUNT(*) as total,
+                SUM(CASE WHEN status = 'published' THEN 1 ELSE 0 END) as published,
+                SUM(CASE WHEN status = 'draft' THEN 1 ELSE 0 END) as draft,
+                COALESCE(SUM(view_count), 0) as total_views
+            ")->first();
+
+        $literaryWorkStats = LiteraryWork::where('user_id', $user->id)
+            ->selectRaw("
+                COUNT(*) as total,
+                SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) as approved,
+                SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+                COALESCE(SUM(view_count), 0) as total_views
+            ")->first();
+
+        $commentCount = Comment::where('email', $user->email)->count();
+        $goldenPenCount = $user->goldenPenPeriods->count();
+
+        return [
+            'user'             => $user,
+            'posts'            => $posts,
+            'literaryWorks'    => $literaryWorks,
+            'comments'         => $comments,
+            'postStats'        => $postStats,
+            'literaryWorkStats' => $literaryWorkStats,
+            'commentCount'     => $commentCount,
+            'goldenPenCount'   => $goldenPenCount,
+        ];
     }
 
     public function delete(User $user): void

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthorsPageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HomeSliderController;
 use App\Http\Controllers\Admin\LiteraryCategoryController;
 use App\Http\Controllers\Admin\LiteraryWorkController;
 use App\Http\Controllers\Admin\MailLogController;
@@ -93,7 +94,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // User Management
-    Route::resource('users', UserController::class)->except(['show']);
+    Route::resource('users', UserController::class);
 
     // Category Management
     Route::resource('categories', CategoryController::class)->except(['show']);
@@ -152,6 +153,10 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('mail-logs', [MailLogController::class, 'index'])->name('mail-logs.index');
     Route::get('mail-logs/{mailLog}', [MailLogController::class, 'show'])->name('mail-logs.show');
     Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy');
+
+    // Home Slider Management (Ana Sayfa Slider)
+    Route::resource('home-sliders', HomeSliderController::class)->except(['show']);
+    Route::post('home-sliders/update-order', [HomeSliderController::class, 'updateOrder'])->name('home-sliders.update-order');
 
     // Literary Category Management (Edebiyat Kategorileri)
     Route::resource('literary-categories', LiteraryCategoryController::class)->except(['show']);

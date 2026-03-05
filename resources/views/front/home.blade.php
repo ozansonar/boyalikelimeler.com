@@ -364,53 +364,54 @@
     =================================================== -->
     <section class="hero-slider" aria-label="Tam genişlik slider">
         <div class="hero-slider__overlay"></div>
-        <div class="hero-slider__slide hero-slider__slide--active" data-slide="0">
-            <div class="hero-slider__bg" role="img" aria-label="Slider arka plan"></div>
-            <div class="hero-slider__content">
-                <span class="hero-slider__badge"><i class="fa-solid fa-feather-pointed me-1"></i>Edebiyat</span>
-                <h2 class="hero-slider__title">Kelimelerin Gücü</h2>
-                <div class="hero-slider__divider"></div>
-                <p class="hero-slider__text">Bir kelime dünyayı değiştirebilir. Bir şiir ruhu dokunabilir. Bir hikaye hayatları dönüştürebilir.</p>
+        @forelse($homeSliders as $index => $slide)
+            <div class="hero-slider__slide {{ $index === 0 ? 'hero-slider__slide--active' : '' }}" data-slide="{{ $index }}">
+                <div class="hero-slider__bg" role="img" aria-label="Slider arka plan"></div>
+                <div class="hero-slider__content">
+                    <span class="hero-slider__badge">
+                        @if($slide->badge_icon)
+                            <i class="{{ $slide->badge_icon }} me-1"></i>
+                        @endif
+                        {{ $slide->badge_text }}
+                    </span>
+                    <h2 class="hero-slider__title">{{ $slide->title }}</h2>
+                    <div class="hero-slider__divider"></div>
+                    <p class="hero-slider__text">{{ $slide->description }}</p>
+                </div>
             </div>
-        </div>
-        <div class="hero-slider__slide" data-slide="1">
-            <div class="hero-slider__bg" role="img" aria-label="Slider arka plan"></div>
-            <div class="hero-slider__content">
-                <span class="hero-slider__badge"><i class="fa-solid fa-palette me-1"></i>Sanat</span>
-                <h2 class="hero-slider__title">Fırçanın Dili</h2>
-                <div class="hero-slider__divider"></div>
-                <p class="hero-slider__text">Renklerin anlatamadığını gölgeler fısıldar. Her tuval bir hikayedir, her fırça darbesi bir itiraftır.</p>
+        @empty
+            <div class="hero-slider__slide hero-slider__slide--active" data-slide="0">
+                <div class="hero-slider__bg" role="img" aria-label="Slider arka plan"></div>
+                <div class="hero-slider__content">
+                    <span class="hero-slider__badge"><i class="fa-solid fa-feather-pointed me-1"></i>Edebiyat</span>
+                    <h2 class="hero-slider__title">Kelimelerin Gücü</h2>
+                    <div class="hero-slider__divider"></div>
+                    <p class="hero-slider__text">Bir kelime dünyayı değiştirebilir. Bir şiir ruhu dokunabilir. Bir hikaye hayatları dönüştürebilir.</p>
+                </div>
             </div>
-        </div>
-        <div class="hero-slider__slide" data-slide="2">
-            <div class="hero-slider__bg" role="img" aria-label="Slider arka plan"></div>
-            <div class="hero-slider__content">
-                <span class="hero-slider__badge"><i class="fa-solid fa-users me-1"></i>Hareket</span>
-                <h2 class="hero-slider__title">Sanatta Birlik</h2>
-                <div class="hero-slider__divider"></div>
-                <p class="hero-slider__text">Edebiyat ve resim el ele. Boyalı Kelimeler, tüm sanat dallarını tek çatı altında buluşturuyor.</p>
+        @endforelse
+
+        @if($homeSliders->count() > 1)
+            <!-- Navigation Arrows -->
+            <button class="hero-slider__arrow hero-slider__arrow--prev" aria-label="Önceki slayt" data-hero-prev>
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button class="hero-slider__arrow hero-slider__arrow--next" aria-label="Sonraki slayt" data-hero-next>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <!-- Slider Dots -->
+            <div class="hero-slider__dots">
+                @foreach($homeSliders as $index => $slide)
+                    <button class="hero-slider__dot {{ $index === 0 ? 'hero-slider__dot--active' : '' }}" data-hero-dot="{{ $index }}" aria-label="Slayt {{ $index + 1 }}"></button>
+                @endforeach
             </div>
-        </div>
 
-        <!-- Navigation Arrows -->
-        <button class="hero-slider__arrow hero-slider__arrow--prev" aria-label="Önceki slayt" data-hero-prev>
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <button class="hero-slider__arrow hero-slider__arrow--next" aria-label="Sonraki slayt" data-hero-next>
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
-
-        <!-- Slider Dots -->
-        <div class="hero-slider__dots">
-            <button class="hero-slider__dot hero-slider__dot--active" data-hero-dot="0" aria-label="Slayt 1"></button>
-            <button class="hero-slider__dot" data-hero-dot="1" aria-label="Slayt 2"></button>
-            <button class="hero-slider__dot" data-hero-dot="2" aria-label="Slayt 3"></button>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="hero-slider__progress">
-            <div class="hero-slider__progress-bar"></div>
-        </div>
+            <!-- Progress Bar -->
+            <div class="hero-slider__progress">
+                <div class="hero-slider__progress-bar"></div>
+            </div>
+        @endif
     </section>
 
     <!-- ===================================================

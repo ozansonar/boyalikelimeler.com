@@ -52,6 +52,11 @@ class UserController extends Controller
             ->with('success', 'Kullanıcı başarıyla oluşturuldu.');
     }
 
+    public function show(User $user): View
+    {
+        return view('admin.users.show', $this->userService->getProfileData($user));
+    }
+
     public function edit(User $user): View
     {
         $user->load(['role', 'goldenPenPeriods' => fn ($q) => $q->orderByDesc('ends_at')]);
