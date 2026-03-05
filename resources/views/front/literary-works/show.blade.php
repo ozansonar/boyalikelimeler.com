@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
 @section('title', ($work->meta_title ?? $work->title) . ' — Boyalı Kelimeler')
-@section('meta_description', $work->meta_description ?? Str::limit(strip_tags($work->body), 160))
+@section('meta_description', $work->meta_description ?? Str::limit(html_entity_decode(strip_tags($work->body)), 160))
 @section('canonical', route('literary-works.show', $work->slug))
 @section('og_title', ($work->meta_title ?? $work->title) . ' — Boyalı Kelimeler')
-@section('og_description', $work->meta_description ?? Str::limit(strip_tags($work->body), 160))
+@section('og_description', $work->meta_description ?? Str::limit(html_entity_decode(strip_tags($work->body)), 160))
 
 @section('content')
 
