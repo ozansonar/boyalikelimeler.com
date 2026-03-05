@@ -543,7 +543,7 @@ final class LiteraryWorkService
 
     public function frontPaginate(int $perPage, array $filters = []): LengthAwarePaginator
     {
-        $query = LiteraryWork::with(['category', 'author'])
+        $query = LiteraryWork::with(['category', 'author' => fn ($q) => $q->withTrashed()])
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at');
 
