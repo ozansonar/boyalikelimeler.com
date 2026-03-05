@@ -148,20 +148,21 @@
                         @php
                             $currentSort = ($filters['sort'] ?? 'created_at') . '_' . ($filters['dir'] ?? 'desc');
                         @endphp
+                        <input type="hidden" name="dir" id="authorSortDir" value="{{ $filters['dir'] ?? 'desc' }}">
                         <button class="member-toolbar__sort-btn {{ $currentSort === 'created_at_desc' ? 'member-toolbar__sort-btn--active' : '' }}"
-                                type="submit" name="sort" value="created_at" title="En Yeni">
+                                type="submit" name="sort" value="created_at" title="En Yeni"
+                                data-dir="desc">
                             <i class="fa-solid fa-clock me-1"></i><span class="d-none d-md-inline">En Yeni</span>
-                            <input type="hidden" name="dir" value="desc" disabled>
                         </button>
                         <button class="member-toolbar__sort-btn {{ $currentSort === 'name_asc' ? 'member-toolbar__sort-btn--active' : '' }}"
-                                type="submit" name="sort" value="name" title="A-Z">
+                                type="submit" name="sort" value="name" title="A-Z"
+                                data-dir="asc">
                             <i class="fa-solid fa-arrow-down-a-z me-1"></i><span class="d-none d-md-inline">A-Z</span>
-                            <input type="hidden" name="dir" value="asc" disabled>
                         </button>
                         <button class="member-toolbar__sort-btn {{ $currentSort === 'works_desc' ? 'member-toolbar__sort-btn--active' : '' }}"
-                                type="submit" name="sort" value="works" title="En Çok Eser">
+                                type="submit" name="sort" value="works" title="En Çok Eser"
+                                data-dir="desc">
                             <i class="fa-solid fa-book me-1"></i><span class="d-none d-md-inline">En Çok Eser</span>
-                            <input type="hidden" name="dir" value="desc" disabled>
                         </button>
                         <button class="member-toolbar__sort-btn {{ !empty($filters['golden_pen']) ? 'member-toolbar__sort-btn--active' : '' }}"
                                 type="submit" name="golden_pen" value="{{ !empty($filters['golden_pen']) ? '' : '1' }}" title="Altın Kalem">
@@ -251,3 +252,13 @@
     </section>
 
 @endsection
+
+@push('scripts')
+<script>
+    document.querySelectorAll('.member-toolbar__sort-btn[data-dir]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.getElementById('authorSortDir').value = this.dataset.dir;
+        });
+    });
+</script>
+@endpush
