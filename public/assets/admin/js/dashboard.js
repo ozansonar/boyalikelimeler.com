@@ -26,7 +26,7 @@
                 labels: data.monthlyUsers.labels,
                 datasets: [
                     {
-                        label: 'Kullanicilar',
+                        label: 'Kullanıcılar',
                         data: data.monthlyUsers.values,
                         borderColor: 'rgb(' + tealRgb + ')',
                         backgroundColor: 'rgba(' + tealRgb + ', 0.1)',
@@ -126,10 +126,10 @@
     if (statusCtx) {
         const statusLabelMap = {
             'pending': 'Beklemede',
-            'approved': 'Onaylandi',
+            'approved': 'Onaylandı',
             'rejected': 'Reddedildi',
             'revision_requested': 'Revizyon',
-            'unpublished': 'Yayinda Degil',
+            'unpublished': 'Yayında Değil',
         };
         const statusColorMap = {
             'pending': 'rgba(' + orangeRgb + ', 0.85)',
@@ -148,7 +148,7 @@
             data: {
                 labels: statusLabels,
                 datasets: [{
-                    label: 'Eser Sayisi',
+                    label: 'Eser Sayısı',
                     data: statusValues,
                     backgroundColor: statusColors,
                     borderRadius: 6,

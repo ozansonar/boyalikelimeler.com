@@ -7,7 +7,7 @@
 <div class="page-header d-flex align-items-center justify-content-between">
     <div>
         <h2>Dashboard</h2>
-        <p>Hos geldiniz, {{ auth()->user()->name }}.</p>
+        <p>Hoş geldiniz, {{ auth()->user()->name }}.</p>
     </div>
 </div>
 
@@ -22,7 +22,7 @@
                 </span>
             </div>
             <div class="stat-value">{{ number_format($stats['total_users']) }}</div>
-            <div class="stat-label">Toplam Kullanici</div>
+            <div class="stat-label">Toplam Kullanıcı</div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
@@ -52,7 +52,7 @@
                 <div class="stat-icon orange"><i class="bi bi-file-earmark-text-fill"></i></div>
             </div>
             <div class="stat-value">{{ number_format($stats['total_posts']) }}</div>
-            <div class="stat-label">Toplam Yazi</div>
+            <div class="stat-label">Toplam Yazı</div>
         </div>
     </div>
 </div>
@@ -82,7 +82,7 @@
                     <i class="bi bi-chat-left-dots"></i>
                 </div>
                 <div>
-                    <div class="fw-600-primary">{{ $stats['pending_comments'] }} Onaysiz Yorum</div>
+                    <div class="fw-600-primary">{{ $stats['pending_comments'] }} Onaysız Yorum</div>
                     <div class="text-sm-muted">Moderasyon bekliyor</div>
                 </div>
             </div>
@@ -97,8 +97,8 @@
                     <i class="bi bi-envelope"></i>
                 </div>
                 <div>
-                    <div class="fw-600-primary">{{ $stats['unread_messages'] }} Okunmamis Mesaj</div>
-                    <div class="text-sm-muted">Iletisim formu</div>
+                    <div class="fw-600-primary">{{ $stats['unread_messages'] }} Okunmamış Mesaj</div>
+                    <div class="text-sm-muted">İletişim formu</div>
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
     <div class="col-xl-8">
         <div class="card-dark">
             <div class="card-header-custom">
-                <h6><i class="bi bi-activity me-2 text-teal"></i>Aylik Kayit ve Eser Istatistikleri</h6>
+                <h6><i class="bi bi-activity me-2 text-teal"></i>Aylık Kayıt ve Eser İstatistikleri</h6>
             </div>
             <div class="card-body-custom">
                 <div class="chart-container"><canvas id="trendChart"></canvas></div>
@@ -121,7 +121,7 @@
     <div class="col-xl-4">
         <div class="card-dark">
             <div class="card-header-custom">
-                <h6><i class="bi bi-pie-chart me-2 text-neon-purple"></i>Rol Dagilimi</h6>
+                <h6><i class="bi bi-pie-chart me-2 text-neon-purple"></i>Rol Dağılımı</h6>
             </div>
             <div class="card-body-custom">
                 <div class="chart-container"><canvas id="roleChart"></canvas></div>
@@ -135,7 +135,7 @@
     <div class="col-xl-4">
         <div class="card-dark">
             <div class="card-header-custom">
-                <h6><i class="bi bi-bar-chart me-2 text-neon-blue"></i>Eser Durumlari</h6>
+                <h6><i class="bi bi-bar-chart me-2 text-neon-blue"></i>Eser Durumları</h6>
             </div>
             <div class="card-body-custom">
                 <div class="chart-container chart-container-sm"><canvas id="workStatusChart"></canvas></div>
@@ -155,11 +155,11 @@
                     </div>
                     <div class="activity-content">
                         <h6>{{ $author->name }}</h6>
-                        <p>{{ $author->literary_works_count }} yayinlanmis eser</p>
+                        <p>{{ $author->literary_works_count }} yayınlanmış eser</p>
                     </div>
                 </div>
                 @empty
-                <div class="text-sm-muted text-center py-3">Henuz veri yok</div>
+                <div class="text-sm-muted text-center py-3">Henüz veri yok</div>
                 @endforelse
             </div>
         </div>
@@ -181,7 +181,7 @@
                     </div>
                 </div>
                 @empty
-                <div class="text-sm-muted text-center py-3">Henuz yorum yok</div>
+                <div class="text-sm-muted text-center py-3">Henüz yorum yok</div>
                 @endforelse
             </div>
         </div>
@@ -223,7 +223,7 @@
                             <td class="text-sm-muted">{{ $work->created_at->format('d M Y') }}</td>
                         </tr>
                         @empty
-                        <tr><td colspan="5" class="text-center text-sm-muted py-3">Henuz eser yok</td></tr>
+                        <tr><td colspan="5" class="text-center text-sm-muted py-3">Henüz eser yok</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -237,16 +237,16 @@
     <div class="col-12">
         <div class="card-dark">
             <div class="card-header-custom">
-                <h6><i class="bi bi-person-plus me-2 text-neon-purple"></i>Son Kayit Olan Kullanicilar</h6>
+                <h6><i class="bi bi-person-plus me-2 text-neon-purple"></i>Son Kayıt Olan Kullanıcılar</h6>
             </div>
             <div class="card-body-custom card-body-flush">
                 <table class="table-dark-custom">
                     <thead>
                         <tr>
-                            <th>Kullanici</th>
+                            <th>Kullanıcı</th>
                             <th>E-posta</th>
                             <th>Rol</th>
-                            <th>Kayit Tarihi</th>
+                            <th>Kayıt Tarihi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -266,7 +266,7 @@
                             <td class="text-sm-muted">{{ $user->created_at->format('d M Y') }}</td>
                         </tr>
                         @empty
-                        <tr><td colspan="4" class="text-center text-sm-muted py-3">Henuz kullanici yok</td></tr>
+                        <tr><td colspan="4" class="text-center text-sm-muted py-3">Henüz kullanıcı yok</td></tr>
                         @endforelse
                     </tbody>
                 </table>
