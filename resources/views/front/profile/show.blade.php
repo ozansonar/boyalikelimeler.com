@@ -353,6 +353,104 @@
                         @endforeach
                     @endif
 
+                    {{-- Beğenilen Eserler --}}
+                    @if($favoriteWorks->isNotEmpty())
+                        <div class="profile-card mb-3">
+                            <h3 class="profile-card__title">
+                                <i class="fa-solid fa-heart me-2"></i>Beğendiği Eserler
+                                <span class="profile-tabs__count ms-2">{{ $favoriteWorks->count() }}</span>
+                            </h3>
+                        </div>
+
+                        @foreach($favoriteWorks as $favWork)
+                            <a href="{{ route('literary-works.show', $favWork->slug) }}" class="profile-post__link">
+                                <article class="profile-post">
+                                    <div class="profile-post__inner">
+                                        @if($favWork->cover_image)
+                                            <div class="profile-post__thumb">
+                                                <x-responsive-image :path="$favWork->cover_image" :alt="$favWork->title . ' görseli'" size="sm" class="profile-post__thumb-img" />
+                                                @if($favWork->category)
+                                                    <span class="profile-post__category">{{ $favWork->category->name }}</span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        <div class="profile-post__body">
+                                            <h3 class="profile-post__title">{{ $favWork->title }}</h3>
+                                            @if($favWork->excerpt)
+                                                <p class="profile-post__excerpt">{{ Str::limit($favWork->excerpt, 200) }}</p>
+                                            @endif
+                                            <div class="profile-post__meta">
+                                                <span class="profile-post__date">
+                                                    <i class="fa-regular fa-calendar me-1"></i>{{ $favWork->published_at?->translatedFormat('d F Y') }}
+                                                </span>
+                                                <span class="profile-post__read-time">
+                                                    <i class="fa-solid fa-user me-1"></i>{{ $favWork->author->name }}
+                                                </span>
+                                            </div>
+                                            <div class="profile-post__stats">
+                                                <span class="profile-post__stat">
+                                                    <i class="fa-solid fa-heart me-1"></i>{{ $favWork->favorites()->count() }}
+                                                </span>
+                                                <span class="profile-post__stat">
+                                                    <i class="fa-regular fa-eye me-1"></i>{{ number_format($favWork->view_count) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </a>
+                        @endforeach
+                    @endif
+
+                    {{-- Beğenilen Blog Yazıları --}}
+                    @if($favoritePosts->isNotEmpty())
+                        <div class="profile-card mb-3">
+                            <h3 class="profile-card__title">
+                                <i class="fa-solid fa-heart me-2"></i>Beğendiği Yazılar
+                                <span class="profile-tabs__count ms-2">{{ $favoritePosts->count() }}</span>
+                            </h3>
+                        </div>
+
+                        @foreach($favoritePosts as $favPost)
+                            <article class="profile-post">
+                                <div class="profile-post__inner">
+                                    @if($favPost->cover_image)
+                                        <div class="profile-post__thumb">
+                                            <x-responsive-image :path="$favPost->cover_image" :alt="$favPost->title . ' görseli'" size="sm" class="profile-post__thumb-img" />
+                                            @if($favPost->category)
+                                                <span class="profile-post__category">{{ $favPost->category->name }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                    <div class="profile-post__body">
+                                        <h3 class="profile-post__title">
+                                            <a href="{{ route('blog.show', $favPost->slug) }}">{{ $favPost->title }}</a>
+                                        </h3>
+                                        @if($favPost->excerpt)
+                                            <p class="profile-post__excerpt">{{ Str::limit($favPost->excerpt, 200) }}</p>
+                                        @endif
+                                        <div class="profile-post__meta">
+                                            <span class="profile-post__date">
+                                                <i class="fa-regular fa-calendar me-1"></i>{{ $favPost->published_at?->translatedFormat('d F Y') }}
+                                            </span>
+                                            <span class="profile-post__read-time">
+                                                <i class="fa-solid fa-user me-1"></i>{{ $favPost->author->name }}
+                                            </span>
+                                        </div>
+                                        <div class="profile-post__stats">
+                                            <span class="profile-post__stat">
+                                                <i class="fa-solid fa-heart me-1"></i>{{ $favPost->favorites()->count() }}
+                                            </span>
+                                            <span class="profile-post__stat">
+                                                <i class="fa-regular fa-eye me-1"></i>{{ number_format($favPost->view_count) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        @endforeach
+                    @endif
+
                     {{-- Boş durum --}}
                     @if($works->isEmpty() && $posts->isEmpty())
                         <div class="profile-card text-center">

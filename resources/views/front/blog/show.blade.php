@@ -110,32 +110,46 @@
                         {!! $post->body !!}
                     </div>
 
-                    <!-- Share Bar -->
-                    <div class="blogd-share">
-                        <span class="blogd-share__label">
-                            <i class="fa-solid fa-share-nodes me-2"></i>Paylaş:
-                        </span>
-                        <div class="blogd-share__btns">
-                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('blog.show', $post->slug)) }}&text={{ urlencode($post->title) }}"
-                               target="_blank" rel="noopener noreferrer"
-                               class="blogd-share__btn blogd-share__btn--twitter" aria-label="Twitter'da paylaş">
-                                <i class="fa-brands fa-x-twitter"></i>
-                            </a>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('blog.show', $post->slug)) }}"
-                               target="_blank" rel="noopener noreferrer"
-                               class="blogd-share__btn blogd-share__btn--facebook" aria-label="Facebook'ta paylaş">
-                                <i class="fa-brands fa-facebook-f"></i>
-                            </a>
-                            <a href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . route('blog.show', $post->slug)) }}"
-                               target="_blank" rel="noopener noreferrer"
-                               class="blogd-share__btn blogd-share__btn--whatsapp" aria-label="WhatsApp'ta paylaş">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </a>
-                            <button type="button" class="blogd-share__btn blogd-share__btn--copy"
-                                    aria-label="Bağlantıyı kopyala"
-                                    data-url="{{ route('blog.show', $post->slug) }}">
-                                <i class="fa-solid fa-link"></i>
+                    <!-- Action Bar (Like + Share) -->
+                    <div class="blogd-actions">
+                        <div class="blogd-actions__left">
+                            <button type="button"
+                                    class="blogd-actions__like-btn js-favorite-btn {{ $post->isFavoritedBy() ? 'blogd-actions__like-btn--liked' : '' }}"
+                                    data-type="post"
+                                    data-id="{{ $post->id }}"
+                                    @guest data-login-required="true" @endguest
+                                    aria-label="Beğen">
+                                <i class="{{ $post->isFavoritedBy() ? 'fa-solid' : 'fa-regular' }} fa-heart me-1"></i>
+                                <span class="js-favorite-text">{{ $post->isFavoritedBy() ? 'Beğenildi' : 'Beğen' }}</span>
+                                <span class="blogd-actions__count js-favorite-count">{{ $post->favorites_count ?? $post->favorites()->count() }}</span>
                             </button>
+                        </div>
+                        <div class="blogd-actions__right">
+                            <span class="blogd-share__label">
+                                <i class="fa-solid fa-share-nodes me-2"></i>Paylaş:
+                            </span>
+                            <div class="blogd-share__btns">
+                                <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('blog.show', $post->slug)) }}&text={{ urlencode($post->title) }}"
+                                   target="_blank" rel="noopener noreferrer"
+                                   class="blogd-share__btn blogd-share__btn--twitter" aria-label="Twitter'da paylaş">
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                </a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('blog.show', $post->slug)) }}"
+                                   target="_blank" rel="noopener noreferrer"
+                                   class="blogd-share__btn blogd-share__btn--facebook" aria-label="Facebook'ta paylaş">
+                                    <i class="fa-brands fa-facebook-f"></i>
+                                </a>
+                                <a href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . route('blog.show', $post->slug)) }}"
+                                   target="_blank" rel="noopener noreferrer"
+                                   class="blogd-share__btn blogd-share__btn--whatsapp" aria-label="WhatsApp'ta paylaş">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </a>
+                                <button type="button" class="blogd-share__btn blogd-share__btn--copy"
+                                        aria-label="Bağlantıyı kopyala"
+                                        data-url="{{ route('blog.show', $post->slug) }}">
+                                    <i class="fa-solid fa-link"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -203,22 +217,5 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var copyBtn = document.querySelector('.blogd-share__btn--copy');
-    if (copyBtn) {
-        copyBtn.addEventListener('click', function () {
-            var url = this.getAttribute('data-url');
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(url).then(function () {
-                    copyBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
-                    setTimeout(function () {
-                        copyBtn.innerHTML = '<i class="fa-solid fa-link"></i>';
-                    }, 2000);
-                });
-            }
-        });
-    }
-});
-</script>
+    <script src="{{ asset('js/favorite.js') }}?v={{ filemtime(public_path('js/favorite.js')) }}"></script>
 @endpush

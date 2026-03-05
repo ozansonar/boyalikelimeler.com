@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class LiteraryWork extends Model
 {
@@ -92,6 +93,22 @@ class LiteraryWork extends Model
     public function isUnpublished(): bool
     {
         return $this->status === LiteraryWorkStatus::Unpublished;
+    }
+
+    public function favorites(): MorphMany
+    {
+        return $this->morphMany(Favorite::class, 'favoriteable');
+    }
+
+    public function isFavoritedBy(?int $userId = null): bool
+    {
+        $userId ??= Auth::id();
+
+        if (! $userId) {
+            return false;
+        }
+
+        return $this->favorites()->where('user_id', $userId)->exists();
     }
 
     public function readingTime(): int

@@ -25,10 +25,12 @@ final class ProfileController extends Controller
         $data = $this->profileService->getProfileData($user);
 
         return view('front.profile.show', [
-            'user'  => $user,
-            'posts' => $data['posts'],
-            'works' => $data['works'],
-            'stats' => $data['stats'],
+            'user'          => $user,
+            'posts'         => $data['posts'],
+            'works'         => $data['works'],
+            'stats'         => $data['stats'],
+            'favoriteWorks' => $data['favoriteWorks'],
+            'favoritePosts' => $data['favoritePosts'],
         ]);
     }
 

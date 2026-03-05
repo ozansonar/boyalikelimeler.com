@@ -25,6 +25,7 @@ use App\Http\Controllers\Front\AuthorController;
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\CommentController;
 use App\Http\Controllers\Front\ContactController;
+use App\Http\Controllers\Front\FavoriteController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\LiteraryWorkController as FrontLiteraryWorkController;
 use App\Http\Controllers\Front\MyPostController;
@@ -72,6 +73,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/profil/sifre', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::post('/profil/kapak', [ProfileController::class, 'updateCover'])->name('profile.cover');
+
+    // Favorite Toggle (AJAX)
+    Route::post('/favori/toggle', [FavoriteController::class, 'toggle'])->name('favorite.toggle');
 
     // Editor Image Upload (TinyMCE)
     Route::get('/editor/images', [EditorImageController::class, 'index'])->name('editor.images.index');
