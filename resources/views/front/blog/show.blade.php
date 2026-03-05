@@ -125,31 +125,10 @@
                             </button>
                         </div>
                         <div class="blogd-actions__right">
-                            <span class="blogd-share__label">
-                                <i class="fa-solid fa-share-nodes me-2"></i>Paylaş:
-                            </span>
-                            <div class="blogd-share__btns">
-                                <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('blog.show', $post->slug)) }}&text={{ urlencode($post->title) }}"
-                                   target="_blank" rel="noopener noreferrer"
-                                   class="blogd-share__btn blogd-share__btn--twitter" aria-label="Twitter'da paylaş">
-                                    <i class="fa-brands fa-x-twitter"></i>
-                                </a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('blog.show', $post->slug)) }}"
-                                   target="_blank" rel="noopener noreferrer"
-                                   class="blogd-share__btn blogd-share__btn--facebook" aria-label="Facebook'ta paylaş">
-                                    <i class="fa-brands fa-facebook-f"></i>
-                                </a>
-                                <a href="https://api.whatsapp.com/send?text={{ urlencode($post->title . ' ' . route('blog.show', $post->slug)) }}"
-                                   target="_blank" rel="noopener noreferrer"
-                                   class="blogd-share__btn blogd-share__btn--whatsapp" aria-label="WhatsApp'ta paylaş">
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                </a>
-                                <button type="button" class="blogd-share__btn blogd-share__btn--copy"
-                                        aria-label="Bağlantıyı kopyala"
-                                        data-url="{{ route('blog.show', $post->slug) }}">
-                                    <i class="fa-solid fa-link"></i>
-                                </button>
-                            </div>
+                            @include('partials.front.share-buttons', [
+                                'shareUrl' => route('blog.show', $post->slug),
+                                'shareTitle' => $post->title,
+                            ])
                         </div>
                     </div>
 

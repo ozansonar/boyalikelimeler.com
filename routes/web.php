@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Front\AuthorController;
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\CommentController;
+use App\Http\Controllers\Front\CategoryController as FrontCategoryController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FavoriteController;
 use App\Http\Controllers\Front\HomeController;
@@ -287,6 +288,9 @@ Route::get('/yazarlar', [AuthorController::class, 'index'])->name('authors.index
 Route::get('/yazarlar/altin-kalem/{yearMonth}', [AuthorController::class, 'goldenPenMonth'])
     ->name('authors.golden-pen-month')
     ->where('yearMonth', '\d{4}-\d{2}');
+
+// Category (Frontend — Kategori Sayfası)
+Route::get('/kategori/{slug}', [FrontCategoryController::class, 'show'])->name('category.show')->where('slug', '[a-z0-9\-]+');
 
 // Static Pages (catch-all — MUST be LAST route)
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')->where('slug', '[a-z0-9\-]+');
