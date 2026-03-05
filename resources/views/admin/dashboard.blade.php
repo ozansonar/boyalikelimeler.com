@@ -23,6 +23,7 @@
             </div>
             <div class="stat-value">{{ number_format($stats['total_users']) }}</div>
             <div class="stat-label">Toplam Kullanıcı</div>
+            <div class="stat-desc">Sistemdeki kayıtlı tüm kullanıcılar</div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
@@ -35,6 +36,7 @@
             </div>
             <div class="stat-value">{{ number_format($stats['total_works']) }}</div>
             <div class="stat-label">Toplam Eser</div>
+            <div class="stat-desc">Yayınlanan edebiyat eserleri</div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
@@ -44,6 +46,7 @@
             </div>
             <div class="stat-value">{{ number_format($stats['total_comments']) }}</div>
             <div class="stat-label">Toplam Yorum</div>
+            <div class="stat-desc">Eserlere yapılan tüm yorumlar</div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
@@ -53,6 +56,7 @@
             </div>
             <div class="stat-value">{{ number_format($stats['total_posts']) }}</div>
             <div class="stat-label">Toplam Yazı</div>
+            <div class="stat-desc">Yayınlanan blog yazıları</div>
         </div>
     </div>
 </div>
