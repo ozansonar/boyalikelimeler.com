@@ -7,7 +7,7 @@
     <!-- Page Header -->
     <x-admin.page-header title="Roller & İzinler" subtitle="Sistem rollerini yönetin, izinleri yapılandırın ve erişim kontrolünü sağlayın">
         @if(auth()->user()->hasPermission('roles.create'))
-            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#roleModal"><i class="bi bi-plus-lg me-1"></i> Yeni Rol Oluştur</button>
+            <button class="btn-teal" data-bs-toggle="modal" data-bs-target="#roleModal"><i class="bi bi-plus-lg me-1"></i> Yeni Rol Oluştur</button>
         @endif
     </x-admin.page-header>
 
@@ -202,7 +202,7 @@
                     <span class="d-flex align-items-center gap-1"><span class="rp-legend-dot locked"></span> Kilitli (Sistem)</span>
                 </div>
                 @if(auth()->user()->hasPermission('roles.edit'))
-                    <button class="btn btn-primary btn-sm" onclick="savePermissions()"><i class="bi bi-check2 me-1"></i> Değişiklikleri Kaydet</button>
+                    <button class="btn-teal" onclick="savePermissions()"><i class="bi bi-check2 me-1"></i> Değişiklikleri Kaydet</button>
                 @endif
             </div>
         </div>
@@ -300,7 +300,7 @@
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-check2 me-1"></i> Rolü Ata</button>
+                                    <button type="submit" class="btn-teal"><i class="bi bi-check2 me-1"></i> Rolü Ata</button>
                                 </div>
                             </div>
                         </form>
@@ -401,8 +401,8 @@
                             </div>
                         </div>
                         <div class="modal-footer border-theme">
-                            <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">İptal</button>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i> Rol Oluştur</button>
+                            <button type="button" class="stg-btn" data-bs-dismiss="modal">İptal</button>
+                            <button type="submit" class="btn-teal"><i class="bi bi-plus-lg me-1"></i> Rol Oluştur</button>
                         </div>
                     </form>
                 </div>
@@ -432,8 +432,8 @@
                             </div>
                         </div>
                         <div class="modal-footer border-theme">
-                            <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">İptal</button>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-check2 me-1"></i> Kaydet</button>
+                            <button type="button" class="stg-btn" data-bs-dismiss="modal">İptal</button>
+                            <button type="submit" class="btn-teal"><i class="bi bi-check2 me-1"></i> Kaydet</button>
                         </div>
                     </form>
                 </div>
@@ -456,11 +456,11 @@
                         <p class="text-danger fs-13 mt-2 mb-0"><i class="bi bi-exclamation-triangle me-1"></i>Role atanmış kullanıcılar varsa silinemez.</p>
                     </div>
                     <div class="modal-footer border-theme">
-                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">İptal</button>
+                        <button type="button" class="stg-btn" data-bs-dismiss="modal">İptal</button>
                         <form id="deleteRoleForm" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash me-1"></i> Sil</button>
+                            <button type="submit" class="stg-btn stg-btn-danger"><i class="bi bi-trash me-1"></i> Sil</button>
                         </form>
                     </div>
                 </div>

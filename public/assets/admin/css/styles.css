@@ -24974,31 +24974,60 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
    ROLES & PERMISSIONS - Modal Permissions
    ============================================================ */
 .rp-modal-permissions {
-  max-height: 320px;
+  max-height: 360px;
   overflow-y: auto;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 12px;
-  background: var(--bg-input, rgba(255,255,255,0.04));
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.rp-modal-permissions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rp-modal-permissions::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rp-modal-permissions::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
 }
 
 .rp-modal-perm-group {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .rp-modal-perm-group:last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .rp-modal-perm-group-title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 600;
   font-size: 13px;
-  color: var(--text-primary);
-  margin-bottom: 8px;
+  color: var(--teal-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: rgba(20, 184, 166, 0.06);
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.rp-modal-perm-group-title:hover {
+  background: rgba(20, 184, 166, 0.12);
 }
 
 .rp-modal-perm-group-title input[type="checkbox"] {
@@ -25011,22 +25040,30 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
 .rp-modal-perm-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 10px;
+  font-size: 13px;
   color: var(--text-secondary);
-  padding: 4px 0 4px 24px;
+  padding: 6px 10px 6px 28px;
   cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s ease;
 }
 
 .rp-modal-perm-item input[type="checkbox"] {
   accent-color: var(--teal-primary);
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   cursor: pointer;
 }
 
 .rp-modal-perm-item:hover {
   color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rp-modal-perm-item input[type="checkbox"]:checked + span {
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 .rp-matrix-filter {
