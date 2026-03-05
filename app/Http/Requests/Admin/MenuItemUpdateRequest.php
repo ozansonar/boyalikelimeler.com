@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\LinkTarget;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class MenuItemUpdateRequest extends FormRequest
 {
@@ -22,7 +24,7 @@ class MenuItemUpdateRequest extends FormRequest
             'title'      => 'required|string|max:100',
             'url'        => 'required|string|max:500',
             'icon'       => 'nullable|string|max:100',
-            'target'     => 'required|in:_self,_blank',
+            'target'     => ['required', new Enum(LinkTarget::class)],
             'parent_id'  => 'nullable|exists:menu_items,id',
             'is_active'  => 'required|boolean',
             'sort_order' => 'nullable|integer|min:0|max:999',

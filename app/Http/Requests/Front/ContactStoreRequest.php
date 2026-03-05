@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Front;
 
+use App\Enums\ContactSubject;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 final class ContactStoreRequest extends FormRequest
 {
@@ -21,7 +23,7 @@ final class ContactStoreRequest extends FormRequest
         return [
             'fullname' => ['required', 'string', 'max:100'],
             'email'    => ['required', 'email', 'max:255'],
-            'subject'  => ['required', 'string', 'in:genel,isbirligi,yarisma,teknik,oneri,diger'],
+            'subject'  => ['required', 'string', new Enum(ContactSubject::class)],
             'message'  => ['required', 'string', 'min:10', 'max:5000'],
         ];
     }

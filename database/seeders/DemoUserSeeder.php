@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\Gender;
 use App\Enums\RoleSlug;
 use App\Models\Role;
 use App\Models\User;
@@ -140,7 +141,7 @@ class DemoUserSeeder extends Seeder
 
         for ($i = 0; $i < self::USER_COUNT; $i++) {
             $isFemale = $i % 2 === 0;
-            $gender = $isFemale ? 'female' : 'male';
+            $gender = $isFemale ? Gender::Female->value : Gender::Male->value;
             $firstName = $isFemale
                 ? $femaleNames[array_rand($femaleNames)]
                 : $maleNames[array_rand($maleNames)];

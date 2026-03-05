@@ -280,9 +280,9 @@
                                             </label>
                                             <select class="pedit-form__select" id="pf_gender" name="gender">
                                                 <option value="">Belirtmek istemiyorum</option>
-                                                <option value="female" @selected(old('gender', $user->gender) === 'female')>Kadın</option>
-                                                <option value="male" @selected(old('gender', $user->gender) === 'male')>Erkek</option>
-                                                <option value="other" @selected(old('gender', $user->gender) === 'other')>Diğer</option>
+                                                @foreach(\App\Enums\Gender::cases() as $genderOption)
+                                                    <option value="{{ $genderOption->value }}" @selected(old('gender', $user->gender?->value) === $genderOption->value)>{{ $genderOption->label() }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>

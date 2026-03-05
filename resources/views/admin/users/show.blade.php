@@ -167,7 +167,7 @@
                         @if($user->gender)
                             <div class="prf-about-item">
                                 <i class="bi bi-gender-ambiguous"></i>
-                                <div><small>Cinsiyet</small><span>{{ $user->gender === 'male' ? 'Erkek' : ($user->gender === 'female' ? 'Kadın' : $user->gender) }}</span></div>
+                                <div><small>Cinsiyet</small><span>{{ $user->gender->label() }}</span></div>
                             </div>
                         @endif
                         <div class="prf-about-item">

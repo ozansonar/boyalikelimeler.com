@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Front;
 
+use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -30,7 +32,7 @@ class ProfileUpdateRequest extends FormRequest
             'location'       => ['nullable', 'string', 'max:100'],
             'website'        => ['nullable', 'url', 'max:255'],
             'birthdate'      => ['nullable', 'date', 'before:today'],
-            'gender'         => ['nullable', 'in:female,male,other'],
+            'gender'         => ['nullable', new Enum(Gender::class)],
             'instagram'      => ['nullable', 'string', 'max:50'],
             'twitter'        => ['nullable', 'string', 'max:50'],
             'youtube'        => ['nullable', 'string', 'max:50'],

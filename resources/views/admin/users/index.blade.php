@@ -87,7 +87,11 @@
                                 <td>
                                     <div class="usr-user-cell">
                                         <div class="usr-avatar">
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=14b8a6&color=fff&size=40" alt="{{ $user->name }}">
+                                            @if($user->avatar)
+                                                <img src="{{ upload_url($user->avatar, 'thumb') }}" alt="{{ $user->name }}" loading="lazy" class="img-fluid">
+                                            @else
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=14b8a6&color=fff&size=40" alt="{{ $user->name }}">
+                                            @endif
                                             @if($user->hasVerifiedEmail())
                                                 <span class="usr-status-dot online"></span>
                                             @else

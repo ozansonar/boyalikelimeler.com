@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\LinkTarget;
+use App\Enums\PageBoxType;
 use App\Models\Page;
 use App\Models\PageBox;
 use App\Traits\GeneratesUniqueSlug;
@@ -145,16 +147,16 @@ final class PageService
                 $imagePath = null;
             }
 
-            $boxType = $boxData['type'] ?? 'image';
+            $boxType = $boxData['type'] ?? PageBoxType::Image->value;
 
             $attributes = [
                 'type'        => $boxType,
                 'title'       => $boxData['title'],
                 'description' => $boxData['description'] ?? null,
                 'link'        => $boxData['link'] ?? null,
-                'link_target' => $boxData['link_target'] ?? '_blank',
-                'image'       => $boxType === 'image' ? $imagePath : null,
-                'video_url'   => $boxType === 'video' ? ($boxData['video_url'] ?? null) : null,
+                'link_target' => $boxData['link_target'] ?? LinkTarget::Blank->value,
+                'image'       => $boxType === PageBoxType::Image->value ? $imagePath : null,
+                'video_url'   => $boxType === PageBoxType::Video->value ? ($boxData['video_url'] ?? null) : null,
                 'col_desktop' => (int) ($boxData['col_desktop'] ?? 4),
                 'col_tablet'  => (int) ($boxData['col_tablet'] ?? 6),
                 'col_mobile'  => (int) ($boxData['col_mobile'] ?? 12),

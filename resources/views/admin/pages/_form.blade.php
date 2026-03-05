@@ -245,8 +245,9 @@
                                         <div class="col-md-4">
                                             <label class="form-label">Link Hedefi</label>
                                             <select class="form-select" name="boxes[{{ $i }}][link_target]">
-                                                <option value="_blank" {{ $box->link_target === '_blank' ? 'selected' : '' }}>Yeni Sekme</option>
-                                                <option value="_self" {{ $box->link_target === '_self' ? 'selected' : '' }}>Aynı Sekme</option>
+                                                @foreach(App\Enums\LinkTarget::cases() as $lt)
+                                                    <option value="{{ $lt->value }}" {{ $box->link_target === $lt ? 'selected' : '' }}>{{ $lt->label() }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-4">

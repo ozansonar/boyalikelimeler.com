@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\MailLogStatus;
 use App\Models\MailLog;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
@@ -22,9 +23,9 @@ final class MailLogService
 
             return [
                 'total'   => (int) $counts->sum(),
-                'sent'    => (int) ($counts['sent'] ?? 0),
-                'failed'  => (int) ($counts['failed'] ?? 0),
-                'pending' => (int) ($counts['pending'] ?? 0),
+                'sent'    => (int) ($counts[MailLogStatus::Sent->value] ?? 0),
+                'failed'  => (int) ($counts[MailLogStatus::Failed->value] ?? 0),
+                'pending' => (int) ($counts[MailLogStatus::Pending->value] ?? 0),
             ];
         });
     }
@@ -83,7 +84,7 @@ final class MailLogService
     public function markSent(MailLog $log): void
     {
         $log->update([
-            'status'  => 'sent',
+            'status'  => MailLogStatus::Sent,
             'sent_at' => now(),
         ]);
         $this->clearCache();
@@ -92,7 +93,7 @@ final class MailLogService
     public function markFailed(MailLog $log, string $error): void
     {
         $log->update([
-            'status'        => 'failed',
+            'status'        => MailLogStatus::Failed,
             'error_message' => $error,
         ]);
         $this->clearCache();

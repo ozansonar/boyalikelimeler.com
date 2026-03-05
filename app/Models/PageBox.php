@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\LinkTarget;
+use App\Enums\PageBoxType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,6 +37,8 @@ class PageBox extends Model
             'col_tablet'  => 'integer',
             'col_mobile'  => 'integer',
             'sort_order'  => 'integer',
+            'type'        => PageBoxType::class,
+            'link_target' => LinkTarget::class,
         ];
     }
 
@@ -45,12 +49,12 @@ class PageBox extends Model
 
     public function isVideo(): bool
     {
-        return $this->type === 'video';
+        return $this->type === PageBoxType::Video;
     }
 
     public function isImage(): bool
     {
-        return $this->type === 'image';
+        return $this->type === PageBoxType::Image;
     }
 
     public function youtubeId(): ?string

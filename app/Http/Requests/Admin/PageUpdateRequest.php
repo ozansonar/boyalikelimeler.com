@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\LinkTarget;
+use App\Enums\PageBoxType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class PageUpdateRequest extends FormRequest
 {
@@ -28,11 +31,11 @@ class PageUpdateRequest extends FormRequest
             'is_active'              => 'required|boolean',
             'sort_order'             => 'nullable|integer|min:0|max:999',
             'boxes'                  => 'nullable|array|max:20',
-            'boxes.*.type'           => 'required|in:image,video',
+            'boxes.*.type'           => ['required', new Enum(PageBoxType::class)],
             'boxes.*.title'          => 'required|string|max:200',
             'boxes.*.description'    => 'nullable|string|max:1000',
             'boxes.*.link'           => 'nullable|url|max:500',
-            'boxes.*.link_target'    => 'nullable|in:_self,_blank',
+            'boxes.*.link_target'    => ['nullable', new Enum(LinkTarget::class)],
             'boxes.*.video_url'      => 'nullable|required_if:boxes.*.type,video|url|max:500',
             'boxes.*.col_desktop'    => 'required|integer|in:2,3,4,6,12',
             'boxes.*.col_tablet'     => 'required|integer|in:4,6,12',
