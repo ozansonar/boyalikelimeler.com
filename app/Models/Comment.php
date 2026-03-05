@@ -17,6 +17,7 @@ class Comment extends Model
     protected $fillable = [
         'commentable_type',
         'commentable_id',
+        'user_id',
         'first_name',
         'last_name',
         'email',
@@ -42,14 +43,50 @@ class Comment extends Model
         return $this->morphTo();
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
 
+    public function isByUser(): bool
+    {
+        return $this->user_id !== null;
+    }
+
     public function fullName(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        if ($this->user_id && $this->relationLoaded('user') && $this->user) {
+            return $this->user->name;
+        }
+
+        return trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
+    }
+
+    public function commenterEmail(): ?string
+    {
+        if ($this->user_id && $this->relationLoaded('user') && $this->user) {
+            return $this->user->email;
+        }
+
+        return $this->email;
+    }
+
+    public function commenterInitials(): string
+    {
+        if ($this->user_id && $this->relationLoaded('user') && $this->user) {
+            $parts = explode(' ', $this->user->name);
+
+            return mb_strtoupper(mb_substr($parts[0] ?? '', 0, 1))
+                 . mb_strtoupper(mb_substr($parts[1] ?? '', 0, 1));
+        }
+
+        return mb_strtoupper(mb_substr($this->first_name ?? '', 0, 1))
+             . mb_strtoupper(mb_substr($this->last_name ?? '', 0, 1));
     }
 
     public function contentTitle(): string

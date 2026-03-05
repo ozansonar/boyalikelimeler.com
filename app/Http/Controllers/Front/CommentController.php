@@ -43,16 +43,25 @@ final class CommentController extends Controller
             ], 404);
         }
 
-        $this->commentService->store([
+        $data = [
             'commentable_type' => $morphClass,
             'commentable_id'   => $model->id,
-            'first_name'       => $validated['first_name'],
-            'last_name'        => $validated['last_name'],
-            'email'            => $validated['email'],
             'body'             => $validated['body'],
             'rating'           => (int) $validated['rating'],
             'ip_address'       => $request->ip(),
-        ]);
+        ];
+
+        $user = $request->user();
+
+        if ($user) {
+            $data['user_id'] = $user->id;
+        } else {
+            $data['first_name'] = $validated['first_name'];
+            $data['last_name']  = $validated['last_name'];
+            $data['email']      = $validated['email'];
+        }
+
+        $this->commentService->store($data);
 
         return response()->json([
             'success' => true,

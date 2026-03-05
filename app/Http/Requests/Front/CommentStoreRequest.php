@@ -18,15 +18,20 @@ final class CommentStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'commentable_type' => ['required', 'string', 'in:literary_work,post'],
             'commentable_id'   => ['required', 'integer', 'min:1'],
-            'first_name'       => ['required', 'string', 'max:100'],
-            'last_name'        => ['required', 'string', 'max:100'],
-            'email'            => ['required', 'email', 'max:255'],
             'body'             => ['required', 'string', 'min:10', 'max:3000'],
             'rating'           => ['required', 'integer', 'min:1', 'max:5'],
         ];
+
+        if (!$this->user()) {
+            $rules['first_name'] = ['required', 'string', 'max:100'];
+            $rules['last_name']  = ['required', 'string', 'max:100'];
+            $rules['email']      = ['required', 'email', 'max:255'];
+        }
+
+        return $rules;
     }
 
     /**

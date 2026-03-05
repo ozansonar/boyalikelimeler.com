@@ -101,6 +101,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Favorite::class);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function activeGoldenPenPeriod(): HasOne
     {
         $today = now()->toDateString();

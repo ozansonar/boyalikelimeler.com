@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             DemoUserSeeder::class,
             DemoWriterSeeder::class,
             DemoLiteraryWorkSeeder::class,
+            DemoCommentSeeder::class,
         ]);
     }
 }

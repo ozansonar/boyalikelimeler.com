@@ -120,12 +120,17 @@
                                 <td>
                                     <div class="cl-content-cell">
                                         <div class="cl-content-thumb draft">
-                                            <span class="cmt-admin-avatar">{{ mb_strtoupper(mb_substr($comment->first_name, 0, 1)) }}{{ mb_strtoupper(mb_substr($comment->last_name, 0, 1)) }}</span>
+                                            <span class="cmt-admin-avatar">{{ $comment->commenterInitials() }}</span>
                                         </div>
                                         <div class="cl-content-info">
-                                            <span class="cl-content-title">{{ $comment->fullName() }}</span>
+                                            <span class="cl-content-title">
+                                                {{ $comment->fullName() }}
+                                                @if($comment->isByUser())
+                                                    <span class="usr-status-badge usr-status-badge-blue ms-1" title="Kayıtlı Kullanıcı"><i class="bi bi-person-check"></i></span>
+                                                @endif
+                                            </span>
                                             <span class="cl-content-meta">
-                                                <i class="bi bi-envelope me-1"></i>{{ $comment->email }}
+                                                <i class="bi bi-envelope me-1"></i>{{ $comment->commenterEmail() }}
                                             </span>
                                             <span class="cl-content-meta">{{ Str::limit($comment->body, 80) }}</span>
                                         </div>
