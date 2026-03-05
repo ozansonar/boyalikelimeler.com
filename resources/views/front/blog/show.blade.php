@@ -5,9 +5,56 @@
 @section('canonical', route('blog.show', $post->slug))
 @section('og_title', ($post->meta_title ?: $post->title) . ' — Boyalı Kelimeler Blog')
 @section('og_description', $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160))
+@section('og_type', 'article')
 @if($post->cover_image)
     @section('og_image', asset('uploads/' . $post->cover_image))
 @endif
+
+@push('og_meta')
+    @if($post->published_at)
+        <meta property="article:published_time" content="{{ $post->published_at->toIso8601String() }}">
+    @endif
+    <meta property="article:modified_time" content="{{ $post->updated_at->toIso8601String() }}">
+    @if($post->category)
+        <meta property="article:section" content="{{ $post->category->name }}">
+    @endif
+@endpush
+
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        array_filter([
+            '@type' => 'BlogPosting',
+            'headline' => $post->meta_title ?: $post->title,
+            'description' => $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160),
+            'image' => $post->cover_image ? asset('uploads/' . $post->cover_image) : asset('images/og-cover.jpg'),
+            'datePublished' => $post->published_at?->toIso8601String(),
+            'dateModified' => $post->updated_at->toIso8601String(),
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Boyalı Kelimeler',
+                'url' => url('/'),
+                'logo' => ['@type' => 'ImageObject', 'url' => asset('images/logo.svg')],
+            ],
+            'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('blog.show', $post->slug)],
+            'articleSection' => $post->category?->name,
+            'wordCount' => preg_match_all('/\pL+/u', strip_tags((string) $post->body)),
+        ]),
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => array_values(array_filter([
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Blog', 'item' => route('blog.index')],
+                $post->category ? ['@type' => 'ListItem', 'position' => 3, 'name' => $post->category->name, 'item' => route('blog.index', ['kategori' => $post->category->slug])] : null,
+                ['@type' => 'ListItem', 'position' => $post->category ? 4 : 3, 'name' => $post->title],
+            ])),
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
 

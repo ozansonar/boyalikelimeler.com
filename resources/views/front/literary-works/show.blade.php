@@ -5,6 +5,64 @@
 @section('canonical', route('literary-works.show', $work->slug))
 @section('og_title', ($work->meta_title ?? $work->title) . ' — Boyalı Kelimeler')
 @section('og_description', $work->meta_description ?? Str::limit(strip_tags($work->body), 160))
+@section('og_type', 'article')
+@if($work->cover_image)
+    @section('og_image', asset('uploads/' . $work->cover_image))
+@endif
+
+@push('og_meta')
+    <meta property="article:published_time" content="{{ $work->published_at->toIso8601String() }}">
+    <meta property="article:modified_time" content="{{ $work->updated_at->toIso8601String() }}">
+    <meta property="article:author" content="{{ $work->author->name }}">
+    <meta property="article:section" content="{{ $work->category->name }}">
+@endpush
+
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'Article',
+            'headline' => $work->meta_title ?? $work->title,
+            'description' => $work->meta_description ?? Str::limit(strip_tags($work->body), 160),
+            'image' => $work->cover_image ? asset('uploads/' . $work->cover_image) : asset('images/og-cover.jpg'),
+            'datePublished' => $work->published_at->toIso8601String(),
+            'dateModified' => $work->updated_at->toIso8601String(),
+            'author' => [
+                '@type' => 'Person',
+                'name' => $work->author->name,
+                'url' => route('profile.show', $work->author->username),
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Boyalı Kelimeler',
+                'url' => url('/'),
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('images/logo.svg'),
+                ],
+            ],
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => route('literary-works.show', $work->slug),
+            ],
+            'articleSection' => $work->category->name,
+            'wordCount' => preg_match_all('/\pL+/u', strip_tags($work->body)),
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'İçerikler', 'item' => route('literary-works.index')],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => $work->category->name, 'item' => route('literary-works.index', ['kategori' => $work->category->slug])],
+                ['@type' => 'ListItem', 'position' => 4, 'name' => $work->title],
+            ],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
 

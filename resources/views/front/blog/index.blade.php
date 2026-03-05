@@ -6,6 +6,43 @@
 @section('og_title', 'Blog — Boyalı Kelimeler')
 @section('og_description', 'Sanat, edebiyat, kültür ve etkinlik haberleri.')
 
+@if(request('kategori'))
+    @section('robots', 'noindex, follow')
+@endif
+
+@push('seo_links')
+    @if($posts->previousPageUrl())
+        <link rel="prev" href="{{ $posts->previousPageUrl() }}">
+    @endif
+    @if($posts->nextPageUrl())
+        <link rel="next" href="{{ $posts->nextPageUrl() }}">
+    @endif
+@endpush
+
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'CollectionPage',
+    'name' => 'Blog',
+    'description' => 'Boyalı Kelimeler blog yazıları. Sanat, edebiyat, kültür ve etkinlik haberleri.',
+    'url' => route('blog.index'),
+    'isPartOf' => [
+        '@type' => 'WebSite',
+        'name' => 'Boyalı Kelimeler',
+        'url' => url('/'),
+    ],
+    'breadcrumb' => [
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Blog'],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
+
 @section('content')
 
     <!-- Page Header -->

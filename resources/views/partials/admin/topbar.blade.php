@@ -8,6 +8,9 @@
         </button>
     </div>
     <div class="navbar-actions">
+        <a href="{{ url('/') }}" target="_blank" class="nav-action-btn" aria-label="Siteye Dön" title="Siteye Dön">
+            <i class="bi bi-box-arrow-up-right"></i>
+        </a>
         <form action="{{ route('logout') }}" method="POST" class="d-inline">
             @csrf
             <button type="submit" class="nav-action-btn" aria-label="Çıkış" title="Çıkış Yap">
