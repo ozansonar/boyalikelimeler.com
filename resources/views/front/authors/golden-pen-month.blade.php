@@ -6,6 +6,30 @@
 @section('og_title', $monthData['label'] . ' — Boyalı Kelimeler')
 @section('og_description', $monthData['label'] . ' — Boyalı Kelimeler altın kalem yazarları.')
 
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'CollectionPage',
+            'name' => $monthData['label'] . ' — Boyalı Kelimeler',
+            'description' => $monthData['label'] . ' altın kalem yazarları.',
+            'url' => route('authors.golden-pen-month', $yearMonth),
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Yazarlar', 'item' => route('authors.index')],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => $monthData['label']],
+            ],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
+
 @section('content')
 
     <!-- =======================================================

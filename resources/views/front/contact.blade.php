@@ -3,13 +3,31 @@
 @section('title', 'İletişim — Boyalı Kelimeler')
 @section('meta_description', 'Boyalı Kelimeler ile iletişime geçin. Sorularınız, önerileriniz ve iş birliği talepleriniz için bize ulaşın.')
 @section('canonical', route('contact.show'))
+@section('og_title', 'İletişim — Boyalı Kelimeler')
+@section('og_description', 'Boyalı Kelimeler ile iletişime geçin. Sorularınız ve önerileriniz için bize ulaşın.')
 
-@section('og')
-    <meta property="og:title" content="İletişim — Boyalı Kelimeler">
-    <meta property="og:description" content="Boyalı Kelimeler ile iletişime geçin. Sorularınız ve önerileriniz için bize ulaşın.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ route('contact.show') }}">
-@endsection
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'ContactPage',
+            'name' => 'İletişim — Boyalı Kelimeler',
+            'description' => 'Boyalı Kelimeler ile iletişime geçin.',
+            'url' => route('contact.show'),
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'İletişim'],
+            ],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
 

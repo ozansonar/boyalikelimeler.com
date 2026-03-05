@@ -3,6 +3,7 @@
 @section('title', $pageTitle . ' — Boyalı Kelimeler')
 @section('meta_description', 'Boyalı Kelimeler\'de eserinizi paylaşın. Şiir, hikaye, deneme ve daha fazlası.')
 @section('canonical', $work ? route('myposts.edit', $work) : route('myposts.create'))
+@section('robots', 'noindex, nofollow')
 
 @push('styles')
     <!-- Tom Select CSS -->

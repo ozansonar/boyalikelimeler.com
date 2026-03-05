@@ -6,6 +6,33 @@
 @section('og_title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız — Boyalı Kelimeler')
 @section('og_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazarları ile tanışın. Şairler, hikayeciler ve deneme yazarlarımız.')
 
+@if(request()->anyFilled(['search', 'sort', 'dir', 'golden_pen', 'page']))
+    @section('robots', 'noindex, follow')
+@endif
+
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'CollectionPage',
+            'name' => !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız — Boyalı Kelimeler',
+            'description' => !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazarları ile tanışın.',
+            'url' => route('authors.index'),
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Yazarlar'],
+            ],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
+
 @section('content')
 
     <!-- =======================================================

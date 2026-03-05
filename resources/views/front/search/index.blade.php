@@ -5,6 +5,7 @@
 @section('canonical', route('search.index', $query ? ['q' => $query] : []))
 @section('og_title', $query ? "\"$query\" arama sonuçları — Boyalı Kelimeler" : 'Ara — Boyalı Kelimeler')
 @section('og_description', $query ? "\"$query\" araması için sonuçlar." : 'Boyalı Kelimeler içerik arama sayfası.')
+@section('robots', 'noindex, follow')
 
 @section('content')
 

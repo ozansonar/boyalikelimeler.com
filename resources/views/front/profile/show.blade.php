@@ -5,6 +5,38 @@
 @section('canonical', route('profile.show', $user->username))
 @section('og_title', $user->name . ' — Yazar Profili | Boyalı Kelimeler')
 @section('og_description', $user->bio ?? $user->name . ' profili')
+@section('og_type', 'profile')
+@if($user->avatar_url)
+    @section('og_image', $user->avatar_url)
+@endif
+
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'ProfilePage',
+            'mainEntity' => [
+                '@type' => 'Person',
+                'name' => $user->name,
+                'url' => route('profile.show', $user->username),
+                'image' => $user->avatar_url ?: null,
+                'description' => $user->bio,
+            ],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Yazarlar', 'item' => route('authors.index')],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => $user->name],
+            ],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
 

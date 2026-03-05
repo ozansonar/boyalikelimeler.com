@@ -5,6 +5,47 @@
 @section('canonical', url('/'))
 @section('og_title', 'Boyalı Kelimeler — Sosyal Çöküntüye Sanatsal Direniş')
 @section('og_description', 'Sanat ve edebiyatın buluştuğu premium platform.')
+@section('og_image', asset('images/og-cover.jpg'))
+
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'WebSite',
+            'name' => 'Boyalı Kelimeler',
+            'url' => url('/'),
+            'description' => 'Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı, fırçaların konuştuğu bir sanat hareketi.',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Boyalı Kelimeler',
+                'url' => url('/'),
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('images/logo.svg'),
+                ],
+            ],
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => route('search.index') . '?q={search_term_string}',
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ],
+        [
+            '@type' => 'Organization',
+            'name' => 'Boyalı Kelimeler',
+            'url' => url('/'),
+            'logo' => asset('images/logo.svg'),
+            'sameAs' => [],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
 

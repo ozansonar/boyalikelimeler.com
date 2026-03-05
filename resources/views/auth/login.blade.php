@@ -5,6 +5,7 @@
 @section('canonical', url('/giris'))
 @section('og_title', 'Giriş Yap — Boyalı Kelimeler')
 @section('og_description', 'Boyalı Kelimeler hesabınıza giriş yapın.')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 <section class="login-section" aria-label="Giriş formu">

@@ -5,6 +5,7 @@
 @section('canonical', url('/kayit-ol'))
 @section('og_title', 'Kayıt Ol — Boyalı Kelimeler')
 @section('og_description', 'Boyalı Kelimeler topluluğuna katılın.')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 <section class="login-section" aria-label="Kayıt formu">

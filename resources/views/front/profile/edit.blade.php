@@ -3,6 +3,7 @@
 @section('title', 'Profili Düzenle — Boyalı Kelimeler')
 @section('meta_description', 'Boyalı Kelimeler profil bilgilerinizi düzenleyin.')
 @section('canonical', route('profile.edit'))
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 
