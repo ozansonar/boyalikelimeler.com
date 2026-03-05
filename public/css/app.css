@@ -3385,13 +3385,13 @@ p {
 }
 
 .navbar-bk__user-dropdown {
-    background-color: var(--color-black-rich);
-    border: 1px solid rgba(200, 169, 110, 0.15);
+    background-color: var(--color-black-sweet);
+    border: 1px solid rgba(200, 169, 110, 0.2);
     border-top: 2px solid var(--color-gold);
     border-radius: 0.5rem;
     padding: 0.5rem 0;
     min-width: 200px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     animation: dropdownFadeIn 0.2s ease;
 }
 
