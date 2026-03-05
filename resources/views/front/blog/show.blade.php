@@ -11,7 +11,9 @@
 @endif
 
 @push('og_meta')
-    <meta property="article:published_time" content="{{ $post->published_at->toIso8601String() }}">
+    @if($post->published_at)
+        <meta property="article:published_time" content="{{ $post->published_at->toIso8601String() }}">
+    @endif
     <meta property="article:modified_time" content="{{ $post->updated_at->toIso8601String() }}">
     @if($post->category)
         <meta property="article:section" content="{{ $post->category->name }}">
@@ -23,12 +25,12 @@
 {!! json_encode([
     '@context' => 'https://schema.org',
     '@graph' => [
-        [
+        array_filter([
             '@type' => 'BlogPosting',
             'headline' => $post->meta_title ?: $post->title,
             'description' => $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160),
             'image' => $post->cover_image ? asset('uploads/' . $post->cover_image) : asset('images/og-cover.jpg'),
-            'datePublished' => $post->published_at->toIso8601String(),
+            'datePublished' => $post->published_at?->toIso8601String(),
             'dateModified' => $post->updated_at->toIso8601String(),
             'publisher' => [
                 '@type' => 'Organization',
@@ -37,9 +39,9 @@
                 'logo' => ['@type' => 'ImageObject', 'url' => asset('images/logo.svg')],
             ],
             'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('blog.show', $post->slug)],
-            ...($post->category ? ['articleSection' => $post->category->name] : []),
-            'wordCount' => str_word_count(strip_tags((string) $post->body)),
-        ],
+            'articleSection' => $post->category?->name,
+            'wordCount' => preg_match_all('/\pL+/u', strip_tags((string) $post->body)),
+        ]),
         [
             '@type' => 'BreadcrumbList',
             'itemListElement' => array_values(array_filter([

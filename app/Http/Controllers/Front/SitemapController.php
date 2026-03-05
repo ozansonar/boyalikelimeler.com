@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Front;
 
+use App\Enums\LiteraryWorkStatus;
+use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Models\LiteraryCategory;
 use App\Models\LiteraryWork;
@@ -39,7 +41,7 @@ class SitemapController extends Controller
 
         // Literary works
         LiteraryWork::query()
-            ->where('status', 'approved')
+            ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at')
             ->whereHas('author', fn ($q) => $q->whereNotNull('username'))
             ->select('slug', 'updated_at')
@@ -57,7 +59,7 @@ class SitemapController extends Controller
 
         // Blog posts
         Post::query()
-            ->where('is_published', true)
+            ->where('status', PostStatus::Published)
             ->whereNotNull('published_at')
             ->select('slug', 'updated_at')
             ->orderByDesc('published_at')

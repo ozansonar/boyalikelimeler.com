@@ -48,7 +48,7 @@
                 '@id' => route('literary-works.show', $work->slug),
             ],
             'articleSection' => $work->category->name,
-            'wordCount' => str_word_count(strip_tags($work->body)),
+            'wordCount' => preg_match_all('/\pL+/u', strip_tags($work->body)),
         ],
         [
             '@type' => 'BreadcrumbList',
