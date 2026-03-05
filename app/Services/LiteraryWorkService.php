@@ -544,7 +544,7 @@ final class LiteraryWorkService
     public function frontPaginate(int $perPage, array $filters = []): LengthAwarePaginator
     {
         $query = LiteraryWork::with(['category', 'author'])
-            ->whereHas('author')
+            ->whereHas('author', fn ($q) => $q->whereNotNull('username'))
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at');
 
@@ -578,7 +578,7 @@ final class LiteraryWorkService
     public function findPublishedBySlug(string $slug): ?LiteraryWork
     {
         return LiteraryWork::with(['category', 'author', 'approvedComments.user'])
-            ->whereHas('author')
+            ->whereHas('author', fn ($q) => $q->whereNotNull('username'))
             ->where('slug', $slug)
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at')
@@ -600,7 +600,7 @@ final class LiteraryWorkService
     public function getRelatedWorks(LiteraryWork $work, int $limit = 4): \Illuminate\Database\Eloquent\Collection
     {
         return LiteraryWork::with(['author'])
-            ->whereHas('author')
+            ->whereHas('author', fn ($q) => $q->whereNotNull('username'))
             ->where('literary_category_id', $work->literary_category_id)
             ->where('id', '!=', $work->id)
             ->where('status', LiteraryWorkStatus::Approved)

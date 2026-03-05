@@ -136,7 +136,7 @@ final class ProfileService
         }
 
         return LiteraryWork::whereIn('id', $favoriteIds)
-            ->whereHas('author')
+            ->whereHas('author', fn ($q) => $q->whereNotNull('username'))
             ->where('status', LiteraryWorkStatus::Approved)
             ->with(['category', 'author'])
             ->get();
