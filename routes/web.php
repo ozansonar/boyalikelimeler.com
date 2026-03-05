@@ -91,86 +91,169 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Admin Routes
 Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('permission:dashboard.view');
 
     // User Management
-    Route::resource('users', UserController::class);
+    Route::middleware('permission:users.view')->group(function () {
+        Route::get('users', [UserController::class, 'index'])->name('users.index');
+        Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+    });
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create')->middleware('permission:users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store')->middleware('permission:users.create');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('permission:users.edit');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update')->middleware('permission:users.edit');
+    Route::patch('users/{user}', [UserController::class, 'update'])->name('users.update.patch')->middleware('permission:users.edit');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy')->middleware('permission:users.delete');
 
     // Category Management
-    Route::resource('categories', CategoryController::class)->except(['show']);
+    Route::middleware('permission:categories.view')->group(function () {
+        Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+    });
+    Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create')->middleware('permission:categories.create');
+    Route::post('categories', [CategoryController::class, 'store'])->name('categories.store')->middleware('permission:categories.create');
+    Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit')->middleware('permission:categories.edit');
+    Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update')->middleware('permission:categories.edit');
+    Route::patch('categories/{category}', [CategoryController::class, 'update'])->name('categories.update.patch')->middleware('permission:categories.edit');
+    Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy')->middleware('permission:categories.delete');
 
     // Post Management
-    Route::resource('posts', PostController::class)->except(['show']);
+    Route::middleware('permission:posts.view')->group(function () {
+        Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+    });
+    Route::get('posts/create', [PostController::class, 'create'])->name('posts.create')->middleware('permission:posts.create');
+    Route::post('posts', [PostController::class, 'store'])->name('posts.store')->middleware('permission:posts.create');
+    Route::get('posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit')->middleware('permission:posts.edit');
+    Route::put('posts/{post}', [PostController::class, 'update'])->name('posts.update')->middleware('permission:posts.edit');
+    Route::patch('posts/{post}', [PostController::class, 'update'])->name('posts.update.patch')->middleware('permission:posts.edit');
+    Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('permission:posts.delete');
 
     // Page Management
-    Route::resource('pages', AdminPageController::class)->except(['show']);
+    Route::middleware('permission:pages.view')->group(function () {
+        Route::get('pages', [AdminPageController::class, 'index'])->name('pages.index');
+    });
+    Route::get('pages/create', [AdminPageController::class, 'create'])->name('pages.create')->middleware('permission:pages.create');
+    Route::post('pages', [AdminPageController::class, 'store'])->name('pages.store')->middleware('permission:pages.create');
+    Route::get('pages/{page}/edit', [AdminPageController::class, 'edit'])->name('pages.edit')->middleware('permission:pages.edit');
+    Route::put('pages/{page}', [AdminPageController::class, 'update'])->name('pages.update')->middleware('permission:pages.edit');
+    Route::patch('pages/{page}', [AdminPageController::class, 'update'])->name('pages.update.patch')->middleware('permission:pages.edit');
+    Route::delete('pages/{page}', [AdminPageController::class, 'destroy'])->name('pages.destroy')->middleware('permission:pages.delete');
 
     // Menu Management
-    Route::resource('menus', MenuController::class)->except(['show']);
-    Route::get('menus/{menu}/items', [MenuController::class, 'items'])->name('menus.items');
-    Route::post('menus/{menu}/items', [MenuController::class, 'storeItem'])->name('menus.items.store');
-    Route::put('menus/{menu}/items/{item}', [MenuController::class, 'updateItem'])->name('menus.items.update');
-    Route::delete('menus/{menu}/items/{item}', [MenuController::class, 'destroyItem'])->name('menus.items.destroy');
-    Route::post('menus/{menu}/items/reorder', [MenuController::class, 'reorderItems'])->name('menus.items.reorder');
+    Route::middleware('permission:menus.view')->group(function () {
+        Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
+        Route::get('menus/{menu}/items', [MenuController::class, 'items'])->name('menus.items');
+    });
+    Route::get('menus/create', [MenuController::class, 'create'])->name('menus.create')->middleware('permission:menus.create');
+    Route::post('menus', [MenuController::class, 'store'])->name('menus.store')->middleware('permission:menus.create');
+    Route::middleware('permission:menus.edit')->group(function () {
+        Route::get('menus/{menu}/edit', [MenuController::class, 'edit'])->name('menus.edit');
+        Route::put('menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
+        Route::patch('menus/{menu}', [MenuController::class, 'update'])->name('menus.update.patch');
+        Route::post('menus/{menu}/items', [MenuController::class, 'storeItem'])->name('menus.items.store');
+        Route::put('menus/{menu}/items/{item}', [MenuController::class, 'updateItem'])->name('menus.items.update');
+        Route::delete('menus/{menu}/items/{item}', [MenuController::class, 'destroyItem'])->name('menus.items.destroy');
+        Route::post('menus/{menu}/items/reorder', [MenuController::class, 'reorderItems'])->name('menus.items.reorder');
+    });
+    Route::delete('menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy')->middleware('permission:menus.delete');
 
     // Authors Page Settings
-    Route::get('authors-page', [AuthorsPageController::class, 'index'])->name('authors-page.index');
-    Route::put('authors-page', [AuthorsPageController::class, 'update'])->name('authors-page.update');
+    Route::middleware('permission:authors-page.manage')->group(function () {
+        Route::get('authors-page', [AuthorsPageController::class, 'index'])->name('authors-page.index');
+        Route::put('authors-page', [AuthorsPageController::class, 'update'])->name('authors-page.update');
+    });
 
     // Settings
-    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::put('settings/general', [SettingController::class, 'updateGeneral'])->name('settings.update.general');
-    Route::put('settings/contact', [SettingController::class, 'updateContact'])->name('settings.update.contact');
-    Route::put('settings/social', [SettingController::class, 'updateSocial'])->name('settings.update.social');
-    Route::put('settings/seo', [SettingController::class, 'updateSeo'])->name('settings.update.seo');
-    Route::put('settings/smtp', [SettingController::class, 'updateSmtp'])->name('settings.update.smtp');
-    Route::put('settings/maintenance', [SettingController::class, 'updateMaintenance'])->name('settings.update.maintenance');
-    Route::get('settings/remove-logo', [SettingController::class, 'removeLogo'])->name('settings.remove-logo');
-    Route::get('settings/remove-favicon', [SettingController::class, 'removeFavicon'])->name('settings.remove-favicon');
-    Route::get('settings/remove-mail-logo', [SettingController::class, 'removeMailLogo'])->name('settings.remove-mail-logo');
-    Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
-    Route::post('settings/send-test-mail', [SettingController::class, 'sendTestMail'])->name('settings.send-test-mail');
+    Route::middleware('permission:settings.view')->group(function () {
+        Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    });
+    Route::middleware('permission:settings.edit')->group(function () {
+        Route::put('settings/general', [SettingController::class, 'updateGeneral'])->name('settings.update.general');
+        Route::put('settings/contact', [SettingController::class, 'updateContact'])->name('settings.update.contact');
+        Route::put('settings/social', [SettingController::class, 'updateSocial'])->name('settings.update.social');
+        Route::put('settings/seo', [SettingController::class, 'updateSeo'])->name('settings.update.seo');
+        Route::put('settings/smtp', [SettingController::class, 'updateSmtp'])->name('settings.update.smtp');
+        Route::put('settings/maintenance', [SettingController::class, 'updateMaintenance'])->name('settings.update.maintenance');
+        Route::get('settings/remove-logo', [SettingController::class, 'removeLogo'])->name('settings.remove-logo');
+        Route::get('settings/remove-favicon', [SettingController::class, 'removeFavicon'])->name('settings.remove-favicon');
+        Route::get('settings/remove-mail-logo', [SettingController::class, 'removeMailLogo'])->name('settings.remove-mail-logo');
+        Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
+        Route::post('settings/send-test-mail', [SettingController::class, 'sendTestMail'])->name('settings.send-test-mail');
+    });
 
     // Comment Management
-    Route::get('comments', [AdminCommentController::class, 'index'])->name('comments.index');
-    Route::get('comments/{comment}', [AdminCommentController::class, 'show'])->name('comments.show');
-    Route::get('comments/{comment}/edit', [AdminCommentController::class, 'edit'])->name('comments.edit');
-    Route::put('comments/{comment}', [AdminCommentController::class, 'update'])->name('comments.update');
-    Route::patch('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
-    Route::patch('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
-    Route::delete('comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');
+    Route::middleware('permission:comments.view')->group(function () {
+        Route::get('comments', [AdminCommentController::class, 'index'])->name('comments.index');
+        Route::get('comments/{comment}', [AdminCommentController::class, 'show'])->name('comments.show');
+    });
+    Route::middleware('permission:comments.edit')->group(function () {
+        Route::get('comments/{comment}/edit', [AdminCommentController::class, 'edit'])->name('comments.edit');
+        Route::put('comments/{comment}', [AdminCommentController::class, 'update'])->name('comments.update');
+    });
+    Route::middleware('permission:comments.moderate')->group(function () {
+        Route::patch('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
+        Route::patch('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
+    });
+    Route::delete('comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy')->middleware('permission:comments.delete');
 
     // Contact Messages
-    Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
-    Route::patch('contacts/mark-all-read', [AdminContactController::class, 'markAllRead'])->name('contacts.mark-all-read');
-    Route::get('contacts/{id}', [AdminContactController::class, 'show'])->name('contacts.show')->where('id', '[0-9]+');
-    Route::post('contacts/{id}/reply', [AdminContactController::class, 'reply'])->name('contacts.reply')->where('id', '[0-9]+');
-    Route::patch('contacts/{id}/star', [AdminContactController::class, 'toggleStar'])->name('contacts.star')->where('id', '[0-9]+');
-    Route::patch('contacts/{id}/archive', [AdminContactController::class, 'archive'])->name('contacts.archive')->where('id', '[0-9]+');
-    Route::delete('contacts/{id}', [AdminContactController::class, 'destroy'])->name('contacts.destroy')->where('id', '[0-9]+');
+    Route::middleware('permission:contacts.view')->group(function () {
+        Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
+        Route::patch('contacts/mark-all-read', [AdminContactController::class, 'markAllRead'])->name('contacts.mark-all-read');
+        Route::get('contacts/{id}', [AdminContactController::class, 'show'])->name('contacts.show')->where('id', '[0-9]+');
+        Route::patch('contacts/{id}/star', [AdminContactController::class, 'toggleStar'])->name('contacts.star')->where('id', '[0-9]+');
+        Route::patch('contacts/{id}/archive', [AdminContactController::class, 'archive'])->name('contacts.archive')->where('id', '[0-9]+');
+    });
+    Route::post('contacts/{id}/reply', [AdminContactController::class, 'reply'])->name('contacts.reply')->where('id', '[0-9]+')->middleware('permission:contacts.reply');
+    Route::delete('contacts/{id}', [AdminContactController::class, 'destroy'])->name('contacts.destroy')->where('id', '[0-9]+')->middleware('permission:contacts.delete');
 
     // Mail Logs
-    Route::get('mail-logs', [MailLogController::class, 'index'])->name('mail-logs.index');
-    Route::get('mail-logs/{mailLog}', [MailLogController::class, 'show'])->name('mail-logs.show');
-    Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy');
+    Route::middleware('permission:mail-logs.view')->group(function () {
+        Route::get('mail-logs', [MailLogController::class, 'index'])->name('mail-logs.index');
+        Route::get('mail-logs/{mailLog}', [MailLogController::class, 'show'])->name('mail-logs.show');
+    });
+    Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy')->middleware('permission:mail-logs.delete');
 
     // Home Slider Management (Ana Sayfa Slider)
-    Route::resource('home-sliders', HomeSliderController::class)->except(['show']);
-    Route::post('home-sliders/update-order', [HomeSliderController::class, 'updateOrder'])->name('home-sliders.update-order');
+    Route::middleware('permission:home-sliders.view')->group(function () {
+        Route::get('home-sliders', [HomeSliderController::class, 'index'])->name('home-sliders.index');
+    });
+    Route::get('home-sliders/create', [HomeSliderController::class, 'create'])->name('home-sliders.create')->middleware('permission:home-sliders.create');
+    Route::post('home-sliders', [HomeSliderController::class, 'store'])->name('home-sliders.store')->middleware('permission:home-sliders.create');
+    Route::middleware('permission:home-sliders.edit')->group(function () {
+        Route::get('home-sliders/{home_slider}/edit', [HomeSliderController::class, 'edit'])->name('home-sliders.edit');
+        Route::put('home-sliders/{home_slider}', [HomeSliderController::class, 'update'])->name('home-sliders.update');
+        Route::patch('home-sliders/{home_slider}', [HomeSliderController::class, 'update'])->name('home-sliders.update.patch');
+        Route::post('home-sliders/update-order', [HomeSliderController::class, 'updateOrder'])->name('home-sliders.update-order');
+    });
+    Route::delete('home-sliders/{home_slider}', [HomeSliderController::class, 'destroy'])->name('home-sliders.destroy')->middleware('permission:home-sliders.delete');
 
     // Literary Category Management (Edebiyat Kategorileri)
-    Route::resource('literary-categories', LiteraryCategoryController::class)->except(['show']);
+    Route::middleware('permission:literary-categories.view')->group(function () {
+        Route::get('literary-categories', [LiteraryCategoryController::class, 'index'])->name('literary-categories.index');
+    });
+    Route::get('literary-categories/create', [LiteraryCategoryController::class, 'create'])->name('literary-categories.create')->middleware('permission:literary-categories.create');
+    Route::post('literary-categories', [LiteraryCategoryController::class, 'store'])->name('literary-categories.store')->middleware('permission:literary-categories.create');
+    Route::get('literary-categories/{literary_category}/edit', [LiteraryCategoryController::class, 'edit'])->name('literary-categories.edit')->middleware('permission:literary-categories.edit');
+    Route::put('literary-categories/{literary_category}', [LiteraryCategoryController::class, 'update'])->name('literary-categories.update')->middleware('permission:literary-categories.edit');
+    Route::patch('literary-categories/{literary_category}', [LiteraryCategoryController::class, 'update'])->name('literary-categories.update.patch')->middleware('permission:literary-categories.edit');
+    Route::delete('literary-categories/{literary_category}', [LiteraryCategoryController::class, 'destroy'])->name('literary-categories.destroy')->middleware('permission:literary-categories.delete');
 
     // Literary Work Management (Edebiyat Eserleri)
-    Route::get('literary-works', [LiteraryWorkController::class, 'index'])->name('literary-works.index');
-    Route::get('literary-works/{id}', [LiteraryWorkController::class, 'show'])->name('literary-works.show')->where('id', '[0-9]+');
-    Route::get('literary-works/{literaryWork}/edit', [LiteraryWorkController::class, 'edit'])->name('literary-works.edit');
-    Route::put('literary-works/{literaryWork}', [LiteraryWorkController::class, 'update'])->name('literary-works.update');
-    Route::delete('literary-works/{literaryWork}', [LiteraryWorkController::class, 'destroy'])->name('literary-works.destroy');
-    Route::patch('literary-works/{literaryWork}/approve', [LiteraryWorkController::class, 'approve'])->name('literary-works.approve');
-    Route::patch('literary-works/{literaryWork}/reject', [LiteraryWorkController::class, 'reject'])->name('literary-works.reject');
-    Route::patch('literary-works/{literaryWork}/unpublish', [LiteraryWorkController::class, 'unpublish'])->name('literary-works.unpublish');
-    Route::post('literary-works/{literaryWork}/revision', [LiteraryWorkController::class, 'requestRevision'])->name('literary-works.revision');
+    Route::middleware('permission:literary-works.view')->group(function () {
+        Route::get('literary-works', [LiteraryWorkController::class, 'index'])->name('literary-works.index');
+        Route::get('literary-works/{id}', [LiteraryWorkController::class, 'show'])->name('literary-works.show')->where('id', '[0-9]+');
+    });
+    Route::middleware('permission:literary-works.edit')->group(function () {
+        Route::get('literary-works/{literaryWork}/edit', [LiteraryWorkController::class, 'edit'])->name('literary-works.edit');
+        Route::put('literary-works/{literaryWork}', [LiteraryWorkController::class, 'update'])->name('literary-works.update');
+    });
+    Route::middleware('permission:literary-works.moderate')->group(function () {
+        Route::patch('literary-works/{literaryWork}/approve', [LiteraryWorkController::class, 'approve'])->name('literary-works.approve');
+        Route::patch('literary-works/{literaryWork}/reject', [LiteraryWorkController::class, 'reject'])->name('literary-works.reject');
+        Route::patch('literary-works/{literaryWork}/unpublish', [LiteraryWorkController::class, 'unpublish'])->name('literary-works.unpublish');
+        Route::post('literary-works/{literaryWork}/revision', [LiteraryWorkController::class, 'requestRevision'])->name('literary-works.revision');
+    });
+    Route::delete('literary-works/{literaryWork}', [LiteraryWorkController::class, 'destroy'])->name('literary-works.destroy')->middleware('permission:literary-works.delete');
 });
 
 // Comments (Frontend)
