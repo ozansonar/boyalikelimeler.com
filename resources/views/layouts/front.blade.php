@@ -94,6 +94,10 @@
                     @endisset
                 </ul>
 
+                <a href="{{ route('search.index') }}" class="navbar-bk__search-btn ms-xl-3" aria-label="Ara" title="Ara">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
+
                 <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
                     @auth
                         <a href="{{ auth()->user()->profile_url }}" class="navbar-bk__auth-link">

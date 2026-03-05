@@ -28,6 +28,7 @@ use App\Http\Controllers\Front\CategoryController as FrontCategoryController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FavoriteController;
 use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\SearchController;
 use App\Http\Controllers\Front\LiteraryWorkController as FrontLiteraryWorkController;
 use App\Http\Controllers\Front\MyPostController;
 use App\Http\Controllers\Front\PageController;
@@ -288,6 +289,9 @@ Route::get('/yazarlar', [AuthorController::class, 'index'])->name('authors.index
 Route::get('/yazarlar/altin-kalem/{yearMonth}', [AuthorController::class, 'goldenPenMonth'])
     ->name('authors.golden-pen-month')
     ->where('yearMonth', '\d{4}-\d{2}');
+
+// Search (Frontend — Arama)
+Route::get('/ara', [SearchController::class, 'index'])->name('search.index');
 
 // Category (Frontend — Kategori Sayfası)
 Route::get('/kategori/{slug}', [FrontCategoryController::class, 'show'])->name('category.show')->where('slug', '[a-z0-9\-]+');
