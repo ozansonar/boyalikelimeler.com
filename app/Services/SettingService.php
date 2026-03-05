@@ -34,15 +34,19 @@ final class SettingService
     }
 
     /**
-     * Get all settings for a specific group.
+     * Get all settings for a specific group (cached).
      *
      * @return array<string, string|null>
      */
     public function getGroup(string $group): array
     {
-        return Setting::where('group', $group)
-            ->pluck('value', 'key')
-            ->toArray();
+        return Cache::remember(
+            self::CACHE_KEY . ".group.{$group}",
+            self::CACHE_TTL,
+            fn (): array => Setting::where('group', $group)
+                ->pluck('value', 'key')
+                ->toArray()
+        );
     }
 
     /**
@@ -83,5 +87,10 @@ final class SettingService
     public function clearCache(): void
     {
         Cache::forget(self::CACHE_KEY);
+
+        $groups = Setting::distinct()->pluck('group');
+        foreach ($groups as $group) {
+            Cache::forget(self::CACHE_KEY . ".group.{$group}");
+        }
     }
 }

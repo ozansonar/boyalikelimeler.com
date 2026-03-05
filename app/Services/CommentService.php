@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 final class CommentService
@@ -136,7 +137,11 @@ final class CommentService
         $admins = User::whereHas('role', fn (Builder $q) => $q->whereIn('slug', ['admin', 'super-admin']))->get();
 
         foreach ($admins as $admin) {
-            Mail::to($admin->email, $admin->name)->send(new NewCommentMail($comment));
+            $this->sendMailSafely(
+                fn () => Mail::to($admin->email, $admin->name)->send(new NewCommentMail($comment)),
+                'notifyAdmins',
+                $comment,
+            );
         }
     }
 
@@ -154,6 +159,23 @@ final class CommentService
             return;
         }
 
-        Mail::to($author->email, $author->name)->send(new CommentApprovedMail($comment));
+        $this->sendMailSafely(
+            fn () => Mail::to($author->email, $author->name)->send(new CommentApprovedMail($comment)),
+            'notifyAuthor',
+            $comment,
+        );
+    }
+
+    private function sendMailSafely(\Closure $mailCallback, string $action, Comment $comment): bool
+    {
+        try {
+            $mailCallback();
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::error("Mail gönderilemedi [{$action}] — Yorum #{$comment->id}: {$e->getMessage()}");
+
+            return false;
+        }
     }
 }

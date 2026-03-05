@@ -7,12 +7,13 @@ namespace App\Services;
 use App\Enums\RoleSlug;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Mail\NewUserRegisteredMail;
 use App\Models\Role;
 use App\Models\User;
-use App\Notifications\NewUserRegisteredNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 final class AuthService
 {
@@ -59,7 +60,14 @@ final class AuthService
             ->whereNotNull('email_verified_at')
             ->get();
 
-        Notification::send($admins, new NewUserRegisteredNotification($newUser));
+        foreach ($admins as $admin) {
+            try {
+                Mail::to($admin->email, $admin->name)
+                    ->send(new NewUserRegisteredMail($newUser));
+            } catch (\Throwable $e) {
+                Log::error("Mail gönderilemedi [notifyAdmins] — Yeni kullanıcı #{$newUser->id}: {$e->getMessage()}");
+            }
+        }
     }
 
     public function logout(\Illuminate\Http\Request $request): void

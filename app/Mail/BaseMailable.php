@@ -11,6 +11,7 @@ use App\Services\SettingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailer;
 use Illuminate\Mail\SentMessage;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
@@ -20,15 +21,25 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
+
+    public int $tries = 3;
+
+    /** @var int[] */
+    public array $backoff = [10, 30, 60];
+
     private bool $isDebugRedirect = false;
     private string $originalToEmail = '';
+
+    /** @var array<string, string|null> */
+    private array $smtpSettings = [];
 
     /**
      * Override send to apply SMTP config, debug redirect, CID logo + automatic logging.
      */
     public function send($mailer): ?SentMessage
     {
-        $this->applySmtpConfig();
+        $this->loadSmtpSettings();
+        $mailer = $this->buildConfiguredMailer($mailer);
         $this->applyDebugMode();
         $this->embedMailLogo();
 
@@ -63,30 +74,69 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     }
 
     /**
-     * Apply SMTP settings from database.
+     * Load SMTP settings from database once.
      */
-    protected function applySmtpConfig(): void
+    private function loadSmtpSettings(): void
     {
         try {
-            $smtp = app(SettingService::class)->getGroup('smtp');
-
-            if (empty($smtp['host'])) {
-                return;
-            }
-
-            config([
-                'mail.mailers.smtp.host'       => $smtp['host'],
-                'mail.mailers.smtp.port'       => (int) ($smtp['port'] ?? 587),
-                'mail.mailers.smtp.username'   => $smtp['username'] ?? '',
-                'mail.mailers.smtp.password'   => $smtp['password'] ?? '',
-                'mail.mailers.smtp.encryption' => ($smtp['encryption'] ?? 'tls') === 'none'
-                    ? null
-                    : ($smtp['encryption'] ?? 'tls'),
-                'mail.from.name'               => $smtp['from_name'] ?? config('mail.from.name'),
-                'mail.from.address'            => $smtp['from_email'] ?? config('mail.from.address'),
-            ]);
+            $this->smtpSettings = app(SettingService::class)->getGroup('smtp');
         } catch (\Throwable $e) {
             Log::warning('SMTP config from DB failed, using .env defaults: ' . $e->getMessage());
+            $this->smtpSettings = [];
+        }
+    }
+
+    /**
+     * Build a fresh mailer instance with DB SMTP settings (no global config mutation).
+     */
+    private function buildConfiguredMailer(object $mailer): object
+    {
+        $smtp = $this->smtpSettings;
+
+        if (empty($smtp['host'])) {
+            return $mailer;
+        }
+
+        try {
+            $encryption = ($smtp['encryption'] ?? 'tls') === 'none'
+                ? null
+                : ($smtp['encryption'] ?? 'tls');
+
+            $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport(
+                $smtp['host'],
+                (int) ($smtp['port'] ?? 587),
+                $encryption === 'ssl',
+            );
+
+            if ($encryption === 'tls') {
+                $transport->setAutoTls(true);
+            }
+
+            $username = $smtp['username'] ?? '';
+            $password = $smtp['password'] ?? '';
+
+            if ($username !== '') {
+                $transport->setUsername($username);
+                $transport->setPassword($password);
+            }
+
+            $fromName    = $smtp['from_name'] ?? config('mail.from.name');
+            $fromAddress = $smtp['from_email'] ?? config('mail.from.address');
+
+            $this->from($fromAddress, $fromName);
+
+            $symfonyMailer = new \Symfony\Component\Mailer\Mailer($transport);
+
+            return new Mailer(
+                'smtp',
+                app('view'),
+                $symfonyMailer,
+                app('events'),
+            );
+        } catch (\Throwable $e) {
+            Log::warning('Custom mailer build failed, using default: ' . $e->getMessage());
+
+            return $mailer;
         }
     }
 
@@ -96,7 +146,7 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     private function applyDebugMode(): void
     {
         try {
-            $smtp = app(SettingService::class)->getGroup('smtp');
+            $smtp = $this->smtpSettings;
 
             if (($smtp['send_mode'] ?? 'normal') !== 'developer') {
                 return;
@@ -137,8 +187,7 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     private function embedMailLogo(): void
     {
         try {
-            $smtp = app(SettingService::class)->getGroup('smtp');
-            $logoPath = $smtp['mail_logo'] ?? '';
+            $logoPath = $this->smtpSettings['mail_logo'] ?? '';
 
             if ($logoPath === '') {
                 return;
