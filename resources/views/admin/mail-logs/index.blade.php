@@ -90,9 +90,9 @@
                     @forelse($logs as $log)
                         <tr>
                             <td>
-                                @if($log->status === 'sent')
+                                @if($log->isSent())
                                     <span class="badge bg-success bg-opacity-25 text-success"><i class="bi bi-check-circle-fill me-1"></i>Gönderildi</span>
-                                @elseif($log->status === 'failed')
+                                @elseif($log->isFailed())
                                     <span class="badge bg-danger bg-opacity-25 text-danger"><i class="bi bi-x-circle-fill me-1"></i>Başarısız</span>
                                 @else
                                     <span class="badge bg-warning bg-opacity-25 text-warning"><i class="bi bi-hourglass-split me-1"></i>Bekliyor</span>

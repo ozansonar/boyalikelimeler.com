@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\LinkTarget;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use Illuminate\Database\Seeder;
@@ -32,7 +33,7 @@ class MenuSeeder extends Seeder
         foreach ($headerItems as $item) {
             MenuItem::create(array_merge($item, [
                 'menu_id'   => $header->id,
-                'target'    => '_self',
+                'target'    => LinkTarget::Self->value,
                 'is_active' => true,
             ]));
         }
@@ -55,7 +56,7 @@ class MenuSeeder extends Seeder
         foreach ($discoverItems as $item) {
             MenuItem::create(array_merge($item, [
                 'menu_id'   => $footerDiscover->id,
-                'target'    => '_self',
+                'target'    => LinkTarget::Self->value,
                 'is_active' => true,
             ]));
         }
@@ -78,7 +79,7 @@ class MenuSeeder extends Seeder
         foreach ($competitionItems as $item) {
             MenuItem::create(array_merge($item, [
                 'menu_id'   => $footerCompetitions->id,
-                'target'    => '_self',
+                'target'    => LinkTarget::Self->value,
                 'is_active' => true,
             ]));
         }
@@ -101,7 +102,7 @@ class MenuSeeder extends Seeder
         foreach ($corporateItems as $item) {
             MenuItem::create(array_merge($item, [
                 'menu_id'   => $footerCorporate->id,
-                'target'    => '_self',
+                'target'    => LinkTarget::Self->value,
                 'is_active' => true,
             ]));
         }

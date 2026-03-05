@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Gender;
 use App\Enums\RoleSlug;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmailMail;
@@ -64,6 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password'          => 'hashed',
             'birthdate'         => 'date',
             'interests'         => 'array',
+            'gender'               => Gender::class,
             'is_public'            => 'boolean',
             'show_email'           => 'boolean',
             'show_last_seen'       => 'boolean',

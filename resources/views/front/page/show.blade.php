@@ -52,7 +52,7 @@
                         @foreach($page->boxes as $box)
                             <div class="{{ $box->bootstrapColClass() }}">
                                 @if($box->link)
-                                    <a href="{{ $box->link }}" target="{{ $box->link_target }}" class="page-box-card" rel="{{ $box->link_target === '_blank' ? 'noopener noreferrer' : '' }}">
+                                    <a href="{{ $box->link }}" target="{{ $box->link_target->value }}" class="page-box-card" rel="{{ $box->link_target === App\Enums\LinkTarget::Blank ? 'noopener noreferrer' : '' }}">
                                 @else
                                     <div class="page-box-card">
                                 @endif

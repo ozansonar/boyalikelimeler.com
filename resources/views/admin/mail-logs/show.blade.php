@@ -34,9 +34,9 @@
                 <div class="card-body-custom">
                     <div class="mb-3">
                         <small class="text-muted d-block mb-1">Durum</small>
-                        @if($log->status === 'sent')
+                        @if($log->isSent())
                             <span class="badge bg-success bg-opacity-25 text-success fs-13"><i class="bi bi-check-circle-fill me-1"></i>Gönderildi</span>
-                        @elseif($log->status === 'failed')
+                        @elseif($log->isFailed())
                             <span class="badge bg-danger bg-opacity-25 text-danger fs-13"><i class="bi bi-x-circle-fill me-1"></i>Başarısız</span>
                         @else
                             <span class="badge bg-warning bg-opacity-25 text-warning fs-13"><i class="bi bi-hourglass-split me-1"></i>Bekliyor</span>

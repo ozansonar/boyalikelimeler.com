@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
+use App\Enums\MailLogStatus;
 use App\Models\MailLog;
 use App\Models\User;
 use App\Services\MailLogService;
@@ -225,7 +226,7 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
                 'body'              => '',
                 'mailable_class'    => static::class,
                 'is_debug_redirect' => $this->isDebugRedirect,
-                'status'            => 'pending',
+                'status'            => MailLogStatus::Pending->value,
             ]);
         } catch (\Throwable $e) {
             Log::error('Mail log creation failed: ' . $e->getMessage());

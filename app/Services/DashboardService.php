@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\LiteraryWorkStatus;
 use App\Models\Comment;
 use App\Models\ContactMessage;
 use App\Models\LiteraryWork;
@@ -24,7 +25,7 @@ final class DashboardService
                 $totalPosts = Post::count();
                 $totalWorks = LiteraryWork::count();
                 $totalComments = Comment::count();
-                $pendingWorks = LiteraryWork::where('status', 'pending')->count();
+                $pendingWorks = LiteraryWork::where('status', LiteraryWorkStatus::Pending)->count();
                 $pendingComments = Comment::where('is_approved', false)->count();
                 $unreadMessages = ContactMessage::where('is_read', false)->count();
 

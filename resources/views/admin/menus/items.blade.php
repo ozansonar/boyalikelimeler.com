@@ -66,7 +66,7 @@
                                                 <i class="{{ $item->icon }} text-teal"></i>
                                             @endif
                                             <span class="fw-medium">{{ $item->title }}</span>
-                                            @if($item->target === '_blank')
+                                            @if($item->target === App\Enums\LinkTarget::Blank)
                                                 <i class="bi bi-box-arrow-up-right text-muted small" title="Yeni sekmede açılır"></i>
                                             @endif
                                         </div>
@@ -170,8 +170,9 @@
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Hedef</label>
                                 <select class="form-select" name="target">
-                                    <option value="_self">Aynı Sekmede</option>
-                                    <option value="_blank">Yeni Sekmede</option>
+                                    @foreach(App\Enums\LinkTarget::cases() as $lt)
+                                        <option value="{{ $lt->value }}">{{ $lt->label() }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-12 col-md-6">
@@ -233,8 +234,9 @@
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Hedef</label>
                                 <select class="form-select" name="target" id="editTarget">
-                                    <option value="_self">Aynı Sekmede</option>
-                                    <option value="_blank">Yeni Sekmede</option>
+                                    @foreach(App\Enums\LinkTarget::cases() as $lt)
+                                        <option value="{{ $lt->value }}">{{ $lt->label() }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-12 col-md-6">

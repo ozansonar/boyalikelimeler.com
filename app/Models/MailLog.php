@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\MailLogStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MailLog extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'user_id',
         'to_email',
@@ -30,6 +32,7 @@ class MailLog extends Model
         return [
             'sent_at'           => 'datetime',
             'is_debug_redirect' => 'boolean',
+            'status'            => MailLogStatus::class,
         ];
     }
 
@@ -40,16 +43,16 @@ class MailLog extends Model
 
     public function isSent(): bool
     {
-        return $this->status === 'sent';
+        return $this->status === MailLogStatus::Sent;
     }
 
     public function isFailed(): bool
     {
-        return $this->status === 'failed';
+        return $this->status === MailLogStatus::Failed;
     }
 
     public function isPending(): bool
     {
-        return $this->status === 'pending';
+        return $this->status === MailLogStatus::Pending;
     }
 }

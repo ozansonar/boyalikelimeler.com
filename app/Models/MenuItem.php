@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\LinkTarget;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,7 @@ class MenuItem extends Model
         return [
             'is_active'  => 'boolean',
             'sort_order' => 'integer',
+            'target'     => LinkTarget::class,
         ];
     }
 

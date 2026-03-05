@@ -75,7 +75,7 @@
                                         @foreach($navItem->activeChildren as $child)
                                             <li>
                                                 <a class="dropdown-item" href="{{ $child->resolvedUrl() }}"
-                                                   @if($child->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>
+                                                   @if($child->target === App\Enums\LinkTarget::Blank) target="_blank" rel="noopener noreferrer" @endif>
                                                     @if($child->icon)<i class="{{ $child->icon }} me-1"></i>@endif{{ $child->title }}
                                                 </a>
                                             </li>
@@ -85,7 +85,7 @@
                             @else
                                 <li class="nav-item">
                                     <a class="nav-link navbar-bk__link" href="{{ $navItem->resolvedUrl() }}"
-                                       @if($navItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>
+                                       @if($navItem->target === App\Enums\LinkTarget::Blank) target="_blank" rel="noopener noreferrer" @endif>
                                         @if($navItem->icon)<i class="{{ $navItem->icon }} me-1"></i>@endif{{ $navItem->title }}
                                     </a>
                                 </li>
@@ -166,7 +166,7 @@
                         @isset($footerDiscoverMenu)
                             @foreach($footerDiscoverMenu as $fItem)
                                 <a href="{{ $fItem->resolvedUrl() }}" class="footer-bk__link"
-                                   @if($fItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
+                                   @if($fItem->target === App\Enums\LinkTarget::Blank) target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
                             @endforeach
                         @endisset
                     </nav>
@@ -177,7 +177,7 @@
                         @isset($footerCompetitionsMenu)
                             @foreach($footerCompetitionsMenu as $fItem)
                                 <a href="{{ $fItem->resolvedUrl() }}" class="footer-bk__link"
-                                   @if($fItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
+                                   @if($fItem->target === App\Enums\LinkTarget::Blank) target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
                             @endforeach
                         @endisset
                     </nav>
@@ -188,7 +188,7 @@
                         @isset($footerCorporateMenu)
                             @foreach($footerCorporateMenu as $fItem)
                                 <a href="{{ $fItem->resolvedUrl() }}" class="footer-bk__link"
-                                   @if($fItem->target === '_blank') target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
+                                   @if($fItem->target === App\Enums\LinkTarget::Blank) target="_blank" rel="noopener noreferrer" @endif>{{ $fItem->title }}</a>
                             @endforeach
                         @endisset
                     </nav>
