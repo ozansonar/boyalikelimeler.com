@@ -58,6 +58,7 @@
                     </select>
                     <select name="sirala" class="wpost-form__input clist-toolbar__select" onchange="this.form.submit()">
                         <option value="newest" @selected($currentSort === 'newest')>En Yeni</option>
+                        <option value="oldest" @selected($currentSort === 'oldest')>En Eski</option>
                         <option value="popular" @selected($currentSort === 'popular')>En Çok Okunan</option>
                     </select>
                 </div>
