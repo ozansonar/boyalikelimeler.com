@@ -100,15 +100,57 @@
 
                 <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
                     @auth
-                        <a href="{{ auth()->user()->profile_url }}" class="navbar-bk__auth-link">
-                            <i class="fa-solid fa-user me-1"></i>{{ auth()->user()->name }}
-                        </a>
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="navbar-bk__auth-btn">
-                                <i class="fa-solid fa-right-from-bracket me-1"></i>Çıkış
-                            </button>
-                        </form>
+                        <div class="dropdown">
+                            <a href="#" class="navbar-bk__auth-link dropdown-toggle" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user me-1"></i>{{ auth()->user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end navbar-bk__user-dropdown">
+                                @if(auth()->user()->role?->slug === App\Enums\RoleSlug::SuperAdmin->value || auth()->user()->role?->slug === App\Enums\RoleSlug::Admin->value)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}" target="_blank">
+                                            <i class="fa-solid fa-gauge-high me-2"></i>Admin Panel
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                @endif
+
+                                <li>
+                                    <a class="dropdown-item" href="{{ auth()->user()->profile_url }}">
+                                        <i class="fa-solid fa-user me-2"></i>Profilim
+                                    </a>
+                                </li>
+
+                                @if(auth()->user()->role?->slug === App\Enums\RoleSlug::Yazar->value || auth()->user()->role?->slug === App\Enums\RoleSlug::SuperAdmin->value || auth()->user()->role?->slug === App\Enums\RoleSlug::Admin->value)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('myposts.index') }}">
+                                            <i class="fa-solid fa-file-lines me-2"></i>Yazılarım
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('myposts.create') }}">
+                                            <i class="fa-solid fa-feather-pointed me-2"></i>Yazı Ekle
+                                        </a>
+                                    </li>
+                                @endif
+
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                        <i class="fa-solid fa-gear me-2"></i>Ayarlar
+                                    </a>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item navbar-bk__user-dropdown-logout">
+                                            <i class="fa-solid fa-right-from-bracket me-2"></i>Çıkış Yap
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     @else
                         <a href="{{ route('login') }}"
                            class="navbar-bk__auth-link {{ request()->routeIs('login') ? 'navbar-bk__auth-link--active' : '' }}">
