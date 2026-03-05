@@ -144,6 +144,9 @@
                                 </td>
                                 <td>
                                     <div class="usr-actions">
+                                        <a class="usr-action-btn" title="Detay" href="{{ route('admin.users.show', $user) }}">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
                                         <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.users.edit', $user) }}">
                                             <i class="bi bi-pencil"></i>
                                         </a>

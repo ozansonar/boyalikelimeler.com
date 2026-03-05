@@ -94,7 +94,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // User Management
-    Route::resource('users', UserController::class)->except(['show']);
+    Route::resource('users', UserController::class);
 
     // Category Management
     Route::resource('categories', CategoryController::class)->except(['show']);
