@@ -23,14 +23,16 @@ class SettingController extends Controller
 
     public function index(Request $request): View
     {
+        $allSettings = $this->settingService->getAllGrouped();
+
         return view('admin.settings.index', [
-            'homepage'    => $this->settingService->getGroup('homepage'),
-            'general'     => $this->settingService->getGroup('general'),
-            'contact'     => $this->settingService->getGroup('contact'),
-            'social'      => $this->settingService->getGroup('social'),
-            'seo'         => $this->settingService->getGroup('seo'),
-            'smtp'        => $this->settingService->getGroup('smtp'),
-            'maintenance' => $this->settingService->getGroup('maintenance'),
+            'homepage'    => $allSettings['homepage'] ?? [],
+            'general'     => $allSettings['general'] ?? [],
+            'contact'     => $allSettings['contact'] ?? [],
+            'social'      => $allSettings['social'] ?? [],
+            'seo'         => $allSettings['seo'] ?? [],
+            'smtp'        => $allSettings['smtp'] ?? [],
+            'maintenance' => $allSettings['maintenance'] ?? [],
             'tab'         => $request->query('tab', 'general'),
         ]);
     }

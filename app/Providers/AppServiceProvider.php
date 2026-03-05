@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\CommentService;
+use App\Services\ContactService;
+use App\Services\LiteraryWorkService;
 use App\Services\MenuService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
@@ -35,6 +38,13 @@ class AppServiceProvider extends ServiceProvider
             $view->with('footerDiscoverMenu', $menuService->getByLocation('footer_discover'));
             $view->with('footerCompetitionsMenu', $menuService->getByLocation('footer_competitions'));
             $view->with('footerCorporateMenu', $menuService->getByLocation('footer_corporate'));
+        });
+
+        View::composer('partials.admin.sidebar', function ($view): void {
+            $view->with('sidebarUser', auth()->user()?->loadMissing('role'));
+            $view->with('pendingWorksCount', app(LiteraryWorkService::class)->getPendingCount());
+            $view->with('pendingCommentsCount', app(CommentService::class)->getPendingCount());
+            $view->with('unreadMessagesCount', app(ContactService::class)->getUnreadCount());
         });
     }
 }
