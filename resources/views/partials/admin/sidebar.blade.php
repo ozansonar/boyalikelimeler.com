@@ -63,11 +63,17 @@
             @endif
         @endif
 
-        @if(auth()->user()->hasAnyPermission('users.view', 'comments.view', 'contacts.view', 'menus.view'))
+        @if(auth()->user()->hasAnyPermission('users.view', 'roles.view', 'comments.view', 'contacts.view', 'menus.view'))
             <div class="nav-section-title">Yönetim</div>
             @if(auth()->user()->hasPermission('users.view'))
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <i class="bi bi-people-fill"></i> Kullanıcılar
+                </a>
+            @endif
+
+            @if(auth()->user()->hasPermission('roles.view'))
+                <a href="{{ route('admin.roles.index') }}" class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                    <i class="bi bi-shield-fill"></i> Roller & İzinler
                 </a>
             @endif
 
