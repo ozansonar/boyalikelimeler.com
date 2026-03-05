@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Services\HomeService;
 use App\Services\HomeSliderService;
+use App\Services\SettingService;
 use Illuminate\View\View;
 
 final class HomeController extends Controller
@@ -14,6 +15,7 @@ final class HomeController extends Controller
     public function __construct(
         private readonly HomeService $homeService,
         private readonly HomeSliderService $homeSliderService,
+        private readonly SettingService $settingService,
     ) {}
 
     public function index(): View
@@ -22,7 +24,8 @@ final class HomeController extends Controller
         $popularWorks = $this->homeService->getPopularWorks(4);
         $latestPosts = $this->homeService->getLatestPosts(6);
         $homeSliders = $this->homeSliderService->getActiveSliders();
+        $hero = $this->settingService->getGroup('homepage');
 
-        return view('front.home', compact('latestWorks', 'popularWorks', 'latestPosts', 'homeSliders'));
+        return view('front.home', compact('latestWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero'));
     }
 }

@@ -16,19 +16,18 @@
         <div class="hero__pattern"></div>
         <div class="container position-relative">
             <div class="animate-fadein">
-                <h1 class="hero__title">Boyalı Kelimeler</h1>
+                <h1 class="hero__title">{{ $hero['hero_title'] ?? 'Boyalı Kelimeler' }}</h1>
             </div>
             <div class="animate-fadein animate-fadein--delay-1">
-                <p class="hero__subtitle">Sosyal Çöküntüye Sanatsal Direniş</p>
+                <p class="hero__subtitle">{{ $hero['hero_subtitle'] ?? 'Sosyal Çöküntüye Sanatsal Direniş' }}</p>
             </div>
             <div class="hero__divider animate-fadein animate-fadein--delay-2"></div>
             <div class="animate-fadein animate-fadein--delay-3">
-                <p class="hero__tagline">— Bir Sanat Hareketi —</p>
+                <p class="hero__tagline">{{ $hero['hero_tagline'] ?? '— Bir Sanat Hareketi —' }}</p>
             </div>
             <div class="animate-fadein animate-fadein--delay-4">
                 <p class="hero__description mt-3">
-                    Kelimelerin boyandığı, fırçaların konuştuğu, sanatın direniş olduğu bir platform.
-                    2026'nın en cesur edebiyat ve sanat hareketi burada başlıyor.
+                    {{ $hero['hero_description'] ?? 'Kelimelerin boyandığı, fırçaların konuştuğu, sanatın direniş olduğu bir platform. 2026\'nın en cesur edebiyat ve sanat hareketi burada başlıyor.' }}
                 </p>
             </div>
         </div>

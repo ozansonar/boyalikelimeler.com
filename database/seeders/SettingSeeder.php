@@ -12,6 +12,12 @@ class SettingSeeder extends Seeder
     public function run(): void
     {
         $settings = [
+            // ─── Anasayfa ───
+            ['group' => 'homepage', 'key' => 'hero_title',       'value' => 'Boyalı Kelimeler'],
+            ['group' => 'homepage', 'key' => 'hero_subtitle',    'value' => 'Sosyal Çöküntüye Sanatsal Direniş'],
+            ['group' => 'homepage', 'key' => 'hero_tagline',     'value' => '— Bir Sanat Hareketi —'],
+            ['group' => 'homepage', 'key' => 'hero_description', 'value' => 'Kelimelerin boyandığı, fırçaların konuştuğu, sanatın direniş olduğu bir platform. 2026\'nın en cesur edebiyat ve sanat hareketi burada başlıyor.'],
+
             // ─── Genel ───
             ['group' => 'general', 'key' => 'site_name',        'value' => 'Boyalı Kelimeler'],
             ['group' => 'general', 'key' => 'site_description', 'value' => 'Edebiyat ve sanat platformu'],
