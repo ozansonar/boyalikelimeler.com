@@ -3,6 +3,7 @@
 @section('title', 'Eserlerim — Boyalı Kelimeler')
 @section('meta_description', 'Boyalı Kelimeler\'de gönderdiğiniz edebiyat eserlerinizi görüntüleyin ve yönetin.')
 @section('canonical', route('myposts.index'))
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 

@@ -9,6 +9,35 @@
     @section('og_image', asset('uploads/' . $page->cover_image))
 @endif
 
+@push('jsonld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type' => 'WebPage',
+            'name' => $page->meta_title ?: $page->title,
+            'description' => $page->meta_description ?: Str::limit(strip_tags((string) $page->excerpt), 160),
+            'url' => route('page.show', $page->slug),
+            'dateModified' => $page->updated_at->toIso8601String(),
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Boyalı Kelimeler',
+                'url' => url('/'),
+            ],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => $page->title],
+            ],
+        ],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
+
 @section('content')
 
     <!-- Page Header -->
