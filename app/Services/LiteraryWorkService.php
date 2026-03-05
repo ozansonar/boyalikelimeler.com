@@ -543,7 +543,8 @@ final class LiteraryWorkService
 
     public function frontPaginate(int $perPage, array $filters = []): LengthAwarePaginator
     {
-        $query = LiteraryWork::with(['category', 'author' => fn ($q) => $q->withTrashed()])
+        $query = LiteraryWork::with(['category', 'author'])
+            ->whereHas('author')
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at');
 
@@ -577,6 +578,7 @@ final class LiteraryWorkService
     public function findPublishedBySlug(string $slug): ?LiteraryWork
     {
         return LiteraryWork::with(['category', 'author', 'approvedComments.user'])
+            ->whereHas('author')
             ->where('slug', $slug)
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at')
@@ -598,6 +600,7 @@ final class LiteraryWorkService
     public function getRelatedWorks(LiteraryWork $work, int $limit = 4): \Illuminate\Database\Eloquent\Collection
     {
         return LiteraryWork::with(['author'])
+            ->whereHas('author')
             ->where('literary_category_id', $work->literary_category_id)
             ->where('id', '!=', $work->id)
             ->where('status', LiteraryWorkStatus::Approved)
@@ -616,10 +619,10 @@ final class LiteraryWorkService
     {
         return Cache::remember('literary_works.front_stats', 300, function (): array {
             return [
-                'work_count'   => LiteraryWork::where('status', LiteraryWorkStatus::Approved)->count(),
-                'author_count' => LiteraryWork::where('status', LiteraryWorkStatus::Approved)
+                'work_count'   => LiteraryWork::whereHas('author')->where('status', LiteraryWorkStatus::Approved)->count(),
+                'author_count' => LiteraryWork::whereHas('author')->where('status', LiteraryWorkStatus::Approved)
                     ->distinct('user_id')->count('user_id'),
-                'total_views'  => (int) LiteraryWork::where('status', LiteraryWorkStatus::Approved)->sum('view_count'),
+                'total_views'  => (int) LiteraryWork::whereHas('author')->where('status', LiteraryWorkStatus::Approved)->sum('view_count'),
             ];
         });
     }

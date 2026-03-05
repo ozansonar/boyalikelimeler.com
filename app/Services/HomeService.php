@@ -21,7 +21,8 @@ final class HomeService
     public function getLatestWorks(int $limit = 6): Collection
     {
         return Cache::remember('home.latest_works', 300, fn (): Collection =>
-            LiteraryWork::where('status', LiteraryWorkStatus::Approved)
+            LiteraryWork::whereHas('author')
+                ->where('status', LiteraryWorkStatus::Approved)
                 ->with(['category', 'author'])
                 ->orderByDesc('published_at')
                 ->limit($limit)
@@ -37,8 +38,9 @@ final class HomeService
     public function getPopularWorks(int $limit = 4): Collection
     {
         return Cache::remember('home.popular_works', 300, fn (): Collection =>
-            LiteraryWork::where('status', LiteraryWorkStatus::Approved)
-                ->with(['category'])
+            LiteraryWork::whereHas('author')
+                ->where('status', LiteraryWorkStatus::Approved)
+                ->with(['category', 'author'])
                 ->orderByDesc('view_count')
                 ->limit($limit)
                 ->get()
@@ -67,7 +69,7 @@ final class HomeService
     public function getStats(): array
     {
         return Cache::remember('home.stats', 600, fn (): array => [
-            'total_works' => LiteraryWork::where('status', LiteraryWorkStatus::Approved)->count(),
+            'total_works' => LiteraryWork::whereHas('author')->where('status', LiteraryWorkStatus::Approved)->count(),
             'total_posts' => Post::where('status', PostStatus::Published)->count(),
         ]);
     }
