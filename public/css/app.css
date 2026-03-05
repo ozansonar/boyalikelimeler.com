@@ -8846,6 +8846,86 @@ p {
     color: var(--color-silver-light);
 }
 
+.cdetail-actions__btn--liked {
+    border-color: rgba(244, 63, 94, 0.4);
+    color: #fb7185;
+    background: rgba(244, 63, 94, 0.08);
+}
+
+.cdetail-actions__btn--liked:hover {
+    border-color: rgba(244, 63, 94, 0.5);
+    color: #f43f5e;
+    background: rgba(244, 63, 94, 0.12);
+}
+
+/* -- Blog Actions Bar (Like + Share) -------------------------- */
+
+.blogd-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    margin: 2rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.blogd-actions__left,
+.blogd-actions__right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.blogd-actions__like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    background: transparent;
+    color: var(--color-silver);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.blogd-actions__like-btn:hover {
+    border-color: rgba(244, 63, 94, 0.3);
+    color: #fb7185;
+    background: rgba(244, 63, 94, 0.06);
+}
+
+.blogd-actions__like-btn--liked {
+    border-color: rgba(244, 63, 94, 0.4);
+    color: #fb7185;
+    background: rgba(244, 63, 94, 0.08);
+}
+
+.blogd-actions__like-btn--liked:hover {
+    border-color: rgba(244, 63, 94, 0.5);
+    color: #f43f5e;
+    background: rgba(244, 63, 94, 0.12);
+}
+
+.blogd-actions__count {
+    font-weight: 600;
+    color: var(--color-silver-light);
+}
+
+@keyframes favoritePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.js-favorite-pulse {
+    animation: favoritePulse 0.5s ease;
+}
+
 /* -- Author Box ---------------------------------------------- */
 
 .cdetail-author-box {
@@ -12789,6 +12869,17 @@ p {
     .blogd-share {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .blogd-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .blogd-actions__left,
+    .blogd-actions__right {
+        justify-content: center;
     }
 }
 

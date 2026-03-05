@@ -92,18 +92,33 @@
                     <!-- Action Bar (Like, Share, Bookmark) -->
                     <div class="cdetail-actions">
                         <div class="cdetail-actions__left">
-                            <button type="button" class="cdetail-actions__btn cdetail-actions__btn--like">
-                                <i class="fa-regular fa-heart me-1"></i>
-                                <span>Beğen</span>
+                            <button type="button"
+                                    class="cdetail-actions__btn cdetail-actions__btn--like js-favorite-btn {{ $work->isFavoritedBy() ? 'cdetail-actions__btn--liked' : '' }}"
+                                    data-type="literary_work"
+                                    data-id="{{ $work->id }}"
+                                    @guest data-login-required="true" @endguest
+                                    aria-label="Beğen">
+                                <i class="{{ $work->isFavoritedBy() ? 'fa-solid' : 'fa-regular' }} fa-heart me-1"></i>
+                                <span class="js-favorite-text">{{ $work->isFavoritedBy() ? 'Beğenildi' : 'Beğen' }}</span>
+                                <span class="cdetail-actions__count js-favorite-count">{{ $work->favorites_count ?? $work->favorites()->count() }}</span>
                             </button>
                         </div>
                         <div class="cdetail-actions__right">
-                            <button type="button" class="cdetail-actions__btn" title="Yer İmi" aria-label="Yer İmi">
-                                <i class="fa-regular fa-bookmark"></i>
+                            <button type="button" class="cdetail-actions__btn cdetail-actions__btn--copy"
+                                    title="Bağlantıyı Kopyala" aria-label="Bağlantıyı Kopyala"
+                                    data-url="{{ route('literary-works.show', $work->slug) }}">
+                                <i class="fa-solid fa-link"></i>
                             </button>
-                            <button type="button" class="cdetail-actions__btn" title="Paylaş" aria-label="Paylaş">
-                                <i class="fa-solid fa-share-nodes"></i>
-                            </button>
+                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('literary-works.show', $work->slug)) }}&text={{ urlencode($work->title) }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="cdetail-actions__btn" title="Twitter'da Paylaş" aria-label="Twitter'da Paylaş">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($work->title . ' ' . route('literary-works.show', $work->slug)) }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="cdetail-actions__btn" title="WhatsApp'ta Paylaş" aria-label="WhatsApp'ta Paylaş">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -250,11 +265,12 @@
 @endsection
 
 @push('scripts')
-<script>
-document.querySelectorAll('.cdetail-content img').forEach(function(img) {
-    img.setAttribute('loading', 'lazy');
-    img.removeAttribute('width');
-    img.removeAttribute('height');
-});
-</script>
+    <script src="{{ asset('js/favorite.js') }}?v={{ filemtime(public_path('js/favorite.js')) }}"></script>
+    <script>
+    document.querySelectorAll('.cdetail-content img').forEach(function(img) {
+        img.setAttribute('loading', 'lazy');
+        img.removeAttribute('width');
+        img.removeAttribute('height');
+    });
+    </script>
 @endpush

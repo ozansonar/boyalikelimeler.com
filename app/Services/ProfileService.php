@@ -6,6 +6,9 @@ namespace App\Services;
 
 use App\Enums\LiteraryWorkStatus;
 use App\Enums\PostStatus;
+use App\Models\Favorite;
+use App\Models\LiteraryWork;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
@@ -38,7 +41,10 @@ final class ProfileService
 
         $stats = $this->getWriterStats($user);
 
-        return compact('posts', 'works', 'stats');
+        $favoriteWorks = $this->getUserFavoriteWorks($user);
+        $favoritePosts = $this->getUserFavoritePosts($user);
+
+        return compact('posts', 'works', 'stats', 'favoriteWorks', 'favoritePosts');
     }
 
     /**
@@ -115,5 +121,41 @@ final class ProfileService
         $user->update(['cover_image' => $path]);
 
         return $path;
+    }
+
+    public function getUserFavoriteWorks(User $user, int $limit = 6): Collection
+    {
+        $favoriteIds = Favorite::where('user_id', $user->id)
+            ->where('favoriteable_type', LiteraryWork::class)
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->pluck('favoriteable_id');
+
+        if ($favoriteIds->isEmpty()) {
+            return new Collection();
+        }
+
+        return LiteraryWork::whereIn('id', $favoriteIds)
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->with(['category', 'author'])
+            ->get();
+    }
+
+    public function getUserFavoritePosts(User $user, int $limit = 6): Collection
+    {
+        $favoriteIds = Favorite::where('user_id', $user->id)
+            ->where('favoriteable_type', Post::class)
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->pluck('favoriteable_id');
+
+        if ($favoriteIds->isEmpty()) {
+            return new Collection();
+        }
+
+        return Post::whereIn('id', $favoriteIds)
+            ->where('status', PostStatus::Published)
+            ->with(['category', 'author'])
+            ->get();
     }
 }
