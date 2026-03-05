@@ -6,7 +6,11 @@
 
     <!-- ==================== COVER & PROFILE HEADER ==================== -->
     <div class="prf-cover">
-        <div class="prf-cover-bg"></div>
+        @if($user->cover_image)
+            <img src="{{ upload_url($user->cover_image, 'lg') }}" alt="{{ $user->name }} kapak fotoğrafı" class="prf-cover-img" loading="lazy">
+        @else
+            <div class="prf-cover-bg"></div>
+        @endif
         <div class="prf-cover-overlay"></div>
     </div>
 
@@ -163,7 +167,7 @@
                         @if($user->gender)
                             <div class="prf-about-item">
                                 <i class="bi bi-gender-ambiguous"></i>
-                                <div><small>Cinsiyet</small><span>{{ $user->gender }}</span></div>
+                                <div><small>Cinsiyet</small><span>{{ $user->gender === 'male' ? 'Erkek' : ($user->gender === 'female' ? 'Kadın' : $user->gender) }}</span></div>
                             </div>
                         @endif
                         <div class="prf-about-item">

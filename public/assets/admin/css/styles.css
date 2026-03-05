@@ -14105,6 +14105,13 @@ a.btn-glass {
   background-size: 200% 200%;
   animation: prfCoverShift 12s ease-in-out infinite;
 }
+.prf-cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 @keyframes prfCoverShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -24239,6 +24246,13 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   background: linear-gradient(135deg, #0d1224 0%, #1a1f35 30%, var(--teal-dark) 60%, var(--neon-blue) 100%);
   background-size: 200% 200%;
   animation: prfCoverShift 12s ease-in-out infinite;
+}
+.prf-cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 @keyframes prfCoverShift {
   0%, 100% { background-position: 0% 50%; }
