@@ -185,6 +185,7 @@
         relative_urls: false,
         remove_script_host: false,
         convert_urls: false,
+        entity_encoding: 'raw',
         images_upload_handler: window.editorImagesUploadHandler,
         setup: window.editorImagesSetup,
         image_class_list: [{ title: 'Responsive', value: 'img-fluid' }],
