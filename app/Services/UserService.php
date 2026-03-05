@@ -167,7 +167,10 @@ final class UserService
             ->limit(10)
             ->get();
 
-        $comments = Comment::where('email', $user->email)
+        $comments = Comment::where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->orWhere('email', $user->email);
+            })
             ->with('commentable')
             ->orderByDesc('created_at')
             ->limit(10)
@@ -189,7 +192,10 @@ final class UserService
                 COALESCE(SUM(view_count), 0) as total_views
             ")->first();
 
-        $commentCount = Comment::where('email', $user->email)->count();
+        $commentCount = Comment::where(function ($q) use ($user) {
+            $q->where('user_id', $user->id)
+              ->orWhere('email', $user->email);
+        })->count();
         $goldenPenCount = $user->goldenPenPeriods->count();
 
         return [
