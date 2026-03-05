@@ -12,6 +12,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -26,6 +27,7 @@ final class CommentService
         return DB::transaction(function () use ($data): Comment {
             $comment = Comment::create($data);
 
+            $this->clearCountCache();
             $this->notifyAdmins($comment);
 
             return $comment;
@@ -41,6 +43,7 @@ final class CommentService
                 'approved_by' => $admin->id,
             ]);
 
+            $this->clearCountCache();
             $this->notifyAuthor($comment);
 
             return $comment;
@@ -54,6 +57,8 @@ final class CommentService
             'approved_at' => null,
             'approved_by' => null,
         ]);
+
+        $this->clearCountCache();
     }
 
     public function findById(int $id): ?Comment
@@ -74,6 +79,7 @@ final class CommentService
     public function destroy(Comment $comment): void
     {
         $comment->delete();
+        $this->clearCountCache();
     }
 
     /**
@@ -129,7 +135,14 @@ final class CommentService
 
     public function getPendingCount(): int
     {
-        return Comment::where('is_approved', false)->count();
+        return Cache::remember('comments.pending_count', 300, function (): int {
+            return Comment::where('is_approved', false)->count();
+        });
+    }
+
+    public function clearCountCache(): void
+    {
+        Cache::forget('comments.pending_count');
     }
 
     private function notifyAdmins(Comment $comment): void

@@ -7,13 +7,19 @@ namespace App\Services;
 use App\Models\ContactMessage;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 final class ContactService
 {
     public function store(array $data): ContactMessage
     {
-        return DB::transaction(fn (): ContactMessage => ContactMessage::create($data));
+        return DB::transaction(function () use ($data): ContactMessage {
+            $message = ContactMessage::create($data);
+            $this->clearCountCache();
+
+            return $message;
+        });
     }
 
     /**
@@ -81,6 +87,7 @@ final class ContactService
     {
         if (! $message->is_read) {
             $message->update(['is_read' => true]);
+            $this->clearCountCache();
         }
     }
 
@@ -118,10 +125,26 @@ final class ContactService
     public function delete(ContactMessage $message): void
     {
         $message->delete();
+        $this->clearCountCache();
+    }
+
+    public function getUnreadCount(): int
+    {
+        return Cache::remember('contacts.unread_count', 300, function (): int {
+            return ContactMessage::where('is_read', false)->count();
+        });
+    }
+
+    public function clearCountCache(): void
+    {
+        Cache::forget('contacts.unread_count');
     }
 
     public function markAllRead(): int
     {
-        return ContactMessage::where('is_read', false)->update(['is_read' => true]);
+        $count = ContactMessage::where('is_read', false)->update(['is_read' => true]);
+        $this->clearCountCache();
+
+        return $count;
     }
 }

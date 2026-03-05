@@ -34,6 +34,21 @@ final class SettingService
     }
 
     /**
+     * Get all settings grouped by group name (single query, cached).
+     *
+     * @return array<string, array<string, string|null>>
+     */
+    public function getAllGrouped(): array
+    {
+        return Cache::remember(self::CACHE_KEY . '.grouped', self::CACHE_TTL, function (): array {
+            return Setting::all(['group', 'key', 'value'])
+                ->groupBy('group')
+                ->map(fn ($items) => $items->pluck('value', 'key')->toArray())
+                ->toArray();
+        });
+    }
+
+    /**
      * Get all settings for a specific group (cached).
      *
      * @return array<string, string|null>
@@ -87,6 +102,7 @@ final class SettingService
     public function clearCache(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget(self::CACHE_KEY . '.grouped');
 
         $groups = Setting::distinct()->pluck('group');
         foreach ($groups as $group) {

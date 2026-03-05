@@ -44,6 +44,15 @@ kod yorumları ve değişken isimleri İngilizce olsun.
 - `Cache::remember()` / Pagination / Bulk insert / `exists()` not `count()`
 - Görseller: `loading="lazy"` `img-fluid` WebP / JS body sonunda
 
+### DB Sorgu Kuralları
+- Blade view içinde doğrudan model/service çağrısı (`Model::where()`, `app(Service::class)`) → YASAK
+- Layout/sidebar/header/footer gibi her sayfada render edilen parçalarda DB sorgusu → YASAK
+- Bu verileri **View Composer** (`AppServiceProvider`) üzerinden ver, cache'li service metotlarını kullan
+- Aynı veri bir request içinde 2+ kez çekiliyorsa → `Cache::remember()` veya değişkende tut
+- Sayaç/badge sorguları (pending count, unread count vb.) → ZORUNLU cache + invalidation
+- Bir controller'da aynı service metodu 3+ kez çağrılıyorsa → toplu çeken metot yaz (ör: `getAllGrouped()`)
+- Service'te veri değiştiren her metot (store/update/delete) → ilgili count cache'i temizlemeli
+
 ## Git
 
 - Türkçe commit: `[feat]: açıklama` / Tipler: feat, fix, refactor, style, docs, test
