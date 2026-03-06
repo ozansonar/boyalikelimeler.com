@@ -22,14 +22,14 @@ class AuthorController extends Controller
         $filters = $request->only(['search', 'golden_pen', 'sort', 'dir']);
         $pageSettings = $this->settingService->getGroup('authors_page');
 
-        $featuredAuthor = $this->authorService->getFeaturedAuthor($pageSettings['featured_author_id'] ?? null);
+        $featuredAuthors = $this->authorService->getFeaturedAuthors($pageSettings['featured_author_ids'] ?? null);
         $goldenPenMonths = $this->authorService->getGoldenPenMonths();
 
         return view('front.authors.index', [
             'authors'          => $this->authorService->paginate(12, $filters),
             'filters'          => $filters,
             'pageSettings'     => $pageSettings,
-            'featuredAuthor'   => $featuredAuthor,
+            'featuredAuthors'  => $featuredAuthors,
             'goldenPenMonths'  => $goldenPenMonths,
         ]);
     }

@@ -151,6 +151,47 @@ final class AuthorService
         });
     }
 
+    /**
+     * @param  string|null  $idsJson  JSON-encoded array of user IDs
+     * @return Collection<int, User>
+     */
+    public function getFeaturedAuthors(?string $idsJson): Collection
+    {
+        if (empty($idsJson)) {
+            return new Collection();
+        }
+
+        /** @var array<int> $ids */
+        $ids = json_decode($idsJson, true);
+
+        if (! is_array($ids) || $ids === []) {
+            return new Collection();
+        }
+
+        $ids = array_map('intval', array_filter($ids));
+
+        if ($ids === []) {
+            return new Collection();
+        }
+
+        $cacheKey = 'front.authors.featured_multi.' . md5(implode(',', $ids));
+
+        return Cache::remember($cacheKey, 300, function () use ($ids): Collection {
+            return User::query()
+                ->whereIn('id', $ids)
+                ->whereNotNull('email_verified_at')
+                ->with(['activeGoldenPenPeriod'])
+                ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
+                    $q->where('status', 'approved');
+                }])
+                ->withSum(['literaryWorks as total_views' => function ($q): void {
+                    $q->where('status', 'approved');
+                }], 'view_count')
+                ->orderByRaw('FIELD(id, ' . implode(',', $ids) . ')')
+                ->get();
+        });
+    }
+
     public function paginate(int $perPage, array $filters = []): LengthAwarePaginator
     {
         $today = now()->toDateString();
