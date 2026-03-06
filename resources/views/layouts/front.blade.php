@@ -51,14 +51,14 @@
     <!-- Custom CSS (critical) -->
     <link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet">
 
-    <!-- Non-critical CSS: async load -->
-    <link rel="preload" href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Non-critical CSS: low-priority async load -->
+    <link rel="stylesheet" href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" media="print" onload="this.media='all'">
     <noscript><link href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" rel="stylesheet"></noscript>
-    <link rel="preload" href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" media="print" onload="this.media='all'">
     <noscript><link href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" rel="stylesheet"></noscript>
-    <link rel="preload" href="{{ asset('vendor/swiper/11/swiper-bundle.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="{{ asset('vendor/swiper/11/swiper-bundle.min.css') }}" media="print" onload="this.media='all'">
     <noscript><link href="{{ asset('vendor/swiper/11/swiper-bundle.min.css') }}" rel="stylesheet"></noscript>
-    <link rel="preload" href="{{ asset('vendor/aos/2.3.4/aos.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="{{ asset('vendor/aos/2.3.4/aos.css') }}" media="print" onload="this.media='all'">
     <noscript><link href="{{ asset('vendor/aos/2.3.4/aos.css') }}" rel="stylesheet"></noscript>
 
     @stack('styles')
