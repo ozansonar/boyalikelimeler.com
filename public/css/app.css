@@ -7194,7 +7194,9 @@ p {
 
 @media (max-width: 767.98px) {
     .myposts-table__th--category,
-    .myposts-table__td:nth-child(2) {
+    .myposts-table__td:nth-child(2),
+    .myposts-table__th--type,
+    .myposts-table__td:nth-child(3) {
         display: none;
     }
 
@@ -7206,6 +7208,10 @@ p {
 }
 
 @media (max-width: 575.98px) {
+    .myposts-type-toggle__btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
     .myposts-stat {
         padding: 0.875rem 1rem;
     }
@@ -7221,7 +7227,7 @@ p {
     }
 
     .myposts-table__th--date,
-    .myposts-table__td:nth-child(3) {
+    .myposts-table__td:nth-child(4) {
         display: none;
     }
 
@@ -7520,6 +7526,46 @@ p {
     background: rgba(245, 158, 11, 0.12);
     color: #fbbf24;
     border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.myposts-badge--type-written {
+    background: rgba(99, 102, 241, 0.12);
+    color: #a5b4fc;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+}
+.myposts-badge--type-visual {
+    background: rgba(236, 72, 153, 0.12);
+    color: #f9a8d4;
+    border: 1px solid rgba(236, 72, 153, 0.25);
+}
+
+/* Work Type Toggle */
+.myposts-type-toggle {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.myposts-type-toggle__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+.myposts-type-toggle__btn:hover {
+    background: rgba(212, 175, 55, 0.06);
+    border-color: rgba(212, 175, 55, 0.25);
+    color: var(--color-text-primary);
+}
+.myposts-type-toggle__btn--active {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--color-gold);
+    color: var(--color-gold-light);
 }
 
 /* -- Unpublish Action Button ---------------------------------- */
