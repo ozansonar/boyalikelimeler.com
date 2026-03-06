@@ -45,6 +45,11 @@ class AppServiceProvider extends ServiceProvider
             $view->with('siteFavicon', ! empty($general['favicon']) ? upload_url($general['favicon']) : null);
         });
 
+        View::composer('layouts.admin', function ($view): void {
+            $general = app(SettingService::class)->getGroup('general');
+            $view->with('siteFavicon', ! empty($general['favicon']) ? upload_url($general['favicon']) : null);
+        });
+
         View::composer('partials.admin.sidebar', function ($view): void {
             $view->with('sidebarUser', auth()->user()?->loadMissing('role'));
             $view->with('pendingWorksCount', app(LiteraryWorkService::class)->getPendingCount());
