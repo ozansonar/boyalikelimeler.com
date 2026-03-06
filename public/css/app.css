@@ -8767,11 +8767,57 @@ p {
 }
 .cdetail-content img {
     max-width: 100% !important;
-    width: auto !important;
     height: auto !important;
+    border-radius: 0.5rem;
+}
+.cdetail-content img:not(.img-align-left):not(.img-align-right):not(.img-align-center) {
     display: block;
     margin: 1.25rem auto;
-    border-radius: 0.5rem;
+    width: auto !important;
+}
+.cdetail-content img.img-align-left {
+    float: left;
+    margin: 0.25rem 1.5rem 1rem 0;
+    max-width: 50%;
+}
+.cdetail-content img.img-align-right {
+    float: right;
+    margin: 0.25rem 0 1rem 1.5rem;
+    max-width: 50%;
+}
+.cdetail-content img.img-align-center {
+    display: block;
+    margin: 1.25rem auto;
+}
+.cdetail-content figure {
+    margin: 1.25rem 0;
+}
+.cdetail-content figure.align-left {
+    float: left;
+    margin: 0.25rem 1.5rem 1rem 0;
+    max-width: 50%;
+}
+.cdetail-content figure.align-right {
+    float: right;
+    margin: 0.25rem 0 1rem 1.5rem;
+    max-width: 50%;
+}
+.cdetail-content figure.align-center {
+    display: block;
+    margin: 1.25rem auto;
+    text-align: center;
+}
+.cdetail-content figcaption {
+    font-size: 0.85rem;
+    color: var(--color-silver);
+    text-align: center;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+.cdetail-content::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .cdetail-content__lead {
@@ -12539,6 +12585,47 @@ p {
 .blogd-content {
     margin-bottom: 2rem;
 }
+.blogd-content img.img-align-left {
+    float: left;
+    margin: 0.25rem 1.5rem 1rem 0;
+    max-width: 50%;
+}
+.blogd-content img.img-align-right {
+    float: right;
+    margin: 0.25rem 0 1rem 1.5rem;
+    max-width: 50%;
+}
+.blogd-content img.img-align-center {
+    display: block;
+    margin: 1.25rem auto;
+}
+.blogd-content figure.align-left {
+    float: left;
+    margin: 0.25rem 1.5rem 1rem 0;
+    max-width: 50%;
+}
+.blogd-content figure.align-right {
+    float: right;
+    margin: 0.25rem 0 1rem 1.5rem;
+    max-width: 50%;
+}
+.blogd-content figure.align-center {
+    display: block;
+    margin: 1.25rem auto;
+    text-align: center;
+}
+.blogd-content figcaption {
+    font-size: 0.85rem;
+    color: var(--color-silver);
+    text-align: center;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+.blogd-content::after {
+    content: "";
+    display: table;
+    clear: both;
+}
 
 .blogd-content__lead {
     font-size: 1.1rem;
@@ -14946,5 +15033,26 @@ a.page-box-card:hover .page-box-card__link-hint {
     }
     .search-results__section-title {
         font-size: 1.2rem;
+    }
+}
+
+/* ─── Image Alignment Mobile Reset ─── */
+@media (max-width: 575.98px) {
+    .cdetail-content img.img-align-left,
+    .cdetail-content img.img-align-right,
+    .blogd-content img.img-align-left,
+    .blogd-content img.img-align-right {
+        float: none;
+        display: block;
+        margin: 1rem auto;
+        max-width: 100%;
+    }
+    .cdetail-content figure.align-left,
+    .cdetail-content figure.align-right,
+    .blogd-content figure.align-left,
+    .blogd-content figure.align-right {
+        float: none;
+        margin: 1rem auto;
+        max-width: 100%;
     }
 }
