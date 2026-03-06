@@ -48,16 +48,14 @@
     <link rel="preload" href="{{ asset('vendor/fonts/inter/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('vendor/fonts/playfair-display/playfair-display-latin-700-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    <!-- Critical CSS: inline for instant first paint -->
-    @include('partials.front.critical-css')
+    <!-- Self-hosted Fonts -->
+    <link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet">
+    <!-- Bootstrap 5.3.8 (critical) -->
+    <link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Custom CSS (critical) -->
+    <link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet">
 
-    <!-- Full CSS: async load (non-render-blocking) -->
-    <link rel="stylesheet" href="{{ asset('vendor/fonts/fonts.css') }}" media="print" onload="this.media='all'">
-    <noscript><link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet"></noscript>
-    <link rel="stylesheet" href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" media="print" onload="this.media='all'">
-    <noscript><link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet"></noscript>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" media="print" onload="this.media='all'">
-    <noscript><link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet"></noscript>
+    <!-- Non-critical CSS: low-priority async load -->
     <link rel="stylesheet" href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" media="print" onload="this.media='all'">
     <noscript><link href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" media="print" onload="this.media='all'">
@@ -68,8 +66,10 @@
     <noscript><link href="{{ asset('vendor/aos/2.3.4/aos.css') }}" rel="stylesheet"></noscript>
 
     @stack('styles')
+    <style>.bk-loader{position:fixed;inset:0;z-index:99999;background:#0F0F12;display:flex;align-items:center;justify-content:center;transition:opacity .4s}.bk-loader__spinner{width:40px;height:40px;border:3px solid rgba(212,175,55,.2);border-top-color:#D4AF37;border-radius:50%;animation:bk-spin .7s linear infinite}@keyframes bk-spin{to{transform:rotate(360deg)}}.bk-loader--hidden{opacity:0;pointer-events:none}</style>
 </head>
 <body>
+    <div class="bk-loader" id="bkLoader"><div class="bk-loader__spinner"></div></div>
 
     <!-- Skip Link -->
     <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
@@ -304,5 +304,6 @@
     <!-- Custom JS -->
     <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}" defer></script>
     @stack('scripts')
+    <script>window.addEventListener('load',function(){var l=document.getElementById('bkLoader');if(l){l.classList.add('bk-loader--hidden');l.addEventListener('transitionend',function(){l.remove()})}})</script>
 </body>
 </html>
