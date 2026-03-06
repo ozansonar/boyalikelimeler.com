@@ -18,6 +18,37 @@ document.addEventListener('DOMContentLoaded', function () {
     if (pageTitleInput) {
         pageTitleInput.addEventListener('input', updateSeoPreview);
     }
+
+    /* ==================== Featured Authors Repeater ==================== */
+    var container = document.getElementById('featuredAuthorsContainer');
+    var addBtn = document.getElementById('addFeaturedAuthor');
+
+    if (container && addBtn) {
+        var templateRow = container.querySelector('.featured-author-row');
+
+        addBtn.addEventListener('click', function () {
+            var clone = templateRow.cloneNode(true);
+            clone.querySelector('select').value = '';
+            container.appendChild(clone);
+            bindRemoveButtons();
+        });
+
+        bindRemoveButtons();
+    }
+
+    function bindRemoveButtons() {
+        var btns = document.querySelectorAll('.js-remove-featured');
+        btns.forEach(function (btn) {
+            btn.onclick = function () {
+                var rows = container.querySelectorAll('.featured-author-row');
+                if (rows.length > 1) {
+                    btn.closest('.featured-author-row').remove();
+                } else {
+                    btn.closest('.featured-author-row').querySelector('select').value = '';
+                }
+            };
+        });
+    }
 });
 
 /* ==================== SEO Preview ==================== */

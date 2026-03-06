@@ -41,13 +41,19 @@ class AuthorsPageController extends Controller
         $data = $request->validate([
             'title'                  => 'nullable|string|max:200',
             'description'            => 'nullable|string|max:500',
-            'featured_author_id'     => 'nullable|integer|exists:users,id',
+            'featured_author_ids'    => 'nullable|array',
+            'featured_author_ids.*'  => 'integer|exists:users,id',
             'golden_pen_title'       => 'nullable|string|max:200',
             'golden_pen_description' => 'nullable|string|max:500',
             'authors_list_title'     => 'nullable|string|max:200',
             'meta_title'             => 'nullable|string|max:70',
             'meta_description'       => 'nullable|string|max:170',
         ]);
+
+        $data['featured_author_ids'] = json_encode(
+            array_values(array_filter($data['featured_author_ids'] ?? [])),
+            JSON_THROW_ON_ERROR
+        );
 
         $this->settingService->updateGroup('authors_page', $data);
 

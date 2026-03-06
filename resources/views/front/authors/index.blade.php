@@ -54,46 +54,48 @@
     </section>
 
     <!-- =======================================================
-         FEATURED AUTHOR
+         FEATURED AUTHORS
     ======================================================= -->
-    @if($featuredAuthor)
+    @if($featuredAuthors->isNotEmpty())
         <section class="section">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-5 col-md-7 col-10" data-aos="fade-up">
-                        <a href="{{ $featuredAuthor->profile_url }}" class="text-decoration-none">
-                            <article class="authors-featured">
-                                <div class="authors-featured__avatar-wrap">
-                                    <div class="authors-featured__badge">
-                                        <i class="fa-solid fa-crown me-1"></i> Öne Çıkan Yazar
-                                    </div>
-                                    <div class="authors-featured__avatar" data-initials="{{ mb_strtoupper(mb_substr($featuredAuthor->name, 0, 1)) . mb_strtoupper(mb_substr(explode(' ', $featuredAuthor->name)[1] ?? '', 0, 1)) }}">
-                                        @if($featuredAuthor->avatar)
-                                            <img src="{{ upload_url($featuredAuthor->avatar, 'md') }}"
-                                                 alt="{{ $featuredAuthor->name }}"
-                                                 class="authors-featured__photo img-fluid"
-                                                 loading="lazy">
+                <div class="row g-4 justify-content-center">
+                    @foreach($featuredAuthors as $featuredAuthor)
+                        <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                            <a href="{{ $featuredAuthor->profile_url }}" class="text-decoration-none">
+                                <article class="authors-featured">
+                                    <div class="authors-featured__avatar-wrap">
+                                        <div class="authors-featured__badge">
+                                            <i class="fa-solid fa-crown me-1"></i> Öne Çıkan
+                                        </div>
+                                        <div class="authors-featured__avatar" data-initials="{{ mb_strtoupper(mb_substr($featuredAuthor->name, 0, 1)) . mb_strtoupper(mb_substr(explode(' ', $featuredAuthor->name)[1] ?? '', 0, 1)) }}">
+                                            @if($featuredAuthor->avatar)
+                                                <img src="{{ upload_url($featuredAuthor->avatar, 'md') }}"
+                                                     alt="{{ $featuredAuthor->name }}"
+                                                     class="authors-featured__photo img-fluid"
+                                                     loading="lazy">
+                                            @endif
+                                        </div>
+                                        @if($featuredAuthor->hasActiveGoldenPen())
+                                            <div class="authors-featured__golden" title="Altın Kalem">
+                                                <i class="fa-solid fa-pen-nib"></i>
+                                            </div>
                                         @endif
                                     </div>
-                                    @if($featuredAuthor->hasActiveGoldenPen())
-                                        <div class="authors-featured__golden" title="Altın Kalem">
-                                            <i class="fa-solid fa-pen-nib"></i>
-                                        </div>
+                                    <h2 class="authors-featured__name">{{ $featuredAuthor->name }}</h2>
+                                    <div class="authors-featured__line"></div>
+                                    <p class="authors-featured__stats">
+                                        {{ $featuredAuthor->approved_works_count ?? 0 }} eser
+                                        <span class="authors-featured__sep">·</span>
+                                        {{ number_format((int) ($featuredAuthor->total_views ?? 0)) }} okunma
+                                    </p>
+                                    @if($featuredAuthor->bio)
+                                        <p class="authors-featured__bio">{{ Str::limit($featuredAuthor->bio, 100) }}</p>
                                     @endif
-                                </div>
-                                <h2 class="authors-featured__name">{{ $featuredAuthor->name }}</h2>
-                                <div class="authors-featured__line"></div>
-                                <p class="authors-featured__stats">
-                                    {{ $featuredAuthor->approved_works_count ?? 0 }} eser
-                                    <span class="authors-featured__sep">·</span>
-                                    {{ number_format((int) ($featuredAuthor->total_views ?? 0)) }} okunma
-                                </p>
-                                @if($featuredAuthor->bio)
-                                    <p class="authors-featured__bio">{{ Str::limit($featuredAuthor->bio, 150) }}</p>
-                                @endif
-                            </article>
-                        </a>
-                    </div>
+                                </article>
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>

@@ -32,7 +32,7 @@
                 </a>
                 <a href="#section-featured" class="stg-nav-item" onclick="scrollToSection('section-featured', this)">
                     <i class="bi bi-star"></i>
-                    <div><span>Öne Çıkan Yazar</span><small>Sayfa üstünde gösterilecek yazar</small></div>
+                    <div><span>Öne Çıkan Yazarlar</span><small>Sayfa üstünde gösterilecek yazarlar</small></div>
                 </a>
                 <a href="#section-golden" class="stg-nav-item" onclick="scrollToSection('section-golden', this)">
                     <i class="bi bi-pen"></i>
@@ -54,7 +54,7 @@
             <select class="form-select form-select-sm" onchange="scrollToSection(this.value, null); this.selectedIndex=0">
                 <option value="" disabled selected>Bölüme git...</option>
                 <option value="section-header">Sayfa Başlığı</option>
-                <option value="section-featured">Öne Çıkan Yazar</option>
+                <option value="section-featured">Öne Çıkan Yazarlar</option>
                 <option value="section-golden">Altın Kalemler</option>
                 <option value="section-list">Yazar Listesi</option>
                 <option value="section-seo">SEO Ayarları</option>
@@ -113,36 +113,66 @@
                     </div>
                 </div>
 
-                <!-- ==================== SECTION 2: ÖNE ÇIKAN YAZAR ==================== -->
+                <!-- ==================== SECTION 2: ÖNE ÇIKAN YAZARLAR ==================== -->
                 <div class="card-dark mb-4" id="section-featured">
                     <div class="card-header-custom">
                         <div class="form-section-header mb-0">
                             <div class="form-section-icon bg-icon-purple"><i class="bi bi-star-fill"></i></div>
                             <div>
-                                <h6 class="mb-0">Öne Çıkan Yazar</h6>
-                                <small class="text-muted">Yazarlar sayfasının üst kısmında öne çıkarılacak yazarı seçin</small>
+                                <h6 class="mb-0">Öne Çıkan Yazarlar</h6>
+                                <small class="text-muted">Yazarlar sayfasının üst kısmında öne çıkarılacak yazarları seçin (satırda 4 kart gösterilir)</small>
                             </div>
                         </div>
                     </div>
                     <div class="card-body-custom">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label" for="apFeaturedAuthor">Yazar Seçin</label>
-                                <select class="form-select @error('featured_author_id') is-invalid @enderror"
-                                        id="apFeaturedAuthor" name="featured_author_id">
-                                    <option value="">— Öne çıkan yazar yok —</option>
-                                    @foreach($writers as $writer)
-                                        <option value="{{ $writer->id }}" {{ old('featured_author_id', $settings['featured_author_id'] ?? '') == $writer->id ? 'selected' : '' }}>
-                                            {{ $writer->name }} (@{{ $writer->username }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('featured_author_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <div class="form-text">Seçilen yazar, sayfanın üst kısmında öne çıkan yazar olarak gösterilecektir</div>
-                            </div>
+                        @php
+                            $savedIds = json_decode($settings['featured_author_ids'] ?? '[]', true) ?: [];
+                            $oldIds = old('featured_author_ids', $savedIds);
+                        @endphp
+
+                        <div id="featuredAuthorsContainer">
+                            @forelse($oldIds as $idx => $authorId)
+                                <div class="featured-author-row d-flex align-items-center gap-2 mb-2">
+                                    <select class="form-select" name="featured_author_ids[]">
+                                        <option value="">— Yazar seçin —</option>
+                                        @foreach($writers as $writer)
+                                            <option value="{{ $writer->id }}" {{ (int) $authorId === $writer->id ? 'selected' : '' }}>
+                                                {{ $writer->name }} ({{ '@' }}{{ $writer->username }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-sm btn-outline-danger js-remove-featured" title="Kaldır">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            @empty
+                                <div class="featured-author-row d-flex align-items-center gap-2 mb-2">
+                                    <select class="form-select" name="featured_author_ids[]">
+                                        <option value="">— Yazar seçin —</option>
+                                        @foreach($writers as $writer)
+                                            <option value="{{ $writer->id }}">
+                                                {{ $writer->name }} ({{ '@' }}{{ $writer->username }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-sm btn-outline-danger js-remove-featured" title="Kaldır">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            @endforelse
                         </div>
+
+                        @error('featured_author_ids')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                        @error('featured_author_ids.*')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+
+                        <button type="button" class="btn btn-sm btn-outline-teal mt-2" id="addFeaturedAuthor">
+                            <i class="bi bi-plus-lg me-1"></i> Yazar Ekle
+                        </button>
+                        <div class="form-text mt-2">Seçilen yazarlar sayfanın üst kısmında grid halinde gösterilir. Satırda 4 kart sığar.</div>
                     </div>
                 </div>
 
