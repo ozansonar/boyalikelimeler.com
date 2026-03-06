@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    @if($siteFavicon)
+        <link rel="icon" type="image/webp" href="{{ $siteFavicon }}">
+    @else
+        <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    @endif
     <link rel="alternate" type="application/rss+xml" title="Boyalı Kelimeler — İçerikler" href="{{ route('feed.literary-works') }}">
     <link rel="alternate" type="application/rss+xml" title="Boyalı Kelimeler — Blog" href="{{ route('feed.blog') }}">
     <title>@yield('title', 'Boyalı Kelimeler')</title>
@@ -44,14 +48,16 @@
     <link rel="preload" href="{{ asset('vendor/fonts/inter/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('vendor/fonts/playfair-display/playfair-display-latin-700-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    <!-- Self-hosted Fonts -->
-    <link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet">
-    <!-- Bootstrap 5.3.8 (critical) -->
-    <link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- Custom CSS (critical) -->
-    <link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet">
+    <!-- Critical CSS: inline for instant first paint -->
+    @include('partials.front.critical-css')
 
-    <!-- Non-critical CSS: low-priority async load -->
+    <!-- Full CSS: async load (non-render-blocking) -->
+    <link rel="stylesheet" href="{{ asset('vendor/fonts/fonts.css') }}" media="print" onload="this.media='all'">
+    <noscript><link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" media="print" onload="this.media='all'">
+    <noscript><link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet"></noscript>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" media="print" onload="this.media='all'">
+    <noscript><link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" media="print" onload="this.media='all'">
     <noscript><link href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" media="print" onload="this.media='all'">
@@ -74,7 +80,7 @@
     <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
         <div class="container-fluid px-3 px-lg-5">
             <a class="navbar-brand navbar-bk__brand" href="{{ url('/') }}">
-                <img src="{{ asset('images/logo.svg') }}"
+                <img src="{{ $siteLogo ?? asset('images/logo.svg') }}"
                      alt="Boyalı Kelimeler Logo"
                      class="navbar-bk__logo"
                      width="200"
