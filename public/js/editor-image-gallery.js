@@ -209,30 +209,13 @@
         if (selectedImages.length === 0 || !activeEditor) return;
 
         var altText = getPageTitle();
-        var pending = selectedImages.length;
-        var htmlParts = [];
-        var editor = activeEditor;
 
-        selectedImages.forEach(function (img, index) {
+        var html = selectedImages.map(function (img) {
             var alt = altText || img.name;
-            var tempImg = new Image();
-            tempImg.onload = function () {
-                htmlParts[index] = '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="img-fluid" loading="lazy" width="' + tempImg.naturalWidth + '" height="' + tempImg.naturalHeight + '" />';
-                pending--;
-                if (pending === 0) {
-                    editor.insertContent(htmlParts.join('\n'));
-                }
-            };
-            tempImg.onerror = function () {
-                htmlParts[index] = '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="img-fluid" loading="lazy" />';
-                pending--;
-                if (pending === 0) {
-                    editor.insertContent(htmlParts.join('\n'));
-                }
-            };
-            tempImg.src = img.url;
-        });
+            return '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="img-fluid" loading="lazy" />';
+        }).join('\n');
 
+        activeEditor.insertContent(html);
         activeEditor = null;
         clearSelection();
         closeGalleryModal();
