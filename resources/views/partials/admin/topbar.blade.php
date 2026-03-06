@@ -8,6 +8,9 @@
         </button>
     </div>
     <div class="navbar-actions">
+        <a href="{{ route('admin.profile.index') }}" class="nav-action-btn" aria-label="Profilim" title="Profilim">
+            <i class="bi bi-person-circle"></i>
+        </a>
         <a href="{{ url('/') }}" target="_blank" class="nav-action-btn" aria-label="Siteye Dön" title="Siteye Dön">
             <i class="bi bi-box-arrow-up-right"></i>
         </a>

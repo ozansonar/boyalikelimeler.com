@@ -108,6 +108,14 @@ final class ProfileService
         return $path;
     }
 
+    public function removeAvatar(User $user): void
+    {
+        if ($user->avatar) {
+            $this->uploadService->deleteImage($user->avatar);
+            $user->update(['avatar' => null]);
+        }
+    }
+
     public function uploadCover(User $user, UploadedFile $file): string
     {
         $slug = \Illuminate\Support\Str::slug($user->name);
