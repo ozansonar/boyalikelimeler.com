@@ -95,6 +95,8 @@
 
     function updateSelectionUI() {
         var insertBtn = el('eigInsertBtn');
+        var insertGridBtn = el('eigInsertGridBtn');
+        var gridColSelect = el('eigGridColSelect');
         var infoEl = el('eigSelectedInfo');
         var count = selectedImages.length;
 
@@ -104,6 +106,21 @@
                 ? '<i class="bi bi-check-lg me-1"></i>' + count + ' görsel ekle'
                 : '<i class="bi bi-check-lg me-1"></i>Ekle';
         }
+
+        // Show grid insert button only when 2+ images selected
+        if (insertGridBtn) {
+            if (count >= 2) {
+                insertGridBtn.classList.remove('d-none');
+                insertGridBtn.disabled = false;
+                insertGridBtn.innerHTML = '<i class="bi bi-grid me-1"></i>Galeri (' + count + ')';
+            } else {
+                insertGridBtn.classList.add('d-none');
+            }
+        }
+        if (gridColSelect) {
+            gridColSelect.classList.toggle('d-none', count < 2);
+        }
+
         if (infoEl) {
             infoEl.textContent = count === 0
                 ? 'Görsel seçin veya yükleyin'
@@ -203,7 +220,14 @@
         return (titleEl && titleEl.value && titleEl.value.trim()) ? titleEl.value.trim() : '';
     }
 
-    // ─── Insert Images ──────────────────────────────────────
+    // ─── Build img tag helper ──────────────────────────────
+    function buildImgTag(img, altText, extraClass) {
+        var alt = altText || img.name;
+        var cls = extraClass || 'img-fluid img-w-100';
+        return '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="' + cls + '" loading="lazy" />';
+    }
+
+    // ─── Insert Images (single/multi — individual) ────────
     document.addEventListener('click', function (e) {
         if (!e.target || !e.target.closest('#eigInsertBtn')) return;
         if (selectedImages.length === 0 || !activeEditor) return;
@@ -211,9 +235,31 @@
         var altText = getPageTitle();
 
         var html = selectedImages.map(function (img) {
-            var alt = altText || img.name;
-            return '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="img-fluid img-w-100" loading="lazy" />';
+            return buildImgTag(img, altText);
         }).join('\n');
+
+        activeEditor.insertContent(html);
+        activeEditor = null;
+        clearSelection();
+        closeGalleryModal();
+    });
+
+    // ─── Insert Images as Grid (gallery row) ─────────────
+    document.addEventListener('click', function (e) {
+        if (!e.target || !e.target.closest('#eigInsertGridBtn')) return;
+        if (selectedImages.length < 2 || !activeEditor) return;
+
+        var altText = getPageTitle();
+        var colSelect = el('eigGridColSelect');
+        var cols = colSelect ? parseInt(colSelect.value, 10) : selectedImages.length;
+        if (cols < 2) cols = 2;
+        if (cols > 4) cols = 4;
+
+        var imgs = selectedImages.map(function (img) {
+            return buildImgTag(img, altText, 'img-fluid');
+        }).join('');
+
+        var html = '<div class="img-grid img-grid-' + cols + '">' + imgs + '</div><p>&nbsp;</p>';
 
         activeEditor.insertContent(html);
         activeEditor = null;

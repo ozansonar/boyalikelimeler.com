@@ -34,13 +34,77 @@ if (! function_exists('responsive_body')) {
             'img-w-100' => 1.00,
         ];
 
+        // Grid column map: img-grid-N → 1/N of content width
+        $gridMap = [
+            'img-grid-2' => 2,
+            'img-grid-3' => 3,
+            'img-grid-4' => 4,
+        ];
+
+        // Step 1: Process images inside grid containers
+        $html = (string) preg_replace_callback(
+            '/<div\b([^>]*class="[^"]*img-grid[^"]*"[^>]*)>(.*?)<\/div>/is',
+            static function (array $gridMatch) use ($gridMap): string {
+                $divAttrs   = $gridMatch[1];
+                $divContent = $gridMatch[2];
+
+                // Detect grid column count
+                $cols = 2;
+                foreach ($gridMap as $cls => $n) {
+                    if (stripos($divAttrs, $cls) !== false) {
+                        $cols = $n;
+                        break;
+                    }
+                }
+
+                // Process each img inside this grid
+                $divContent = (string) preg_replace_callback(
+                    '/<img\b([^>]*)>/i',
+                    static function (array $imgMatch) use ($cols): string {
+                        $imgTag  = $imgMatch[0];
+                        $imgAttr = $imgMatch[1];
+
+                        if (stripos($imgAttr, 'srcset') !== false) {
+                            return $imgTag;
+                        }
+
+                        if (! preg_match('/\bsrc=["\']([^"\']*\/uploads\/[^"\']+\.webp)["\']/i', $imgAttr, $srcMatch)) {
+                            return $imgTag;
+                        }
+
+                        if (preg_match('/-(thumb|sm|md|lg)\.webp$/i', $srcMatch[1])) {
+                            return $imgTag;
+                        }
+
+                        $base    = substr($srcMatch[1], 0, -5);
+                        $srcset  = $base . '-sm.webp 480w, ' . $base . '-md.webp 768w, ' . $base . '-lg.webp 1200w';
+                        $pctDesk = (int) round(100 / $cols);
+                        // Mobile: 3+ cols collapse to 2 cols
+                        $pctMob  = $cols > 2 ? 50 : $pctDesk;
+                        $sizes   = '(max-width: 575.98px) calc(' . $pctMob . 'vw - 1rem), calc(' . $pctDesk . 'vw - 2rem)';
+
+                        return str_replace(
+                            $srcMatch[0],
+                            $srcMatch[0] . ' srcset="' . $srcset . '" sizes="' . $sizes . '"',
+                            $imgTag,
+                        );
+                    },
+                    $divContent,
+                );
+
+                return '<div' . $divAttrs . '>' . $divContent . '</div>';
+            },
+            $html,
+        ) ?? $html;
+
+        // Step 2: Process standalone images (not inside grid)
         return (string) preg_replace_callback(
             '/<img\b([^>]*)>/i',
             static function (array $matches) use ($widthMap): string {
                 $tag   = $matches[0];
                 $attrs = $matches[1];
 
-                // Skip if already has srcset
+                // Skip if already has srcset (including grid-processed ones)
                 if (stripos($attrs, 'srcset') !== false) {
                     return $tag;
                 }
@@ -81,7 +145,6 @@ if (! function_exists('responsive_body')) {
                 $srcsetParts = [];
                 foreach ($allVariants as $v) {
                     $srcsetParts[] = $base . $v['suffix'] . ' ' . $v['w'] . 'w';
-                    // Stop adding larger variants once we've exceeded display need
                     if ($v['w'] >= $maxDisplayPx) {
                         break;
                     }
@@ -94,7 +157,6 @@ if (! function_exists('responsive_body')) {
                     $pctStr = (int) ($ratio * 100);
                     $sizes = '(max-width: 575.98px) calc(' . $pctStr . 'vw), calc(' . $pctStr . 'vw - 2rem)';
                 } else {
-                    // Full width: use content column aware sizes
                     $sizes = '(max-width: 575.98px) calc(100vw - 2rem), (max-width: 991.98px) calc(100vw - 3rem), 800px';
                 }
 
