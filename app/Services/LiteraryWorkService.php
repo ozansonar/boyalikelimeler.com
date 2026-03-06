@@ -49,12 +49,18 @@ final class LiteraryWorkService
     /**
      * @return array{total: int, pending: int, approved: int, rejected: int, revision_requested: int, unpublished: int}
      */
-    public function getAdminStats(): array
+    public function getAdminStats(?string $workType = null): array
     {
-        return Cache::remember('literary_works.admin_stats', 300, function (): array {
-            $counts = LiteraryWork::selectRaw("status, COUNT(*) as cnt")
-                ->groupBy('status')
-                ->pluck('cnt', 'status');
+        $cacheKey = 'literary_works.admin_stats' . ($workType ? ".{$workType}" : '');
+
+        return Cache::remember($cacheKey, 300, function () use ($workType): array {
+            $query = LiteraryWork::selectRaw("status, COUNT(*) as cnt");
+
+            if ($workType) {
+                $query->where('work_type', $workType);
+            }
+
+            $counts = $query->groupBy('status')->pluck('cnt', 'status');
 
             return [
                 'total'              => (int) $counts->sum(),
@@ -639,6 +645,8 @@ final class LiteraryWorkService
     private function clearCache(): void
     {
         Cache::forget('literary_works.admin_stats');
+        Cache::forget('literary_works.admin_stats.written');
+        Cache::forget('literary_works.admin_stats.visual');
         Cache::forget('literary_works.pending_count');
         Cache::forget('literary_works.front_stats');
     }

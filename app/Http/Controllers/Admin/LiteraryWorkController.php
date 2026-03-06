@@ -31,7 +31,7 @@ final class LiteraryWorkController extends Controller
 
         return view('admin.literary-works.index', [
             'works'      => $this->workService->adminPaginate($perPage, $filters),
-            'stats'      => $this->workService->getAdminStats(),
+            'stats'      => $this->workService->getAdminStats($filters['work_type'] ?? null),
             'categories' => $this->categoryService->activeList(),
             'authors'    => $this->workService->getAuthorsWithWorks(),
             'filters'    => $filters,
