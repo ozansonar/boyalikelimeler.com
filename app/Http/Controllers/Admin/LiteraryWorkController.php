@@ -27,7 +27,7 @@ final class LiteraryWorkController extends Controller
             ? (int) $request->input('per_page')
             : 10;
 
-        $filters = $request->only(['search', 'status', 'category', 'author']);
+        $filters = $request->only(['search', 'status', 'category', 'author', 'work_type']);
 
         return view('admin.literary-works.index', [
             'works'      => $this->workService->adminPaginate($perPage, $filters),

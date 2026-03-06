@@ -59,6 +59,13 @@
                 </div>
 
                 <div class="cl-filters">
+                    <select class="cl-filter-select" name="work_type" onchange="this.form.submit()">
+                        <option value="">Tüm Türler</option>
+                        @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+                            <option value="{{ $type->value }}" {{ ($filters['work_type'] ?? '') === $type->value ? 'selected' : '' }}>{{ $type->label() }}</option>
+                        @endforeach
+                    </select>
+
                     <select class="cl-filter-select" name="category" onchange="this.form.submit()">
                         <option value="">Tüm Kategoriler</option>
                         @foreach($categories as $cat)
@@ -80,7 +87,7 @@
 
                 <div class="cl-toolbar-actions">
                     <button type="submit" class="btn-glass"><i class="bi bi-funnel me-1"></i>Filtrele</button>
-                    @if(!empty($filters['search']) || !empty($filters['category']) || !empty($filters['author']))
+                    @if(!empty($filters['search']) || !empty($filters['work_type']) || !empty($filters['category']) || !empty($filters['author']))
                         <a href="{{ route('admin.literary-works.index', !empty($filters['status']) ? ['status' => $filters['status']] : []) }}" class="cl-filter-reset" title="Filtreleri Sıfırla">
                             <i class="bi bi-arrow-counterclockwise"></i>
                         </a>
