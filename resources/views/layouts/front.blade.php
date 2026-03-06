@@ -78,7 +78,8 @@
                      alt="Boyalı Kelimeler Logo"
                      class="navbar-bk__logo"
                      width="200"
-                     height="50">
+                     height="50"
+                     fetchpriority="high">
             </a>
 
             <button class="navbar-toggler navbar-bk__toggler" type="button"
