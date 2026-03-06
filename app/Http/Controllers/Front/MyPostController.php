@@ -25,13 +25,15 @@ final class MyPostController extends Controller
     public function index(Request $request): View
     {
         $user = auth()->user();
-        $stats = $this->workService->getAuthorStats($user);
+        $workType = $request->query('work_type');
+        $stats = $this->workService->getAuthorStats($user, $workType);
         $works = $this->workService->authorPaginate($user, 10, [
-            'search' => $request->query('search'),
-            'status' => $request->query('status'),
+            'search'    => $request->query('search'),
+            'status'    => $request->query('status'),
+            'work_type' => $workType,
         ]);
 
-        return view('front.myposts.index', compact('stats', 'works'));
+        return view('front.myposts.index', compact('stats', 'works', 'workType'));
     }
 
     public function create(): View

@@ -191,12 +191,15 @@ final class LiteraryWorkService
     /**
      * @return array{total: int, pending: int, approved: int, rejected: int, revision_requested: int}
      */
-    public function getAuthorStats(User $user): array
+    public function getAuthorStats(User $user, ?string $workType = null): array
     {
-        $counts = $user->literaryWorks()
-            ->selectRaw("status, COUNT(*) as cnt")
-            ->groupBy('status')
-            ->pluck('cnt', 'status');
+        $query = $user->literaryWorks()->selectRaw("status, COUNT(*) as cnt");
+
+        if ($workType) {
+            $query->where('work_type', $workType);
+        }
+
+        $counts = $query->groupBy('status')->pluck('cnt', 'status');
 
         return [
             'total'              => (int) $counts->sum(),
@@ -220,6 +223,10 @@ final class LiteraryWorkService
 
         if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
+        }
+
+        if (! empty($filters['work_type'])) {
+            $query->where('work_type', $filters['work_type']);
         }
 
         return $query->orderByDesc('created_at')->paginate($perPage)->withQueryString();

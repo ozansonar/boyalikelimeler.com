@@ -29,6 +29,20 @@
                 </div>
             </div>
 
+            {{-- Work Type Toggle --}}
+            <div class="myposts-type-toggle mb-4">
+                <a href="{{ route('myposts.index', request()->except(['work_type', 'page'])) }}"
+                   class="myposts-type-toggle__btn {{ empty($workType) ? 'myposts-type-toggle__btn--active' : '' }}">
+                    <i class="fa-solid fa-layer-group me-1"></i>Tümü
+                </a>
+                @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+                    <a href="{{ route('myposts.index', array_merge(request()->except('page'), ['work_type' => $type->value])) }}"
+                       class="myposts-type-toggle__btn {{ ($workType ?? '') === $type->value ? 'myposts-type-toggle__btn--active' : '' }}">
+                        <i class="fa-solid {{ $type === \App\Enums\LiteraryWorkType::Written ? 'fa-pen-fancy' : 'fa-palette' }} me-1"></i>{{ $type->label() }}
+                    </a>
+                @endforeach
+            </div>
+
             {{-- Stats Summary --}}
             <div class="row g-3 mb-4">
                 <div class="col-6 col-md-3">
@@ -82,6 +96,9 @@
 
                 {{-- Table Toolbar --}}
                 <form action="{{ route('myposts.index') }}" method="GET" class="myposts-toolbar">
+                    @if(!empty($workType))
+                        <input type="hidden" name="work_type" value="{{ $workType }}">
+                    @endif
                     <div class="myposts-toolbar__search">
                         <i class="fa-solid fa-magnifying-glass myposts-toolbar__search-icon"></i>
                         <input type="text"
@@ -110,6 +127,7 @@
                             <tr>
                                 <th class="myposts-table__th myposts-table__th--title">Eser Başlığı</th>
                                 <th class="myposts-table__th myposts-table__th--category">Kategori</th>
+                                <th class="myposts-table__th myposts-table__th--type">Tür</th>
                                 <th class="myposts-table__th myposts-table__th--date">Tarih</th>
                                 <th class="myposts-table__th myposts-table__th--status">Durum</th>
                                 <th class="myposts-table__th myposts-table__th--views">Görüntülenme</th>
@@ -124,6 +142,11 @@
                                     </td>
                                     <td class="myposts-table__td">
                                         <span class="myposts-badge myposts-badge--category">{{ $work->category?->name ?? '—' }}</span>
+                                    </td>
+                                    <td class="myposts-table__td">
+                                        <span class="myposts-badge myposts-badge--type-{{ $work->work_type?->value ?? 'written' }}">
+                                            <i class="fa-solid {{ $work->work_type === \App\Enums\LiteraryWorkType::Visual ? 'fa-palette' : 'fa-pen-fancy' }} me-1"></i>{{ $work->work_type?->label() ?? 'Yazılı Eser' }}
+                                        </span>
                                     </td>
                                     <td class="myposts-table__td myposts-table__td--muted">{{ $work->created_at->translatedFormat('d M Y') }}</td>
                                     <td class="myposts-table__td">
@@ -209,7 +232,7 @@
                                     @php $latestRevision = $work->revisions->first(); @endphp
                                     @if($latestRevision)
                                         <tr class="myposts-table__row">
-                                            <td colspan="6" class="myposts-table__td">
+                                            <td colspan="7" class="myposts-table__td">
                                                 <div class="myposts-revision-note">
                                                     <i class="fa-solid fa-triangle-exclamation me-2 text-warning"></i>
                                                     <strong>Editör notu:</strong> {{ $latestRevision->reason }}
@@ -220,7 +243,7 @@
                                 @endif
                             @empty
                                 <tr>
-                                    <td colspan="6" class="myposts-table__td text-center py-5">
+                                    <td colspan="7" class="myposts-table__td text-center py-5">
                                         <i class="fa-solid fa-feather-pointed fa-2x mb-3 d-block" aria-hidden="true"></i>
                                         Henüz eseriniz bulunmuyor. İlk eserinizi gönderin!
                                     </td>
