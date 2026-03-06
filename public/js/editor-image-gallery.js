@@ -212,7 +212,7 @@
 
         var html = selectedImages.map(function (img) {
             var alt = altText || img.name;
-            return '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="img-fluid" loading="lazy" />';
+            return '<img src="' + esc(img.url) + '" alt="' + esc(alt) + '" class="img-fluid img-w-100" loading="lazy" />';
         }).join('\n');
 
         activeEditor.insertContent(html);

@@ -8834,6 +8834,14 @@ p {
     display: block;
     margin: 1.25rem auto;
 }
+
+/* Image Width Classes — editor size control */
+.cdetail-content img.img-w-20 { max-width: 20%; }
+.cdetail-content img.img-w-40 { max-width: 40%; }
+.cdetail-content img.img-w-60 { max-width: 60%; }
+.cdetail-content img.img-w-80 { max-width: 80%; }
+.cdetail-content img.img-w-100 { max-width: 100%; }
+
 .cdetail-content figure {
     margin: 1.25rem 0;
 }
@@ -15104,6 +15112,11 @@ a.page-box-card:hover .page-box-card__link-hint {
         display: block;
         margin: 1rem auto;
         max-width: 100%;
+    }
+    /* Mobile: small img-w classes get minimum readable size */
+    .cdetail-content img.img-w-20,
+    .cdetail-content img.img-w-40 {
+        max-width: 60%;
     }
     .cdetail-content figure.align-left,
     .cdetail-content figure.align-right,

@@ -211,9 +211,56 @@
         convert_urls: false,
         entity_encoding: 'raw',
         images_upload_handler: window.editorImagesUploadHandler,
-        setup: window.editorImagesSetup,
-        image_class_list: [{ title: 'Responsive', value: 'img-fluid' }],
-        content_style: 'img { max-width: 100%; height: auto; }',
+        setup: function (editor) {
+            if (typeof window.editorImagesSetup === 'function') {
+                window.editorImagesSetup(editor);
+            }
+
+            var IMG_SIZES = [
+                { name: 'imgw20',  label: 'XS',  cls: 'img-w-20'  },
+                { name: 'imgw40',  label: 'S',   cls: 'img-w-40'  },
+                { name: 'imgw60',  label: 'M',   cls: 'img-w-60'  },
+                { name: 'imgw80',  label: 'L',   cls: 'img-w-80'  },
+                { name: 'imgw100', label: 'XL',  cls: 'img-w-100' }
+            ];
+            var ALL_W = IMG_SIZES.map(function (s) { return s.cls; });
+            function getImg() { var n = editor.selection.getNode(); return n && n.nodeName === 'IMG' ? n : null; }
+            IMG_SIZES.forEach(function (s) {
+                editor.ui.registry.addToggleButton(s.name, {
+                    text: s.label, tooltip: 'Boyut: ' + s.label,
+                    onAction: function () { var img = getImg(); if (img) { ALL_W.forEach(function (c) { editor.dom.removeClass(img, c); }); editor.dom.addClass(img, s.cls); editor.undoManager.add(); editor.nodeChanged(); } },
+                    onSetup: function (api) { var h = function () { var img = getImg(); api.setActive(img ? editor.dom.hasClass(img, s.cls) : false); }; editor.on('NodeChange', h); return function () { editor.off('NodeChange', h); }; }
+                });
+            });
+
+            var IMG_ALIGNS = [
+                { name: 'imgAlignLeft',   icon: 'align-left',   cls: 'img-align-left'   },
+                { name: 'imgAlignCenter', icon: 'align-center', cls: 'img-align-center' },
+                { name: 'imgAlignRight',  icon: 'align-right',  cls: 'img-align-right'  }
+            ];
+            var ALL_A = IMG_ALIGNS.map(function (a) { return a.cls; });
+            IMG_ALIGNS.forEach(function (a) {
+                editor.ui.registry.addToggleButton(a.name, {
+                    icon: a.icon, tooltip: a.name.replace('imgAlign', ''),
+                    onAction: function () { var img = getImg(); if (img) { ALL_A.forEach(function (c) { editor.dom.removeClass(img, c); }); editor.dom.addClass(img, a.cls); editor.undoManager.add(); editor.nodeChanged(); } },
+                    onSetup: function (api) { var h = function () { var img = getImg(); api.setActive(img ? editor.dom.hasClass(img, a.cls) : false); }; editor.on('NodeChange', h); return function () { editor.off('NodeChange', h); }; }
+                });
+            });
+
+            editor.ui.registry.addContextToolbar('imagetools', {
+                predicate: function (node) { return node.nodeName === 'IMG'; },
+                items: 'imgw20 imgw40 imgw60 imgw80 imgw100 | imgAlignLeft imgAlignCenter imgAlignRight',
+                position: 'node', scope: 'node'
+            });
+        },
+        image_class_list: [
+            { title: 'Tam Genişlik (XL)', value: 'img-fluid img-w-100' },
+            { title: 'Büyük (L — 80%)', value: 'img-fluid img-w-80' },
+            { title: 'Orta (M — 60%)', value: 'img-fluid img-w-60' },
+            { title: 'Küçük (S — 40%)', value: 'img-fluid img-w-40' },
+            { title: 'Çok Küçük (XS — 20%)', value: 'img-fluid img-w-20' }
+        ],
+        content_style: 'img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; }',
     });
     </script>
 @endpush
