@@ -22,7 +22,7 @@ function switchProfilePanel(btn, panelId) {
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ==================== Password Toggle ==================== */
-    document.querySelectorAll('.ap-toggle-pw').forEach(function (btn) {
+    document.querySelectorAll('.ap-pw-eye').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var targetId = btn.dataset.target;
             var input = document.getElementById(targetId);

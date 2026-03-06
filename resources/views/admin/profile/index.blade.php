@@ -279,12 +279,12 @@
 
                         <div class="stg-field">
                             <label class="stg-label" for="apCurrentPassword">Mevcut Şifre</label>
-                            <div class="stg-input-group">
-                                <input type="password" class="stg-input @error('current_password') is-invalid @enderror"
+                            <div class="ap-pw-wrap">
+                                <input type="password" class="stg-input ap-pw-input @error('current_password') is-invalid @enderror"
                                        id="apCurrentPassword" name="current_password"
                                        placeholder="Mevcut şifrenizi girin"
                                        autocomplete="current-password">
-                                <button type="button" class="stg-btn stg-btn-sm ap-toggle-pw" data-target="apCurrentPassword">
+                                <button type="button" class="ap-pw-eye" data-target="apCurrentPassword">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -295,12 +295,12 @@
 
                         <div class="stg-field">
                             <label class="stg-label" for="apNewPassword">Yeni Şifre</label>
-                            <div class="stg-input-group">
-                                <input type="password" class="stg-input @error('password') is-invalid @enderror"
+                            <div class="ap-pw-wrap">
+                                <input type="password" class="stg-input ap-pw-input @error('password') is-invalid @enderror"
                                        id="apNewPassword" name="password"
                                        placeholder="Yeni şifrenizi girin"
                                        autocomplete="new-password">
-                                <button type="button" class="stg-btn stg-btn-sm ap-toggle-pw" data-target="apNewPassword">
+                                <button type="button" class="ap-pw-eye" data-target="apNewPassword">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -331,12 +331,12 @@
 
                         <div class="stg-field">
                             <label class="stg-label" for="apConfirmPassword">Yeni Şifre Tekrar</label>
-                            <div class="stg-input-group">
-                                <input type="password" class="stg-input"
+                            <div class="ap-pw-wrap">
+                                <input type="password" class="stg-input ap-pw-input"
                                        id="apConfirmPassword" name="password_confirmation"
                                        placeholder="Yeni şifrenizi tekrar girin"
                                        autocomplete="new-password">
-                                <button type="button" class="stg-btn stg-btn-sm ap-toggle-pw" data-target="apConfirmPassword">
+                                <button type="button" class="ap-pw-eye" data-target="apConfirmPassword">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
