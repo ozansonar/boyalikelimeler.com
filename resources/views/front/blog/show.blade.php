@@ -80,6 +80,7 @@
         $blogData,
         [
             '@type' => 'BreadcrumbList',
+            'name' => 'Breadcrumb',
             'itemListElement' => array_values(array_filter([
                 ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
                 ['@type' => 'ListItem', 'position' => 2, 'name' => 'Blog', 'item' => route('blog.index')],
