@@ -22,7 +22,7 @@
 @push('jsonld')
 <script type="application/ld+json">
 {!! json_encode([
-    '@context' => 'https://schema.org',
+    '@@context' => 'https://schema.org',
     '@type' => 'CollectionPage',
     'name' => 'İçerikler',
     'description' => 'Boyalı Kelimeler yazarlarının en güzel yazılarını keşfedin.',
