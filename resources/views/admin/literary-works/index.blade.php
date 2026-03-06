@@ -7,6 +7,20 @@
     <x-admin.page-header title="Edebiyat Eserleri" subtitle="Yazarların gönderdiği edebiyat eserlerini inceleyin ve yönetin">
     </x-admin.page-header>
 
+    <!-- Work Type Toggle -->
+    <div class="cl-status-tabs mb-4" data-aos="fade-up">
+        <a href="{{ route('admin.literary-works.index', request()->except(['work_type', 'page'])) }}" class="cl-status-tab {{ empty($filters['work_type']) ? 'active' : '' }}">
+            <i class="bi bi-grid"></i>
+            <span>Tümü</span>
+        </a>
+        @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+            <a href="{{ route('admin.literary-works.index', array_merge(request()->except('page'), ['work_type' => $type->value])) }}" class="cl-status-tab {{ ($filters['work_type'] ?? '') === $type->value ? 'active' : '' }}">
+                <i class="bi {{ $type->icon() }}"></i>
+                <span>{{ $type->label() }}</span>
+            </a>
+        @endforeach
+    </div>
+
     <!-- Stats -->
     <div class="row g-4 mb-4">
         <x-admin.stat-card color="blue" icon="bi-journal-text" label="Toplam Eser" :count="$stats['total']" :delay="0" col-class="col-xxl col-xl-6 col-sm-6" />
@@ -59,12 +73,9 @@
                 </div>
 
                 <div class="cl-filters">
-                    <select class="cl-filter-select" name="work_type" onchange="this.form.submit()">
-                        <option value="">Tüm Türler</option>
-                        @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
-                            <option value="{{ $type->value }}" {{ ($filters['work_type'] ?? '') === $type->value ? 'selected' : '' }}>{{ $type->label() }}</option>
-                        @endforeach
-                    </select>
+                    @if(!empty($filters['work_type']))
+                        <input type="hidden" name="work_type" value="{{ $filters['work_type'] }}">
+                    @endif
 
                     <select class="cl-filter-select" name="category" onchange="this.form.submit()">
                         <option value="">Tüm Kategoriler</option>
@@ -87,8 +98,8 @@
 
                 <div class="cl-toolbar-actions">
                     <button type="submit" class="btn-glass"><i class="bi bi-funnel me-1"></i>Filtrele</button>
-                    @if(!empty($filters['search']) || !empty($filters['work_type']) || !empty($filters['category']) || !empty($filters['author']))
-                        <a href="{{ route('admin.literary-works.index', !empty($filters['status']) ? ['status' => $filters['status']] : []) }}" class="cl-filter-reset" title="Filtreleri Sıfırla">
+                    @if(!empty($filters['search']) || !empty($filters['category']) || !empty($filters['author']))
+                        <a href="{{ route('admin.literary-works.index', array_filter(['status' => $filters['status'] ?? null, 'work_type' => $filters['work_type'] ?? null])) }}" class="cl-filter-reset" title="Filtreleri Sıfırla">
                             <i class="bi bi-arrow-counterclockwise"></i>
                         </a>
                     @endif
