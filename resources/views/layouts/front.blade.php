@@ -48,16 +48,14 @@
     <link rel="preload" href="{{ asset('vendor/fonts/inter/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('vendor/fonts/playfair-display/playfair-display-latin-700-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    <!-- Critical CSS: inline for instant first paint -->
-    @include('partials.front.critical-css')
+    <!-- Self-hosted Fonts -->
+    <link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet">
+    <!-- Bootstrap 5.3.8 (critical) -->
+    <link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Custom CSS (critical) -->
+    <link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet">
 
-    <!-- Full CSS: async load (non-render-blocking) -->
-    <link rel="stylesheet" href="{{ asset('vendor/fonts/fonts.css') }}" media="print" onload="this.media='all'">
-    <noscript><link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet"></noscript>
-    <link rel="stylesheet" href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" media="print" onload="this.media='all'">
-    <noscript><link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet"></noscript>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" media="print" onload="this.media='all'">
-    <noscript><link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet"></noscript>
+    <!-- Non-critical CSS: low-priority async load -->
     <link rel="stylesheet" href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" media="print" onload="this.media='all'">
     <noscript><link href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" media="print" onload="this.media='all'">
