@@ -566,41 +566,11 @@
                                     </div>
                                     <div class="pedit-toggle__item">
                                         <div class="pedit-toggle__info">
-                                            <span class="pedit-toggle__label"><i class="fa-solid fa-user-plus me-1 text-gold"></i>Takipçi bildirimleri</span>
-                                            <span class="pedit-toggle__desc">Yeni takipçi kazandığınızda</span>
-                                        </div>
-                                        <label class="pedit-toggle__switch" for="notif_follow">
-                                            <input type="checkbox" id="notif_follow" name="notif_follow" checked>
-                                            <span class="pedit-toggle__track"></span>
-                                        </label>
-                                    </div>
-                                    <div class="pedit-toggle__item">
-                                        <div class="pedit-toggle__info">
                                             <span class="pedit-toggle__label"><i class="fa-solid fa-envelope me-1 text-gold"></i>E-posta bildirimleri</span>
                                             <span class="pedit-toggle__desc">Önemli gelişmeleri e-posta ile al</span>
                                         </div>
                                         <label class="pedit-toggle__switch" for="notif_email">
                                             <input type="checkbox" id="notif_email" name="notif_email" checked>
-                                            <span class="pedit-toggle__track"></span>
-                                        </label>
-                                    </div>
-                                    <div class="pedit-toggle__item">
-                                        <div class="pedit-toggle__info">
-                                            <span class="pedit-toggle__label"><i class="fa-solid fa-newspaper me-1 text-gold"></i>Dergi bildirimleri</span>
-                                            <span class="pedit-toggle__desc">Boyalı Kelimeler dergisi yayınlandığında</span>
-                                        </div>
-                                        <label class="pedit-toggle__switch" for="notif_dergi">
-                                            <input type="checkbox" id="notif_dergi" name="notif_dergi" checked>
-                                            <span class="pedit-toggle__track"></span>
-                                        </label>
-                                    </div>
-                                    <div class="pedit-toggle__item">
-                                        <div class="pedit-toggle__info">
-                                            <span class="pedit-toggle__label"><i class="fa-solid fa-trophy me-1 text-gold"></i>Yarışma bildirimleri</span>
-                                            <span class="pedit-toggle__desc">Yeni yarışmalar ve sonuçlar için</span>
-                                        </div>
-                                        <label class="pedit-toggle__switch" for="notif_contest">
-                                            <input type="checkbox" id="notif_contest" name="notif_contest" checked>
                                             <span class="pedit-toggle__track"></span>
                                         </label>
                                     </div>
