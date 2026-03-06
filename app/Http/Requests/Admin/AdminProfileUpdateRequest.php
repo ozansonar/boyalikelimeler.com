@@ -28,11 +28,11 @@ class AdminProfileUpdateRequest extends FormRequest
             'bio'       => 'nullable|string|max:300',
             'location'  => 'nullable|string|max:100',
             'website'   => 'nullable|url|max:255',
-            'instagram' => 'nullable|string|max:100',
-            'twitter'   => 'nullable|string|max:100',
-            'youtube'   => 'nullable|string|max:255',
-            'tiktok'    => 'nullable|string|max:100',
-            'spotify'   => 'nullable|string|max:255',
+            'instagram' => 'nullable|url|max:255',
+            'twitter'   => 'nullable|url|max:255',
+            'youtube'   => 'nullable|url|max:255',
+            'tiktok'    => 'nullable|url|max:255',
+            'spotify'   => 'nullable|url|max:255',
         ];
     }
 
@@ -51,7 +51,12 @@ class AdminProfileUpdateRequest extends FormRequest
             'username.unique'   => 'Bu kullanıcı adı zaten kullanılıyor.',
             'username.regex'    => 'Kullanıcı adı sadece harf, rakam, nokta, tire ve alt çizgi içerebilir.',
             'bio.max'           => 'Biyografi en fazla 300 karakter olabilir.',
-            'website.url'       => 'Geçerli bir URL girin.',
+            'website.url'       => 'Geçerli bir URL girin (https://...).',
+            'instagram.url'     => 'Geçerli bir Instagram URL\'si girin.',
+            'twitter.url'       => 'Geçerli bir Twitter/X URL\'si girin.',
+            'youtube.url'       => 'Geçerli bir YouTube URL\'si girin.',
+            'tiktok.url'        => 'Geçerli bir TikTok URL\'si girin.',
+            'spotify.url'       => 'Geçerli bir Spotify URL\'si girin.',
         ];
     }
 }

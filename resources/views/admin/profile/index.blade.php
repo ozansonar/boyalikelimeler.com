@@ -7,7 +7,7 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-3" data-aos="fade-down" data-aos-duration="400">
         <ol class="breadcrumb">
-            <li><a href="{{ route('admin.dashboard') }}" class="breadcrumb-link"><i class="bi bi-house"></i> Ana Sayfa</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="breadcrumb-link"><i class="bi bi-house me-1"></i>Ana Sayfa</a></li>
             <li class="breadcrumb-item active text-teal">Profilim</li>
         </ol>
     </nav>
@@ -153,26 +153,26 @@
                     <div class="stg-section">
                         <div class="stg-section-title">
                             <h6>Sosyal Medya</h6>
-                            <p>Sosyal medya hesaplarınızı bağlayın</p>
+                            <p>Sosyal medya profil URL'lerinizi ekleyin</p>
                         </div>
 
                         <div class="stg-row">
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apInstagram"><i class="bi bi-instagram me-1"></i> Instagram</label>
-                                <input type="text" class="stg-input @error('instagram') is-invalid @enderror"
+                                <input type="url" class="stg-input @error('instagram') is-invalid @enderror"
                                        id="apInstagram" name="instagram"
                                        value="{{ old('instagram', $user->instagram) }}"
-                                       placeholder="kullaniciadi">
+                                       placeholder="https://instagram.com/kullaniciadi">
                                 @error('instagram')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apTwitter"><i class="bi bi-twitter-x me-1"></i> Twitter / X</label>
-                                <input type="text" class="stg-input @error('twitter') is-invalid @enderror"
+                                <input type="url" class="stg-input @error('twitter') is-invalid @enderror"
                                        id="apTwitter" name="twitter"
                                        value="{{ old('twitter', $user->twitter) }}"
-                                       placeholder="kullaniciadi">
+                                       placeholder="https://x.com/kullaniciadi">
                                 @error('twitter')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -182,20 +182,20 @@
                         <div class="stg-row">
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apYoutube"><i class="bi bi-youtube me-1"></i> YouTube</label>
-                                <input type="text" class="stg-input @error('youtube') is-invalid @enderror"
+                                <input type="url" class="stg-input @error('youtube') is-invalid @enderror"
                                        id="apYoutube" name="youtube"
                                        value="{{ old('youtube', $user->youtube) }}"
-                                       placeholder="Kanal URL'si veya @kullaniciadi">
+                                       placeholder="https://youtube.com/@kanaladi">
                                 @error('youtube')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apTiktok"><i class="bi bi-tiktok me-1"></i> TikTok</label>
-                                <input type="text" class="stg-input @error('tiktok') is-invalid @enderror"
+                                <input type="url" class="stg-input @error('tiktok') is-invalid @enderror"
                                        id="apTiktok" name="tiktok"
                                        value="{{ old('tiktok', $user->tiktok) }}"
-                                       placeholder="kullaniciadi">
+                                       placeholder="https://tiktok.com/@kullaniciadi">
                                 @error('tiktok')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -204,10 +204,10 @@
 
                         <div class="stg-field">
                             <label class="stg-label" for="apSpotify"><i class="bi bi-spotify me-1"></i> Spotify</label>
-                            <input type="text" class="stg-input @error('spotify') is-invalid @enderror"
+                            <input type="url" class="stg-input @error('spotify') is-invalid @enderror"
                                    id="apSpotify" name="spotify"
                                    value="{{ old('spotify', $user->spotify) }}"
-                                   placeholder="Profil URL'si">
+                                   placeholder="https://open.spotify.com/user/kullaniciadi">
                             @error('spotify')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -307,26 +307,26 @@
                             @error('password')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
+                        </div>
 
-                            <!-- Password Strength Meter -->
-                            <div class="ap-pw-strength mt-2" id="pwStrengthWrap">
-                                <div class="ap-pw-bars">
-                                    <div class="ap-pw-bar" id="pwBar1"></div>
-                                    <div class="ap-pw-bar" id="pwBar2"></div>
-                                    <div class="ap-pw-bar" id="pwBar3"></div>
-                                    <div class="ap-pw-bar" id="pwBar4"></div>
-                                </div>
-                                <small class="ap-pw-text" id="pwStrengthText"></small>
+                        <!-- Password Strength Meter -->
+                        <div class="ap-pw-meter" id="pwStrengthWrap">
+                            <div class="ap-pw-meter__bars">
+                                <div class="ap-pw-meter__bar" id="pwBar1"></div>
+                                <div class="ap-pw-meter__bar" id="pwBar2"></div>
+                                <div class="ap-pw-meter__bar" id="pwBar3"></div>
+                                <div class="ap-pw-meter__bar" id="pwBar4"></div>
                             </div>
+                            <span class="ap-pw-meter__text" id="pwStrengthText"></span>
+                        </div>
 
-                            <!-- Password Requirements -->
-                            <div class="ap-pw-requirements mt-2">
-                                <div class="ap-pw-req" id="reqLength"><i class="bi bi-circle"></i> En az 8 karakter</div>
-                                <div class="ap-pw-req" id="reqLower"><i class="bi bi-circle"></i> Küçük harf (a-z)</div>
-                                <div class="ap-pw-req" id="reqUpper"><i class="bi bi-circle"></i> Büyük harf (A-Z)</div>
-                                <div class="ap-pw-req" id="reqNumber"><i class="bi bi-circle"></i> Rakam (0-9)</div>
-                                <div class="ap-pw-req" id="reqSpecial"><i class="bi bi-circle"></i> Özel karakter (@$!%*?&#._-)</div>
-                            </div>
+                        <!-- Password Requirements -->
+                        <div class="ap-pw-checklist">
+                            <div class="ap-pw-checklist__item" id="reqLength"><i class="bi bi-circle"></i> <span>En az 8 karakter</span></div>
+                            <div class="ap-pw-checklist__item" id="reqLower"><i class="bi bi-circle"></i> <span>Küçük harf (a-z)</span></div>
+                            <div class="ap-pw-checklist__item" id="reqUpper"><i class="bi bi-circle"></i> <span>Büyük harf (A-Z)</span></div>
+                            <div class="ap-pw-checklist__item" id="reqNumber"><i class="bi bi-circle"></i> <span>Rakam (0-9)</span></div>
+                            <div class="ap-pw-checklist__item" id="reqSpecial"><i class="bi bi-circle"></i> <span>Özel karakter (@$!%*?&#._-)</span></div>
                         </div>
 
                         <div class="stg-field">
@@ -340,7 +340,7 @@
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
-                            <div class="ap-pw-match mt-1" id="pwMatchStatus"></div>
+                            <div class="ap-pw-match mt-2" id="pwMatchStatus"></div>
                         </div>
                     </div>
 
