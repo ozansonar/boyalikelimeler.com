@@ -18,38 +18,80 @@
 @endpush
 
 @push('jsonld')
+@php
+    $workComments = $work->approvedComments;
+    $ratingComments = $workComments->where('rating', '>', 0);
+    $avgRating = $ratingComments->count() > 0 ? round($ratingComments->avg('rating'), 1) : null;
+
+    $articleData = [
+        '@type' => 'Article',
+        'headline' => $work->meta_title ?? $work->title,
+        'description' => $work->meta_description ?? Str::limit(strip_tags($work->body), 160),
+        'image' => $work->cover_image ? asset('uploads/' . $work->cover_image) : asset('images/og-cover.jpg'),
+        'datePublished' => $work->published_at->toIso8601String(),
+        'dateModified' => $work->updated_at->toIso8601String(),
+        'author' => [
+            '@type' => 'Person',
+            'name' => $work->author->name,
+            'url' => route('profile.show', $work->author->username),
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Boyalı Kelimeler',
+            'url' => url('/'),
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/logo.svg'),
+            ],
+        ],
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => route('literary-works.show', $work->slug),
+        ],
+        'articleSection' => $work->category->name,
+        'wordCount' => preg_match_all('/\pL+/u', strip_tags($work->body)),
+        'commentCount' => $workComments->count(),
+        'interactionStatistic' => [
+            [
+                '@type' => 'InteractionCounter',
+                'interactionType' => 'https://schema.org/ReadAction',
+                'userInteractionCount' => $work->view_count,
+            ],
+            [
+                '@type' => 'InteractionCounter',
+                'interactionType' => 'https://schema.org/CommentAction',
+                'userInteractionCount' => $workComments->count(),
+            ],
+        ],
+    ];
+
+    if ($avgRating !== null) {
+        $articleData['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'ratingValue' => $avgRating,
+            'bestRating' => 5,
+            'worstRating' => 1,
+            'ratingCount' => $ratingComments->count(),
+        ];
+    }
+
+    if ($workComments->count() > 0) {
+        $articleData['comment'] = $workComments->take(5)->map(fn ($c) => array_filter([
+            '@type' => 'Comment',
+            'text' => Str::limit($c->body, 200),
+            'dateCreated' => $c->created_at->toIso8601String(),
+            'author' => [
+                '@type' => 'Person',
+                'name' => $c->user?->name ?? ($c->first_name . ' ' . $c->last_name),
+            ],
+        ]))->values()->all();
+    }
+@endphp
 <script type="application/ld+json">
 {!! json_encode([
     '@@context' => 'https://schema.org',
     '@graph' => [
-        [
-            '@type' => 'Article',
-            'headline' => $work->meta_title ?? $work->title,
-            'description' => $work->meta_description ?? Str::limit(strip_tags($work->body), 160),
-            'image' => $work->cover_image ? asset('uploads/' . $work->cover_image) : asset('images/og-cover.jpg'),
-            'datePublished' => $work->published_at->toIso8601String(),
-            'dateModified' => $work->updated_at->toIso8601String(),
-            'author' => [
-                '@type' => 'Person',
-                'name' => $work->author->name,
-                'url' => route('profile.show', $work->author->username),
-            ],
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'Boyalı Kelimeler',
-                'url' => url('/'),
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => asset('images/logo.svg'),
-                ],
-            ],
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => route('literary-works.show', $work->slug),
-            ],
-            'articleSection' => $work->category->name,
-            'wordCount' => preg_match_all('/\pL+/u', strip_tags($work->body)),
-        ],
+        $articleData,
         [
             '@type' => 'BreadcrumbList',
             'itemListElement' => [

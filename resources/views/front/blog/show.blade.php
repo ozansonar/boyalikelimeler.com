@@ -21,27 +21,74 @@
 @endpush
 
 @push('jsonld')
+@php
+    $postComments = $post->approvedComments;
+    $postRatingComments = $postComments->where('rating', '>', 0);
+    $postAvgRating = $postRatingComments->count() > 0 ? round($postRatingComments->avg('rating'), 1) : null;
+
+    $blogData = array_filter([
+        '@type' => 'BlogPosting',
+        'headline' => $post->meta_title ?: $post->title,
+        'description' => $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160),
+        'image' => $post->cover_image ? asset('uploads/' . $post->cover_image) : asset('images/og-cover.jpg'),
+        'datePublished' => $post->published_at?->toIso8601String(),
+        'dateModified' => $post->updated_at->toIso8601String(),
+        'author' => $post->author ? [
+            '@type' => 'Person',
+            'name' => $post->author->name,
+            'url' => route('profile.show', $post->author->username),
+        ] : null,
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Boyalı Kelimeler',
+            'url' => url('/'),
+            'logo' => ['@type' => 'ImageObject', 'url' => asset('images/logo.svg')],
+        ],
+        'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('blog.show', $post->slug)],
+        'articleSection' => $post->category?->name,
+        'wordCount' => preg_match_all('/\pL+/u', strip_tags((string) $post->body)),
+        'commentCount' => $postComments->count(),
+        'interactionStatistic' => [
+            [
+                '@type' => 'InteractionCounter',
+                'interactionType' => 'https://schema.org/ReadAction',
+                'userInteractionCount' => $post->view_count,
+            ],
+            [
+                '@type' => 'InteractionCounter',
+                'interactionType' => 'https://schema.org/CommentAction',
+                'userInteractionCount' => $postComments->count(),
+            ],
+        ],
+    ]);
+
+    if ($postAvgRating !== null) {
+        $blogData['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'ratingValue' => $postAvgRating,
+            'bestRating' => 5,
+            'worstRating' => 1,
+            'ratingCount' => $postRatingComments->count(),
+        ];
+    }
+
+    if ($postComments->count() > 0) {
+        $blogData['comment'] = $postComments->take(5)->map(fn ($c) => array_filter([
+            '@type' => 'Comment',
+            'text' => Str::limit($c->body, 200),
+            'dateCreated' => $c->created_at->toIso8601String(),
+            'author' => [
+                '@type' => 'Person',
+                'name' => $c->user?->name ?? ($c->first_name . ' ' . $c->last_name),
+            ],
+        ]))->values()->all();
+    }
+@endphp
 <script type="application/ld+json">
 {!! json_encode([
     '@@context' => 'https://schema.org',
     '@graph' => [
-        array_filter([
-            '@type' => 'BlogPosting',
-            'headline' => $post->meta_title ?: $post->title,
-            'description' => $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160),
-            'image' => $post->cover_image ? asset('uploads/' . $post->cover_image) : asset('images/og-cover.jpg'),
-            'datePublished' => $post->published_at?->toIso8601String(),
-            'dateModified' => $post->updated_at->toIso8601String(),
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'Boyalı Kelimeler',
-                'url' => url('/'),
-                'logo' => ['@type' => 'ImageObject', 'url' => asset('images/logo.svg')],
-            ],
-            'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('blog.show', $post->slug)],
-            'articleSection' => $post->category?->name,
-            'wordCount' => preg_match_all('/\pL+/u', strip_tags((string) $post->body)),
-        ]),
+        $blogData,
         [
             '@type' => 'BreadcrumbList',
             'itemListElement' => array_values(array_filter([

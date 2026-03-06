@@ -23,20 +23,34 @@
 <script type="application/ld+json">
 {!! json_encode([
     '@@context' => 'https://schema.org',
-    '@type' => 'CollectionPage',
-    'name' => 'İçerikler',
-    'description' => 'Boyalı Kelimeler yazarlarının en güzel yazılarını keşfedin.',
-    'url' => route('literary-works.index'),
-    'isPartOf' => [
-        '@type' => 'WebSite',
-        'name' => 'Boyalı Kelimeler',
-        'url' => url('/'),
-    ],
-    'breadcrumb' => [
-        '@type' => 'BreadcrumbList',
-        'itemListElement' => [
-            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
-            ['@type' => 'ListItem', 'position' => 2, 'name' => 'İçerikler'],
+    '@graph' => [
+        [
+            '@type' => 'CollectionPage',
+            'name' => 'İçerikler',
+            'description' => 'Boyalı Kelimeler yazarlarının en güzel yazılarını keşfedin.',
+            'url' => route('literary-works.index'),
+            'isPartOf' => [
+                '@type' => 'WebSite',
+                'name' => 'Boyalı Kelimeler',
+                'url' => url('/'),
+            ],
+            'mainEntity' => [
+                '@type' => 'ItemList',
+                'numberOfItems' => $works->total(),
+                'itemListElement' => $works->map(fn ($w, $i) => [
+                    '@type' => 'ListItem',
+                    'position' => ($works->currentPage() - 1) * $works->perPage() + $i + 1,
+                    'url' => route('literary-works.show', $w->slug),
+                    'name' => $w->title,
+                ])->all(),
+            ],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'İçerikler'],
+            ],
         ],
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
