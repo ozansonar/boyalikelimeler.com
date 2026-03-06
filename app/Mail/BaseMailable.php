@@ -39,6 +39,7 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
      */
     public function send($mailer): ?SentMessage
     {
+        $this->resolveSubjectFromEnvelope();
         $this->loadSmtpSettings();
         $mailer = $this->buildConfiguredMailer($mailer);
         $this->applyDebugMode();
@@ -263,6 +264,27 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
         $name = $this->to[0]['name'] ?? '';
 
         return $name !== '' ? $name : null;
+    }
+
+    /**
+     * Resolve subject from envelope() before send, so logging and debug mode can access it.
+     */
+    private function resolveSubjectFromEnvelope(): void
+    {
+        if ($this->subject !== null && $this->subject !== '') {
+            return;
+        }
+
+        try {
+            if (method_exists($this, 'envelope')) {
+                $envelope = $this->envelope();
+                if ($envelope->subject !== null && $envelope->subject !== '') {
+                    $this->subject = $envelope->subject;
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Subject resolve from envelope failed: ' . $e->getMessage());
+        }
     }
 
     private function findUserId(string $email): ?int
