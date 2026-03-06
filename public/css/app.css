@@ -8812,8 +8812,8 @@ p {
     word-break: break-word;
 }
 .cdetail-content img {
-    max-width: 100% !important;
-    height: auto !important;
+    max-width: 100%;
+    height: auto;
     border-radius: 0.5rem;
 }
 .cdetail-content img:not(.img-align-left):not(.img-align-right):not(.img-align-center) {
