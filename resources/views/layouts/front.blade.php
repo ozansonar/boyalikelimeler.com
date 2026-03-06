@@ -40,23 +40,27 @@
     <!-- CSRF -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Preload: Critical fonts -->
+    <link rel="preload" href="{{ asset('vendor/fonts/inter/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('vendor/fonts/playfair-display/playfair-display-latin-700-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    <!-- Bootstrap 5.3.8 -->
+    <!-- Self-hosted Fonts -->
+    <link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet">
+    <!-- Bootstrap 5.3.8 (critical) -->
     <link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" rel="stylesheet">
-    <!-- Font Awesome 6.7.2 -->
-    <link href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" rel="stylesheet">
-    <!-- Swiper.js CSS -->
-    <link href="{{ asset('vendor/swiper/11/swiper-bundle.min.css') }}" rel="stylesheet">
-    <!-- AOS.js CSS -->
-    <link href="{{ asset('vendor/aos/2.3.4/aos.css') }}" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Custom CSS (critical) -->
     <link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet">
+
+    <!-- Non-critical CSS: async load -->
+    <link rel="preload" href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" rel="stylesheet"></noscript>
+    <link rel="preload" href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" rel="stylesheet"></noscript>
+    <link rel="preload" href="{{ asset('vendor/swiper/11/swiper-bundle.min.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="{{ asset('vendor/swiper/11/swiper-bundle.min.css') }}" rel="stylesheet"></noscript>
+    <link rel="preload" href="{{ asset('vendor/aos/2.3.4/aos.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="{{ asset('vendor/aos/2.3.4/aos.css') }}" rel="stylesheet"></noscript>
+
     @stack('styles')
 </head>
 <body>
@@ -285,13 +289,13 @@
     @include('partials.front.status-modal')
 
     <!-- Bootstrap 5.3.8 JS -->
-    <script src="{{ asset('vendor/bootstrap/5.3.8/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/5.3.8/js/bootstrap.bundle.min.js') }}" defer></script>
     <!-- Swiper.js -->
-    <script src="{{ asset('vendor/swiper/11/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/swiper/11/swiper-bundle.min.js') }}" defer></script>
     <!-- AOS.js -->
-    <script src="{{ asset('vendor/aos/2.3.4/aos.js') }}"></script>
+    <script src="{{ asset('vendor/aos/2.3.4/aos.js') }}" defer></script>
     <!-- Custom JS -->
-    <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}"></script>
+    <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}" defer></script>
     @stack('scripts')
 </body>
 </html>
