@@ -100,6 +100,10 @@ final class LiteraryWorkService
             $query->where('user_id', $filters['author']);
         }
 
+        if (! empty($filters['work_type'])) {
+            $query->where('work_type', $filters['work_type']);
+        }
+
         return $query->orderByDesc('created_at')->paginate($perPage)->withQueryString();
     }
 
