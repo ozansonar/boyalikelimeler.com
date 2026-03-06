@@ -126,6 +126,9 @@
                     </div>
                     <div class="d-flex flex-column gap-1">
                         <div class="text-muted small">
+                            <i class="bi bi-bookmark me-1"></i>Tür: <span class="usr-status-badge {{ $work->work_type?->badgeClass() ?? 'active' }}">{{ $work->work_type?->label() ?? 'Yazılı Eser' }}</span>
+                        </div>
+                        <div class="text-muted small">
                             <i class="bi bi-calendar me-1"></i>Gönderim: {{ $work->created_at->format('d.m.Y H:i') }}
                         </div>
                         @if($work->published_at)

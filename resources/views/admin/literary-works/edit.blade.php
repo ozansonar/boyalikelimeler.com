@@ -114,6 +114,30 @@
                     </div>
                 </div>
 
+                <!-- Eser Türü -->
+                <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="75">
+                    <div class="card-header-custom">
+                        <div class="form-section-header mb-0">
+                            <div class="form-section-icon bg-icon-teal"><i class="bi bi-bookmark"></i></div>
+                            <div>
+                                <h6 class="mb-0">Eser Türü</h6>
+                                <small class="text-muted">Yazılı veya görsel eser</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body-custom">
+                        <select class="form-select @error('work_type') is-invalid @enderror" name="work_type" required>
+                            <option value="">Tür seçiniz</option>
+                            @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+                                <option value="{{ $type->value }}" @selected(old('work_type', $work->work_type?->value) === $type->value)>{{ $type->label() }}</option>
+                            @endforeach
+                        </select>
+                        @error('work_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
                 <!-- Kapak Görseli -->
                 <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="card-header-custom">

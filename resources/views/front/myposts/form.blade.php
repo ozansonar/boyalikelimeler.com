@@ -157,6 +157,30 @@
                             </div>
                         </div>
 
+                        {{-- Work Type --}}
+                        <div class="wpost-card">
+                            <h3 class="wpost-card__title">
+                                <i class="fa-solid fa-layer-group me-2"></i>Eser Türü
+                            </h3>
+                            <div class="wpost-form__group">
+                                <label class="wpost-form__label" for="workType">
+                                    <i class="fa-solid fa-shapes me-1"></i>Eser Türü
+                                </label>
+                                <select id="workType"
+                                        name="work_type"
+                                        placeholder="Eser türü seçin..."
+                                        required>
+                                    <option value="">Eser türü seçiniz</option>
+                                    @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+                                        <option value="{{ $type->value }}"
+                                            @selected(old('work_type', $work?->work_type?->value) === $type->value)>
+                                            {{ $type->label() }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         {{-- Cover Image --}}
                         <div class="wpost-card">
                             <h3 class="wpost-card__title">
