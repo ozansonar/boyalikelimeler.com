@@ -47,6 +47,7 @@
         ],
         [
             '@type' => 'BreadcrumbList',
+            'name' => 'Breadcrumb',
             'itemListElement' => [
                 ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
                 ['@type' => 'ListItem', 'position' => 2, 'name' => 'İçerikler'],
