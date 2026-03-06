@@ -19,6 +19,16 @@
         });
     }
 
+    /* -- Tom Select: Work Type Dropdown --------------------- */
+    var workTypeEl = document.getElementById('workType');
+    if (workTypeEl) {
+        new TomSelect('#workType', {
+            allowEmptyOption: false,
+            placeholder: 'Eser türü seçin...',
+            controlInput: '<input type="text" autocomplete="off" size="1">'
+        });
+    }
+
     /* -- TinyMCE 7: Content Editor ------------------------- */
     var editorEl = document.getElementById('postEditor');
     if (editorEl && typeof tinymce !== 'undefined') {

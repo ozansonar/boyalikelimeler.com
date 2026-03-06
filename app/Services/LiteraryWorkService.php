@@ -226,6 +226,7 @@ final class LiteraryWorkService
                 'body'                 => $data['body'],
                 'excerpt'              => $data['excerpt'] ?? null,
                 'literary_category_id' => $data['literary_category_id'],
+                'work_type'            => $data['work_type'],
                 'status'               => LiteraryWorkStatus::Pending,
                 'meta_title'           => $data['title'],
                 'meta_description'     => $data['excerpt'] ?? null,
@@ -250,6 +251,7 @@ final class LiteraryWorkService
                 'body'                 => $data['body'],
                 'excerpt'              => $data['excerpt'] ?? null,
                 'literary_category_id' => $data['literary_category_id'],
+                'work_type'            => $data['work_type'] ?? $work->work_type?->value,
                 'meta_title'           => $data['title'],
                 'meta_description'     => $data['excerpt'] ?? null,
             ];
@@ -328,6 +330,7 @@ final class LiteraryWorkService
                 'body'                 => $data['body'],
                 'excerpt'              => $data['excerpt'] ?? null,
                 'literary_category_id' => $data['literary_category_id'],
+                'work_type'            => $data['work_type'] ?? $work->work_type?->value,
                 'status'               => LiteraryWorkStatus::Pending,
                 'meta_title'           => $data['title'],
                 'meta_description'     => $data['excerpt'] ?? null,

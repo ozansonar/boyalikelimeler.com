@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\LiteraryWorkStatus;
+use App\Enums\LiteraryWorkType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +27,7 @@ class LiteraryWork extends Model
         'literary_category_id',
         'user_id',
         'status',
+        'work_type',
         'meta_title',
         'meta_description',
         'view_count',
@@ -38,6 +40,7 @@ class LiteraryWork extends Model
             'user_id'              => 'integer',
             'literary_category_id' => 'integer',
             'status'               => LiteraryWorkStatus::class,
+            'work_type'            => LiteraryWorkType::class,
             'view_count'           => 'integer',
             'published_at'         => 'datetime',
         ];

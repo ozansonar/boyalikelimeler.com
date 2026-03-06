@@ -106,6 +106,7 @@
                     <thead>
                         <tr>
                             <th>Eser</th>
+                            <th class="d-none d-md-table-cell">Tür</th>
                             <th class="d-none d-md-table-cell">Kategori</th>
                             <th class="d-none d-lg-table-cell">Yazar</th>
                             <th>Durum</th>
@@ -134,6 +135,9 @@
                                     </div>
                                 </td>
                                 <td class="d-none d-md-table-cell">
+                                    <span class="usr-status-badge {{ $work->work_type?->badgeClass() ?? 'active' }}">{{ $work->work_type?->label() ?? 'Yazılı Eser' }}</span>
+                                </td>
+                                <td class="d-none d-md-table-cell">
                                     <span class="cl-category-badge tech">{{ $work->category?->name ?? '-' }}</span>
                                 </td>
                                 <td class="d-none d-lg-table-cell">
@@ -160,7 +164,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <x-admin.table-empty :colspan="6" icon="bi-journal-text" message="Henüz edebiyat eseri gönderilmemiş." />
+                            <x-admin.table-empty :colspan="7" icon="bi-journal-text" message="Henüz edebiyat eseri gönderilmemiş." />
                         @endforelse
                     </tbody>
                 </table>

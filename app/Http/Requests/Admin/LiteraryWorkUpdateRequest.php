@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\LiteraryWorkType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 final class LiteraryWorkUpdateRequest extends FormRequest
 {
@@ -20,6 +22,7 @@ final class LiteraryWorkUpdateRequest extends FormRequest
     {
         return [
             'title'                => ['required', 'string', 'max:200'],
+            'work_type'            => ['required', new Enum(LiteraryWorkType::class)],
             'body'                 => ['required', 'string', 'min:50'],
             'excerpt'              => ['nullable', 'string', 'max:300'],
             'literary_category_id' => ['required', 'integer', 'exists:literary_categories,id'],
@@ -34,6 +37,8 @@ final class LiteraryWorkUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'work_type.required'            => 'Eser türü seçimi zorunludur.',
+            'work_type.Illuminate\Validation\Rules\Enum' => 'Geçersiz eser türü seçildi.',
             'title.required'                => 'Eser başlığı zorunludur.',
             'title.max'                     => 'Başlık en fazla 200 karakter olabilir.',
             'body.required'                 => 'Eser içeriği zorunludur.',
