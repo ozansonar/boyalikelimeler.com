@@ -57,6 +57,9 @@
          FEATURED AUTHORS
     ======================================================= -->
     @if($featuredAuthors->isNotEmpty())
+        @php
+            $featuredLabels = json_decode($pageSettings['featured_author_labels'] ?? '{}', true) ?: [];
+        @endphp
         <section class="section">
             <div class="container">
                 <div class="row g-4 justify-content-center">
@@ -89,7 +92,9 @@
                                         <span class="authors-featured__sep">·</span>
                                         {{ number_format((int) ($featuredAuthor->total_views ?? 0)) }} okunma
                                     </p>
-                                    @if($featuredAuthor->bio)
+                                    @if(!empty($featuredLabels[(string) $featuredAuthor->id]))
+                                        <p class="authors-featured__bio">{{ $featuredLabels[(string) $featuredAuthor->id] }}</p>
+                                    @elseif($featuredAuthor->bio)
                                         <p class="authors-featured__bio">{{ Str::limit($featuredAuthor->bio, 100) }}</p>
                                     @endif
                                 </article>
