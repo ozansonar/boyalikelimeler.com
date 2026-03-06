@@ -25,6 +25,14 @@ final class UploadService
 
     private const WEBP_QUALITY = 82;
 
+    /** MIME types that GD can process and convert to WebP. */
+    private const PROCESSABLE_MIMES = [
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+        'image/gif',
+    ];
+
     // ─── Public API ───────────────────────────────────────────────
 
     /**
@@ -39,14 +47,24 @@ final class UploadService
     {
         $baseName = $this->generateBaseName($slug);
         $this->ensureDirectory($directory);
+
+        $originalExt = strtolower($file->getClientOriginalExtension()) ?: 'bin';
+        $mime = $file->getMimeType() ?: '';
+
+        // Non-processable files (SVG, ICO, DOCX etc.) — save as-is, no conversion
+        if (! in_array($mime, self::PROCESSABLE_MIMES, true)) {
+            $fileName = $baseName . '.' . $originalExt;
+            $file->move($this->uploadsPath($directory), $fileName);
+
+            return $directory . '/' . $fileName;
+        }
+
+        // Processable images — save original, convert to WebP, create variants
         $this->ensureDirectory($directory . '/originals');
 
-        // Save original file (preserve original format)
-        $originalExt = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
         $originalName = $baseName . '.' . $originalExt;
         $file->move($this->uploadsPath($directory . '/originals'), $originalName);
 
-        // Convert to WebP (main file — optionally resize/crop to target dimensions)
         $webpName = $baseName . '.webp';
         $originalFullPath = $this->uploadsPath($directory . '/originals/' . $originalName);
 
@@ -62,7 +80,6 @@ final class UploadService
             $this->convertToWebp($originalFullPath, $this->uploadsPath($directory . '/' . $webpName));
         }
 
-        // Create responsive variants
         $this->createVariants($originalFullPath, $directory, $baseName);
 
         return $directory . '/' . $webpName;
@@ -100,10 +117,16 @@ final class UploadService
 
         $info = pathinfo($fullPath);
         $directory = $info['dirname'];
-        $baseName = $info['filename']; // e.g. kahve-fali-20260303143025-a7xk2
+        $baseName = $info['filename'];
+        $extension = $info['extension'] ?? '';
 
-        // Delete main WebP file
+        // Delete main file
         File::delete($fullPath);
+
+        // Non-WebP files have no variants or originals
+        if ($extension !== 'webp') {
+            return;
+        }
 
         // Delete variant files
         foreach (array_keys(self::VARIANTS) as $size) {
@@ -132,7 +155,9 @@ final class UploadService
             return null;
         }
 
-        if ($size) {
+        // Only WebP files have responsive variants
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        if ($size && $extension === 'webp') {
             $info = pathinfo($path);
             $dir = $info['dirname'] !== '.' ? $info['dirname'] . '/' : '';
             $path = $dir . $info['filename'] . '-' . $size . '.webp';
