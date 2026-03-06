@@ -11,19 +11,39 @@
 @endif
 
 @push('jsonld')
+@php
+    $socialLinks = array_values(array_filter([
+        $user->instagram ? 'https://instagram.com/' . $user->instagram : null,
+        $user->twitter ? 'https://x.com/' . $user->twitter : null,
+        $user->youtube ? 'https://youtube.com/' . $user->youtube : null,
+        $user->tiktok ? 'https://tiktok.com/@' . $user->tiktok : null,
+        $user->website ?? null,
+    ]));
+
+    $personData = array_filter([
+        '@type' => 'Person',
+        'name' => $user->name,
+        'url' => route('profile.show', $user->username),
+        'image' => $user->avatar_url ?: null,
+        'description' => $user->bio,
+        'sameAs' => $socialLinks ?: null,
+        'interactionStatistic' => [
+            [
+                '@type' => 'InteractionCounter',
+                'interactionType' => 'https://schema.org/WriteAction',
+                'userInteractionCount' => ($stats['approved_works'] ?? 0) + ($stats['published_posts'] ?? 0),
+            ],
+        ],
+    ]);
+@endphp
 <script type="application/ld+json">
 {!! json_encode([
     '@@context' => 'https://schema.org',
     '@graph' => [
         [
             '@type' => 'ProfilePage',
-            'mainEntity' => [
-                '@type' => 'Person',
-                'name' => $user->name,
-                'url' => route('profile.show', $user->username),
-                'image' => $user->avatar_url ?: null,
-                'description' => $user->bio,
-            ],
+            'dateModified' => $user->updated_at->toIso8601String(),
+            'mainEntity' => $personData,
         ],
         [
             '@type' => 'BreadcrumbList',

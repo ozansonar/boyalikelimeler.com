@@ -23,20 +23,34 @@
 <script type="application/ld+json">
 {!! json_encode([
     '@@context' => 'https://schema.org',
-    '@type' => 'CollectionPage',
-    'name' => 'Blog',
-    'description' => 'Boyalı Kelimeler blog yazıları. Sanat, edebiyat, kültür ve etkinlik haberleri.',
-    'url' => route('blog.index'),
-    'isPartOf' => [
-        '@type' => 'WebSite',
-        'name' => 'Boyalı Kelimeler',
-        'url' => url('/'),
-    ],
-    'breadcrumb' => [
-        '@type' => 'BreadcrumbList',
-        'itemListElement' => [
-            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
-            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Blog'],
+    '@graph' => [
+        [
+            '@type' => 'CollectionPage',
+            'name' => 'Blog',
+            'description' => 'Boyalı Kelimeler blog yazıları. Sanat, edebiyat, kültür ve etkinlik haberleri.',
+            'url' => route('blog.index'),
+            'isPartOf' => [
+                '@type' => 'WebSite',
+                'name' => 'Boyalı Kelimeler',
+                'url' => url('/'),
+            ],
+            'mainEntity' => [
+                '@type' => 'ItemList',
+                'numberOfItems' => $posts->total(),
+                'itemListElement' => $posts->map(fn ($p, $i) => [
+                    '@type' => 'ListItem',
+                    'position' => ($posts->currentPage() - 1) * $posts->perPage() + $i + 1,
+                    'url' => route('blog.show', $p->slug),
+                    'name' => $p->title,
+                ])->all(),
+            ],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Blog'],
+            ],
         ],
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
