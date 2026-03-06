@@ -39,21 +39,32 @@ class AuthorsPageController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'title'                  => 'nullable|string|max:200',
-            'description'            => 'nullable|string|max:500',
-            'featured_author_ids'    => 'nullable|array',
-            'featured_author_ids.*'  => 'integer|exists:users,id',
-            'golden_pen_title'       => 'nullable|string|max:200',
-            'golden_pen_description' => 'nullable|string|max:500',
-            'authors_list_title'     => 'nullable|string|max:200',
-            'meta_title'             => 'nullable|string|max:70',
-            'meta_description'       => 'nullable|string|max:170',
+            'title'                    => 'nullable|string|max:200',
+            'description'              => 'nullable|string|max:500',
+            'featured_author_ids'      => 'nullable|array',
+            'featured_author_ids.*'    => 'integer|exists:users,id',
+            'featured_author_labels'   => 'nullable|array',
+            'featured_author_labels.*' => 'nullable|string|max:150',
+            'golden_pen_title'         => 'nullable|string|max:200',
+            'golden_pen_description'   => 'nullable|string|max:500',
+            'authors_list_title'       => 'nullable|string|max:200',
+            'meta_title'               => 'nullable|string|max:70',
+            'meta_description'         => 'nullable|string|max:170',
         ]);
 
-        $data['featured_author_ids'] = json_encode(
-            array_values(array_filter($data['featured_author_ids'] ?? [])),
-            JSON_THROW_ON_ERROR
-        );
+        $ids = array_values(array_filter($data['featured_author_ids'] ?? []));
+        $rawLabels = $data['featured_author_labels'] ?? [];
+
+        $labels = [];
+        foreach ($ids as $index => $id) {
+            $label = trim($rawLabels[$index] ?? '');
+            if ($label !== '') {
+                $labels[(string) $id] = $label;
+            }
+        }
+
+        $data['featured_author_ids'] = json_encode($ids, JSON_THROW_ON_ERROR);
+        $data['featured_author_labels'] = json_encode($labels, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
 
         $this->settingService->updateGroup('authors_page', $data);
 

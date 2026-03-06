@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
         addBtn.addEventListener('click', function () {
             var clone = templateRow.cloneNode(true);
             clone.querySelector('select').value = '';
+            var labelInput = clone.querySelector('input[name="featured_author_labels[]"]');
+            if (labelInput) { labelInput.value = ''; }
             container.appendChild(clone);
             bindRemoveButtons();
         });
@@ -41,10 +43,13 @@ document.addEventListener('DOMContentLoaded', function () {
         btns.forEach(function (btn) {
             btn.onclick = function () {
                 var rows = container.querySelectorAll('.featured-author-row');
+                var row = btn.closest('.featured-author-row');
                 if (rows.length > 1) {
-                    btn.closest('.featured-author-row').remove();
+                    row.remove();
                 } else {
-                    btn.closest('.featured-author-row').querySelector('select').value = '';
+                    row.querySelector('select').value = '';
+                    var labelInput = row.querySelector('input[name="featured_author_labels[]"]');
+                    if (labelInput) { labelInput.value = ''; }
                 }
             };
         });

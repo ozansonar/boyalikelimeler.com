@@ -127,37 +127,48 @@
                     <div class="card-body-custom">
                         @php
                             $savedIds = json_decode($settings['featured_author_ids'] ?? '[]', true) ?: [];
+                            $savedLabels = json_decode($settings['featured_author_labels'] ?? '{}', true) ?: [];
                             $oldIds = old('featured_author_ids', $savedIds);
+                            $oldLabels = old('featured_author_labels', $savedLabels);
                         @endphp
 
                         <div id="featuredAuthorsContainer">
                             @forelse($oldIds as $idx => $authorId)
-                                <div class="featured-author-row d-flex align-items-center gap-2 mb-2">
-                                    <select class="form-select" name="featured_author_ids[]">
-                                        <option value="">— Yazar seçin —</option>
-                                        @foreach($writers as $writer)
-                                            <option value="{{ $writer->id }}" {{ (int) $authorId === $writer->id ? 'selected' : '' }}>
-                                                {{ $writer->name }} ({{ '@' }}{{ $writer->username }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <button type="button" class="btn btn-sm btn-outline-danger js-remove-featured" title="Kaldır">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                <div class="featured-author-row mb-3 p-3 border border-secondary rounded">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <select class="form-select" name="featured_author_ids[]">
+                                            <option value="">— Yazar seçin —</option>
+                                            @foreach($writers as $writer)
+                                                <option value="{{ $writer->id }}" {{ (int) $authorId === $writer->id ? 'selected' : '' }}>
+                                                    {{ $writer->name }} ({{ '@' }}{{ $writer->username }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button type="button" class="btn btn-sm btn-outline-danger js-remove-featured" title="Kaldır">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="featured_author_labels[]"
+                                           value="{{ $oldLabels[$authorId] ?? '' }}"
+                                           placeholder="Kısa açıklama yazın (ör: Şiirin yıldızı, Hikaye ustası...)" maxlength="150">
                                 </div>
                             @empty
-                                <div class="featured-author-row d-flex align-items-center gap-2 mb-2">
-                                    <select class="form-select" name="featured_author_ids[]">
-                                        <option value="">— Yazar seçin —</option>
-                                        @foreach($writers as $writer)
-                                            <option value="{{ $writer->id }}">
-                                                {{ $writer->name }} ({{ '@' }}{{ $writer->username }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <button type="button" class="btn btn-sm btn-outline-danger js-remove-featured" title="Kaldır">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                <div class="featured-author-row mb-3 p-3 border border-secondary rounded">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <select class="form-select" name="featured_author_ids[]">
+                                            <option value="">— Yazar seçin —</option>
+                                            @foreach($writers as $writer)
+                                                <option value="{{ $writer->id }}">
+                                                    {{ $writer->name }} ({{ '@' }}{{ $writer->username }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button type="button" class="btn btn-sm btn-outline-danger js-remove-featured" title="Kaldır">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="featured_author_labels[]"
+                                           value="" placeholder="Kısa açıklama yazın (ör: Şiirin yıldızı, Hikaye ustası...)" maxlength="150">
                                 </div>
                             @endforelse
                         </div>
