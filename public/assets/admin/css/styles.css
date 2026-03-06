@@ -25134,3 +25134,192 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   border-radius: 8px;
   font-size: 12px;
 }
+
+/* ==================== ADMIN PROFILE (ap-) ==================== */
+
+/* Avatar Area */
+.ap-avatar-area {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.ap-avatar-preview {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--bg-input);
+  border: 3px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.ap-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.ap-avatar-initials {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--teal-primary);
+  opacity: 0.7;
+  letter-spacing: 2px;
+}
+
+.ap-avatar-actions {
+  flex: 1;
+  min-width: 200px;
+}
+
+.ap-avatar-feedback {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ap-avatar-feedback--success { color: var(--neon-green, #22c55e); }
+.ap-avatar-feedback--danger  { color: var(--neon-red, #ef4444); }
+.ap-avatar-feedback--info    { color: var(--teal-primary); }
+
+/* Password Strength */
+.ap-pw-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ap-pw-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.ap-pw-bar {
+  height: 4px;
+  flex: 1;
+  border-radius: 4px;
+  background: var(--border-color);
+  opacity: 0.3;
+  transition: all 0.3s;
+}
+
+.ap-pw-bar.active {
+  opacity: 1;
+}
+
+.ap-pw-bar.active.weak        { background: var(--neon-red, #ef4444); }
+.ap-pw-bar.active.medium      { background: var(--neon-orange, #f59e0b); }
+.ap-pw-bar.active.strong      { background: var(--neon-green, #22c55e); }
+.ap-pw-bar.active.very-strong { background: var(--teal-primary); }
+
+.ap-pw-text {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ap-pw-text--weak        { color: var(--neon-red, #ef4444); }
+.ap-pw-text--medium      { color: var(--neon-orange, #f59e0b); }
+.ap-pw-text--strong      { color: var(--neon-green, #22c55e); }
+.ap-pw-text--very-strong { color: var(--teal-primary); }
+
+/* Password Requirements */
+.ap-pw-requirements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.ap-pw-req {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.2s;
+}
+
+.ap-pw-req i {
+  font-size: 12px;
+}
+
+.ap-pw-req--pass {
+  color: var(--neon-green, #22c55e);
+}
+
+.ap-pw-req--fail {
+  color: var(--text-muted);
+}
+
+/* Password Match */
+.ap-pw-match {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ap-pw-match--ok   { color: var(--neon-green, #22c55e); }
+.ap-pw-match--fail { color: var(--neon-red, #ef4444); }
+
+/* Toggle Password */
+.ap-toggle-pw {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+}
+
+.ap-toggle-pw:hover {
+  color: var(--text-primary);
+}
+
+/* Spin animation */
+@keyframes apSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.ap-spin {
+  display: inline-block;
+  animation: apSpin 1s linear infinite;
+}
+
+/* Sidebar avatar image */
+.ap-sidebar-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 575.98px) {
+  .ap-avatar-area {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ap-avatar-preview {
+    width: 110px;
+    height: 110px;
+  }
+
+  .ap-avatar-initials {
+    font-size: 2rem;
+  }
+
+  .ap-pw-requirements {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

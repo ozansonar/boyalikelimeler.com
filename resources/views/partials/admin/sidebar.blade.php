@@ -121,12 +121,18 @@
     </nav>
 
     <div class="sidebar-footer">
-        <div class="sidebar-user">
-            <div class="sidebar-user-avatar">{{ mb_substr($sidebarUser->name, 0, 2) }}</div>
+        <a href="{{ route('admin.profile.index') }}" class="sidebar-user text-decoration-none">
+            <div class="sidebar-user-avatar">
+                @if($sidebarUser->avatar)
+                    <img src="{{ upload_url($sidebarUser->avatar, 'thumb') }}" alt="{{ $sidebarUser->name }}" class="ap-sidebar-avatar-img" loading="lazy">
+                @else
+                    {{ mb_substr($sidebarUser->name, 0, 2) }}
+                @endif
+            </div>
             <div class="sidebar-user-info">
                 <h6>{{ $sidebarUser->name }}</h6>
                 <span>{{ $sidebarUser->role->name ?? '-' }}</span>
             </div>
-        </div>
+        </a>
     </div>
 </aside>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AuthorsPageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
@@ -99,6 +100,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Admin Routes
 Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('permission:dashboard.view');
+
+    // Admin Profile
+    Route::get('profile', [AdminProfileController::class, 'index'])->name('profile.index');
+    Route::put('profile', [AdminProfileController::class, 'updateProfile'])->name('profile.update');
+    Route::put('profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('profile/avatar', [AdminProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::delete('profile/avatar', [AdminProfileController::class, 'removeAvatar'])->name('profile.avatar.remove');
 
     // User Management
     Route::middleware('permission:users.view')->group(function () {
