@@ -33,35 +33,44 @@
 
         <!-- Page Content -->
         <div class="page-content">
-            {{-- Flash Messages --}}
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
-                    <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
-                </div>
-            @endif
-            @if(session('warning'))
-                <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert">
-                    <i class="bi bi-exclamation-triangle me-2"></i>{{ session('warning') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
-                    <i class="bi bi-exclamation-triangle me-2"></i>{{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
-                </div>
-            @endif
-
             @yield('content')
         </div>
 
     </main>
 </div>
 
+<!-- Global Status Modal -->
+<div class="modal fade" id="globalStatusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-5">
+                <div class="status-modal-icon" id="gsm-icon"></div>
+                <h4 class="fw-800-mb" id="gsm-title"></h4>
+                <p class="text-muted-label" id="gsm-message"></p>
+                <button class="btn-teal" id="gsm-btn" data-bs-dismiss="modal"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="{{ asset('vendor/bootstrap/5.3.8/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('vendor/aos/2.3.4/aos.js') }}"></script>
 <script src="{{ asset('assets/admin/js/app.js') }}?v={{ filemtime(public_path('assets/admin/js/app.js')) }}"></script>
+@if(session('success') || session('error') || session('warning') || session('info'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('success'))
+            showStatusModal('success', @json(session('success')));
+        @elseif(session('error'))
+            showStatusModal('danger', @json(session('error')));
+        @elseif(session('warning'))
+            showStatusModal('warning', @json(session('warning')));
+        @elseif(session('info'))
+            showStatusModal('info', @json(session('info')));
+        @endif
+    });
+</script>
+@endif
 @stack('scripts')
 </body>
 </html>

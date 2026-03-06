@@ -483,6 +483,36 @@ function showToast(message, type) {
   }, 3000);
 }
 
+// ---- Status Modal (Global) ----
+function showStatusModal(type, message) {
+  var modal = document.getElementById('globalStatusModal');
+  if (!modal) return;
+
+  var iconEl = document.getElementById('gsm-icon');
+  var titleEl = document.getElementById('gsm-title');
+  var msgEl = document.getElementById('gsm-message');
+  var btnEl = document.getElementById('gsm-btn');
+
+  var config = {
+    success: { icon: 'bi-check-lg', title: 'İşlem Başarılı!', btnClass: 'btn-teal', btnText: '<i class="bi bi-check-lg"></i> Tamam' },
+    danger:  { icon: 'bi-x-lg', title: 'Hata Oluştu!', btnClass: 'btn-teal avatar-gradient-red', btnText: '<i class="bi bi-x-lg"></i> Kapat' },
+    warning: { icon: 'bi-exclamation-lg', title: 'Dikkat!', btnClass: 'btn-teal btn-warning-gradient', btnText: '<i class="bi bi-check-lg"></i> Tamam' },
+    info:    { icon: 'bi-info-lg', title: 'Bilgilendirme', btnClass: 'btn-teal btn-info-gradient', btnText: '<i class="bi bi-check-lg"></i> Anladım' }
+  };
+
+  var c = config[type] || config.info;
+
+  iconEl.className = 'status-modal-icon ' + type;
+  iconEl.innerHTML = '<i class="bi ' + c.icon + '"></i>';
+  titleEl.textContent = c.title;
+  msgEl.textContent = message;
+  btnEl.className = c.btnClass;
+  btnEl.innerHTML = c.btnText;
+
+  var bsModal = new bootstrap.Modal(modal);
+  bsModal.show();
+}
+
 // ---- Delete Modal (Global) ----
 function openDeleteModal(id, title, customUrl) {
   var modal = document.getElementById('deleteConfirmModal') || document.getElementById('deleteModal');
