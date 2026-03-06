@@ -58,10 +58,32 @@
             remove_script_host: false,
             convert_urls: false,
             entity_encoding: 'raw',
+            object_resizing: true,
+            image_advtab: true,
+            image_caption: true,
+            image_title: true,
+            image_description: true,
+            image_dimensions: true,
+            editimage_toolbar: 'imageoptions',
             images_upload_handler: window.editorImagesUploadHandler,
-            setup: window.editorImagesSetup,
-            image_class_list: [{ title: 'Responsive', value: 'img-fluid' }],
-            content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
+            setup: function (editor) {
+                if (typeof window.editorImagesSetup === 'function') {
+                    window.editorImagesSetup(editor);
+                }
+
+                editor.on('ObjectSelected', function (e) {
+                    if (e.target.nodeName === 'IMG') {
+                        e.target.setAttribute('data-mce-selected', '1');
+                    }
+                });
+            },
+            image_class_list: [
+                { title: 'Responsive', value: 'img-fluid' },
+                { title: 'Sola Yasla', value: 'img-fluid img-align-left' },
+                { title: 'Sağa Yasla', value: 'img-fluid img-align-right' },
+                { title: 'Ortala', value: 'img-fluid img-align-center' }
+            ],
+            content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } img.img-align-center { display: block; margin: 1rem auto; } figure { margin: 1rem 0; } figure.align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } figure.align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } figure.align-center { display: block; margin: 1rem auto; text-align: center; } figcaption { font-size: 0.85em; color: #9B9EA3; text-align: center; margin-top: 0.5rem; font-style: italic; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
         });
     }
 
