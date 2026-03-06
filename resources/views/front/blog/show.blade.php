@@ -23,11 +23,10 @@
 @push('jsonld')
 @php
     $postComments = $post->approvedComments;
-    $postRatingComments = $postComments->where('rating', '>', 0);
-    $postAvgRating = $postRatingComments->count() > 0 ? round($postRatingComments->avg('rating'), 1) : null;
 
     $blogData = array_filter([
         '@type' => 'BlogPosting',
+        'name' => $post->title,
         'headline' => $post->meta_title ?: $post->title,
         'description' => $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160),
         'image' => $post->cover_image ? asset('uploads/' . $post->cover_image) : asset('images/og-cover.jpg'),
@@ -61,16 +60,6 @@
             ],
         ],
     ]);
-
-    if ($postAvgRating !== null) {
-        $blogData['aggregateRating'] = [
-            '@type' => 'AggregateRating',
-            'ratingValue' => $postAvgRating,
-            'bestRating' => 5,
-            'worstRating' => 1,
-            'ratingCount' => $postRatingComments->count(),
-        ];
-    }
 
     if ($postComments->count() > 0) {
         $blogData['comment'] = $postComments->take(5)->map(fn ($c) => array_filter([

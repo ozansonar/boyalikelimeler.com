@@ -20,11 +20,10 @@
 @push('jsonld')
 @php
     $workComments = $work->approvedComments;
-    $ratingComments = $workComments->where('rating', '>', 0);
-    $avgRating = $ratingComments->count() > 0 ? round($ratingComments->avg('rating'), 1) : null;
 
     $articleData = [
         '@type' => 'Article',
+        'name' => $work->title,
         'headline' => $work->meta_title ?? $work->title,
         'description' => $work->meta_description ?? Str::limit(strip_tags($work->body), 160),
         'image' => $work->cover_image ? asset('uploads/' . $work->cover_image) : asset('images/og-cover.jpg'),
@@ -64,16 +63,6 @@
             ],
         ],
     ];
-
-    if ($avgRating !== null) {
-        $articleData['aggregateRating'] = [
-            '@type' => 'AggregateRating',
-            'ratingValue' => $avgRating,
-            'bestRating' => 5,
-            'worstRating' => 1,
-            'ratingCount' => $ratingComments->count(),
-        ];
-    }
 
     if ($workComments->count() > 0) {
         $articleData['comment'] = $workComments->take(5)->map(fn ($c) => array_filter([
