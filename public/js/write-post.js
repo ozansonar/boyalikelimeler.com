@@ -58,6 +58,8 @@
             remove_script_host: false,
             convert_urls: false,
             entity_encoding: 'raw',
+            valid_children: '+div[img]',
+            extended_valid_elements: 'div[class]',
             object_resizing: true,
             image_advtab: true,
             image_caption: true,
@@ -152,10 +154,83 @@
                     });
                 });
 
-                /* ── Context Toolbar (appears on image click) ── */
+                /* ── Context Toolbar: Image (appears on image click) ── */
                 editor.ui.registry.addContextToolbar('imagetools', {
-                    predicate: function (node) { return node.nodeName === 'IMG'; },
+                    predicate: function (node) {
+                        return node.nodeName === 'IMG' && !node.closest('.img-grid');
+                    },
                     items: 'imgw20 imgw40 imgw60 imgw80 imgw100 | imgAlignLeft imgAlignCenter imgAlignRight',
+                    position: 'node',
+                    scope: 'node'
+                });
+
+                /* ── Grid Column Buttons ───────────────────── */
+                var GRID_COLS = [
+                    { name: 'gridCol2', label: '2', cls: 'img-grid-2', tip: '2 Sütun' },
+                    { name: 'gridCol3', label: '3', cls: 'img-grid-3', tip: '3 Sütun' },
+                    { name: 'gridCol4', label: '4', cls: 'img-grid-4', tip: '4 Sütun' }
+                ];
+                var ALL_GRID_CLASSES = GRID_COLS.map(function (g) { return g.cls; });
+
+                function getGridNode() {
+                    var node = editor.selection.getNode();
+                    if (node.classList && node.classList.contains('img-grid')) return node;
+                    var parent = node.closest ? node.closest('.img-grid') : null;
+                    return parent;
+                }
+
+                GRID_COLS.forEach(function (col) {
+                    editor.ui.registry.addToggleButton(col.name, {
+                        text: col.label,
+                        tooltip: col.tip,
+                        onAction: function () {
+                            var grid = getGridNode();
+                            if (grid) {
+                                ALL_GRID_CLASSES.forEach(function (c) { editor.dom.removeClass(grid, c); });
+                                editor.dom.addClass(grid, col.cls);
+                                editor.undoManager.add();
+                                editor.nodeChanged();
+                            }
+                        },
+                        onSetup: function (api) {
+                            var handler = function () {
+                                var grid = getGridNode();
+                                api.setActive(grid ? editor.dom.hasClass(grid, col.cls) : false);
+                            };
+                            editor.on('NodeChange', handler);
+                            return function () { editor.off('NodeChange', handler); };
+                        }
+                    });
+                });
+
+                /* Remove Grid button */
+                editor.ui.registry.addButton('gridRemove', {
+                    icon: 'remove',
+                    tooltip: 'Gridi Kaldır (görselleri ayır)',
+                    onAction: function () {
+                        var grid = getGridNode();
+                        if (grid) {
+                            var images = grid.querySelectorAll('img');
+                            var frag = document.createDocumentFragment();
+                            images.forEach(function (img) {
+                                var p = document.createElement('p');
+                                p.appendChild(img.cloneNode(true));
+                                frag.appendChild(p);
+                            });
+                            grid.parentNode.replaceChild(frag, grid);
+                            editor.undoManager.add();
+                            editor.nodeChanged();
+                        }
+                    }
+                });
+
+                /* ── Context Toolbar: Grid (appears when inside grid) ── */
+                editor.ui.registry.addContextToolbar('gridtools', {
+                    predicate: function (node) {
+                        if (node.classList && node.classList.contains('img-grid')) return true;
+                        return node.closest ? !!node.closest('.img-grid') : false;
+                    },
+                    items: 'gridCol2 gridCol3 gridCol4 | gridRemove',
                     position: 'node',
                     scope: 'node'
                 });
@@ -167,7 +242,7 @@
                 { title: 'Küçük (S — 40%)', value: 'img-fluid img-w-40' },
                 { title: 'Çok Küçük (XS — 20%)', value: 'img-fluid img-w-20' }
             ],
-            content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; } figure { margin: 1rem 0; } figure.align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } figure.align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } figure.align-center { display: block; margin: 1rem auto; text-align: center; } figcaption { font-size: 0.85em; color: #9B9EA3; text-align: center; margin-top: 0.5rem; font-style: italic; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
+            content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; } .img-grid { display: grid; gap: 0.75rem; margin: 1rem 0; } .img-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem; } .img-grid-2 { grid-template-columns: repeat(2, 1fr); } .img-grid-3 { grid-template-columns: repeat(3, 1fr); } .img-grid-4 { grid-template-columns: repeat(4, 1fr); } figure { margin: 1rem 0; } figure.align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } figure.align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } figure.align-center { display: block; margin: 1rem auto; text-align: center; } figcaption { font-size: 0.85em; color: #9B9EA3; text-align: center; margin-top: 0.5rem; font-style: italic; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
         });
     }
 

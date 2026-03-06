@@ -42,6 +42,17 @@
             <div class="modal-footer border-secondary py-2">
                 <span class="text-secondary small me-auto" id="eigSelectedInfo">Görsel seçin veya yükleyin</span>
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">İptal</button>
+
+                {{-- Grid insert (visible when 2+ selected) --}}
+                <select id="eigGridColSelect" class="form-select form-select-sm d-none" style="width:auto;display:inline-block!important;">
+                    <option value="2">2 Sütun</option>
+                    <option value="3" selected>3 Sütun</option>
+                    <option value="4">4 Sütun</option>
+                </select>
+                <button type="button" class="btn btn-outline-warning btn-sm d-none" id="eigInsertGridBtn" disabled>
+                    <i class="bi bi-grid me-1"></i>Galeri
+                </button>
+
                 <button type="button" class="btn btn-warning btn-sm" id="eigInsertBtn" disabled>
                     <i class="bi bi-check-lg me-1"></i>Ekle
                 </button>

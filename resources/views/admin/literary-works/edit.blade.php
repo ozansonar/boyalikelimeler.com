@@ -210,6 +210,8 @@
         remove_script_host: false,
         convert_urls: false,
         entity_encoding: 'raw',
+        valid_children: '+div[img]',
+        extended_valid_elements: 'div[class]',
         images_upload_handler: window.editorImagesUploadHandler,
         setup: function (editor) {
             if (typeof window.editorImagesSetup === 'function') {
@@ -248,8 +250,33 @@
             });
 
             editor.ui.registry.addContextToolbar('imagetools', {
-                predicate: function (node) { return node.nodeName === 'IMG'; },
+                predicate: function (node) { return node.nodeName === 'IMG' && !node.closest('.img-grid'); },
                 items: 'imgw20 imgw40 imgw60 imgw80 imgw100 | imgAlignLeft imgAlignCenter imgAlignRight',
+                position: 'node', scope: 'node'
+            });
+
+            // Grid column buttons
+            var GRID_COLS = [
+                { name: 'gridCol2', label: '2', cls: 'img-grid-2' },
+                { name: 'gridCol3', label: '3', cls: 'img-grid-3' },
+                { name: 'gridCol4', label: '4', cls: 'img-grid-4' }
+            ];
+            var ALL_G = GRID_COLS.map(function (g) { return g.cls; });
+            function getGrid() { var n = editor.selection.getNode(); if (n.classList && n.classList.contains('img-grid')) return n; return n.closest ? n.closest('.img-grid') : null; }
+            GRID_COLS.forEach(function (g) {
+                editor.ui.registry.addToggleButton(g.name, {
+                    text: g.label, tooltip: g.label + ' Sütun',
+                    onAction: function () { var grid = getGrid(); if (grid) { ALL_G.forEach(function (c) { editor.dom.removeClass(grid, c); }); editor.dom.addClass(grid, g.cls); editor.undoManager.add(); editor.nodeChanged(); } },
+                    onSetup: function (api) { var h = function () { var grid = getGrid(); api.setActive(grid ? editor.dom.hasClass(grid, g.cls) : false); }; editor.on('NodeChange', h); return function () { editor.off('NodeChange', h); }; }
+                });
+            });
+            editor.ui.registry.addButton('gridRemove', {
+                icon: 'remove', tooltip: 'Gridi Kaldır',
+                onAction: function () { var grid = getGrid(); if (grid) { var imgs = grid.querySelectorAll('img'); var frag = document.createDocumentFragment(); imgs.forEach(function (img) { var p = document.createElement('p'); p.appendChild(img.cloneNode(true)); frag.appendChild(p); }); grid.parentNode.replaceChild(frag, grid); editor.undoManager.add(); editor.nodeChanged(); } }
+            });
+            editor.ui.registry.addContextToolbar('gridtools', {
+                predicate: function (node) { if (node.classList && node.classList.contains('img-grid')) return true; return node.closest ? !!node.closest('.img-grid') : false; },
+                items: 'gridCol2 gridCol3 gridCol4 | gridRemove',
                 position: 'node', scope: 'node'
             });
         },
@@ -260,7 +287,7 @@
             { title: 'Küçük (S — 40%)', value: 'img-fluid img-w-40' },
             { title: 'Çok Küçük (XS — 20%)', value: 'img-fluid img-w-20' }
         ],
-        content_style: 'img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; }',
+        content_style: 'img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; } .img-grid { display: grid; gap: 0.75rem; margin: 1rem 0; } .img-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem; } .img-grid-2 { grid-template-columns: repeat(2, 1fr); } .img-grid-3 { grid-template-columns: repeat(3, 1fr); } .img-grid-4 { grid-template-columns: repeat(4, 1fr); }',
     });
     </script>
 @endpush
