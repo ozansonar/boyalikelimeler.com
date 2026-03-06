@@ -71,19 +71,103 @@
                     window.editorImagesSetup(editor);
                 }
 
-                editor.on('ObjectSelected', function (e) {
-                    if (e.target.nodeName === 'IMG') {
-                        e.target.setAttribute('data-mce-selected', '1');
-                    }
+                /* ── Image Size Buttons ─────────────────────── */
+                var IMG_SIZES = [
+                    { name: 'imgw20',  label: 'XS',  cls: 'img-w-20',  pct: '20%'  },
+                    { name: 'imgw40',  label: 'S',   cls: 'img-w-40',  pct: '40%'  },
+                    { name: 'imgw60',  label: 'M',   cls: 'img-w-60',  pct: '60%'  },
+                    { name: 'imgw80',  label: 'L',   cls: 'img-w-80',  pct: '80%'  },
+                    { name: 'imgw100', label: 'XL',  cls: 'img-w-100', pct: '100%' }
+                ];
+
+                var ALL_W_CLASSES = IMG_SIZES.map(function (s) { return s.cls; });
+
+                function getImgNode() {
+                    var node = editor.selection.getNode();
+                    return node && node.nodeName === 'IMG' ? node : null;
+                }
+
+                function setImgWidth(img, cls) {
+                    ALL_W_CLASSES.forEach(function (c) { editor.dom.removeClass(img, c); });
+                    editor.dom.addClass(img, cls);
+                    editor.undoManager.add();
+                    editor.nodeChanged();
+                }
+
+                function hasImgWidth(img, cls) {
+                    return editor.dom.hasClass(img, cls);
+                }
+
+                IMG_SIZES.forEach(function (size) {
+                    editor.ui.registry.addToggleButton(size.name, {
+                        text: size.label,
+                        tooltip: 'Boyut: ' + size.pct,
+                        onAction: function () {
+                            var img = getImgNode();
+                            if (img) setImgWidth(img, size.cls);
+                        },
+                        onSetup: function (api) {
+                            var handler = function () {
+                                var img = getImgNode();
+                                api.setActive(img ? hasImgWidth(img, size.cls) : false);
+                            };
+                            editor.on('NodeChange', handler);
+                            return function () { editor.off('NodeChange', handler); };
+                        }
+                    });
+                });
+
+                /* ── Image Align Buttons ────────────────────── */
+                var IMG_ALIGNS = [
+                    { name: 'imgAlignLeft',   icon: 'align-left',   cls: 'img-align-left',   tip: 'Sola Yasla' },
+                    { name: 'imgAlignCenter', icon: 'align-center', cls: 'img-align-center', tip: 'Ortala'      },
+                    { name: 'imgAlignRight',  icon: 'align-right',  cls: 'img-align-right',  tip: 'Sağa Yasla'  }
+                ];
+
+                var ALL_A_CLASSES = IMG_ALIGNS.map(function (a) { return a.cls; });
+
+                function setImgAlign(img, cls) {
+                    ALL_A_CLASSES.forEach(function (c) { editor.dom.removeClass(img, c); });
+                    editor.dom.addClass(img, cls);
+                    editor.undoManager.add();
+                    editor.nodeChanged();
+                }
+
+                IMG_ALIGNS.forEach(function (align) {
+                    editor.ui.registry.addToggleButton(align.name, {
+                        icon: align.icon,
+                        tooltip: align.tip,
+                        onAction: function () {
+                            var img = getImgNode();
+                            if (img) setImgAlign(img, align.cls);
+                        },
+                        onSetup: function (api) {
+                            var handler = function () {
+                                var img = getImgNode();
+                                api.setActive(img ? editor.dom.hasClass(img, align.cls) : false);
+                            };
+                            editor.on('NodeChange', handler);
+                            return function () { editor.off('NodeChange', handler); };
+                        }
+                    });
+                });
+
+                /* ── Context Toolbar (appears on image click) ── */
+                editor.ui.registry.addContextToolbar('imagetools', {
+                    predicate: function (node) { return node.nodeName === 'IMG'; },
+                    items: 'imgw20 imgw40 imgw60 imgw80 imgw100 | imgAlignLeft imgAlignCenter imgAlignRight',
+                    position: 'node',
+                    scope: 'node'
                 });
             },
             image_class_list: [
-                { title: 'Responsive', value: 'img-fluid' },
-                { title: 'Sola Yasla', value: 'img-fluid img-align-left' },
-                { title: 'Sağa Yasla', value: 'img-fluid img-align-right' },
-                { title: 'Ortala', value: 'img-fluid img-align-center' }
+                { title: 'Tam Genişlik (XL)', value: 'img-fluid img-w-100' },
+                { title: 'Büyük (L — 80%)', value: 'img-fluid img-w-80' },
+                { title: 'Orta (M — 60%)', value: 'img-fluid img-w-60' },
+                { title: 'Küçük (S — 40%)', value: 'img-fluid img-w-40' },
+                { title: 'Çok Küçük (XS — 20%)', value: 'img-fluid img-w-20' }
             ],
-            content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } img.img-align-center { display: block; margin: 1rem auto; } figure { margin: 1rem 0; } figure.align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } figure.align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } figure.align-center { display: block; margin: 1rem auto; text-align: center; } figcaption { font-size: 0.85em; color: #9B9EA3; text-align: center; margin-top: 0.5rem; font-style: italic; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
+            content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; } figure { margin: 1rem 0; } figure.align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } figure.align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } figure.align-center { display: block; margin: 1rem auto; text-align: center; } figcaption { font-size: 0.85em; color: #9B9EA3; text-align: center; margin-top: 0.5rem; font-style: italic; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
         });
     }
 
