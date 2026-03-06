@@ -15393,6 +15393,7 @@ a.btn-glass {
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
 }
 .usr-status-badge.active {
   background: color-mix(in srgb, var(--neon-green) 15%, transparent);
