@@ -6,6 +6,7 @@ use App\Services\CommentService;
 use App\Services\ContactService;
 use App\Services\LiteraryWorkService;
 use App\Services\MenuService;
+use App\Services\SettingService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -38,6 +39,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('footerDiscoverMenu', $menuService->getByLocation('footer_discover'));
             $view->with('footerCompetitionsMenu', $menuService->getByLocation('footer_competitions'));
             $view->with('footerCorporateMenu', $menuService->getByLocation('footer_corporate'));
+
+            $general = app(SettingService::class)->getGroup('general');
+            $view->with('siteLogo', ! empty($general['logo']) ? upload_url($general['logo']) : null);
+            $view->with('siteFavicon', ! empty($general['favicon']) ? upload_url($general['favicon']) : null);
         });
 
         View::composer('partials.admin.sidebar', function ($view): void {

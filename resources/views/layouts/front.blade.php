@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    @if($siteFavicon)
+        <link rel="icon" type="image/webp" href="{{ $siteFavicon }}">
+    @else
+        <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    @endif
     <link rel="alternate" type="application/rss+xml" title="Boyalı Kelimeler — İçerikler" href="{{ route('feed.literary-works') }}">
     <link rel="alternate" type="application/rss+xml" title="Boyalı Kelimeler — Blog" href="{{ route('feed.blog') }}">
     <title>@yield('title', 'Boyalı Kelimeler')</title>
@@ -74,7 +78,7 @@
     <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
         <div class="container-fluid px-3 px-lg-5">
             <a class="navbar-brand navbar-bk__brand" href="{{ url('/') }}">
-                <img src="{{ asset('images/logo.svg') }}"
+                <img src="{{ $siteLogo ?? asset('images/logo.svg') }}"
                      alt="Boyalı Kelimeler Logo"
                      class="navbar-bk__logo"
                      width="200"
