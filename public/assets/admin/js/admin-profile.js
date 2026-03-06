@@ -74,12 +74,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         var score = Object.values(checks).filter(Boolean).length;
 
-        bars.forEach(function (bar, i) {
-            bar.className = 'ap-pw-bar';
+        bars.forEach(function (bar) {
+            bar.className = 'ap-pw-meter__bar';
         });
 
         if (pw.length === 0) {
             textEl.textContent = '';
+            textEl.className = 'ap-pw-meter__text';
             return;
         }
 
@@ -106,19 +107,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         textEl.textContent = level;
-        textEl.className = 'ap-pw-text ap-pw-text--' + color;
+        textEl.className = 'ap-pw-meter__text ap-pw-meter__text--' + color;
     }
 
     function updateRequirement(id, passed) {
         var el = document.getElementById(id);
         if (!el) return;
         if (passed) {
-            el.classList.add('ap-pw-req--pass');
-            el.classList.remove('ap-pw-req--fail');
+            el.classList.add('ap-pw-checklist__item--pass');
+            el.classList.remove('ap-pw-checklist__item--fail');
             el.querySelector('i').className = 'bi bi-check-circle-fill';
         } else {
-            el.classList.remove('ap-pw-req--pass');
-            el.classList.add('ap-pw-req--fail');
+            el.classList.remove('ap-pw-checklist__item--pass');
+            el.classList.add('ap-pw-checklist__item--fail');
             el.querySelector('i').className = 'bi bi-circle';
         }
     }
