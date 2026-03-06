@@ -9,6 +9,7 @@
             sortField: { field: 'text', direction: 'asc' },
             placeholder: 'Kategori arayın veya seçin...',
             controlInput: '<input type="text" autocomplete="off" size="1">',
+            onItemAdd: function () { this.blur(); },
             render: {
                 optgroup_header: function (data) {
                     return '<div class="optgroup-header">' +
@@ -25,7 +26,8 @@
         new TomSelect('#workType', {
             allowEmptyOption: false,
             placeholder: 'Eser türü seçin...',
-            controlInput: '<input type="text" autocomplete="off" size="1">'
+            controlInput: '<input type="text" autocomplete="off" size="1">',
+            onItemAdd: function () { this.blur(); }
         });
     }
 
