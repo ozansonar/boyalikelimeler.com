@@ -171,7 +171,7 @@
                             <div class="text-muted small">
                                 <i class="bi bi-calendar me-1"></i>Oluşturulma: {{ $comment->created_at->format('d.m.Y H:i') }}
                             </div>
-                            <div class="text-muted small">
+                            <div class="text-muted small" id="commentStatusText">
                                 @if($comment->is_approved)
                                     <i class="bi bi-check-circle me-1 text-neon-green"></i>Durum: <strong class="text-neon-green">Onaylı</strong>
                                 @else
@@ -184,6 +184,17 @@
                                 </div>
                             @endif
                         </div>
+
+                        @if(!$comment->is_approved)
+                            <div class="d-flex gap-2 mt-3" id="commentApprovalActions">
+                                <button type="button" class="btn-teal flex-fill" id="btnApproveComment">
+                                    <i class="bi bi-check-lg me-1"></i>Onayla
+                                </button>
+                                <button type="button" class="btn-glass avatar-gradient-red flex-fill" id="btnRejectComment">
+                                    <i class="bi bi-x-lg me-1"></i>Reddet
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -191,3 +202,65 @@
     </form>
 
 @endsection
+
+@push('scripts')
+@if(!$comment->is_approved)
+<script>
+    document.getElementById('btnApproveComment')?.addEventListener('click', function() {
+        var btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Onaylanıyor...';
+
+        fetch('{{ route('admin.comments.approve', $comment) }}', {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                document.getElementById('commentStatusText').innerHTML =
+                    '<i class="bi bi-check-circle me-1 text-neon-green"></i>Durum: <strong class="text-neon-green">Onaylı</strong>';
+                document.getElementById('commentApprovalActions').remove();
+                showStatusModal('success', data.message);
+            }
+        })
+        .catch(function() {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Onayla';
+            showStatusModal('danger', 'Bir hata oluştu. Lütfen tekrar deneyin.');
+        });
+    });
+
+    document.getElementById('btnRejectComment')?.addEventListener('click', function() {
+        var btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Reddediliyor...';
+
+        fetch('{{ route('admin.comments.reject', $comment) }}', {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                document.getElementById('commentStatusText').innerHTML =
+                    '<i class="bi bi-x-circle me-1 text-neon-red"></i>Durum: <strong class="text-neon-red">Reddedildi</strong>';
+                document.getElementById('commentApprovalActions').remove();
+                showStatusModal('success', data.message);
+            }
+        })
+        .catch(function() {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-x-lg me-1"></i>Reddet';
+            showStatusModal('danger', 'Bir hata oluştu. Lütfen tekrar deneyin.');
+        });
+    });
+</script>
+@endif
+@endpush
