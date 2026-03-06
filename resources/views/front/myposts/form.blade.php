@@ -7,7 +7,7 @@
 
 @push('styles')
     <!-- Tom Select CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.min.css" rel="stylesheet">
+    <link href="{{ asset('vendor/tom-select/2.4.3/css/tom-select.min.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -242,9 +242,9 @@
 
 @push('scripts')
     <!-- Tom Select -->
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+    <script src="{{ asset('vendor/tom-select/2.4.3/js/tom-select.complete.min.js') }}"></script>
     <!-- TinyMCE 7 -->
-    <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.1/tinymce.min.js"></script>
+    <script src="{{ asset('vendor/tinymce/7.6.1/tinymce.min.js') }}"></script>
     <!-- Editor Image Gallery JS (must load before write-post.js) -->
     <script src="{{ asset('js/editor-image-gallery.js') }}"></script>
     <!-- Write Post JS -->

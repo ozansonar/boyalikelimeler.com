@@ -144,12 +144,12 @@
 </section>
 
 @push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/validationEngine.jquery.min.css">
+<link rel="stylesheet" href="{{ asset('vendor/jquery-validation-engine/2.6.4/validationEngine.jquery.min.css') }}">
 @endpush
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/languages/jquery.validationEngine-tr.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/jquery.validationEngine.min.js"></script>
+<script src="{{ asset('vendor/jquery/3.7.1/jquery.min.js') }}"></script>
+<script src="{{ asset('vendor/jquery-validation-engine/2.6.4/jquery.validationEngine-tr.js') }}"></script>
+<script src="{{ asset('vendor/jquery-validation-engine/2.6.4/jquery.validationEngine.min.js') }}"></script>
 <script src="{{ asset('js/comment.js') }}"></script>
 @endpush
