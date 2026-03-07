@@ -78,6 +78,9 @@ class PermissionSeeder extends Seeder
             // Yazarlar Sayfası
             ['name' => 'Yazarlar Sayfası Yönetimi', 'slug' => 'authors-page.manage', 'group' => 'authors-page', 'sort_order' => 110],
 
+            // Ressamlar Sayfası
+            ['name' => 'Ressamlar Sayfası Yönetimi', 'slug' => 'painters-page.manage', 'group' => 'painters-page', 'sort_order' => 111],
+
             // Roller & İzinler
             ['name' => 'Rolleri Görüntüle', 'slug' => 'roles.view', 'group' => 'roles', 'sort_order' => 115],
             ['name' => 'Rol Oluştur', 'slug' => 'roles.create', 'group' => 'roles', 'sort_order' => 116],

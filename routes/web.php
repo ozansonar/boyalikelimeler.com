@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\LiteraryWorkController;
 use App\Http\Controllers\Admin\MailLogController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
+use App\Http\Controllers\Admin\PaintersPageController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\EditorImageController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Front\AuthorController;
 use App\Http\Controllers\Front\BlogController;
+use App\Http\Controllers\Front\PainterController;
 use App\Http\Controllers\Front\CommentController;
 use App\Http\Controllers\Front\CategoryController as FrontCategoryController;
 use App\Http\Controllers\Front\ContactController;
@@ -177,6 +179,12 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::put('authors-page', [AuthorsPageController::class, 'update'])->name('authors-page.update');
     });
 
+    // Painters Page Settings
+    Route::middleware('permission:painters-page.manage')->group(function () {
+        Route::get('painters-page', [PaintersPageController::class, 'index'])->name('painters-page.index');
+        Route::put('painters-page', [PaintersPageController::class, 'update'])->name('painters-page.update');
+    });
+
     // Settings
     Route::middleware('permission:settings.view')->group(function () {
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
@@ -298,6 +306,8 @@ Route::get('/yazarlar', [AuthorController::class, 'index'])->name('authors.index
 Route::get('/yazarlar/altin-kalem/{yearMonth}', [AuthorController::class, 'goldenPenMonth'])
     ->name('authors.golden-pen-month')
     ->where('yearMonth', '\d{4}-\d{2}');
+
+Route::get('/ressamlarimiz', [PainterController::class, 'index'])->name('painters.index');
 
 // Search (Frontend — Arama)
 Route::get('/ara', [SearchController::class, 'index'])->name('search.index');
