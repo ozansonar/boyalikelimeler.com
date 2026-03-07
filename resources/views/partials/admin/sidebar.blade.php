@@ -22,7 +22,7 @@
             </a>
         @endif
 
-        @if($sidebarUser->hasAnyPermission('posts.view', 'categories.view', 'pages.view', 'authors-page.manage'))
+        @if($sidebarUser->hasAnyPermission('posts.view', 'categories.view', 'pages.view', 'authors-page.manage', 'painters-page.manage'))
             <div class="nav-section-title">İçerik Yönetimi</div>
             @if($sidebarUser->hasPermission('posts.view'))
                 <a href="{{ route('admin.posts.index') }}" class="nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
@@ -42,6 +42,11 @@
             @if($sidebarUser->hasPermission('authors-page.manage'))
                 <a href="{{ route('admin.authors-page.index') }}" class="nav-link {{ request()->routeIs('admin.authors-page.*') ? 'active' : '' }}">
                     <i class="bi bi-pen-fill"></i> Yazarlar
+                </a>
+            @endif
+            @if($sidebarUser->hasPermission('painters-page.manage'))
+                <a href="{{ route('admin.painters-page.index') }}" class="nav-link {{ request()->routeIs('admin.painters-page.*') ? 'active' : '' }}">
+                    <i class="bi bi-palette-fill"></i> Ressamlar
                 </a>
             @endif
         @endif
