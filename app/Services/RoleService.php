@@ -112,6 +112,7 @@ final class RoleService
 
             if (array_key_exists('permissions', $data)) {
                 $role->permissions()->sync($data['permissions'] ?? []);
+                $this->clearUserPermissionCacheForRole($role);
             }
 
             $this->clearCache();
@@ -126,6 +127,7 @@ final class RoleService
             $role->permissions()->sync($permissionIds);
 
             $this->clearCache();
+            $this->clearUserPermissionCacheForRole($role);
 
             return $role->fresh()->load('permissions');
         });
@@ -134,6 +136,7 @@ final class RoleService
     public function delete(Role $role): void
     {
         DB::transaction(function () use ($role): void {
+            $this->clearUserPermissionCacheForRole($role);
             $role->permissions()->detach();
             $role->delete();
             $this->clearCache();
@@ -144,7 +147,7 @@ final class RoleService
     {
         DB::transaction(function () use ($user, $role): void {
             $user->update(['role_id' => $role->id]);
-            Cache::forget("user_permissions_{$user->id}");
+            $user->clearPermissionCache();
             $this->clearCache();
         });
     }
@@ -154,6 +157,18 @@ final class RoleService
         return User::with('role')
             ->orderBy('name')
             ->get(['id', 'name', 'email', 'role_id']);
+    }
+
+    /**
+     * Clear permission cache for ALL users that belong to the given role.
+     */
+    private function clearUserPermissionCacheForRole(Role $role): void
+    {
+        $userIds = User::where('role_id', $role->id)->pluck('id');
+
+        foreach ($userIds as $userId) {
+            Cache::forget("user.{$userId}.permissions");
+        }
     }
 
     private function clearCache(): void
