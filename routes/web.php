@@ -307,7 +307,8 @@ Route::get('/yazarlar/altin-kalem/{yearMonth}', [AuthorController::class, 'golde
     ->name('authors.golden-pen-month')
     ->where('yearMonth', '\d{4}-\d{2}');
 
-Route::get('/ressamlarimiz', [PainterController::class, 'index'])->name('painters.index');
+Route::get('/ressamlar', [PainterController::class, 'index'])->name('painters.index');
+Route::redirect('/ressamlarimiz', '/ressamlar', 301);
 
 // Search (Frontend — Arama)
 Route::get('/ara', [SearchController::class, 'index'])->name('search.index');

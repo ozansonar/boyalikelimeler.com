@@ -262,7 +262,7 @@
                             <!-- SEO Preview -->
                             <div class="col-12">
                                 <div class="ca-seo-preview" data-aos="fade-up">
-                                    <div class="ca-seo-url">{{ config('app.url') }}/ressamlarimiz</div>
+                                    <div class="ca-seo-url">{{ config('app.url') }}/ressamlar</div>
                                     <div class="ca-seo-title" id="seoPreviewTitle">{{ $settings['meta_title'] ?? 'Ressamlarımız — Boyalı Kelimeler' }}</div>
                                     <div class="ca-seo-desc" id="seoPreviewDesc">{{ $settings['meta_description'] ?? 'Boyalı Kelimeler ressamları ile tanışın.' }}</div>
                                 </div>
