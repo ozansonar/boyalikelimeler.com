@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\LiteraryWorkStatus;
+use App\Enums\LiteraryWorkType;
 use App\Enums\PostStatus;
 use App\Models\LiteraryWork;
 use App\Models\Post;
@@ -14,15 +15,34 @@ use Illuminate\Support\Facades\Cache;
 final class HomeService
 {
     /**
-     * Get latest approved literary works.
+     * Get latest approved written works.
      *
      * @return Collection<int, LiteraryWork>
      */
-    public function getLatestWorks(int $limit = 6): Collection
+    public function getLatestWrittenWorks(int $limit = 3): Collection
     {
-        return Cache::remember('home.latest_works', 300, fn (): Collection =>
+        return Cache::remember('home.latest_written_works', 300, fn (): Collection =>
             LiteraryWork::whereHas('author', fn ($q) => $q->whereNotNull('username'))
                 ->where('status', LiteraryWorkStatus::Approved)
+                ->where('work_type', LiteraryWorkType::Written)
+                ->with(['category', 'author'])
+                ->orderByDesc('published_at')
+                ->limit($limit)
+                ->get()
+        );
+    }
+
+    /**
+     * Get latest approved visual works.
+     *
+     * @return Collection<int, LiteraryWork>
+     */
+    public function getLatestVisualWorks(int $limit = 3): Collection
+    {
+        return Cache::remember('home.latest_visual_works', 300, fn (): Collection =>
+            LiteraryWork::whereHas('author', fn ($q) => $q->whereNotNull('username'))
+                ->where('status', LiteraryWorkStatus::Approved)
+                ->where('work_type', LiteraryWorkType::Visual)
                 ->with(['category', 'author'])
                 ->orderByDesc('published_at')
                 ->limit($limit)

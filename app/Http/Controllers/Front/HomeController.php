@@ -20,12 +20,13 @@ final class HomeController extends Controller
 
     public function index(): View
     {
-        $latestWorks = $this->homeService->getLatestWorks(6);
+        $latestWrittenWorks = $this->homeService->getLatestWrittenWorks(3);
+        $latestVisualWorks = $this->homeService->getLatestVisualWorks(3);
         $popularWorks = $this->homeService->getPopularWorks(4);
         $latestPosts = $this->homeService->getLatestPosts(6);
         $homeSliders = $this->homeSliderService->getActiveSliders();
         $hero = $this->settingService->getGroup('homepage');
 
-        return view('front.home', compact('latestWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero'));
+        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero'));
     }
 }

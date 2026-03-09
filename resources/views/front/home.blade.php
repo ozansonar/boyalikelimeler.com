@@ -143,7 +143,7 @@
                         <!-- Tab: Yazılar -->
                         <div class="tabs-bk__panel tabs-bk__panel--active" id="tab-yazilar" role="tabpanel">
                             <div class="row g-3">
-                                @forelse($latestWorks->take(3) as $work)
+                                @forelse($latestWrittenWorks as $work)
                                     <div class="col-md-4">
                                         <a href="{{ route('literary-works.show', $work->slug) }}" class="card-bk card-bk--link">
                                             <div class="card-bk__body">
@@ -204,45 +204,61 @@
                         <!-- Tab: Resimler -->
                         <div class="tabs-bk__panel" id="tab-resimler" role="tabpanel">
                             <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body text-center py-5">
-                                            <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
-                                            <h4 class="card-bk__title">Mavi Hüzün</h4>
-                                            <p class="card-bk__text">Yağlıboya — 60×80 cm</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Zeynep Ateş</span>
-                                            <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>127</span>
+                                @forelse($latestVisualWorks as $work)
+                                    <div class="col-md-4">
+                                        <a href="{{ route('literary-works.show', $work->slug) }}" class="card-bk card-bk--link">
+                                            <div class="card-bk__body text-center py-5">
+                                                <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
+                                                <h4 class="card-bk__title">{{ $work->title }}</h4>
+                                                <p class="card-bk__text">{{ Str::limit(strip_tags($work->excerpt ?? $work->body), 80) }}</p>
+                                            </div>
+                                            <div class="card-bk__footer">
+                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>{{ $work->author?->name ?? 'Anonim' }}</span>
+                                                <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>{{ $work->view_count }}</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @empty
+                                    <div class="col-md-4">
+                                        <div class="card-bk">
+                                            <div class="card-bk__body text-center py-5">
+                                                <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
+                                                <h4 class="card-bk__title">Mavi Hüzün</h4>
+                                                <p class="card-bk__text">Yağlıboya — 60×80 cm</p>
+                                            </div>
+                                            <div class="card-bk__footer">
+                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Zeynep Ateş</span>
+                                                <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>127</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body text-center py-5">
-                                            <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
-                                            <h4 class="card-bk__title">Sonbahar Rüyası</h4>
-                                            <p class="card-bk__text">Akrilik — 50×70 cm</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Ali Fırtına</span>
-                                            <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>98</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body text-center py-5">
-                                            <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
-                                            <h4 class="card-bk__title">Işığın Dansı</h4>
-                                            <p class="card-bk__text">Suluboya — 40×50 cm</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Deniz Çelik</span>
-                                            <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>85</span>
+                                    <div class="col-md-4">
+                                        <div class="card-bk">
+                                            <div class="card-bk__body text-center py-5">
+                                                <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
+                                                <h4 class="card-bk__title">Sonbahar Rüyası</h4>
+                                                <p class="card-bk__text">Akrilik — 50×70 cm</p>
+                                            </div>
+                                            <div class="card-bk__footer">
+                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Ali Fırtına</span>
+                                                <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>98</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="col-md-4">
+                                        <div class="card-bk">
+                                            <div class="card-bk__body text-center py-5">
+                                                <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
+                                                <h4 class="card-bk__title">Işığın Dansı</h4>
+                                                <p class="card-bk__text">Suluboya — 40×50 cm</p>
+                                            </div>
+                                            <div class="card-bk__footer">
+                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Deniz Çelik</span>
+                                                <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>85</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
 
