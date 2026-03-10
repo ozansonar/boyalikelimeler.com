@@ -6,7 +6,7 @@
 @section('og_title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Ressamlarımız — Boyalı Kelimeler')
 @section('og_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler ressamları ile tanışın. Görsel eser veren sanatçılarımız.')
 
-@if(request()->anyFilled(['search', 'sort', 'dir', 'page']))
+@if(request()->anyFilled(['search', 'sort', 'dir', 'golden_brush', 'page']))
     @section('robots', 'noindex, follow')
 @endif
 
@@ -79,9 +79,9 @@
                                                      loading="lazy">
                                             @endif
                                         </div>
-                                        @if($featuredPainter->hasActiveGoldenPen())
-                                            <div class="authors-featured__golden" title="Altın Kalem">
-                                                <i class="fa-solid fa-pen-nib"></i>
+                                        @if($featuredPainter->hasActiveGoldenBrush())
+                                            <div class="authors-featured__golden" title="Altın Fırça">
+                                                <i class="fa-solid fa-paintbrush"></i>
                                             </div>
                                         @endif
                                     </div>
@@ -101,6 +101,57 @@
                             </a>
                         </div>
                     @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <!-- =======================================================
+         GOLDEN BRUSH MONTHS — MONTHLY CARDS SLIDER
+    ======================================================= -->
+    @if(!empty($goldenBrushMonths))
+        <section class="section section--surface" data-aos="fade-up">
+            <div class="container">
+                <div class="golden-slider">
+                    <div class="golden-slider__header">
+                        <div>
+                            <h2 class="golden-slider__title">
+                                <i class="fa-solid fa-paintbrush me-2"></i>{{ $pageSettings['golden_brush_title'] ?? 'Altın Fırçalarımız' }}
+                            </h2>
+                            @if(!empty($pageSettings['golden_brush_description']))
+                                <p class="golden-slider__desc">{{ $pageSettings['golden_brush_description'] }}</p>
+                            @endif
+                        </div>
+                        <div class="golden-slider__nav">
+                            <button class="golden-slider__nav-btn golden-slider__nav-btn--prev" type="button" aria-label="Önceki ay">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button class="golden-slider__nav-btn golden-slider__nav-btn--next" type="button" aria-label="Sonraki ay">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="swiper golden-slider__swiper">
+                        <div class="swiper-wrapper">
+                            @foreach($goldenBrushMonths as $month)
+                                <div class="swiper-slide">
+                                    <a href="{{ route('painters.golden-brush-month', $month['key']) }}" class="text-decoration-none">
+                                        <article class="golden-month-card">
+                                            <div class="golden-month-card__icon">
+                                                <i class="fa-solid fa-paintbrush"></i>
+                                            </div>
+                                            <h3 class="golden-month-card__label">{{ $month['label'] }}</h3>
+                                            <div class="golden-month-card__action">
+                                                <span>Ressamları Gör</span>
+                                                <i class="fa-solid fa-arrow-right ms-2"></i>
+                                            </div>
+                                        </article>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -158,6 +209,10 @@
                                 data-dir="desc">
                             <i class="fa-solid fa-image me-1"></i><span class="d-none d-md-inline">Çok Eser</span>
                         </button>
+                        <button class="member-toolbar__sort-btn {{ !empty($filters['golden_brush']) ? 'member-toolbar__sort-btn--active' : '' }}"
+                                type="submit" name="golden_brush" value="{{ !empty($filters['golden_brush']) ? '' : '1' }}" title="Altın Fırça">
+                            <i class="fa-solid fa-paintbrush me-1"></i><span class="d-none d-md-inline">Altın Fırça</span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -181,9 +236,9 @@
                                         @endif
                                     </div>
                                     <div class="member-card__glow"></div>
-                                    @if($painter->hasActiveGoldenPen())
-                                        <div class="member-card__golden-badge" title="Altın Kalem">
-                                            <i class="fa-solid fa-pen-nib"></i>
+                                    @if($painter->hasActiveGoldenBrush())
+                                        <div class="member-card__golden-badge" title="Altın Fırça">
+                                            <i class="fa-solid fa-paintbrush"></i>
                                         </div>
                                     @endif
                                 </div>

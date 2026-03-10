@@ -34,6 +34,10 @@
                     <i class="bi bi-star"></i>
                     <div><span>Öne Çıkan Ressamlar</span><small>Sayfa üstünde gösterilecek ressamlar</small></div>
                 </a>
+                <a href="#section-golden" class="stg-nav-item" onclick="scrollToSection('section-golden', this)">
+                    <i class="bi bi-brush"></i>
+                    <div><span>Altın Fırçalar</span><small>Altın fırça bölümü başlık/açıklama</small></div>
+                </a>
                 <a href="#section-list" class="stg-nav-item" onclick="scrollToSection('section-list', this)">
                     <i class="bi bi-people"></i>
                     <div><span>Ressam Listesi</span><small>Liste bölümü başlığı</small></div>
@@ -51,6 +55,7 @@
                 <option value="" disabled selected>Bölüme git...</option>
                 <option value="section-header">Sayfa Başlığı</option>
                 <option value="section-featured">Öne Çıkan Ressamlar</option>
+                <option value="section-golden">Altın Fırçalar</option>
                 <option value="section-list">Ressam Listesi</option>
                 <option value="section-seo">SEO Ayarları</option>
             </select>
@@ -182,7 +187,53 @@
                     </div>
                 </div>
 
-                <!-- ==================== SECTION 3: RESSAM LİSTESİ ==================== -->
+                <!-- ==================== SECTION 3: ALTIN FIRÇALAR ==================== -->
+                <div class="card-dark mb-4" id="section-golden">
+                    <div class="card-header-custom">
+                        <div class="form-section-header mb-0">
+                            <div class="form-section-icon bg-icon-pink"><i class="bi bi-brush-fill"></i></div>
+                            <div>
+                                <h6 class="mb-0">Altın Fırçalar Bölümü</h6>
+                                <small class="text-muted">Altın fırça slider bölümünün başlığı ve açıklaması</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label" for="ppGoldenTitle">Bölüm Başlığı</label>
+                                <input type="text" class="form-control @error('golden_brush_title') is-invalid @enderror"
+                                       id="ppGoldenTitle" name="golden_brush_title"
+                                       value="{{ old('golden_brush_title', $settings['golden_brush_title'] ?? '') }}"
+                                       placeholder="Örn: Altın Fırçalarımız"
+                                       oninput="updateCharCounter(this, 200)">
+                                @error('golden_brush_title')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="d-flex justify-content-between mt-1">
+                                    <div class="form-text">Altın fırça slider bölümünün başlığı</div>
+                                    <div class="form-text"><span id="ppGoldenTitle-counter">{{ mb_strlen(old('golden_brush_title', $settings['golden_brush_title'] ?? '')) }}</span>/200</div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="ppGoldenDesc">Bölüm Açıklaması</label>
+                                <textarea class="form-control @error('golden_brush_description') is-invalid @enderror"
+                                          id="ppGoldenDesc" name="golden_brush_description" rows="3"
+                                          placeholder="Altın fırça bölümü hakkında kısa bir açıklama..."
+                                          oninput="updateCharCounter(this, 500)">{{ old('golden_brush_description', $settings['golden_brush_description'] ?? '') }}</textarea>
+                                @error('golden_brush_description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="d-flex justify-content-between mt-1">
+                                    <div class="form-text">Slider bölümünün altında gösterilecek açıklama</div>
+                                    <div class="form-text"><span id="ppGoldenDesc-counter">{{ mb_strlen(old('golden_brush_description', $settings['golden_brush_description'] ?? '')) }}</span>/500</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SECTION 4: RESSAM LİSTESİ ==================== -->
                 <div class="card-dark mb-4" id="section-list">
                     <div class="card-header-custom">
                         <div class="form-section-header mb-0">
@@ -214,7 +265,7 @@
                     </div>
                 </div>
 
-                <!-- ==================== SECTION 4: SEO ==================== -->
+                <!-- ==================== SECTION 5: SEO ==================== -->
                 <div class="card-dark mb-4" id="section-seo">
                     <div class="card-header-custom">
                         <div class="form-section-header mb-0">

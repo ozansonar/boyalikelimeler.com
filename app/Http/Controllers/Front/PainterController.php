@@ -19,16 +19,37 @@ class PainterController extends Controller
 
     public function index(Request $request): View
     {
-        $filters = $request->only(['search', 'sort', 'dir']);
+        $filters = $request->only(['search', 'golden_brush', 'sort', 'dir']);
         $pageSettings = $this->settingService->getGroup('painters_page');
 
         $featuredPainters = $this->painterService->getFeaturedPainters($pageSettings['featured_painter_ids'] ?? null);
+        $goldenBrushMonths = $this->painterService->getGoldenBrushMonths();
 
         return view('front.painters.index', [
-            'painters'          => $this->painterService->paginate(12, $filters),
-            'filters'           => $filters,
-            'pageSettings'      => $pageSettings,
-            'featuredPainters'  => $featuredPainters,
+            'painters'           => $this->painterService->paginate(12, $filters),
+            'filters'            => $filters,
+            'pageSettings'       => $pageSettings,
+            'featuredPainters'   => $featuredPainters,
+            'goldenBrushMonths'  => $goldenBrushMonths,
+        ]);
+    }
+
+    public function goldenBrushMonth(string $yearMonth): View
+    {
+        $pageSettings = $this->settingService->getGroup('painters_page');
+        $monthData = $this->painterService->getGoldenBrushPaintersByMonth($yearMonth);
+
+        if ($monthData === null) {
+            abort(404);
+        }
+
+        $hasPainters = $monthData['painters']->isNotEmpty();
+
+        return view('front.painters.golden-brush-month', [
+            'monthData'    => $monthData,
+            'yearMonth'    => $yearMonth,
+            'pageSettings' => $pageSettings,
+            'hasPainters'  => $hasPainters,
         ]);
     }
 }
