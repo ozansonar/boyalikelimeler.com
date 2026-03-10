@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\LiteraryWorkStatus;
+use App\Enums\LiteraryWorkType;
 use App\Models\LiteraryCategory;
 use App\Models\LiteraryWork;
 use App\Models\User;
@@ -39,6 +40,7 @@ class LiteraryWorkFactory extends Factory
             'literary_category_id' => LiteraryCategory::inRandomOrder()->value('id'),
             'user_id'              => User::inRandomOrder()->value('id'),
             'status'               => $status,
+            'work_type'            => LiteraryWorkType::Written,
             'meta_title'           => Str::limit($title, 190),
             'meta_description'     => Str::limit($excerpt, 290),
             'view_count'           => rand(0, 1500),
@@ -146,6 +148,20 @@ class LiteraryWorkFactory extends Factory
         return $this->state(fn () => [
             'status'       => LiteraryWorkStatus::RevisionRequested,
             'published_at' => null,
+        ]);
+    }
+
+    public function written(): static
+    {
+        return $this->state(fn () => [
+            'work_type' => LiteraryWorkType::Written,
+        ]);
+    }
+
+    public function visual(): static
+    {
+        return $this->state(fn () => [
+            'work_type' => LiteraryWorkType::Visual,
         ]);
     }
 }
