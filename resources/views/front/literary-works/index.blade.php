@@ -6,7 +6,7 @@
 @section('og_title', 'İçerikler — Boyalı Kelimeler')
 @section('og_description', 'Yazarlarımızın en güzel eserlerini keşfedin.')
 
-@if(request('kategori') || request('sirala') || request('ara'))
+@if(request('kategori') || request('sirala') || request('ara') || request('tur'))
     @section('robots', 'noindex, follow')
 @endif
 
@@ -102,6 +102,12 @@
                            value="{{ request('ara') }}">
                 </div>
                 <div class="clist-toolbar__filters">
+                    <select name="tur" class="wpost-form__input clist-toolbar__select" onchange="this.form.submit()">
+                        <option value="">Tüm Türler</option>
+                        @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+                            <option value="{{ $type->value }}" @selected($currentWorkType === $type->value)>{{ $type->label() }}</option>
+                        @endforeach
+                    </select>
                     <select name="kategori" class="wpost-form__input clist-toolbar__select" onchange="this.form.submit()">
                         <option value="">Tüm Kategoriler</option>
                         @foreach($categories as $category)
