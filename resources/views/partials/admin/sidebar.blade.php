@@ -105,17 +105,19 @@
             @endif
         @endif
 
-        @if($sidebarUser->hasAnyPermission('mail-logs.view', 'settings.view'))
+        @if($sidebarUser->hasAnyPermission('mail-logs.view', 'mail-templates.view', 'settings.view'))
             <div class="nav-section-title">Sistem</div>
             @if($sidebarUser->hasPermission('mail-logs.view'))
                 <a href="{{ route('admin.mail-logs.index') }}" class="nav-link {{ request()->routeIs('admin.mail-logs.*') ? 'active' : '' }}">
                     <i class="bi bi-envelope-fill"></i> Mail Logları
                 </a>
             @endif
-            @if($sidebarUser->hasPermission('settings.view'))
+            @if($sidebarUser->hasPermission('mail-templates.view'))
                 <a href="{{ route('admin.mail-templates.index') }}" class="nav-link {{ request()->routeIs('admin.mail-templates.*') ? 'active' : '' }}">
                     <i class="bi bi-envelope-paper-fill"></i> Mail Şablonları
                 </a>
+            @endif
+            @if($sidebarUser->hasPermission('settings.view'))
                 <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                     <i class="bi bi-gear-fill"></i> Ayarlar
                 </a>
