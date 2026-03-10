@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\TestMail;
 use App\Services\SettingService;
 use App\Services\UploadService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -232,5 +233,251 @@ class SettingController extends Controller
             return redirect()->route('admin.settings.index', ['tab' => 'smtp'])
                 ->with('error', 'Mail gönderilemedi: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Debug SMTP: raw socket + Symfony transport test with step-by-step output.
+     */
+    public function debugSmtp(Request $request): JsonResponse
+    {
+        $smtp = $this->settingService->getGroup('smtp');
+        $steps = [];
+        $toEmail = $request->query('to', $smtp['from_email'] ?? 'test@test.com');
+
+        // Step 1: Show loaded settings
+        $steps[] = [
+            'step'   => '1. DB SMTP Ayarları',
+            'status' => 'info',
+            'data'   => [
+                'host'       => $smtp['host'] ?? '(boş)',
+                'port'       => $smtp['port'] ?? '(boş)',
+                'username'   => $smtp['username'] ?? '(boş)',
+                'password'   => isset($smtp['password']) ? str_repeat('*', max(0, strlen($smtp['password']) - 4)) . substr($smtp['password'], -4) : '(boş)',
+                'pass_len'   => isset($smtp['password']) ? strlen($smtp['password']) : 0,
+                'pass_hex'   => isset($smtp['password']) ? bin2hex($smtp['password']) : '',
+                'encryption' => $smtp['encryption'] ?? '(boş)',
+                'from_name'  => $smtp['from_name'] ?? '(boş)',
+                'from_email' => $smtp['from_email'] ?? '(boş)',
+            ],
+        ];
+
+        // Step 2: Raw socket test
+        $host = $smtp['host'] ?? '';
+        $port = (int) ($smtp['port'] ?? 587);
+
+        try {
+            $errno = 0;
+            $errstr = '';
+            $context = stream_context_create(['ssl' => [
+                'verify_peer'       => false,
+                'verify_peer_name'  => false,
+                'allow_self_signed' => true,
+            ]]);
+
+            $prefix = ($port === 465) ? 'ssl://' : '';
+            $sock = @stream_socket_client(
+                $prefix . $host . ':' . $port,
+                $errno,
+                $errstr,
+                15,
+                STREAM_CLIENT_CONNECT,
+                $context
+            );
+
+            if (!$sock) {
+                $steps[] = [
+                    'step'   => '2. Raw Socket Bağlantısı',
+                    'status' => 'fail',
+                    'data'   => "Bağlantı kurulamadı: [{$errno}] {$errstr}",
+                ];
+
+                return response()->json(['steps' => $steps], 200);
+            }
+
+            $banner = fgets($sock, 1024);
+            $steps[] = [
+                'step'   => '2. Raw Socket Bağlantısı',
+                'status' => 'ok',
+                'data'   => 'Banner: ' . trim((string) $banner),
+            ];
+
+            // EHLO
+            fwrite($sock, "EHLO localhost\r\n");
+            $ehloResponse = '';
+            while ($line = fgets($sock, 512)) {
+                $ehloResponse .= $line;
+                if (isset($line[3]) && $line[3] === ' ') {
+                    break;
+                }
+            }
+            $steps[] = [
+                'step'   => '3. EHLO Yanıtı',
+                'status' => 'ok',
+                'data'   => trim($ehloResponse),
+            ];
+
+            // STARTTLS (only for non-SSL port)
+            if ($port !== 465) {
+                fwrite($sock, "STARTTLS\r\n");
+                $starttlsResp = trim((string) fgets($sock, 512));
+                $steps[] = [
+                    'step'   => '4. STARTTLS Yanıtı',
+                    'status' => str_starts_with($starttlsResp, '220') ? 'ok' : 'fail',
+                    'data'   => $starttlsResp,
+                ];
+
+                if (str_starts_with($starttlsResp, '220')) {
+                    $tlsResult = @stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT);
+                    $meta = stream_get_meta_data($sock);
+                    $steps[] = [
+                        'step'   => '5. TLS Handshake',
+                        'status' => $tlsResult ? 'ok' : 'fail',
+                        'data'   => [
+                            'result'  => $tlsResult ? 'BAŞARILI' : 'BAŞARISIZ',
+                            'crypto'  => $meta['crypto'] ?? 'yok',
+                        ],
+                    ];
+
+                    if (!$tlsResult) {
+                        fclose($sock);
+
+                        return response()->json(['steps' => $steps], 200);
+                    }
+
+                    // EHLO after TLS
+                    fwrite($sock, "EHLO localhost\r\n");
+                    $ehlo2 = '';
+                    while ($line = fgets($sock, 512)) {
+                        $ehlo2 .= $line;
+                        if (isset($line[3]) && $line[3] === ' ') {
+                            break;
+                        }
+                    }
+                    $steps[] = [
+                        'step'   => '6. EHLO (TLS sonrası)',
+                        'status' => 'ok',
+                        'data'   => trim($ehlo2),
+                    ];
+                }
+            }
+
+            // AUTH LOGIN
+            $username = $smtp['username'] ?? '';
+            $password = $smtp['password'] ?? '';
+
+            fwrite($sock, "AUTH LOGIN\r\n");
+            $authResp = trim((string) fgets($sock, 512));
+            $steps[] = [
+                'step'   => '7. AUTH LOGIN Başlatıldı',
+                'status' => str_starts_with($authResp, '334') ? 'ok' : 'fail',
+                'data'   => $authResp . ' (beklenen: 334)',
+            ];
+
+            if (str_starts_with($authResp, '334')) {
+                // Send username
+                fwrite($sock, base64_encode($username) . "\r\n");
+                $userResp = trim((string) fgets($sock, 512));
+                $steps[] = [
+                    'step'   => '8. Username Gönderildi',
+                    'status' => str_starts_with($userResp, '334') ? 'ok' : 'fail',
+                    'data'   => [
+                        'response'       => $userResp,
+                        'username_b64'   => base64_encode($username),
+                        'username_plain' => $username,
+                    ],
+                ];
+
+                if (str_starts_with($userResp, '334')) {
+                    // Send password
+                    fwrite($sock, base64_encode($password) . "\r\n");
+                    $passResp = trim((string) fgets($sock, 512));
+                    $steps[] = [
+                        'step'   => '9. Password Gönderildi',
+                        'status' => str_starts_with($passResp, '235') ? 'ok' : 'fail',
+                        'data'   => [
+                            'response'     => $passResp,
+                            'password_b64' => base64_encode($password),
+                            'password_len' => strlen($password),
+                        ],
+                    ];
+                }
+            }
+
+            fwrite($sock, "QUIT\r\n");
+            fclose($sock);
+        } catch (\Throwable $e) {
+            $steps[] = [
+                'step'   => 'Raw Socket Hatası',
+                'status' => 'fail',
+                'data'   => $e->getMessage(),
+            ];
+        }
+
+        // Step 10: Symfony Transport test
+        $steps[] = [
+            'step'   => '10. Symfony Transport Testi Başlıyor...',
+            'status' => 'info',
+            'data'   => 'scheme=' . (($port === 465) ? 'smtps' : 'smtp') . ' port=' . $port,
+        ];
+
+        try {
+            $scheme = ($port === 465) ? 'smtps' : 'smtp';
+            $factory = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory();
+            $transport = $factory->create(new \Symfony\Component\Mailer\Transport\Dsn(
+                $scheme,
+                $host,
+                $smtp['username'] ?? null,
+                $smtp['password'] ?? null,
+                $port,
+                ['verify_peer' => 0],
+            ));
+
+            $stream = $transport->getStream();
+            if ($stream instanceof \Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream) {
+                $stream->setTimeout(30);
+            }
+
+            $steps[] = [
+                'step'   => '11. Symfony Transport Oluşturuldu',
+                'status' => 'ok',
+                'data'   => get_class($transport),
+            ];
+
+            // Try sending a real email via Symfony
+            $email = (new \Symfony\Component\Mime\Email())
+                ->from(new \Symfony\Component\Mime\Address($smtp['from_email'] ?? $username, $smtp['from_name'] ?? ''))
+                ->to($toEmail)
+                ->subject('Debug SMTP Test - ' . now()->format('H:i:s'))
+                ->text('Bu bir SMTP debug test mailidir. ' . now()->toDateTimeString());
+
+            $transport->send($email);
+
+            $steps[] = [
+                'step'   => '12. Symfony ile Mail Gönderildi!',
+                'status' => 'ok',
+                'data'   => 'Alıcı: ' . $toEmail,
+            ];
+        } catch (\Throwable $e) {
+            $steps[] = [
+                'step'   => '12. Symfony Transport HATA',
+                'status' => 'fail',
+                'data'   => [
+                    'message' => $e->getMessage(),
+                    'class'   => get_class($e),
+                    'trace'   => array_slice(
+                        array_map(fn ($t) => ($t['class'] ?? '') . '::' . ($t['function'] ?? '') . ' (' . basename($t['file'] ?? '') . ':' . ($t['line'] ?? '') . ')', $e->getTrace()),
+                        0,
+                        10
+                    ),
+                ],
+            ];
+        }
+
+        return response()->json([
+            'steps'     => $steps,
+            'php'       => PHP_VERSION,
+            'openssl'   => OPENSSL_VERSION_TEXT ?? 'N/A',
+            'timestamp' => now()->toDateTimeString(),
+        ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 }
