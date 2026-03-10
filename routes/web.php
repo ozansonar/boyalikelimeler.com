@@ -315,6 +315,8 @@ Route::post('/iletisim', [ContactController::class, 'store'])->name('contact.sto
 
 // Literary Works (Frontend — İçerikler)
 Route::get('/icerikler', [FrontLiteraryWorkController::class, 'index'])->name('literary-works.index');
+Route::get('/yazili-eserler', [FrontLiteraryWorkController::class, 'writtenWorks'])->name('literary-works.written');
+Route::get('/gorsel-eserler', [FrontLiteraryWorkController::class, 'visualWorks'])->name('literary-works.visual');
 Route::get('/icerik/{slug}', [FrontLiteraryWorkController::class, 'show'])->name('literary-works.show');
 
 // Authors (Frontend — Yazarlar)

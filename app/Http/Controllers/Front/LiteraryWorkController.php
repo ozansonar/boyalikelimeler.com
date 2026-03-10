@@ -32,6 +32,32 @@ class LiteraryWorkController extends Controller
         ]);
     }
 
+    public function writtenWorks(Request $request): View
+    {
+        return view('front.literary-works.written', [
+            'works'       => $this->workService->frontPaginate(12, [
+                'search'    => $request->input('ara'),
+                'sort'      => $request->input('sirala'),
+                'work_type' => 'written',
+            ]),
+            'stats'       => $this->workService->getPublishedStatsByType('written'),
+            'currentSort' => $request->input('sirala', 'newest'),
+        ]);
+    }
+
+    public function visualWorks(Request $request): View
+    {
+        return view('front.literary-works.visual', [
+            'works'       => $this->workService->frontPaginate(12, [
+                'search'    => $request->input('ara'),
+                'sort'      => $request->input('sirala'),
+                'work_type' => 'visual',
+            ]),
+            'stats'       => $this->workService->getPublishedStatsByType('visual'),
+            'currentSort' => $request->input('sirala', 'newest'),
+        ]);
+    }
+
     public function show(string $slug): View
     {
         $work = $this->workService->findPublishedBySlug($slug);
