@@ -131,6 +131,14 @@
                                     <a href="{{ route('admin.mail-logs.show', $log) }}" class="usr-action-btn" title="Detay">
                                         <i class="bi bi-eye"></i>
                                     </a>
+                                    @if($log->body && ($log->isFailed() || $log->isSent()))
+                                        <form action="{{ route('admin.mail-logs.resend', $log) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu mail yeniden gönderilecek. Emin misiniz?')">
+                                            @csrf
+                                            <button type="submit" class="usr-action-btn text-teal" title="Yeniden Gönder">
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                     <button type="button" class="usr-action-btn text-danger" title="Sil" onclick="openDeleteModal({{ $log->id }}, '{{ e($log->subject) }}')">
                                         <i class="bi bi-trash3"></i>
                                     </button>

@@ -205,6 +205,8 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::put('settings/mail-theme', [SettingController::class, 'updateMailTheme'])->name('settings.update.mail-theme');
         Route::post('settings/mail-theme/preview', [SettingController::class, 'previewMailTheme'])->name('settings.mail-theme.preview');
         Route::get('settings/mail-theme/reset', [SettingController::class, 'resetMailTheme'])->name('settings.mail-theme.reset');
+        Route::put('settings/mail-templates', [SettingController::class, 'updateMailTemplates'])->name('settings.update.mail-templates');
+        Route::get('settings/mail-templates/reset', [SettingController::class, 'resetMailTemplates'])->name('settings.reset-mail-templates');
     });
 
     // Comment Management
@@ -238,6 +240,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::get('mail-logs', [MailLogController::class, 'index'])->name('mail-logs.index');
         Route::get('mail-logs/{mailLog}', [MailLogController::class, 'show'])->name('mail-logs.show');
     });
+    Route::post('mail-logs/{mailLog}/resend', [MailLogController::class, 'resend'])->name('mail-logs.resend')->middleware('permission:mail-logs.view');
     Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy')->middleware('permission:mail-logs.delete');
 
     // Home Slider Management (Ana Sayfa Slider)

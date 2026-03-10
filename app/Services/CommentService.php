@@ -151,6 +151,9 @@ final class CommentService
         $admins = User::whereHas('role', fn (Builder $q) => $q->whereIn('slug', ['admin', 'super-admin']))->get();
 
         foreach ($admins as $admin) {
+            if (!$admin->wantsMailNotification('new_comment')) {
+                continue;
+            }
             $this->sendMailSafely(
                 fn () => Mail::to($admin->email, $admin->name)->send(new NewCommentMail($comment)),
                 'notifyAdmins',
@@ -170,6 +173,10 @@ final class CommentService
         $author = $commentable->author;
 
         if (!$author) {
+            return;
+        }
+
+        if (!$author->wantsMailNotification('comment_approved')) {
             return;
         }
 

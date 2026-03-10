@@ -133,11 +133,15 @@ final class LiteraryWorkService
             $this->clearCache();
         });
 
-        return $this->sendMailSafely(
-            fn () => Mail::to($work->author)->send(new LiteraryWorkApprovedMail($work)),
-            'approve',
-            $work,
-        );
+        if ($work->author?->wantsMailNotification('work_status')) {
+            return $this->sendMailSafely(
+                fn () => Mail::to($work->author)->send(new LiteraryWorkApprovedMail($work)),
+                'approve',
+                $work,
+            );
+        }
+
+        return true;
     }
 
     // ─── Admin: Reject ───
@@ -152,11 +156,15 @@ final class LiteraryWorkService
             $this->clearCache();
         });
 
-        return $this->sendMailSafely(
-            fn () => Mail::to($work->author)->send(new LiteraryWorkRejectedMail($work)),
-            'reject',
-            $work,
-        );
+        if ($work->author?->wantsMailNotification('work_status')) {
+            return $this->sendMailSafely(
+                fn () => Mail::to($work->author)->send(new LiteraryWorkRejectedMail($work)),
+                'reject',
+                $work,
+            );
+        }
+
+        return true;
     }
 
     // ─── Admin: Request Revision ───
@@ -178,6 +186,10 @@ final class LiteraryWorkService
         });
 
         $work->load('revisions.admin');
+
+        if (!$work->author?->wantsMailNotification('work_status')) {
+            return true;
+        }
 
         return $this->sendMailSafely(
             fn () => Mail::to($work->author)->send(new LiteraryWorkRevisionRequestedMail($work, $reason)),

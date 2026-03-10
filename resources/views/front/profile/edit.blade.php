@@ -543,34 +543,35 @@
                                 <h3 class="pedit-card__title">
                                     <i class="fa-solid fa-bell me-2"></i>Bildirim Tercihleri
                                 </h3>
+                                <p class="pedit-card__desc">Hangi durumlarda e-posta bildirimi almak istediğinizi seçin.</p>
                                 <div class="pedit-toggle-list">
                                     <div class="pedit-toggle__item">
                                         <div class="pedit-toggle__info">
-                                            <span class="pedit-toggle__label"><i class="fa-solid fa-heart me-1 text-gold"></i>Beğeni bildirimleri</span>
-                                            <span class="pedit-toggle__desc">Eserleriniz beğenildiğinde</span>
+                                            <span class="pedit-toggle__label"><i class="fa-solid fa-comment me-1 text-gold"></i>Yorum onay bildirimi</span>
+                                            <span class="pedit-toggle__desc">İçeriğinize yapılan bir yorum onaylandığında e-posta alın</span>
                                         </div>
-                                        <label class="pedit-toggle__switch" for="notif_like">
-                                            <input type="checkbox" id="notif_like" name="notif_like" checked>
+                                        <label class="pedit-toggle__switch" for="notif_comment_approved">
+                                            <input type="checkbox" id="notif_comment_approved" name="notify_comment_approved" value="1" @checked(old('notify_comment_approved', $user->notify_comment_approved))>
                                             <span class="pedit-toggle__track"></span>
                                         </label>
                                     </div>
                                     <div class="pedit-toggle__item">
                                         <div class="pedit-toggle__info">
-                                            <span class="pedit-toggle__label"><i class="fa-solid fa-comment me-1 text-gold"></i>Yorum bildirimleri</span>
-                                            <span class="pedit-toggle__desc">Eserlerinize yorum yapıldığında</span>
+                                            <span class="pedit-toggle__label"><i class="fa-solid fa-feather-pointed me-1 text-gold"></i>Eser durum bildirimi</span>
+                                            <span class="pedit-toggle__desc">Eseriniz onaylandığında, reddedildiğinde veya revize istendiğinde e-posta alın</span>
                                         </div>
-                                        <label class="pedit-toggle__switch" for="notif_comment">
-                                            <input type="checkbox" id="notif_comment" name="notif_comment" checked>
+                                        <label class="pedit-toggle__switch" for="notif_work_status">
+                                            <input type="checkbox" id="notif_work_status" name="notify_work_status" value="1" @checked(old('notify_work_status', $user->notify_work_status))>
                                             <span class="pedit-toggle__track"></span>
                                         </label>
                                     </div>
                                     <div class="pedit-toggle__item">
                                         <div class="pedit-toggle__info">
-                                            <span class="pedit-toggle__label"><i class="fa-solid fa-envelope me-1 text-gold"></i>E-posta bildirimleri</span>
-                                            <span class="pedit-toggle__desc">Önemli gelişmeleri e-posta ile al</span>
+                                            <span class="pedit-toggle__label"><i class="fa-solid fa-envelope me-1 text-gold"></i>Yeni yorum bildirimi</span>
+                                            <span class="pedit-toggle__desc">Yeni yorum geldiğinde e-posta alın (admin)</span>
                                         </div>
-                                        <label class="pedit-toggle__switch" for="notif_email">
-                                            <input type="checkbox" id="notif_email" name="notif_email" checked>
+                                        <label class="pedit-toggle__switch" for="notif_new_comment">
+                                            <input type="checkbox" id="notif_new_comment" name="notify_new_comment" value="1" @checked(old('notify_new_comment', $user->notify_new_comment))>
                                             <span class="pedit-toggle__track"></span>
                                         </label>
                                     </div>

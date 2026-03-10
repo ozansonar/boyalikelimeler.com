@@ -16,6 +16,20 @@ class ProfileUpdateRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $booleanFields = [
+            'is_public', 'show_email', 'show_last_seen', 'allow_messages',
+            'notify_comment_approved', 'notify_work_status', 'notify_new_comment',
+        ];
+
+        foreach ($booleanFields as $field) {
+            if (!$this->has($field)) {
+                $this->merge([$field => false]);
+            }
+        }
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -40,10 +54,13 @@ class ProfileUpdateRequest extends FormRequest
             'spotify'        => ['nullable', 'string', 'max:100'],
             'interests'      => ['nullable', 'array'],
             'interests.*'    => ['string', 'max:50'],
-            'is_public'      => ['boolean'],
-            'show_email'     => ['boolean'],
-            'show_last_seen' => ['boolean'],
-            'allow_messages' => ['boolean'],
+            'is_public'               => ['boolean'],
+            'show_email'              => ['boolean'],
+            'show_last_seen'          => ['boolean'],
+            'allow_messages'          => ['boolean'],
+            'notify_comment_approved' => ['boolean'],
+            'notify_work_status'      => ['boolean'],
+            'notify_new_comment'      => ['boolean'],
         ];
     }
 

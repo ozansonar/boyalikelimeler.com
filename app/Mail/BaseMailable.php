@@ -8,6 +8,7 @@ use App\Enums\MailLogStatus;
 use App\Models\MailLog;
 use App\Models\User;
 use App\Services\MailLogService;
+use App\Services\MailTemplateService;
 use App\Services\SettingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,6 +32,9 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     /** @var int[] */
     public array $backoff = [10, 30, 60];
 
+    /** Mail log ID created at queue dispatch time (serialized with the job). */
+    public ?int $pendingMailLogId = null;
+
     private bool $isDebugRedirect = false;
     private string $originalToEmail = '';
 
@@ -38,11 +42,26 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     private array $smtpSettings = [];
 
     /**
-     * Override send to apply SMTP config, debug redirect, CID logo + automatic logging.
+     * Override queue to create a pending mail log at dispatch time (before worker runs).
+     *
+     * This ensures the "Bekliyor" count appears immediately when a mail is queued.
+     *
+     * @param \Illuminate\Contracts\Queue\Queue $queue
+     */
+    public function queue($queue): mixed
+    {
+        $this->createQueuedPendingLog();
+
+        return parent::queue($queue);
+    }
+
+    /**
+     * Override send to apply SMTP config, debug redirect, CID logo + update existing log.
      */
     public function send($mailer): ?SentMessage
     {
         $this->resolveSubjectFromEnvelope();
+        $this->applyTemplateSubjectOverride();
         $this->loadSmtpSettings();
         $mailer = $this->buildConfiguredMailer($mailer);
         $this->applyDebugMode();
@@ -57,20 +76,20 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
                 : (string) ($message->getTextBody() ?? '');
         });
 
-        $log = $this->createPendingLog();
+        $log = $this->findOrCreatePendingLog();
 
         try {
             $result = parent::send($mailer);
 
             if ($log) {
-                $this->updateLogBody($log, $capturedBody);
+                $this->updateLogOnSend($log, $capturedBody);
                 app(MailLogService::class)->markSent($log);
             }
 
             return $result;
         } catch (\Throwable $e) {
             if ($log) {
-                $this->updateLogBody($log, $capturedBody);
+                $this->updateLogOnSend($log, $capturedBody);
                 app(MailLogService::class)->markFailed($log, $e->getMessage());
             }
 
@@ -210,11 +229,44 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     }
 
     /**
-     * Create a pending mail log entry.
+     * Create a pending log at queue dispatch time (runs synchronously in the request).
      */
-    private function createPendingLog(): ?MailLog
+    private function createQueuedPendingLog(): void
     {
         try {
+            $this->resolveSubjectFromEnvelope();
+            $this->applyTemplateSubjectOverride();
+
+            $toEmail = $this->getFirstToAddress();
+            $toName = $this->getFirstToName();
+
+            $log = app(MailLogService::class)->create([
+                'user_id'        => $this->findUserId($toEmail),
+                'to_email'       => $toEmail,
+                'to_name'        => $toName,
+                'subject'        => $this->subject ?? '',
+                'body'           => '',
+                'mailable_class' => static::class,
+                'status'         => MailLogStatus::Pending->value,
+            ]);
+
+            $this->pendingMailLogId = $log->id;
+        } catch (\Throwable $e) {
+            Log::error('Queued mail log creation failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Find existing log (created at queue time) or create a new one as fallback.
+     */
+    private function findOrCreatePendingLog(): ?MailLog
+    {
+        try {
+            if ($this->pendingMailLogId !== null) {
+                return MailLog::find($this->pendingMailLogId);
+            }
+
+            // Fallback: create log now (for mails sent synchronously without queue)
             $toEmail = $this->getFirstToAddress();
             $toName = $this->getFirstToName();
 
@@ -237,12 +289,30 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     }
 
     /**
-     * Update log body after message is rendered.
+     * Update log with final send details (body, debug redirect info, subject).
      */
-    private function updateLogBody(MailLog $log, string $body): void
+    private function updateLogOnSend(MailLog $log, string $capturedBody): void
     {
-        if ($body !== '') {
-            $log->updateQuietly(['body' => $body]);
+        $data = [];
+
+        if ($capturedBody !== '') {
+            $data['body'] = $capturedBody;
+        }
+
+        // Update subject (may have changed due to debug mode prefix)
+        if ($this->subject !== null && $this->subject !== '') {
+            $data['subject'] = $this->subject;
+        }
+
+        // Update debug redirect info (only known at send time)
+        if ($this->isDebugRedirect) {
+            $data['to_email'] = $this->getFirstToAddress();
+            $data['original_to_email'] = $this->originalToEmail;
+            $data['is_debug_redirect'] = true;
+        }
+
+        if ($data !== []) {
+            $log->updateQuietly($data);
         }
     }
 
@@ -284,6 +354,22 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
             }
         } catch (\Throwable $e) {
             Log::warning('Subject resolve from envelope failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Override subject from DB mail template settings if available.
+     */
+    private function applyTemplateSubjectOverride(): void
+    {
+        try {
+            $override = app(MailTemplateService::class)->getSubjectByClass(static::class);
+
+            if ($override !== null && $override !== '') {
+                $this->subject = $override;
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Template subject override failed: ' . $e->getMessage());
         }
     }
 
