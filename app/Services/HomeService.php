@@ -60,6 +60,7 @@ final class HomeService
         return Cache::remember('home.popular_works', 300, fn (): Collection =>
             LiteraryWork::whereHas('author', fn ($q) => $q->whereNotNull('username'))
                 ->where('status', LiteraryWorkStatus::Approved)
+                ->where('work_type', LiteraryWorkType::Written)
                 ->with(['category', 'author'])
                 ->orderByDesc('view_count')
                 ->limit($limit)
