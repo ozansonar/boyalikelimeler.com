@@ -112,6 +112,8 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
 
             if ($encryption === 'tls') {
                 $transport->setAutoTls(true);
+            } elseif ($encryption === null) {
+                $transport->setAutoTls(false);
             }
 
             $username = $smtp['username'] ?? '';

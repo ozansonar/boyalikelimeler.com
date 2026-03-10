@@ -143,6 +143,12 @@ class SettingController extends Controller
             'debug_emails' => 'nullable|string|max:1000',
         ]);
 
+        // Keep existing password when field is submitted empty
+        if ($data['password'] === null || $data['password'] === '') {
+            $existing = $this->settingService->getGroup('smtp');
+            $data['password'] = $existing['password'] ?? '';
+        }
+
         if ($request->hasFile('mail_logo')) {
             $request->validate(['mail_logo' => 'image|mimes:png,jpg,jpeg|max:1024']);
             $oldLogo = $this->settingService->getGroup('smtp')['mail_logo'] ?? null;
