@@ -156,10 +156,26 @@
     <!-- Pagination -->
     @if($logs->hasPages())
         <div class="cl-pagination-wrapper mt-4" data-aos="fade-up">
-            <div class="text-muted">
-                Toplam {{ $logs->total() }} kayıttan {{ $logs->firstItem() }}-{{ $logs->lastItem() }} arası gösteriliyor
+            <div class="cl-pagination-info">
+                <span>Toplam <strong>{{ number_format($logs->total()) }}</strong> kayıttan <strong>{{ $logs->firstItem() }}-{{ $logs->lastItem() }}</strong> arası gösteriliyor</span>
             </div>
-            {{ $logs->links() }}
+            <nav class="cl-pagination">
+                @if($logs->onFirstPage())
+                    <button class="cl-page-btn" disabled><i class="bi bi-chevron-left"></i></button>
+                @else
+                    <a href="{{ $logs->previousPageUrl() }}" class="cl-page-btn"><i class="bi bi-chevron-left"></i></a>
+                @endif
+
+                @foreach($logs->getUrlRange(max(1, $logs->currentPage() - 2), min($logs->lastPage(), $logs->currentPage() + 2)) as $page => $url)
+                    <a href="{{ $url }}" class="cl-page-btn {{ $page === $logs->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+                @endforeach
+
+                @if($logs->hasMorePages())
+                    <a href="{{ $logs->nextPageUrl() }}" class="cl-page-btn"><i class="bi bi-chevron-right"></i></a>
+                @else
+                    <button class="cl-page-btn" disabled><i class="bi bi-chevron-right"></i></button>
+                @endif
+            </nav>
         </div>
     @endif
 

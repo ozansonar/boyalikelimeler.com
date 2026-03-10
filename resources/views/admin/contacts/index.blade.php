@@ -181,8 +181,27 @@
             </div>
 
             @if($messages->hasPages())
-                <div class="d-flex justify-content-center p-3">
-                    {{ $messages->links() }}
+                <div class="cl-pagination-wrapper">
+                    <div class="cl-pagination-info">
+                        <span>Toplam <strong>{{ number_format($messages->total()) }}</strong> mesajdan <strong>{{ $messages->firstItem() }}-{{ $messages->lastItem() }}</strong> arası gösteriliyor</span>
+                    </div>
+                    <nav class="cl-pagination">
+                        @if($messages->onFirstPage())
+                            <button class="cl-page-btn" disabled><i class="bi bi-chevron-left"></i></button>
+                        @else
+                            <a href="{{ $messages->previousPageUrl() }}" class="cl-page-btn"><i class="bi bi-chevron-left"></i></a>
+                        @endif
+
+                        @foreach($messages->getUrlRange(max(1, $messages->currentPage() - 2), min($messages->lastPage(), $messages->currentPage() + 2)) as $page => $url)
+                            <a href="{{ $url }}" class="cl-page-btn {{ $page === $messages->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+                        @endforeach
+
+                        @if($messages->hasMorePages())
+                            <a href="{{ $messages->nextPageUrl() }}" class="cl-page-btn"><i class="bi bi-chevron-right"></i></a>
+                        @else
+                            <button class="cl-page-btn" disabled><i class="bi bi-chevron-right"></i></button>
+                        @endif
+                    </nav>
                 </div>
             @endif
         </div>
