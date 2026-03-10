@@ -14573,8 +14573,8 @@ a.page-box-card:hover .page-box-card__link-hint {
 }
 
 .golden-slider__swiper {
-    overflow: visible;
-    padding: 8px 0;
+    overflow: visible !important;
+    padding: 12px 0;
 }
 
 .golden-slider__swiper .swiper-wrapper {
