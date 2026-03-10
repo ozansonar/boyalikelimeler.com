@@ -52,6 +52,8 @@ class PaintersPageController extends Controller
             'featured_painter_ids.*'    => 'integer|exists:users,id',
             'featured_painter_labels'   => 'nullable|array',
             'featured_painter_labels.*' => 'nullable|string|max:150',
+            'golden_brush_title'        => 'nullable|string|max:200',
+            'golden_brush_description'  => 'nullable|string|max:500',
             'painters_list_title'       => 'nullable|string|max:200',
             'meta_title'                => 'nullable|string|max:70',
             'meta_description'          => 'nullable|string|max:170',
