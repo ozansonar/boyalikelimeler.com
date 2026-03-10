@@ -12,7 +12,6 @@ use App\Services\SettingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailer;
 use Illuminate\Mail\SentMessage;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
@@ -89,7 +88,10 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     }
 
     /**
-     * Build a fresh mailer instance with DB SMTP settings (no global config mutation).
+     * Build a fresh mailer instance with DB SMTP settings via Laravel MailManager.
+     *
+     * Uses Laravel's own EsmtpTransportFactory + Dsn internally,
+     * which correctly handles authentication mechanisms and TLS negotiation.
      */
     private function buildConfiguredMailer(object $mailer): object
     {
@@ -100,46 +102,26 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
         }
 
         try {
-            $encSetting = $smtp['encryption'] ?? 'tls';
+            $encryption = $smtp['encryption'] ?? 'tls';
 
-            // ssl → implicit TLS (true), tls → auto-detect/STARTTLS (null), none → plaintext (false)
-            $tls = match ($encSetting) {
-                'ssl'  => true,
-                'tls'  => null,
-                default => false,
-            };
-
-            $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport(
-                $smtp['host'],
-                (int) ($smtp['port'] ?? 587),
-                $tls,
-            );
-
-            if ($encSetting === 'none') {
-                $transport->setAutoTls(false);
-            }
-
-            $username = $smtp['username'] ?? '';
-            $password = $smtp['password'] ?? '';
-
-            if ($username !== '') {
-                $transport->setUsername($username);
-                $transport->setPassword($password);
-            }
+            config([
+                'mail.mailers.db_smtp' => [
+                    'transport'  => 'smtp',
+                    'host'       => $smtp['host'],
+                    'port'       => (int) ($smtp['port'] ?? 587),
+                    'encryption' => $encryption === 'none' ? null : $encryption,
+                    'username'   => $smtp['username'] ?? '',
+                    'password'   => $smtp['password'] ?? '',
+                    'timeout'    => 30,
+                ],
+            ]);
 
             $fromName    = $smtp['from_name'] ?? config('mail.from.name');
             $fromAddress = $smtp['from_email'] ?? config('mail.from.address');
 
             $this->from($fromAddress, $fromName);
 
-            $symfonyMailer = new \Symfony\Component\Mailer\Mailer($transport);
-
-            return new Mailer(
-                'smtp',
-                app('view'),
-                $symfonyMailer,
-                app('events'),
-            );
+            return app('mail')->mailer('db_smtp');
         } catch (\Throwable $e) {
             Log::warning('Custom mailer build failed, using default: ' . $e->getMessage());
 
