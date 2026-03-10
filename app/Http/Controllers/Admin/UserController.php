@@ -59,7 +59,11 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
-        $user->load(['role', 'goldenPenPeriods' => fn ($q) => $q->orderByDesc('ends_at')]);
+        $user->load([
+            'role',
+            'goldenPenPeriods' => fn ($q) => $q->orderByDesc('ends_at'),
+            'goldenBrushPeriods' => fn ($q) => $q->orderByDesc('ends_at'),
+        ]);
 
         return view('admin.users.edit', [
             'user'  => $user,

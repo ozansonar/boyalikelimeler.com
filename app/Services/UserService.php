@@ -19,6 +19,7 @@ final class UserService
 {
     public function __construct(
         private readonly GoldenPenPeriodService $goldenPenPeriodService,
+        private readonly GoldenBrushPeriodService $goldenBrushPeriodService,
     ) {}
     /**
      * @return array<string, int>
@@ -113,6 +114,10 @@ final class UserService
                 $this->goldenPenPeriodService->syncPeriods($user, $data['golden_pen_periods']);
             }
 
+            if (! empty($data['golden_brush_periods'])) {
+                $this->goldenBrushPeriodService->syncPeriods($user, $data['golden_brush_periods']);
+            }
+
             Cache::forget('admin.users.stats');
             Cache::forget('admin.users.role_counts');
 
@@ -140,6 +145,10 @@ final class UserService
                 $this->goldenPenPeriodService->syncPeriods($user, $data['golden_pen_periods'] ?? []);
             }
 
+            if (isset($data['golden_brush_periods_sent'])) {
+                $this->goldenBrushPeriodService->syncPeriods($user, $data['golden_brush_periods'] ?? []);
+            }
+
             Cache::forget('admin.users.stats');
             Cache::forget('admin.users.role_counts');
             Cache::forget('front.authors.stats');
@@ -153,7 +162,11 @@ final class UserService
      */
     public function getProfileData(User $user): array
     {
-        $user->load(['role', 'goldenPenPeriods' => fn ($q) => $q->orderByDesc('ends_at')]);
+        $user->load([
+            'role',
+            'goldenPenPeriods' => fn ($q) => $q->orderByDesc('ends_at'),
+            'goldenBrushPeriods' => fn ($q) => $q->orderByDesc('ends_at'),
+        ]);
 
         $posts = Post::where('user_id', $user->id)
             ->with('category')
@@ -197,16 +210,18 @@ final class UserService
               ->orWhere('email', $user->email);
         })->count();
         $goldenPenCount = $user->goldenPenPeriods->count();
+        $goldenBrushCount = $user->goldenBrushPeriods->count();
 
         return [
-            'user'             => $user,
-            'posts'            => $posts,
-            'literaryWorks'    => $literaryWorks,
-            'comments'         => $comments,
-            'postStats'        => $postStats,
+            'user'              => $user,
+            'posts'             => $posts,
+            'literaryWorks'     => $literaryWorks,
+            'comments'          => $comments,
+            'postStats'         => $postStats,
             'literaryWorkStats' => $literaryWorkStats,
-            'commentCount'     => $commentCount,
-            'goldenPenCount'   => $goldenPenCount,
+            'commentCount'      => $commentCount,
+            'goldenPenCount'    => $goldenPenCount,
+            'goldenBrushCount'  => $goldenBrushCount,
         ];
     }
 

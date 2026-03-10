@@ -24,6 +24,9 @@
         <a href="#section-golden-pen" class="stg-nav-item" id="goldenPenNavItem" onclick="scrollToSection('section-golden-pen', this)" {!! !$isYazar ? 'style="display:none"' : '' !!}>
             <i class="bi bi-pen"></i> Altın Kalem
         </a>
+        <a href="#section-golden-brush" class="stg-nav-item" id="goldenBrushNavItem" onclick="scrollToSection('section-golden-brush', this)" {!! !$isYazar ? 'style="display:none"' : '' !!}>
+            <i class="bi bi-brush"></i> Altın Fırça
+        </a>
     </div>
 
     <!-- Mobile Nav -->
@@ -33,6 +36,7 @@
             <option value="section-account">Hesap Bilgileri</option>
             <option value="section-role">Rol & Yetki</option>
             <option value="section-golden-pen" id="goldenPenMobileOption" {!! !$isYazar ? 'style="display:none"' : '' !!}>Altın Kalem</option>
+            <option value="section-golden-brush" id="goldenBrushMobileOption" {!! !$isYazar ? 'style="display:none"' : '' !!}>Altın Fırça</option>
         </select>
     </div>
 
@@ -302,6 +306,101 @@
 
                 <div class="mt-3">
                     <button type="button" class="btn-glass" id="btnAddGoldenPenPeriod" onclick="addGoldenPenPeriod()">
+                        <i class="bi bi-plus-lg me-1"></i>Yeni Dönem Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==================== SECTION 5: GOLDEN BRUSH ==================== -->
+        <div class="card-dark mb-4" id="section-golden-brush" data-aos="fade-up" data-aos-delay="50" {!! !$isYazar ? 'style="display:none"' : '' !!}>
+            <div class="card-header-custom">
+                <div class="form-section-header mb-0">
+                    <div class="form-section-icon"><i class="bi bi-brush-fill"></i></div>
+                    <div>
+                        <h6 class="mb-0">Altın Fırça Dönemleri</h6>
+                        <small class="text-muted">Yazara birden fazla altın fırça dönemi tanımlayabilirsiniz</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body-custom">
+                @if($isEdit && $user->hasActiveGoldenBrush())
+                    <div class="uf-golden-pen-status uf-golden-pen-active mb-3">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Altın Fırça unvanı şu an <strong>aktif</strong>.</span>
+                    </div>
+                @endif
+
+                <div class="uf-info-box mb-3">
+                    <i class="bi bi-info-circle-fill text-neon-blue"></i>
+                    <span>Birden fazla dönem ekleyerek yazarın altın fırça tarihçesini yönetebilirsiniz.</span>
+                </div>
+
+                {{-- Ensure key is always sent even when all periods are removed --}}
+                <input type="hidden" name="golden_brush_periods_sent" value="1">
+
+                <div id="goldenBrushPeriodsContainer">
+                    @php
+                        $brushPeriods = old('golden_brush_periods', ($isEdit && $user->goldenBrushPeriods) ? $user->goldenBrushPeriods->map(fn($p) => [
+                            'starts_at' => $p->starts_at->format('Y-m-d'),
+                            'ends_at' => $p->ends_at->format('Y-m-d'),
+                            'note' => $p->note,
+                        ])->toArray() : []);
+                    @endphp
+
+                    @forelse($brushPeriods as $index => $period)
+                        <div class="uf-period-row" data-brush-period-index="{{ $index }}">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-sm-6">
+                                    <label class="stg-label">Başlangıç <span class="text-neon-red">*</span></label>
+                                    <div class="stg-input-group">
+                                        <span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>
+                                        <input type="date" class="stg-input"
+                                               name="golden_brush_periods[{{ $index }}][starts_at]"
+                                               value="{{ $period['starts_at'] ?? '' }}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="stg-label">Bitiş <span class="text-neon-red">*</span></label>
+                                    <div class="stg-input-group">
+                                        <span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>
+                                        <input type="date" class="stg-input"
+                                               name="golden_brush_periods[{{ $index }}][ends_at]"
+                                               value="{{ $period['ends_at'] ?? '' }}">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label class="stg-label">Not</label>
+                                    <input type="text" class="stg-input"
+                                           name="golden_brush_periods[{{ $index }}][note]"
+                                           value="{{ $period['note'] ?? '' }}"
+                                           placeholder="Opsiyonel not...">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn-glass btn-sm text-neon-red" onclick="removeGoldenBrushPeriod(this)" title="Dönemi sil">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        {{-- No periods yet --}}
+                    @endforelse
+                </div>
+
+                @error('golden_brush_periods')
+                    <small class="text-neon-red">{{ $message }}</small>
+                @enderror
+                @error('golden_brush_periods.*.starts_at')
+                    <small class="text-neon-red">{{ $message }}</small>
+                @enderror
+                @error('golden_brush_periods.*.ends_at')
+                    <small class="text-neon-red">{{ $message }}</small>
+                @enderror
+
+                <div class="mt-3">
+                    <button type="button" class="btn-glass" id="btnAddGoldenBrushPeriod" onclick="addGoldenBrushPeriod()">
                         <i class="bi bi-plus-lg me-1"></i>Yeni Dönem Ekle
                     </button>
                 </div>

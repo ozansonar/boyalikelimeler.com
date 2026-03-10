@@ -104,6 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(GoldenPenPeriod::class);
     }
 
+    public function goldenBrushPeriods(): HasMany
+    {
+        return $this->hasMany(GoldenBrushPeriod::class);
+    }
+
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
@@ -119,6 +124,16 @@ class User extends Authenticatable implements MustVerifyEmail
         $today = now()->toDateString();
 
         return $this->hasOne(GoldenPenPeriod::class)
+            ->where('starts_at', '<=', $today)
+            ->where('ends_at', '>=', $today)
+            ->latest('ends_at');
+    }
+
+    public function activeGoldenBrushPeriod(): HasOne
+    {
+        $today = now()->toDateString();
+
+        return $this->hasOne(GoldenBrushPeriod::class)
             ->where('starts_at', '<=', $today)
             ->where('ends_at', '>=', $today)
             ->latest('ends_at');
@@ -160,6 +175,27 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $this->goldenPenPeriods()
+            ->where('starts_at', '<=', now())
+            ->where('ends_at', '>=', now())
+            ->exists();
+    }
+
+    public function hasActiveGoldenBrush(): bool
+    {
+        if ($this->relationLoaded('activeGoldenBrushPeriod')) {
+            return $this->activeGoldenBrushPeriod !== null;
+        }
+
+        if ($this->relationLoaded('goldenBrushPeriods')) {
+            $today = now()->toDateString();
+
+            return $this->goldenBrushPeriods->contains(function (GoldenBrushPeriod $period) use ($today): bool {
+                return $period->starts_at?->toDateString() <= $today
+                    && $period->ends_at?->toDateString() >= $today;
+            });
+        }
+
+        return $this->goldenBrushPeriods()
             ->where('starts_at', '<=', now())
             ->where('ends_at', '>=', now())
             ->exists();
