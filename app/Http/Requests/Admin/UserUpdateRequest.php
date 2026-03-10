@@ -30,6 +30,11 @@ class UserUpdateRequest extends FormRequest
             'golden_pen_periods.*.starts_at'  => ['required', 'date'],
             'golden_pen_periods.*.ends_at'    => ['required', 'date', 'after_or_equal:golden_pen_periods.*.starts_at'],
             'golden_pen_periods.*.note'       => ['nullable', 'string', 'max:500'],
+            'golden_brush_periods_sent'          => ['nullable'],
+            'golden_brush_periods'               => ['nullable', 'array'],
+            'golden_brush_periods.*.starts_at'   => ['required', 'date'],
+            'golden_brush_periods.*.ends_at'     => ['required', 'date', 'after_or_equal:golden_brush_periods.*.starts_at'],
+            'golden_brush_periods.*.note'        => ['nullable', 'string', 'max:500'],
         ];
     }
 
@@ -52,6 +57,11 @@ class UserUpdateRequest extends FormRequest
             'golden_pen_periods.*.ends_at.required'    => 'Dönem bitiş tarihi zorunludur.',
             'golden_pen_periods.*.ends_at.date'        => 'Geçerli bir bitiş tarihi giriniz.',
             'golden_pen_periods.*.ends_at.after_or_equal' => 'Bitiş tarihi başlangıç tarihinden önce olamaz.',
+            'golden_brush_periods.*.starts_at.required'    => 'Altın Fırça dönem başlangıç tarihi zorunludur.',
+            'golden_brush_periods.*.starts_at.date'        => 'Geçerli bir başlangıç tarihi giriniz.',
+            'golden_brush_periods.*.ends_at.required'      => 'Altın Fırça dönem bitiş tarihi zorunludur.',
+            'golden_brush_periods.*.ends_at.date'          => 'Geçerli bir bitiş tarihi giriniz.',
+            'golden_brush_periods.*.ends_at.after_or_equal' => 'Bitiş tarihi başlangıç tarihinden önce olamaz.',
         ];
     }
 }

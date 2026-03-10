@@ -34,6 +34,19 @@ function toggleGoldenPenSection(isYazar) {
     if (section) section.style.display = isYazar ? '' : 'none';
     if (navItem) navItem.style.display = isYazar ? '' : 'none';
     if (mobileOption) mobileOption.style.display = isYazar ? '' : 'none';
+
+    toggleGoldenBrushSection(isYazar);
+}
+
+/* -- Golden Brush Section Visibility -- */
+function toggleGoldenBrushSection(isYazar) {
+    var section = document.getElementById('section-golden-brush');
+    var navItem = document.getElementById('goldenBrushNavItem');
+    var mobileOption = document.getElementById('goldenBrushMobileOption');
+
+    if (section) section.style.display = isYazar ? '' : 'none';
+    if (navItem) navItem.style.display = isYazar ? '' : 'none';
+    if (mobileOption) mobileOption.style.display = isYazar ? '' : 'none';
 }
 
 /* -- Golden Pen Periods Management -- */
@@ -87,6 +100,57 @@ function removeGoldenPenPeriod(btn) {
     if (row) row.remove();
 }
 
+/* -- Golden Brush Periods Management -- */
+var goldenBrushPeriodIndex = 0;
+
+function initGoldenBrushPeriodIndex() {
+    var rows = document.querySelectorAll('[data-brush-period-index]');
+    goldenBrushPeriodIndex = rows.length;
+}
+
+function addGoldenBrushPeriod() {
+    var container = document.getElementById('goldenBrushPeriodsContainer');
+    if (!container) return;
+
+    var row = document.createElement('div');
+    row.className = 'uf-period-row';
+    row.setAttribute('data-brush-period-index', goldenBrushPeriodIndex);
+    row.innerHTML =
+        '<div class="row g-3 align-items-end">' +
+            '<div class="col-sm-6">' +
+                '<label class="stg-label">Başlangıç <span class="text-neon-red">*</span></label>' +
+                '<div class="stg-input-group">' +
+                    '<span class="stg-input-prefix"><i class="bi bi-calendar-event"></i></span>' +
+                    '<input type="date" class="stg-input" name="golden_brush_periods[' + goldenBrushPeriodIndex + '][starts_at]" value="">' +
+                '</div>' +
+            '</div>' +
+            '<div class="col-sm-6">' +
+                '<label class="stg-label">Bitiş <span class="text-neon-red">*</span></label>' +
+                '<div class="stg-input-group">' +
+                    '<span class="stg-input-prefix"><i class="bi bi-calendar-check"></i></span>' +
+                    '<input type="date" class="stg-input" name="golden_brush_periods[' + goldenBrushPeriodIndex + '][ends_at]" value="">' +
+                '</div>' +
+            '</div>' +
+            '<div class="col">' +
+                '<label class="stg-label">Not</label>' +
+                '<input type="text" class="stg-input" name="golden_brush_periods[' + goldenBrushPeriodIndex + '][note]" value="" placeholder="Opsiyonel not...">' +
+            '</div>' +
+            '<div class="col-auto">' +
+                '<button type="button" class="btn-glass btn-sm text-neon-red" onclick="removeGoldenBrushPeriod(this)" title="Dönemi sil">' +
+                    '<i class="bi bi-trash"></i>' +
+                '</button>' +
+            '</div>' +
+        '</div>';
+
+    container.appendChild(row);
+    goldenBrushPeriodIndex++;
+}
+
+function removeGoldenBrushPeriod(btn) {
+    var row = btn.closest('.uf-period-row');
+    if (row) row.remove();
+}
+
 /* -- Role Card Click -- */
 function initRoleCards() {
     var roleCards = document.querySelectorAll('.uf-role-card[data-role-id]');
@@ -126,6 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     initRoleCards();
     initGoldenPenPeriodIndex();
+    initGoldenBrushPeriodIndex();
 
     /* Password strength */
     var passwordInput = document.getElementById('password');
