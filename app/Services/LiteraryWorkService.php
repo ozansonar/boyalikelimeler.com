@@ -580,6 +580,10 @@ final class LiteraryWorkService
             ->where('status', LiteraryWorkStatus::Approved)
             ->whereNotNull('published_at');
 
+        if (! empty($filters['work_type'])) {
+            $query->where('work_type', $filters['work_type']);
+        }
+
         if (! empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search): void {
@@ -659,6 +663,26 @@ final class LiteraryWorkService
         });
     }
 
+    // ─── Front: Stats by work type ───
+
+    /**
+     * @return array{work_count: int, author_count: int, total_views: int}
+     */
+    public function getPublishedStatsByType(string $workType): array
+    {
+        return Cache::remember("literary_works.front_stats.{$workType}", 300, function () use ($workType): array {
+            $base = LiteraryWork::whereHas('author')
+                ->where('status', LiteraryWorkStatus::Approved)
+                ->where('work_type', $workType);
+
+            return [
+                'work_count'   => (clone $base)->count(),
+                'author_count' => (clone $base)->distinct('user_id')->count('user_id'),
+                'total_views'  => (int) (clone $base)->sum('view_count'),
+            ];
+        });
+    }
+
     // ─── Cache ───
 
     private function clearCache(): void
@@ -668,5 +692,7 @@ final class LiteraryWorkService
         Cache::forget('literary_works.admin_stats.visual');
         Cache::forget('literary_works.pending_count');
         Cache::forget('literary_works.front_stats');
+        Cache::forget('literary_works.front_stats.written');
+        Cache::forget('literary_works.front_stats.visual');
     }
 }
