@@ -243,11 +243,11 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy')->middleware('permission:mail-logs.delete');
 
     // Mail Templates (Mail Şablonları)
-    Route::middleware('permission:settings.view')->group(function () {
+    Route::middleware('permission:mail-templates.view')->group(function () {
         Route::get('mail-templates', [MailTemplateController::class, 'index'])->name('mail-templates.index');
         Route::get('mail-templates/{mailTemplate}/edit', [MailTemplateController::class, 'edit'])->name('mail-templates.edit');
     });
-    Route::middleware('permission:settings.edit')->group(function () {
+    Route::middleware('permission:mail-templates.edit')->group(function () {
         Route::get('mail-templates/reset-all', [MailTemplateController::class, 'resetAll'])->name('mail-templates.reset-all');
         Route::put('mail-templates/{mailTemplate}', [MailTemplateController::class, 'update'])->name('mail-templates.update');
         Route::get('mail-templates/{mailTemplate}/reset', [MailTemplateController::class, 'reset'])->name('mail-templates.reset');

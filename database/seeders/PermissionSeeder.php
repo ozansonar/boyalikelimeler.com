@@ -95,6 +95,10 @@ class PermissionSeeder extends Seeder
             // Mail Logları
             ['name' => 'Mail Loglarını Görüntüle', 'slug' => 'mail-logs.view', 'group' => 'mail-logs', 'sort_order' => 130],
             ['name' => 'Mail Logu Sil', 'slug' => 'mail-logs.delete', 'group' => 'mail-logs', 'sort_order' => 131],
+
+            // Mail Şablonları
+            ['name' => 'Mail Şablonlarını Görüntüle', 'slug' => 'mail-templates.view', 'group' => 'mail-templates', 'sort_order' => 135],
+            ['name' => 'Mail Şablonu Düzenle', 'slug' => 'mail-templates.edit', 'group' => 'mail-templates', 'sort_order' => 136],
         ];
 
         foreach ($permissions as $permission) {
