@@ -54,10 +54,6 @@
                     <i class="bi bi-palette"></i>
                     <div><span>Mail Teması</span><small>Renk, footer & sosyal medya</small></div>
                 </a>
-                <a href="{{ route('admin.mail-templates.index') }}" class="stg-nav-item">
-                    <i class="bi bi-envelope-paper"></i>
-                    <div><span>Mail Şablonları</span><small>Konu & gövde düzenleme</small></div>
-                </a>
                 <a href="#stg-maintenance" class="stg-nav-item {{ ($tab ?? '') === 'maintenance' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-maintenance')">
                     <i class="bi bi-tools"></i>
                     <div><span>Bakım Modu</span><small>Planlı bakım & sistem durumu</small></div>

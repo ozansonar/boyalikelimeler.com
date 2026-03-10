@@ -131,7 +131,7 @@
 @endpush
 
 @push('scripts')
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="{{ asset('vendor/tinymce/7.6.1/tinymce.min.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     tinymce.init({
@@ -140,22 +140,21 @@ document.addEventListener('DOMContentLoaded', function() {
         menubar: true,
         skin: 'oxide-dark',
         content_css: 'dark',
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'charmap',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'table', 'preview', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link | code | help',
+        plugins: 'advlist autolink lists link charmap anchor searchreplace visualblocks code fullscreen insertdatetime table preview help wordcount',
+        toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link | code fullscreen | help',
         content_style: 'body { font-family: Inter, sans-serif; font-size: 14px; color: #f5f5f0; background: #1a1a1e; } a.button { display: inline-block; padding: 10px 24px; background: #D4AF37; color: #0f0f12; text-decoration: none; border-radius: 6px; font-weight: 600; } blockquote { border-left: 3px solid #D4AF37; padding-left: 12px; margin: 12px 0; color: #9B9EA3; }',
+        branding: false,
+        promotion: false,
+        relative_urls: false,
+        remove_script_host: false,
+        convert_urls: false,
+        entity_encoding: 'raw',
+        license_key: 'gpl',
         setup: function(editor) {
             editor.on('change', function() {
                 editor.save();
             });
-        },
-        language: 'tr',
-        branding: false,
-        promotion: false,
-        license_key: 'gpl'
+        }
     });
 
     // Variable insert buttons
