@@ -355,7 +355,7 @@
                             <i class="fa-solid fa-fire me-2"></i>En Çok Okunanlar
                         </h3>
                         @forelse($popularWorks as $index => $popular)
-                            <a href="#" class="popular-list__item">
+                            <a href="{{ route('literary-works.show', $popular->slug) }}" class="popular-list__item">
                                 <span class="popular-list__rank">{{ $index + 1 }}</span>
                                 <div class="popular-list__content">
                                     <span class="popular-list__name">{{ $popular->title }}</span>
