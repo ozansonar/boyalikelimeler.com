@@ -202,7 +202,6 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::get('settings/remove-mail-logo', [SettingController::class, 'removeMailLogo'])->name('settings.remove-mail-logo');
         Route::get('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
         Route::post('settings/send-test-mail', [SettingController::class, 'sendTestMail'])->name('settings.send-test-mail');
-        Route::get('settings/debug-smtp', [SettingController::class, 'debugSmtp'])->name('settings.debug-smtp');
     });
 
     // Comment Management

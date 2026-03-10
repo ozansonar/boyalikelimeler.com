@@ -26,7 +26,10 @@ class TestMail extends BaseMailable
     public function content(): Content
     {
         return new Content(
-            htmlString: $this->mailBody,
+            markdown: 'emails.test',
+            with: [
+                'body' => $this->mailBody,
+            ],
         );
     }
 }
