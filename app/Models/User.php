@@ -51,6 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'show_email',
         'show_last_seen',
         'allow_messages',
+        'notify_comment_approved',
+        'notify_work_status',
+        'notify_new_comment',
     ];
 
     protected $hidden = [
@@ -66,10 +69,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'birthdate'         => 'date',
             'interests'         => 'array',
             'gender'               => Gender::class,
-            'is_public'            => 'boolean',
-            'show_email'           => 'boolean',
-            'show_last_seen'       => 'boolean',
-            'allow_messages'       => 'boolean',
+            'is_public'               => 'boolean',
+            'show_email'              => 'boolean',
+            'show_last_seen'          => 'boolean',
+            'allow_messages'          => 'boolean',
+            'notify_comment_approved' => 'boolean',
+            'notify_work_status'      => 'boolean',
+            'notify_new_comment'      => 'boolean',
         ];
     }
 
@@ -157,6 +163,21 @@ class User extends Authenticatable implements MustVerifyEmail
             ->where('starts_at', '<=', now())
             ->where('ends_at', '>=', now())
             ->exists();
+    }
+
+    /**
+     * Check if user wants to receive a specific mail notification type.
+     *
+     * Supported types: comment_approved, work_status, new_comment
+     */
+    public function wantsMailNotification(string $type): bool
+    {
+        return match ($type) {
+            'comment_approved' => $this->notify_comment_approved,
+            'work_status'      => $this->notify_work_status,
+            'new_comment'      => $this->notify_new_comment,
+            default            => true,
+        };
     }
 
     public function getAvatarUrlAttribute(): ?string

@@ -47,6 +47,24 @@ class MailLogController extends Controller
         ]);
     }
 
+    public function resend(MailLog $mailLog): RedirectResponse
+    {
+        if (!$mailLog->body) {
+            return redirect()->route('admin.mail-logs.show', $mailLog)
+                ->with('error', 'Bu mailin içeriği kayıtlı değil, yeniden gönderilemez.');
+        }
+
+        $newLog = $this->mailLogService->resend($mailLog);
+
+        if ($newLog->isSent()) {
+            return redirect()->route('admin.mail-logs.show', $newLog)
+                ->with('success', 'Mail başarıyla yeniden gönderildi.');
+        }
+
+        return redirect()->route('admin.mail-logs.show', $newLog)
+            ->with('error', 'Mail gönderilemedi: ' . ($newLog->error_message ?? 'Bilinmeyen hata'));
+    }
+
     public function destroy(MailLog $mailLog): RedirectResponse
     {
         $this->mailLogService->delete($mailLog);

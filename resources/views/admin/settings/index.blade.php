@@ -54,6 +54,10 @@
                     <i class="bi bi-palette"></i>
                     <div><span>Mail Teması</span><small>Renk, footer & sosyal medya</small></div>
                 </a>
+                <a href="#stg-mail-templates" class="stg-nav-item {{ ($tab ?? '') === 'mail_templates' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-mail-templates')">
+                    <i class="bi bi-envelope-paper"></i>
+                    <div><span>Mail Şablonları</span><small>E-posta konu satırları</small></div>
+                </a>
                 <a href="#stg-maintenance" class="stg-nav-item {{ ($tab ?? '') === 'maintenance' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-maintenance')">
                     <i class="bi bi-tools"></i>
                     <div><span>Bakım Modu</span><small>Planlı bakım & sistem durumu</small></div>
@@ -71,6 +75,7 @@
                 <option value="stg-seo" {{ ($tab ?? '') === 'seo' ? 'selected' : '' }}>SEO</option>
                 <option value="stg-email" {{ ($tab ?? '') === 'smtp' ? 'selected' : '' }}>E-posta (SMTP)</option>
                 <option value="stg-mail-theme" {{ ($tab ?? '') === 'mail_theme' ? 'selected' : '' }}>Mail Teması</option>
+                <option value="stg-mail-templates" {{ ($tab ?? '') === 'mail_templates' ? 'selected' : '' }}>Mail Şablonları</option>
                 <option value="stg-maintenance" {{ ($tab ?? '') === 'maintenance' ? 'selected' : '' }}>Bakım Modu</option>
             </select>
         </div>
@@ -733,7 +738,80 @@
                 </form>
             </div>
 
-            {{-- ==================== 7. BAKIM MODU ==================== --}}
+            {{-- ==================== 7. MAIL ŞABLONLARI ==================== --}}
+            <div class="stg-panel {{ ($tab ?? '') === 'mail_templates' ? 'active' : '' }}" id="stg-mail-templates">
+                <form action="{{ route('admin.settings.update.mail-templates') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="stg-panel-header">
+                        <div>
+                            <h5><i class="bi bi-envelope-paper"></i> Mail Şablonları</h5>
+                            <p>E-posta konu satırlarını özelleştirin</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.settings.reset-mail-templates') }}" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="return confirm('Tüm konu satırları varsayılan değerlere sıfırlanacak. Emin misiniz?')">
+                                <i class="bi bi-arrow-counterclockwise"></i> Varsayılana Dön
+                            </a>
+                            <button type="submit" class="stg-save-btn"><i class="bi bi-check-lg"></i> Kaydet</button>
+                        </div>
+                    </div>
+
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Kimlik Doğrulama Mailleri</h6>
+                            <p>Kayıt, doğrulama ve şifre sıfırlama mailleri</p>
+                        </div>
+
+                        @foreach(['verify_email', 'reset_password', 'new_user_registered'] as $tplKey)
+                            <div class="stg-field">
+                                <label class="stg-label">{{ $mailTemplates[$tplKey]['description'] }}</label>
+                                <input type="text" name="templates[{{ $tplKey }}]" class="stg-input"
+                                       value="{{ old('templates.' . $tplKey, $mailTemplates[$tplKey]['subject']) }}"
+                                       placeholder="{{ $mailTemplates[$tplKey]['default_subject'] }}">
+                                <small class="stg-hint">Varsayılan: {{ $mailTemplates[$tplKey]['default_subject'] }}</small>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Yorum Mailleri</h6>
+                            <p>Yorum bildirimi mailleri</p>
+                        </div>
+
+                        @foreach(['comment_approved', 'new_comment'] as $tplKey)
+                            <div class="stg-field">
+                                <label class="stg-label">{{ $mailTemplates[$tplKey]['description'] }}</label>
+                                <input type="text" name="templates[{{ $tplKey }}]" class="stg-input"
+                                       value="{{ old('templates.' . $tplKey, $mailTemplates[$tplKey]['subject']) }}"
+                                       placeholder="{{ $mailTemplates[$tplKey]['default_subject'] }}">
+                                <small class="stg-hint">Varsayılan: {{ $mailTemplates[$tplKey]['default_subject'] }}</small>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Edebiyat Eseri Mailleri</h6>
+                            <p>Eser gönderim, onay, ret ve revize bildirimleri</p>
+                        </div>
+
+                        @foreach(['literary_work_submitted', 'literary_work_approved', 'literary_work_rejected', 'literary_work_revision_requested', 'literary_work_revised', 'literary_work_updated'] as $tplKey)
+                            <div class="stg-field">
+                                <label class="stg-label">{{ $mailTemplates[$tplKey]['description'] }}</label>
+                                <input type="text" name="templates[{{ $tplKey }}]" class="stg-input"
+                                       value="{{ old('templates.' . $tplKey, $mailTemplates[$tplKey]['subject']) }}"
+                                       placeholder="{{ $mailTemplates[$tplKey]['default_subject'] }}">
+                                <small class="stg-hint">Varsayılan: {{ $mailTemplates[$tplKey]['default_subject'] }}</small>
+                            </div>
+                        @endforeach
+                    </div>
+
+                </form>
+            </div>
+
+            {{-- ==================== 8. BAKIM MODU ==================== --}}
             <div class="stg-panel {{ ($tab ?? '') === 'maintenance' ? 'active' : '' }}" id="stg-maintenance">
                 <form action="{{ route('admin.settings.update.maintenance') }}" method="POST">
                     @csrf

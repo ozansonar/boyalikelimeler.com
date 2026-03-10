@@ -8,6 +8,7 @@ use App\Enums\MailLogStatus;
 use App\Models\MailLog;
 use App\Models\User;
 use App\Services\MailLogService;
+use App\Services\MailTemplateService;
 use App\Services\SettingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,6 +44,7 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     public function send($mailer): ?SentMessage
     {
         $this->resolveSubjectFromEnvelope();
+        $this->applyTemplateSubjectOverride();
         $this->loadSmtpSettings();
         $mailer = $this->buildConfiguredMailer($mailer);
         $this->applyDebugMode();
@@ -284,6 +286,22 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
             }
         } catch (\Throwable $e) {
             Log::warning('Subject resolve from envelope failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Override subject from DB mail template settings if available.
+     */
+    private function applyTemplateSubjectOverride(): void
+    {
+        try {
+            $override = app(MailTemplateService::class)->getSubjectByClass(static::class);
+
+            if ($override !== null && $override !== '') {
+                $this->subject = $override;
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Template subject override failed: ' . $e->getMessage());
         }
     }
 

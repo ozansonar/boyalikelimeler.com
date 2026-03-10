@@ -8,6 +8,7 @@ use App\Enums\MailLogStatus;
 use App\Models\MailLog;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 final class MailLogService
 {
@@ -97,6 +98,41 @@ final class MailLogService
             'error_message' => $error,
         ]);
         $this->clearCache();
+    }
+
+    /**
+     * Resend an email using the stored HTML body from the log.
+     */
+    public function resend(MailLog $log): MailLog
+    {
+        $newLog = $this->create([
+            'user_id'        => $log->user_id,
+            'to_email'       => $log->original_to_email ?: $log->to_email,
+            'to_name'        => $log->to_name,
+            'subject'        => $log->subject,
+            'body'           => $log->body,
+            'mailable_class' => $log->mailable_class,
+            'status'         => MailLogStatus::Pending->value,
+        ]);
+
+        try {
+            $settingService = app(SettingService::class);
+            $smtp = $settingService->getGroup('smtp');
+            $fromEmail = $smtp['from_email'] ?? config('mail.from.address');
+            $fromName = $smtp['from_name'] ?? config('mail.from.name');
+
+            Mail::html($log->body ?? '', function ($message) use ($newLog, $fromEmail, $fromName): void {
+                $message->to($newLog->to_email, $newLog->to_name)
+                    ->from($fromEmail, $fromName)
+                    ->subject($newLog->subject ?? '(Konu yok)');
+            });
+
+            $this->markSent($newLog);
+        } catch (\Throwable $e) {
+            $this->markFailed($newLog, $e->getMessage());
+        }
+
+        return $newLog;
     }
 
     public function delete(MailLog $log): void
