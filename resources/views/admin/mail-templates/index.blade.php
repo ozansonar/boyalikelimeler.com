@@ -6,13 +6,18 @@
 
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-3" data-aos="fade-down" data-aos-duration="400">
-        <ol class="breadcrumb">
-            <li><a href="{{ route('admin.dashboard') }}" class="breadcrumb-link"><i class="bi bi-house"></i> Ana Sayfa</a></li>
+        <ol class="breadcrumb breadcrumb-reset fs-13">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="breadcrumb-link"><i class="bi bi-house me-1"></i>Ana Sayfa</a></li>
             <li class="breadcrumb-item active text-teal">Mail Şablonları</li>
         </ol>
     </nav>
 
-    <x-admin.page-header title="Mail Şablonları" subtitle="E-posta konu ve gövde içeriklerini yönetin, değişkenleri istediğiniz yere yerleştirin" />
+    <x-admin.page-header title="Mail Şablonları" subtitle="E-posta konu ve gövde içeriklerini yönetin, değişkenleri istediğiniz yere yerleştirin">
+        <a href="{{ route('admin.mail-templates.reset-all') }}" class="btn-glass"
+           onclick="return confirm('Tüm şablonlar varsayılan değerlere sıfırlanacak. Emin misiniz?')">
+            <i class="bi bi-arrow-counterclockwise me-1"></i>Tümünü Sıfırla
+        </a>
+    </x-admin.page-header>
 
     <!-- Stat Cards -->
     <div class="row g-4 mb-4">
@@ -21,71 +26,58 @@
         <x-admin.stat-card color="orange" icon="bi-pencil-fill" label="Özelleştirilmiş" :count="$stats['customized']" :delay="200" />
     </div>
 
-    <!-- Toolbar -->
-    <div class="cl-toolbar mb-4" data-aos="fade-up" data-aos-delay="50">
-        <div class="d-flex justify-content-end w-100">
-            <a href="{{ route('admin.mail-templates.reset-all') }}" class="btn btn-outline-warning btn-sm"
-               onclick="return confirm('Tüm şablonlar varsayılan değerlere sıfırlanacak. Emin misiniz?')">
-                <i class="bi bi-arrow-counterclockwise"></i> Tümünü Sıfırla
-            </a>
-        </div>
-    </div>
-
     <!-- Templates Table -->
-    <div class="cl-table-card" data-aos="fade-up" data-aos-delay="100">
-        <div class="table-responsive">
-            <table class="table cl-table mb-0">
-                <thead>
-                    <tr>
-                        <th>Şablon</th>
-                        <th>Konu</th>
-                        <th>Durum</th>
-                        <th>Özelleştirilmiş</th>
-                        <th class="text-end">İşlem</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($templates as $template)
+    <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="card-body-custom p-0">
+            <div class="table-responsive">
+                <table class="table table-hover cl-table mb-0">
+                    <thead>
                         <tr>
-                            <td>
-                                <div class="fw-semibold">{{ $template->description }}</div>
-                                <small class="text-muted">{{ $template->key }}</small>
-                            </td>
-                            <td>
-                                <span class="text-truncate d-inline-block" title="{{ $template->subject }}">
-                                    {{ \Illuminate\Support\Str::limit($template->subject, 50) }}
-                                </span>
-                            </td>
-                            <td>
-                                @if($template->is_active)
-                                    <span class="badge bg-success">Aktif</span>
-                                @else
-                                    <span class="badge bg-secondary">Pasif</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if($template->hasCustomSubject() || $template->hasCustomBody())
-                                    <span class="badge bg-warning text-dark">Düzenlenmiş</span>
-                                @else
-                                    <span class="badge bg-dark">Varsayılan</span>
-                                @endif
-                            </td>
-                            <td class="text-end">
-                                <a href="{{ route('admin.mail-templates.edit', $template) }}" class="btn btn-sm btn-outline-info" title="Düzenle">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                            </td>
+                            <th>Şablon</th>
+                            <th>Konu</th>
+                            <th>Durum</th>
+                            <th>Özelleştirilmiş</th>
+                            <th class="cl-th-actions">İşlem</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
-                                <i class="bi bi-envelope-x fs-1 d-block mb-2"></i>
-                                Henüz mail şablonu bulunamadı. Lütfen seeder'ı çalıştırın.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @forelse($templates as $template)
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">{{ $template->description }}</div>
+                                    <small class="text-muted">{{ $template->key }}</small>
+                                </td>
+                                <td>
+                                    <span class="text-truncate d-inline-block" title="{{ $template->subject }}">
+                                        {{ \Illuminate\Support\Str::limit($template->subject, 50) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($template->is_active)
+                                        <span class="badge bg-success">Aktif</span>
+                                    @else
+                                        <span class="badge bg-secondary">Pasif</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($template->hasCustomSubject() || $template->hasCustomBody())
+                                        <span class="badge bg-warning text-dark">Düzenlenmiş</span>
+                                    @else
+                                        <span class="badge bg-dark">Varsayılan</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="usr-actions">
+                                        <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.mail-templates.edit', $template) }}"><i class="bi bi-pencil"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <x-admin.table-empty :colspan="5" icon="bi-envelope-x" message="Henüz mail şablonu bulunamadı." />
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
