@@ -50,6 +50,10 @@
                     <i class="bi bi-envelope-at"></i>
                     <div><span>E-posta (SMTP)</span><small>Sunucu yapılandırması</small></div>
                 </a>
+                <a href="#stg-mail-theme" class="stg-nav-item {{ ($tab ?? '') === 'mail_theme' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-mail-theme')">
+                    <i class="bi bi-palette"></i>
+                    <div><span>Mail Teması</span><small>Renk, footer & sosyal medya</small></div>
+                </a>
                 <a href="#stg-maintenance" class="stg-nav-item {{ ($tab ?? '') === 'maintenance' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-maintenance')">
                     <i class="bi bi-tools"></i>
                     <div><span>Bakım Modu</span><small>Planlı bakım & sistem durumu</small></div>
@@ -66,6 +70,7 @@
                 <option value="stg-social" {{ ($tab ?? '') === 'social' ? 'selected' : '' }}>Sosyal Medya</option>
                 <option value="stg-seo" {{ ($tab ?? '') === 'seo' ? 'selected' : '' }}>SEO</option>
                 <option value="stg-email" {{ ($tab ?? '') === 'smtp' ? 'selected' : '' }}>E-posta (SMTP)</option>
+                <option value="stg-mail-theme" {{ ($tab ?? '') === 'mail_theme' ? 'selected' : '' }}>Mail Teması</option>
                 <option value="stg-maintenance" {{ ($tab ?? '') === 'maintenance' ? 'selected' : '' }}>Bakım Modu</option>
             </select>
         </div>
@@ -603,7 +608,132 @@
                 </form>
             </div>
 
-            {{-- ==================== 6. BAKIM MODU ==================== --}}
+            {{-- ==================== 6. MAIL TEMASI ==================== --}}
+            <div class="stg-panel {{ ($tab ?? '') === 'mail_theme' ? 'active' : '' }}" id="stg-mail-theme">
+                <form action="{{ route('admin.settings.update.mail-theme') }}" method="POST" id="mailThemeForm">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="stg-panel-header">
+                        <div>
+                            <h5><i class="bi bi-palette"></i> Mail Teması</h5>
+                            <p>E-posta şablonu renkleri, footer yazısı ve sosyal medya ayarları</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.settings.mail-theme.reset') }}" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="return confirm('Mail teması varsayılan değerlere sıfırlansın mı?')"><i class="bi bi-arrow-counterclockwise"></i> Sıfırla</a>
+                            <button type="submit" class="stg-save-btn"><i class="bi bi-check-lg"></i> Kaydet</button>
+                        </div>
+                    </div>
+
+                    <!-- Renk Paleti -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Renk Paleti</h6>
+                            <p>E-posta şablonunda kullanılan renkleri özelleştirin</p>
+                        </div>
+
+                        <div class="stg-row">
+                            <div class="stg-field stg-half">
+                                <label class="stg-label">Ana Renk (Primary)</label>
+                                <div class="stg-color-field">
+                                    <input type="color" name="primary_color" id="mtPrimaryColor" value="{{ old('primary_color', $mailTheme['primary_color'] ?? '#D4AF37') }}" onchange="updateMailThemePreview()">
+                                    <input type="text" class="stg-input stg-input-sm" value="{{ old('primary_color', $mailTheme['primary_color'] ?? '#D4AF37') }}" oninput="syncColorInput(this, 'mtPrimaryColor')" maxlength="7">
+                                </div>
+                            </div>
+                            <div class="stg-field stg-half">
+                                <label class="stg-label">Koyu Ana Renk (Primary Dark)</label>
+                                <div class="stg-color-field">
+                                    <input type="color" name="primary_dark" id="mtPrimaryDark" value="{{ old('primary_dark', $mailTheme['primary_dark'] ?? '#A68B4B') }}" onchange="updateMailThemePreview()">
+                                    <input type="text" class="stg-input stg-input-sm" value="{{ old('primary_dark', $mailTheme['primary_dark'] ?? '#A68B4B') }}" oninput="syncColorInput(this, 'mtPrimaryDark')" maxlength="7">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stg-row">
+                            <div class="stg-field stg-half">
+                                <label class="stg-label">Arka Plan Rengi</label>
+                                <div class="stg-color-field">
+                                    <input type="color" name="bg_color" id="mtBgColor" value="{{ old('bg_color', $mailTheme['bg_color'] ?? '#0F0F12') }}" onchange="updateMailThemePreview()">
+                                    <input type="text" class="stg-input stg-input-sm" value="{{ old('bg_color', $mailTheme['bg_color'] ?? '#0F0F12') }}" oninput="syncColorInput(this, 'mtBgColor')" maxlength="7">
+                                </div>
+                            </div>
+                            <div class="stg-field stg-half">
+                                <label class="stg-label">Kart Arka Planı</label>
+                                <div class="stg-color-field">
+                                    <input type="color" name="card_bg" id="mtCardBg" value="{{ old('card_bg', $mailTheme['card_bg'] ?? '#1A1A1E') }}" onchange="updateMailThemePreview()">
+                                    <input type="text" class="stg-input stg-input-sm" value="{{ old('card_bg', $mailTheme['card_bg'] ?? '#1A1A1E') }}" oninput="syncColorInput(this, 'mtCardBg')" maxlength="7">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stg-row">
+                            <div class="stg-field stg-half">
+                                <label class="stg-label">Metin Rengi</label>
+                                <div class="stg-color-field">
+                                    <input type="color" name="text_color" id="mtTextColor" value="{{ old('text_color', $mailTheme['text_color'] ?? '#F5F5F0') }}" onchange="updateMailThemePreview()">
+                                    <input type="text" class="stg-input stg-input-sm" value="{{ old('text_color', $mailTheme['text_color'] ?? '#F5F5F0') }}" oninput="syncColorInput(this, 'mtTextColor')" maxlength="7">
+                                </div>
+                            </div>
+                            <div class="stg-field stg-half">
+                                <label class="stg-label">Soluk Metin Rengi</label>
+                                <div class="stg-color-field">
+                                    <input type="color" name="text_muted" id="mtTextMuted" value="{{ old('text_muted', $mailTheme['text_muted'] ?? '#9B9EA3') }}" onchange="updateMailThemePreview()">
+                                    <input type="text" class="stg-input stg-input-sm" value="{{ old('text_muted', $mailTheme['text_muted'] ?? '#9B9EA3') }}" oninput="syncColorInput(this, 'mtTextMuted')" maxlength="7">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Ayarları -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Footer Ayarları</h6>
+                            <p>E-posta alt bilgisinde görünecek metin ve sosyal medya ayarları</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Footer Yazısı</label>
+                            <textarea name="footer_text" class="stg-textarea" rows="3" placeholder="Ör: Bu e-posta Boyalı Kelimeler tarafından gönderilmiştir." oninput="updateMailThemePreview()">{{ old('footer_text', $mailTheme['footer_text'] ?? '') }}</textarea>
+                            <small class="stg-hint">Copyright yazısının üstünde görünür. Boş bırakılabilir.</small>
+                        </div>
+
+                        <div class="stg-toggle-item">
+                            <div class="stg-toggle-info">
+                                <i class="bi bi-share text-neon-blue"></i>
+                                <div>
+                                    <span>Sosyal Medya Linkleri</span>
+                                    <small>Footer'da sosyal medya hesaplarınızı gösterin (Sosyal Medya sekmesindeki linkler kullanılır)</small>
+                                </div>
+                            </div>
+                            <input type="hidden" name="show_social" value="0">
+                            <label class="stg-switch">
+                                <input type="checkbox" name="show_social" value="1" {{ ($mailTheme['show_social'] ?? '1') === '1' ? 'checked' : '' }} onchange="updateMailThemePreview()">
+                                <span class="stg-switch-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Canlı Önizleme -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Canlı Önizleme</h6>
+                            <p>Ayarları değiştirdikçe e-posta şablonu burada güncellenir</p>
+                        </div>
+
+                        <div class="stg-mail-preview-wrapper">
+                            <div class="stg-mail-preview-toolbar">
+                                <span><i class="bi bi-eye"></i> E-posta Önizleme</span>
+                                <button type="button" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="updateMailThemePreview()"><i class="bi bi-arrow-clockwise"></i> Yenile</button>
+                            </div>
+                            <div class="stg-mail-preview-frame">
+                                <iframe id="mailThemePreviewFrame" sandbox="allow-same-origin" style="width: 100%; height: 580px; border: none; border-radius: 0 0 8px 8px; background: #0F0F12;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {{-- ==================== 7. BAKIM MODU ==================== --}}
             <div class="stg-panel {{ ($tab ?? '') === 'maintenance' ? 'active' : '' }}" id="stg-maintenance">
                 <form action="{{ route('admin.settings.update.maintenance') }}" method="POST">
                     @csrf

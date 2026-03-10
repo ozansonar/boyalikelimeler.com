@@ -1,11 +1,8 @@
-@php
-    $siteName = app(\App\Services\SettingService::class)->get('site_name', config('app.name'));
-@endphp
 <x-mail::layout>
 {{-- Header --}}
 <x-slot:header>
 <x-mail::header :url="config('app.url')">
-{{ $siteName }}
+{{ config('app.name') }}
 </x-mail::header>
 </x-slot:header>
 
@@ -21,10 +18,4 @@
 </x-slot:subcopy>
 @endisset
 
-{{-- Footer --}}
-<x-slot:footer>
-<x-mail::footer>
-© {{ date('Y') }} {{ $siteName }}. {{ __('All rights reserved.') }}
-</x-mail::footer>
-</x-slot:footer>
 </x-mail::layout>
