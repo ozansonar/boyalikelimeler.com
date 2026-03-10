@@ -7996,8 +7996,8 @@ p {
 
 .clist-toolbar__search {
     position: relative;
-    flex: 1;
-    min-width: 200px;
+    flex: 0 1 280px;
+    min-width: 180px;
 }
 
 .clist-toolbar__search-icon {

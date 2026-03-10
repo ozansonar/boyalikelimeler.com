@@ -21,14 +21,16 @@ class LiteraryWorkController extends Controller
     {
         return view('front.literary-works.index', [
             'works'           => $this->workService->frontPaginate(12, [
-                'search'   => $request->input('ara'),
-                'category' => $request->input('kategori'),
-                'sort'     => $request->input('sirala'),
+                'search'    => $request->input('ara'),
+                'category'  => $request->input('kategori'),
+                'sort'      => $request->input('sirala'),
+                'work_type' => $request->input('tur'),
             ]),
             'categories'      => $this->categoryService->activeList(),
             'stats'           => $this->workService->getPublishedStats(),
             'currentCategory' => $request->input('kategori'),
             'currentSort'     => $request->input('sirala', 'newest'),
+            'currentWorkType' => $request->input('tur'),
         ]);
     }
 
