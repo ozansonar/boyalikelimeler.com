@@ -83,6 +83,8 @@ class ProcessQueueCommand extends Command
                         'available_at' => now()->addSeconds($attempts * 30)->timestamp,
                     ]);
                     $this->warn("Job #{$job->id} failed (attempt {$attempts}), will retry.");
+                    $this->error("  Error: {$e->getMessage()}");
+                    $this->line("  File: {$e->getFile()}:{$e->getLine()}");
                 }
 
                 $processed++;
