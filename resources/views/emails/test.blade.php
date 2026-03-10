@@ -1,8 +1,6 @@
 <x-mail::message>
-# Test E-postası
-
 {!! nl2br(e($body)) !!}
 
 Saygılarımızla,
-{{ config('app.name') }}
+{{ app(\App\Services\SettingService::class)->get('site_name', config('app.name')) }}
 </x-mail::message>
