@@ -27,4 +27,15 @@ class LiteraryWorkSubmittedMail extends BaseMailable
             markdown: 'emails.literary.submitted',
         );
     }
+
+    protected function getTemplateVariables(): array
+    {
+        return [
+            '{author_name}'   => $this->work->author->name ?? '',
+            '{work_title}'    => $this->work->title,
+            '{category_name}' => $this->work->category->name ?? '',
+            '{submit_date}'   => $this->work->created_at?->format('d.m.Y H:i') ?? '-',
+            '{admin_url}'     => route('admin.literary-works.show', $this->work->id),
+        ];
+    }
 }

@@ -28,4 +28,12 @@ class VerifyEmailMail extends BaseMailable
             markdown: 'emails.auth.verify-email',
         );
     }
+
+    protected function getTemplateVariables(): array
+    {
+        return [
+            '{user_name}'        => $this->user->name,
+            '{verification_url}' => $this->verificationUrl,
+        ];
+    }
 }

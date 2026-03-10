@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\HomeSliderController;
 use App\Http\Controllers\Admin\LiteraryCategoryController;
 use App\Http\Controllers\Admin\LiteraryWorkController;
 use App\Http\Controllers\Admin\MailLogController;
+use App\Http\Controllers\Admin\MailTemplateController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PaintersPageController;
@@ -205,8 +206,6 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::put('settings/mail-theme', [SettingController::class, 'updateMailTheme'])->name('settings.update.mail-theme');
         Route::post('settings/mail-theme/preview', [SettingController::class, 'previewMailTheme'])->name('settings.mail-theme.preview');
         Route::get('settings/mail-theme/reset', [SettingController::class, 'resetMailTheme'])->name('settings.mail-theme.reset');
-        Route::put('settings/mail-templates', [SettingController::class, 'updateMailTemplates'])->name('settings.update.mail-templates');
-        Route::get('settings/mail-templates/reset', [SettingController::class, 'resetMailTemplates'])->name('settings.reset-mail-templates');
     });
 
     // Comment Management
@@ -242,6 +241,17 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     });
     Route::post('mail-logs/{mailLog}/resend', [MailLogController::class, 'resend'])->name('mail-logs.resend')->middleware('permission:mail-logs.view');
     Route::delete('mail-logs/{mailLog}', [MailLogController::class, 'destroy'])->name('mail-logs.destroy')->middleware('permission:mail-logs.delete');
+
+    // Mail Templates (Mail Şablonları)
+    Route::middleware('permission:settings.view')->group(function () {
+        Route::get('mail-templates', [MailTemplateController::class, 'index'])->name('mail-templates.index');
+        Route::get('mail-templates/{mailTemplate}/edit', [MailTemplateController::class, 'edit'])->name('mail-templates.edit');
+    });
+    Route::middleware('permission:settings.edit')->group(function () {
+        Route::get('mail-templates/reset-all', [MailTemplateController::class, 'resetAll'])->name('mail-templates.reset-all');
+        Route::put('mail-templates/{mailTemplate}', [MailTemplateController::class, 'update'])->name('mail-templates.update');
+        Route::get('mail-templates/{mailTemplate}/reset', [MailTemplateController::class, 'reset'])->name('mail-templates.reset');
+    });
 
     // Home Slider Management (Ana Sayfa Slider)
     Route::middleware('permission:home-sliders.view')->group(function () {

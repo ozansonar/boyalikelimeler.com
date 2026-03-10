@@ -28,4 +28,14 @@ class LiteraryWorkRevisionRequestedMail extends BaseMailable
             markdown: 'emails.literary.revision-requested',
         );
     }
+
+    protected function getTemplateVariables(): array
+    {
+        return [
+            '{author_name}' => $this->work->author->name ?? '',
+            '{work_title}'  => $this->work->title,
+            '{reason}'      => $this->reason,
+            '{edit_url}'    => route('myposts.edit', $this->work),
+        ];
+    }
 }

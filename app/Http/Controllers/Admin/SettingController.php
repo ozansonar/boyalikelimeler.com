@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TestMail;
-use App\Services\MailTemplateService;
 use App\Services\SettingService;
 use App\Services\UploadService;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +20,6 @@ class SettingController extends Controller
     public function __construct(
         private readonly SettingService $settingService,
         private readonly UploadService $uploadService,
-        private readonly MailTemplateService $mailTemplateService,
     ) {}
 
     public function index(Request $request): View
@@ -37,7 +35,6 @@ class SettingController extends Controller
             'smtp'        => $allSettings['smtp'] ?? [],
             'mailTheme'   => $allSettings['mail_theme'] ?? [],
             'maintenance'    => $allSettings['maintenance'] ?? [],
-            'mailTemplates'  => $this->mailTemplateService->getAllForAdmin(),
             'tab'            => $request->query('tab', 'general'),
         ]);
     }
@@ -239,27 +236,6 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings.index', ['tab' => 'mail_theme'])
             ->with('success', 'Mail teması varsayılan değerlere sıfırlandı.');
-    }
-
-    public function updateMailTemplates(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'templates'   => 'required|array',
-            'templates.*' => 'nullable|string|max:200',
-        ]);
-
-        $this->mailTemplateService->saveSubjects($data['templates']);
-
-        return redirect()->route('admin.settings.index', ['tab' => 'mail_templates'])
-            ->with('success', 'Mail şablonları başarıyla güncellendi.');
-    }
-
-    public function resetMailTemplates(): RedirectResponse
-    {
-        $this->mailTemplateService->resetToDefaults();
-
-        return redirect()->route('admin.settings.index', ['tab' => 'mail_templates'])
-            ->with('success', 'Mail şablonları varsayılan değerlere sıfırlandı.');
     }
 
     public function updateMaintenance(Request $request): RedirectResponse

@@ -28,4 +28,12 @@ class ResetPasswordMail extends BaseMailable
             markdown: 'emails.auth.reset-password',
         );
     }
+
+    protected function getTemplateVariables(): array
+    {
+        return [
+            '{user_name}' => $this->user->name,
+            '{reset_url}' => $this->resetUrl,
+        ];
+    }
 }
