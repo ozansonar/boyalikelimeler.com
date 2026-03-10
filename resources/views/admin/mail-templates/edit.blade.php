@@ -6,14 +6,32 @@
 
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-3" data-aos="fade-down" data-aos-duration="400">
-        <ol class="breadcrumb">
-            <li><a href="{{ route('admin.dashboard') }}" class="breadcrumb-link"><i class="bi bi-house"></i> Ana Sayfa</a></li>
-            <li><a href="{{ route('admin.mail-templates.index') }}" class="breadcrumb-link">Mail Şablonları</a></li>
+        <ol class="breadcrumb breadcrumb-reset fs-13">
+            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="breadcrumb-link"><i class="bi bi-house me-1"></i>Ana Sayfa</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.mail-templates.index') }}" class="breadcrumb-link">Mail Şablonları</a></li>
             <li class="breadcrumb-item active text-teal">{{ $template->description }}</li>
         </ol>
     </nav>
 
-    <x-admin.page-header title="{{ $template->description }}" subtitle="Şablon konu ve gövdesini düzenleyin — değişkenleri istediğiniz yere yerleştirin" />
+    <!-- Page Header -->
+    <div class="page-header d-flex align-items-start align-items-sm-center justify-content-between flex-column flex-sm-row gap-3 mb-4" data-aos="fade-down">
+        <div class="d-flex align-items-center gap-3">
+            <a href="{{ route('admin.mail-templates.index') }}" class="btn-glass" title="Geri Dön"><i class="bi bi-arrow-left"></i></a>
+            <div>
+                <h1 class="page-title mb-0">Şablon Düzenle</h1>
+                <p class="page-subtitle mb-0">{{ $template->description }}</p>
+            </div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ route('admin.mail-templates.reset', $template) }}" class="btn-glass"
+               onclick="return confirm('Bu şablon varsayılan değerlere sıfırlanacak. Emin misiniz?')">
+                <i class="bi bi-arrow-counterclockwise me-1"></i>Varsayılana Dön
+            </a>
+            <button class="btn-teal" onclick="document.getElementById('templateForm').submit()">
+                <i class="bi bi-check2 me-1"></i>Kaydet
+            </button>
+        </div>
+    </div>
 
     <form action="{{ route('admin.mail-templates.update', $template) }}" method="POST" id="templateForm">
         @csrf
@@ -22,7 +40,7 @@
         <div class="row g-4">
             <!-- Left Column: Form -->
             <div class="col-lg-8" data-aos="fade-up" data-aos-delay="50">
-                <div class="cl-table-card p-4">
+                <div class="card-dark p-4">
                     <!-- Subject -->
                     <div class="mb-4">
                         <label for="subject" class="form-label fw-semibold">Konu (Subject)</label>
@@ -61,22 +79,13 @@
                         </div>
                     </div>
 
-                    <!-- Actions -->
-                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-                        <a href="{{ route('admin.mail-templates.reset', $template) }}" class="btn btn-outline-warning btn-sm"
-                           onclick="return confirm('Bu şablon varsayılan değerlere sıfırlanacak. Emin misiniz?')">
-                            <i class="bi bi-arrow-counterclockwise"></i> Varsayılana Dön
-                        </a>
-                        <button type="submit" class="btn btn-teal">
-                            <i class="bi bi-check-lg"></i> Kaydet
-                        </button>
-                    </div>
+                    <!-- Status is the last field, submit handled by header button -->
                 </div>
             </div>
 
             <!-- Right Column: Variables -->
             <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="cl-table-card p-4 mb-4">
+                <div class="card-dark p-4 mb-4">
                     <h6 class="fw-semibold mb-3"><i class="bi bi-braces"></i> Kullanılabilir Değişkenler</h6>
                     <p class="text-muted small mb-3">Aşağıdaki değişkenleri konu veya gövde içinde kullanabilirsiniz. Tıklayarak editöre ekleyin.</p>
 
@@ -100,7 +109,7 @@
                     </ul>
                 </div>
 
-                <div class="cl-table-card p-4">
+                <div class="card-dark p-4">
                     <h6 class="fw-semibold mb-3"><i class="bi bi-info-circle"></i> Bilgi</h6>
                     <ul class="list-unstyled small text-muted mb-0">
                         <li class="mb-2"><strong>Şablon Key:</strong> <code>{{ $template->key }}</code></li>
