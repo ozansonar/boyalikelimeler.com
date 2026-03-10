@@ -59,6 +59,7 @@ class ProcessQueueCommand extends Command
                 set_time_limit($timeout + 30);
 
                 $queueJob = new \Illuminate\Queue\Jobs\DatabaseJob(
+                    app(),
                     app('queue')->connection('database'),
                     $job,
                     'database',
