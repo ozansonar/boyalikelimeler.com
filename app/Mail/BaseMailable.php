@@ -100,19 +100,22 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
         }
 
         try {
-            $encryption = ($smtp['encryption'] ?? 'tls') === 'none'
-                ? null
-                : ($smtp['encryption'] ?? 'tls');
+            $encSetting = $smtp['encryption'] ?? 'tls';
+
+            // ssl → implicit TLS (true), tls → auto-detect/STARTTLS (null), none → plaintext (false)
+            $tls = match ($encSetting) {
+                'ssl'  => true,
+                'tls'  => null,
+                default => false,
+            };
 
             $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport(
                 $smtp['host'],
                 (int) ($smtp['port'] ?? 587),
-                $encryption === 'ssl',
+                $tls,
             );
 
-            if ($encryption === 'tls') {
-                $transport->setAutoTls(true);
-            } elseif ($encryption === null) {
+            if ($encSetting === 'none') {
                 $transport->setAutoTls(false);
             }
 
