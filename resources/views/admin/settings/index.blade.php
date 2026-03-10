@@ -590,12 +590,12 @@
 
                         <div class="stg-field">
                             <label class="stg-label">Konu</label>
-                            <input type="text" name="test_subject" class="stg-input" value="{{ old('test_subject', 'SMTP Test — Boyalı Kelimeler') }}" placeholder="Test maili konusu" required>
+                            <input type="text" name="test_subject" class="stg-input" value="{{ old('test_subject', 'Boyalı Kelimeler — E-posta Bilgilendirmesi') }}" placeholder="E-posta konusu" required>
                         </div>
 
                         <div class="stg-field">
                             <label class="stg-label">Mesaj</label>
-                            <textarea name="test_body" class="stg-textarea" rows="4" placeholder="Test mesajınızı yazın..." required>{{ old('test_body', 'Bu bir test e-postasıdır. SMTP ayarlarınız doğru çalışıyor.') }}</textarea>
+                            <textarea name="test_body" class="stg-textarea" rows="4" placeholder="Mesajınızı yazın..." required>{{ old('test_body', 'Merhaba, bu e-posta Boyalı Kelimeler platformu üzerinden gönderilmiştir. E-posta yapılandırmanız başarıyla tamamlanmıştır. Herhangi bir sorunuz olursa bizimle iletişime geçebilirsiniz.') }}</textarea>
                         </div>
 
                         <button type="submit" class="stg-btn"><i class="bi bi-send"></i> Test Maili Gönder</button>
