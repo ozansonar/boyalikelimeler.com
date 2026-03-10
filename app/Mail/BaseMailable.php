@@ -41,6 +41,9 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     /** @var array<string, string|null> */
     private array $smtpSettings = [];
 
+    /** DB template body (set when override is applied). */
+    protected ?string $dbTemplateBody = null;
+
     /**
      * Override queue to create a pending mail log at dispatch time (before worker runs).
      *
@@ -56,12 +59,24 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     }
 
     /**
+     * Return template variables for DB body/subject replacement.
+     * Child classes should override this to provide their variables.
+     *
+     * @return array<string, string>
+     */
+    protected function getTemplateVariables(): array
+    {
+        return [];
+    }
+
+    /**
      * Override send to apply SMTP config, debug redirect, CID logo + update existing log.
      */
     public function send($mailer): ?SentMessage
     {
         $this->resolveSubjectFromEnvelope();
-        $this->applyTemplateSubjectOverride();
+        $this->applyTemplateOverrides();
+        $this->applyDynamicContent();
         $this->loadSmtpSettings();
         $mailer = $this->buildConfiguredMailer($mailer);
         $this->applyDebugMode();
@@ -235,7 +250,7 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     {
         try {
             $this->resolveSubjectFromEnvelope();
-            $this->applyTemplateSubjectOverride();
+            $this->applyTemplateOverrides();
 
             $toEmail = $this->getFirstToAddress();
             $toName = $this->getFirstToName();
@@ -358,18 +373,48 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
     }
 
     /**
-     * Override subject from DB mail template settings if available.
+     * If DB template body is available, switch to dynamic template view.
      */
-    private function applyTemplateSubjectOverride(): void
+    private function applyDynamicContent(): void
+    {
+        if ($this->dbTemplateBody === null) {
+            return;
+        }
+
+        $this->view = null;
+        $this->markdown = 'emails.dynamic-template';
+        $this->viewData['templateBody'] = $this->dbTemplateBody;
+    }
+
+    /**
+     * Override subject and body from DB mail template if available.
+     * Replaces {variables} in both subject and body with actual values.
+     */
+    private function applyTemplateOverrides(): void
     {
         try {
-            $override = app(MailTemplateService::class)->getSubjectByClass(static::class);
+            $templateService = app(MailTemplateService::class);
+            $template = $templateService->findByClass(static::class);
 
-            if ($override !== null && $override !== '') {
-                $this->subject = $override;
+            if ($template === null || !$template->is_active) {
+                return;
+            }
+
+            $variables = $this->getTemplateVariables();
+
+            // Override subject with variable replacement
+            $renderedSubject = $template->renderSubject($variables);
+            if ($renderedSubject !== '') {
+                $this->subject = $renderedSubject;
+            }
+
+            // Override body with variable replacement
+            $renderedBody = $template->renderBody($variables);
+            if ($renderedBody !== '') {
+                $this->dbTemplateBody = $renderedBody;
             }
         } catch (\Throwable $e) {
-            Log::warning('Template subject override failed: ' . $e->getMessage());
+            Log::warning('Template override failed: ' . $e->getMessage());
         }
     }
 

@@ -27,4 +27,13 @@ class LiteraryWorkRejectedMail extends BaseMailable
             markdown: 'emails.literary.rejected',
         );
     }
+
+    protected function getTemplateVariables(): array
+    {
+        return [
+            '{author_name}' => $this->work->author->name ?? '',
+            '{work_title}'  => $this->work->title,
+            '{works_url}'   => route('myposts.index'),
+        ];
+    }
 }

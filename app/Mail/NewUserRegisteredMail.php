@@ -27,4 +27,14 @@ class NewUserRegisteredMail extends BaseMailable
             markdown: 'emails.auth.new-user-registered',
         );
     }
+
+    protected function getTemplateVariables(): array
+    {
+        return [
+            '{user_name}'     => $this->newUser->name,
+            '{user_email}'    => $this->newUser->email,
+            '{register_date}' => $this->newUser->created_at?->format('d.m.Y H:i') ?? '-',
+            '{admin_url}'     => url(route('admin.dashboard', [], false)),
+        ];
+    }
 }

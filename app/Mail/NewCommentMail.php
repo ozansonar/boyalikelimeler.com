@@ -27,4 +27,16 @@ class NewCommentMail extends BaseMailable
             markdown: 'emails.comment.new-comment',
         );
     }
+
+    protected function getTemplateVariables(): array
+    {
+        return [
+            '{content_title}'   => $this->comment->contentTitle(),
+            '{commenter_name}'  => $this->comment->fullName(),
+            '{commenter_email}' => $this->comment->commenterEmail() ?? '',
+            '{comment_body}'    => $this->comment->body,
+            '{rating}'          => str_repeat('★', $this->comment->rating) . str_repeat('☆', 5 - $this->comment->rating) . ' (' . $this->comment->rating . '/5)',
+            '{admin_url}'       => route('admin.comments.index', ['status' => 'pending']),
+        ];
+    }
 }
