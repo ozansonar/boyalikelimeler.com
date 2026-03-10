@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\TestMail;
 use App\Services\SettingService;
 use App\Services\UploadService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -32,6 +33,7 @@ class SettingController extends Controller
             'social'      => $allSettings['social'] ?? [],
             'seo'         => $allSettings['seo'] ?? [],
             'smtp'        => $allSettings['smtp'] ?? [],
+            'mailTheme'   => $allSettings['mail_theme'] ?? [],
             'maintenance' => $allSettings['maintenance'] ?? [],
             'tab'         => $request->query('tab', 'general'),
         ]);
@@ -169,6 +171,71 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings.index', ['tab' => 'smtp'])
             ->with('success', 'Mail logosu başarıyla kaldırıldı.');
+    }
+
+    public function updateMailTheme(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'primary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'primary_dark'  => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'bg_color'      => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'card_bg'       => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'text_color'    => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'text_muted'    => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'footer_text'   => 'nullable|string|max:500',
+            'show_social'   => 'required|in:0,1',
+        ]);
+
+        $this->settingService->updateGroup('mail_theme', $data);
+
+        return redirect()->route('admin.settings.index', ['tab' => 'mail_theme'])
+            ->with('success', 'Mail teması ayarları başarıyla güncellendi.');
+    }
+
+    public function previewMailTheme(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'primary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'primary_dark'  => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'bg_color'      => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'card_bg'       => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'text_color'    => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'text_muted'    => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'footer_text'   => 'nullable|string|max:500',
+            'show_social'   => 'required|in:0,1',
+        ]);
+
+        $social = $this->settingService->getGroup('social');
+        $siteName = $this->settingService->get('site_name', config('app.name'));
+        $siteUrl = config('app.url');
+
+        $html = view('admin.settings.mail-theme-preview', [
+            'theme'    => $data,
+            'social'   => $social,
+            'siteName' => $siteName,
+            'siteUrl'  => $siteUrl,
+        ])->render();
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function resetMailTheme(): RedirectResponse
+    {
+        $defaults = [
+            'primary_color' => '#D4AF37',
+            'primary_dark'  => '#A68B4B',
+            'bg_color'      => '#0F0F12',
+            'card_bg'       => '#1A1A1E',
+            'text_color'    => '#F5F5F0',
+            'text_muted'    => '#9B9EA3',
+            'footer_text'   => '',
+            'show_social'   => '1',
+        ];
+
+        $this->settingService->updateGroup('mail_theme', $defaults);
+
+        return redirect()->route('admin.settings.index', ['tab' => 'mail_theme'])
+            ->with('success', 'Mail teması varsayılan değerlere sıfırlandı.');
     }
 
     public function updateMaintenance(Request $request): RedirectResponse
