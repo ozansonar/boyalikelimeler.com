@@ -129,12 +129,10 @@ abstract class BaseMailable extends Mailable implements ShouldQueue
 
             $this->from($fromAddress, $fromName);
 
-            $symfonyMailer = new \Symfony\Component\Mailer\Mailer($transport);
-
             return new Mailer(
                 'db_smtp',
                 app('view'),
-                $symfonyMailer,
+                $transport,
                 app('events'),
             );
         } catch (\Throwable $e) {
