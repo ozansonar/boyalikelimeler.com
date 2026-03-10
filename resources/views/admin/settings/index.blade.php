@@ -480,7 +480,7 @@
                             </div>
                             <div class="stg-field stg-half">
                                 <label class="stg-label">Şifre</label>
-                                <input type="password" name="password" class="stg-input" value="{{ old('password', $smtp['password'] ?? '') }}" placeholder="SMTP şifresi">
+                                <input type="password" name="password" class="stg-input" value="" placeholder="{{ !empty($smtp['password']) ? '••••••••  (değiştirmek için yeni şifre girin)' : 'SMTP şifresi' }}">
                             </div>
                         </div>
 
