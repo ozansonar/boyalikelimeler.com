@@ -59,6 +59,7 @@ class ProcessQueueCommand extends Command
                 set_time_limit($timeout + 30);
 
                 $queueJob = new \Illuminate\Queue\Jobs\DatabaseJob(
+                    app(),
                     app('queue')->connection('database'),
                     $job,
                     'database',
@@ -83,6 +84,8 @@ class ProcessQueueCommand extends Command
                         'available_at' => now()->addSeconds($attempts * 30)->timestamp,
                     ]);
                     $this->warn("Job #{$job->id} failed (attempt {$attempts}), will retry.");
+                    $this->error("  Error: {$e->getMessage()}");
+                    $this->line("  File: {$e->getFile()}:{$e->getLine()}");
                 }
 
                 $processed++;
