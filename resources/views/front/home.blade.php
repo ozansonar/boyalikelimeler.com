@@ -890,26 +890,43 @@
 
                 <!-- Right col-lg-4 -->
                 <div class="col-lg-4 d-flex flex-column">
-                    <!-- Günün Sözü + Yorum Gönder -->
-                    <div class="quote-comment mb-3" data-aos="fade-left" data-aos-duration="600">
+                    <!-- Günün Sorusu -->
+                    <div class="quote-comment mb-3" data-aos="fade-left" data-aos-duration="600" id="dailyQuestionCard">
                         <div class="quote-comment__header">
-                            <i class="fa-solid fa-quote-left quote-comment__icon"></i>
-                            <h3 class="quote-comment__heading">Günün Sözü</h3>
+                            <i class="fa-solid fa-circle-question quote-comment__icon"></i>
+                            <h3 class="quote-comment__heading">Günün Sorusu</h3>
                         </div>
-                        <blockquote class="quote-comment__text">
-                            "Şiir, dünyanın en güzel yalanı ve en acı gerçeğidir."
-                        </blockquote>
-                        <span class="quote-comment__author">
-                            <i class="fa-solid fa-feather-pointed me-1"></i>Boyalı Kelimeler
-                        </span>
+                        @if($dailyQuestion)
+                            <blockquote class="quote-comment__text">
+                                "{{ $dailyQuestion->question_text }}"
+                            </blockquote>
+                            <span class="quote-comment__author">
+                                <i class="fa-solid fa-calendar-day me-1"></i>{{ $dailyQuestion->published_at->format('d.m.Y') }}
+                            </span>
 
-                        <div class="quote-comment__divider"></div>
+                            <div class="quote-comment__divider"></div>
 
-                        <p class="quote-comment__label">Bu söz hakkında ne düşünüyorsunuz?</p>
-                        <textarea class="quote-comment__textarea" rows="3" placeholder="Yorumunuzu buraya yazın..."></textarea>
-                        <button class="quote-comment__btn" type="button">
-                            <i class="fa-solid fa-paper-plane me-1"></i> Gönder
-                        </button>
+                            @if($dailyQuestionAnswered)
+                                <div class="quote-comment__success" id="dqSuccessMsg">
+                                    <i class="fa-solid fa-circle-check me-2"></i>
+                                    <span>Teşekkürler! Cevabınız kaydedildi.</span>
+                                </div>
+                            @else
+                                <p class="quote-comment__label">Bu soru hakkında ne düşünüyorsunuz?</p>
+                                <textarea class="quote-comment__textarea" rows="3" placeholder="Cevabınızı buraya yazın..." id="dqAnswerText" maxlength="1000"></textarea>
+                                <button class="quote-comment__btn" type="button" id="dqSubmitBtn">
+                                    <i class="fa-solid fa-paper-plane me-1"></i> Gönder
+                                </button>
+                                <div class="quote-comment__success d-none" id="dqSuccessMsg">
+                                    <i class="fa-solid fa-circle-check me-2"></i>
+                                    <span>Teşekkürler! Cevabınız kaydedildi.</span>
+                                </div>
+                            @endif
+                        @else
+                            <blockquote class="quote-comment__text">
+                                "Bugün için henüz bir soru yayınlanmadı."
+                            </blockquote>
+                        @endif
                     </div>
 
                     <!-- 2 Küçük CTA Kutusu -->
@@ -943,3 +960,71 @@
     </section>
 
 @endsection
+
+@if($dailyQuestion && !$dailyQuestionAnswered)
+@push('scripts')
+<script>
+(function() {
+    var submitBtn = document.getElementById('dqSubmitBtn');
+    var textarea = document.getElementById('dqAnswerText');
+    var successMsg = document.getElementById('dqSuccessMsg');
+
+    if (!submitBtn || !textarea) return;
+
+    function getCookieToken() {
+        var match = document.cookie.match(/(?:^|;\s*)dq_token=([^;]*)/);
+        if (match) return match[1];
+        var token = crypto.randomUUID ? crypto.randomUUID().replace(/-/g, '').substring(0, 64) : Math.random().toString(36).substring(2) + Date.now().toString(36);
+        document.cookie = 'dq_token=' + token + '; path=/; max-age=' + (365 * 24 * 60 * 60) + '; SameSite=Lax';
+        return token;
+    }
+
+    submitBtn.addEventListener('click', function() {
+        var text = textarea.value.trim();
+        if (!text) {
+            textarea.classList.add('is-invalid');
+            textarea.focus();
+            return;
+        }
+        textarea.classList.remove('is-invalid');
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Gönderiliyor...';
+
+        fetch('{{ route("daily-question.answer") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                question_id: {{ $dailyQuestion->id }},
+                answer_text: text,
+                cookie_token: getCookieToken()
+            })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                textarea.classList.add('d-none');
+                submitBtn.classList.add('d-none');
+                var label = textarea.previousElementSibling;
+                if (label) label.classList.add('d-none');
+                successMsg.classList.remove('d-none');
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Gönder';
+                alert(data.message || 'Bir hata oluştu.');
+            }
+        })
+        .catch(function() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Gönder';
+            alert('Bağlantı hatası. Lütfen tekrar deneyin.');
+        });
+    });
+})();
+</script>
+@endpush
+@endif
