@@ -530,6 +530,40 @@ function openDeleteModal(id, title, customUrl) {
   }
 }
 
+// ---- Confirm Modal (Global) ----
+function openConfirmModal(options) {
+  var modal = document.getElementById('globalConfirmModal');
+  if (!modal) return;
+
+  var titleEl = document.getElementById('gcm-title');
+  var msgEl = document.getElementById('gcm-message');
+  var confirmBtn = document.getElementById('gcm-confirm-btn');
+  var iconEl = document.getElementById('gcm-icon');
+
+  if (titleEl) titleEl.textContent = options.title || 'Emin misiniz?';
+  if (msgEl) msgEl.textContent = options.message || '';
+  if (confirmBtn) confirmBtn.innerHTML = options.btnHtml || '<i class="bi bi-check-lg"></i> Evet, Devam Et';
+
+  if (iconEl && options.iconClass) {
+    iconEl.className = 'status-modal-icon ' + (options.type || 'warning');
+    iconEl.innerHTML = '<i class="bi ' + options.iconClass + '"></i>';
+  }
+
+  var newBtn = confirmBtn.cloneNode(true);
+  confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+  newBtn.id = 'gcm-confirm-btn';
+
+  newBtn.addEventListener('click', function () {
+    bootstrap.Modal.getInstance(modal).hide();
+    if (typeof options.onConfirm === 'function') {
+      options.onConfirm();
+    }
+  });
+
+  var bsModal = new bootstrap.Modal(modal);
+  bsModal.show();
+}
+
 // ---- Slug Generation (Global) ----
 function generateSlug(value, slugElId, previewElId, defaultText) {
   var slug = value

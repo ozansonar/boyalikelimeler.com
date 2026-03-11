@@ -40,6 +40,29 @@
     </main>
 </div>
 
+<!-- Global Confirm Modal -->
+<div class="modal fade" id="globalConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-5">
+                <div class="status-modal-icon warning" id="gcm-icon">
+                    <i class="bi bi-exclamation-lg"></i>
+                </div>
+                <h4 class="fw-800-mb" id="gcm-title">Emin misiniz?</h4>
+                <p class="text-muted-label" id="gcm-message"></p>
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <button type="button" class="btn-glass" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Vazgeç
+                    </button>
+                    <button type="button" class="btn-teal" id="gcm-confirm-btn">
+                        <i class="bi bi-check-lg"></i> Evet, Devam Et
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Global Status Modal -->
 <div class="modal fade" id="globalStatusModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

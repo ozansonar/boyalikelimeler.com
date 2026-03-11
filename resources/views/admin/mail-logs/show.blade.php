@@ -21,9 +21,18 @@
         </div>
         <div class="d-flex gap-2">
             @if($log->body)
-                <form action="{{ route('admin.mail-logs.resend', $log) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu mail yeniden gönderilecek. Emin misiniz?')">
+                <form id="resendMailForm" action="{{ route('admin.mail-logs.resend', $log) }}" method="POST" class="d-inline">
                     @csrf
-                    <button type="submit" class="btn-teal"><i class="bi bi-arrow-repeat me-1"></i>Yeniden Gönder</button>
+                    <button type="button" class="btn-teal" onclick="openConfirmModal({
+                        title: 'Maili Yeniden Gönder',
+                        message: 'Bu mail {{ $log->to_email }} adresine yeniden gönderilecek. Devam etmek istiyor musunuz?',
+                        iconClass: 'bi-envelope-arrow-up-fill',
+                        type: 'info',
+                        btnHtml: '<i class=\'bi bi-arrow-repeat\'></i> Evet, Gönder',
+                        onConfirm: function() { document.getElementById('resendMailForm').submit(); }
+                    })">
+                        <i class="bi bi-arrow-repeat me-1"></i>Yeniden Gönder
+                    </button>
                 </form>
             @endif
             <a href="{{ route('admin.mail-logs.index') }}" class="btn-glass"><i class="bi bi-arrow-left"></i> Geri Dön</a>

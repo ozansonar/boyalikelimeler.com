@@ -13,8 +13,14 @@
     </nav>
 
     <x-admin.page-header title="Mail Şablonları" subtitle="E-posta konu ve gövde içeriklerini yönetin, değişkenleri istediğiniz yere yerleştirin">
-        <a href="{{ route('admin.mail-templates.reset-all') }}" class="btn-glass"
-           onclick="return confirm('Tüm şablonlar varsayılan değerlere sıfırlanacak. Emin misiniz?')">
+        <a href="javascript:void(0)" class="btn-glass" onclick="openConfirmModal({
+            title: 'Tüm Şablonları Sıfırla',
+            message: 'Tüm şablonlar varsayılan değerlere sıfırlanacak. Devam etmek istiyor musunuz?',
+            iconClass: 'bi-arrow-counterclockwise',
+            type: 'warning',
+            btnHtml: '<i class=\'bi bi-arrow-counterclockwise\'></i> Evet, Tümünü Sıfırla',
+            onConfirm: function() { window.location.href = '{{ route('admin.mail-templates.reset-all') }}'; }
+        })">
             <i class="bi bi-arrow-counterclockwise me-1"></i>Tümünü Sıfırla
         </a>
     </x-admin.page-header>
