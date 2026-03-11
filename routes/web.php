@@ -42,6 +42,10 @@ use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\DailyQuestionController as FrontDailyQuestionController;
 use App\Http\Controllers\Front\PollController as FrontPollController;
 use App\Http\Controllers\Front\ProfileController;
+use App\Http\Controllers\Front\QnaController;
+use App\Http\Controllers\Admin\QnaCategoryController;
+use App\Http\Controllers\Admin\QnaQuestionController as AdminQnaQuestionController;
+use App\Http\Controllers\Admin\QnaAnswerController as AdminQnaAnswerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -310,6 +314,37 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::delete('daily-questions/{id}', [AdminDailyQuestionController::class, 'destroy'])->name('daily-questions.destroy')->where('id', '[0-9]+')->middleware('permission:daily-questions.delete');
     Route::delete('daily-questions/{questionId}/answers/{answerId}', [AdminDailyQuestionController::class, 'destroyAnswer'])->name('daily-questions.answers.destroy')->where(['questionId' => '[0-9]+', 'answerId' => '[0-9]+'])->middleware('permission:daily-questions.delete');
 
+    // Söz Meydanı — QnA Category Management
+    Route::middleware('permission:qna-categories.view')->group(function () {
+        Route::get('soz-meydani/kategoriler', [QnaCategoryController::class, 'index'])->name('qna.categories.index');
+    });
+    Route::get('soz-meydani/kategoriler/olustur', [QnaCategoryController::class, 'create'])->name('qna.categories.create')->middleware('permission:qna-categories.create');
+    Route::post('soz-meydani/kategoriler', [QnaCategoryController::class, 'store'])->name('qna.categories.store')->middleware('permission:qna-categories.create');
+    Route::get('soz-meydani/kategoriler/{id}/duzenle', [QnaCategoryController::class, 'edit'])->name('qna.categories.edit')->where('id', '[0-9]+')->middleware('permission:qna-categories.edit');
+    Route::put('soz-meydani/kategoriler/{id}', [QnaCategoryController::class, 'update'])->name('qna.categories.update')->where('id', '[0-9]+')->middleware('permission:qna-categories.edit');
+    Route::delete('soz-meydani/kategoriler/{id}', [QnaCategoryController::class, 'destroy'])->name('qna.categories.destroy')->where('id', '[0-9]+')->middleware('permission:qna-categories.delete');
+
+    // Söz Meydanı — QnA Question Management
+    Route::middleware('permission:qna.view')->group(function () {
+        Route::get('soz-meydani/sorular', [AdminQnaQuestionController::class, 'index'])->name('qna.questions.index');
+        Route::get('soz-meydani/sorular/{id}', [AdminQnaQuestionController::class, 'show'])->name('qna.questions.show')->where('id', '[0-9]+');
+    });
+    Route::middleware('permission:qna.approve')->group(function () {
+        Route::patch('soz-meydani/sorular/{id}/onayla', [AdminQnaQuestionController::class, 'approve'])->name('qna.questions.approve')->where('id', '[0-9]+');
+        Route::patch('soz-meydani/sorular/{id}/reddet', [AdminQnaQuestionController::class, 'reject'])->name('qna.questions.reject')->where('id', '[0-9]+');
+    });
+    Route::delete('soz-meydani/sorular/{id}', [AdminQnaQuestionController::class, 'destroy'])->name('qna.questions.destroy')->where('id', '[0-9]+')->middleware('permission:qna.delete');
+
+    // Söz Meydanı — QnA Answer Management
+    Route::middleware('permission:qna.view')->group(function () {
+        Route::get('soz-meydani/cevaplar', [AdminQnaAnswerController::class, 'index'])->name('qna.answers.index');
+    });
+    Route::middleware('permission:qna.approve')->group(function () {
+        Route::patch('soz-meydani/cevaplar/{id}/onayla', [AdminQnaAnswerController::class, 'approve'])->name('qna.answers.approve')->where('id', '[0-9]+');
+        Route::patch('soz-meydani/cevaplar/{id}/reddet', [AdminQnaAnswerController::class, 'reject'])->name('qna.answers.reject')->where('id', '[0-9]+');
+    });
+    Route::delete('soz-meydani/cevaplar/{id}', [AdminQnaAnswerController::class, 'destroy'])->name('qna.answers.destroy')->where('id', '[0-9]+')->middleware('permission:qna.delete');
+
     // Role & Permission Management
     Route::middleware('permission:roles.view')->group(function () {
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
@@ -386,6 +421,16 @@ Route::get('/ara', [SearchController::class, 'index'])->name('search.index');
 
 // Category (Frontend — Kategori Sayfası)
 Route::get('/kategori/{slug}', [FrontCategoryController::class, 'show'])->name('category.show')->where('slug', '[a-z0-9\-]+');
+
+// Söz Meydanı (Frontend — Soru/Cevap)
+Route::get('/soz-meydani', [QnaController::class, 'index'])->name('qna.index');
+Route::get('/soz-meydani/{categorySlug}', [QnaController::class, 'category'])->name('qna.category')->where('categorySlug', '[a-z0-9\-]+');
+Route::get('/soz-meydani/{categorySlug}/{questionSlug}', [QnaController::class, 'show'])->name('qna.show')->where(['categorySlug' => '[a-z0-9\-]+', 'questionSlug' => '[a-z0-9\-]+']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/soz-meydani/soru-sor', [QnaController::class, 'storeQuestion'])->name('qna.store-question')->middleware('throttle:3,1');
+    Route::post('/soz-meydani/cevap-yaz/{question}', [QnaController::class, 'storeAnswer'])->name('qna.store-answer')->middleware('throttle:10,1');
+    Route::post('/soz-meydani/begen', [QnaController::class, 'toggleLike'])->name('qna.toggle-like')->middleware('throttle:30,1');
+});
 
 // Sitemap & RSS Feeds
 Route::get('/sitemap.xml', [App\Http\Controllers\Front\SitemapController::class, 'index'])->name('sitemap');

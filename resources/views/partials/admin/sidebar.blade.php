@@ -85,6 +85,26 @@
             @endif
         @endif
 
+        @if($sidebarUser->hasAnyPermission('qna.view', 'qna-categories.view'))
+            <div class="nav-section-title">Söz Meydanı</div>
+            @if($sidebarUser->hasPermission('qna-categories.view'))
+                <a href="{{ route('admin.qna.categories.index') }}" class="nav-link {{ request()->routeIs('admin.qna.categories.*') ? 'active' : '' }}">
+                    <i class="bi bi-grid-fill"></i> Kategoriler
+                </a>
+            @endif
+            @if($sidebarUser->hasPermission('qna.view'))
+                <a href="{{ route('admin.qna.questions.index') }}" class="nav-link {{ request()->routeIs('admin.qna.questions.*') ? 'active' : '' }}">
+                    <i class="bi bi-chat-square-quote-fill"></i> Sorular
+                    @if($pendingQnaCount > 0)
+                        <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingQnaCount }}</span>
+                    @endif
+                </a>
+                <a href="{{ route('admin.qna.answers.index') }}" class="nav-link {{ request()->routeIs('admin.qna.answers.*') ? 'active' : '' }}">
+                    <i class="bi bi-chat-left-text-fill"></i> Cevaplar
+                </a>
+            @endif
+        @endif
+
         @if($sidebarUser->hasAnyPermission('users.view', 'roles.view', 'comments.view', 'contacts.view', 'menus.view'))
             <div class="nav-section-title">Yönetim</div>
             @if($sidebarUser->hasPermission('users.view'))

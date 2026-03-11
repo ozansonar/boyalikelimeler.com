@@ -7,8 +7,10 @@ namespace App\Services;
 use App\Enums\LiteraryWorkStatus;
 use App\Enums\LiteraryWorkType;
 use App\Enums\PostStatus;
+use App\Enums\QnaStatus;
 use App\Models\LiteraryWork;
 use App\Models\Post;
+use App\Models\QnaQuestion;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -92,6 +94,21 @@ final class HomeService
             Post::where('status', PostStatus::Published)
                 ->with(['category', 'author'])
                 ->orderByDesc('published_at')
+                ->limit($limit)
+                ->get()
+        );
+    }
+
+    /**
+     * @return Collection<int, QnaQuestion>
+     */
+    public function getLatestQnaQuestions(int $limit = 3): Collection
+    {
+        return Cache::remember('home.latest_qna_questions', 300, fn (): Collection =>
+            QnaQuestion::where('status', QnaStatus::Approved)
+                ->with(['user', 'category'])
+                ->withCount(['approvedAnswers as approved_answer_count'])
+                ->orderByDesc('created_at')
                 ->limit($limit)
                 ->get()
         );
