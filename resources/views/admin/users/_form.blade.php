@@ -19,7 +19,7 @@
             <i class="bi bi-key"></i> Hesap Bilgileri
         </a>
         <a href="#section-role" class="stg-nav-item" onclick="scrollToSection('section-role', this)">
-            <i class="bi bi-shield"></i> Rol & Yetki
+            <i class="bi bi-shield"></i> Tip, Rol & Yetki
         </a>
         <a href="#section-golden-pen" class="stg-nav-item" id="goldenPenNavItem" onclick="scrollToSection('section-golden-pen', this)" {!! !$isYazar ? 'style="display:none"' : '' !!}>
             <i class="bi bi-pen"></i> Altın Kalem
@@ -34,7 +34,7 @@
         <select class="stg-select" onchange="scrollToSection(this.value, null)" id="mobileNavSelect">
             <option value="section-personal">Kişisel Bilgiler</option>
             <option value="section-account">Hesap Bilgileri</option>
-            <option value="section-role">Rol & Yetki</option>
+            <option value="section-role">Tip, Rol & Yetki</option>
             <option value="section-golden-pen" id="goldenPenMobileOption" {!! !$isYazar ? 'style="display:none"' : '' !!}>Altın Kalem</option>
             <option value="section-golden-brush" id="goldenBrushMobileOption" {!! !$isYazar ? 'style="display:none"' : '' !!}>Altın Fırça</option>
         </select>
@@ -163,19 +163,36 @@
         </div>
 
 
-        <!-- ==================== SECTION 3: ROLE ==================== -->
+        <!-- ==================== SECTION 3: TYPE & ROLE ==================== -->
         <div class="card-dark mb-4" id="section-role" data-aos="fade-up" data-aos-delay="50">
             <div class="card-header-custom">
                 <div class="form-section-header mb-0">
                     <div class="form-section-icon"><i class="bi bi-shield-fill-check"></i></div>
                     <div>
-                        <h6 class="mb-0">Rol & Yetki</h6>
-                        <small class="text-muted">Kullanıcının rolünü belirleyin</small>
+                        <h6 class="mb-0">Tip, Rol & Yetki</h6>
+                        <small class="text-muted">Kullanıcının tipini ve rolünü belirleyin</small>
                     </div>
                 </div>
             </div>
             <div class="card-body-custom">
                 <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="stg-label">Kullanıcı Tipi <span class="text-neon-red">*</span></label>
+                        <select class="stg-select @error('type') is-invalid @enderror" name="type" required>
+                            @foreach(\App\Enums\UserType::cases() as $userType)
+                                <option value="{{ $userType->value }}" @selected(old('type', $user->type?->value ?? 'kullanici') === $userType->value)>
+                                    {{ $userType->label() }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('type')
+                            <small class="text-neon-red">{{ $message }}</small>
+                        @enderror
+                        <div class="uf-info-box mt-2">
+                            <i class="bi bi-info-circle-fill text-neon-blue"></i>
+                            <span>Tip, admin paneline erişimi belirler. Rol ise paneldeki yetkileri belirler.</span>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <label class="stg-label">Rol <span class="text-neon-red">*</span></label>
                         <select class="stg-select @error('role_id') is-invalid @enderror" name="role_id" id="userRole" required>
@@ -191,26 +208,29 @@
                         @enderror
                     </div>
                     <div class="col-12">
-                        <label class="stg-label">Rol Açıklamaları</label>
+                        <label class="stg-label">Tip Açıklamaları</label>
                         <div class="uf-role-cards">
-                            @php
-                                $roleDescriptions = [
-                                    'super_admin' => ['icon' => 'bi-shield-fill', 'accent' => 'accent-teal', 'title' => 'Süper Admin', 'desc' => 'Tam erişim. Tüm modüller ve sistem ayarlarına erişebilir.'],
-                                    'admin' => ['icon' => 'bi-shield-fill', 'accent' => 'accent-blue', 'title' => 'Admin', 'desc' => 'Kullanıcı yönetimi, içerik yönetimi ve ayarlara erişebilir.'],
-                                    'yazar' => ['icon' => 'bi-pencil-fill', 'accent' => 'accent-purple', 'title' => 'Yazar', 'desc' => 'İçerik oluşturma ve düzenleme yetkisi. Yönetim yapamaz.'],
-                                    'kullanici' => ['icon' => 'bi-person-fill', 'accent' => 'accent-green', 'title' => 'Kullanıcı', 'desc' => 'Temel kullanım hakları. Kendi profilini düzenleyebilir.'],
-                                ];
-                            @endphp
-                            @foreach($roles as $role)
-                                @php $rd = $roleDescriptions[$role->slug] ?? ['icon' => 'bi-person-fill', 'accent' => 'accent-green', 'title' => $role->name, 'desc' => '']; @endphp
-                                <div class="uf-role-card" data-role-id="{{ $role->id }}">
-                                    <div class="uf-role-card-icon {{ $rd['accent'] }}"><i class="bi {{ $rd['icon'] }}"></i></div>
-                                    <div class="uf-role-card-info">
-                                        <strong>{{ $rd['title'] }}</strong>
-                                        <small>{{ $rd['desc'] }}</small>
-                                    </div>
+                            <div class="uf-role-card">
+                                <div class="uf-role-card-icon accent-teal"><i class="bi bi-shield-fill"></i></div>
+                                <div class="uf-role-card-info">
+                                    <strong>Süper Admin</strong>
+                                    <small>Tam erişim. Tüm izinleri otomatik bypass eder.</small>
                                 </div>
-                            @endforeach
+                            </div>
+                            <div class="uf-role-card">
+                                <div class="uf-role-card-icon accent-blue"><i class="bi bi-shield-fill"></i></div>
+                                <div class="uf-role-card-info">
+                                    <strong>Admin</strong>
+                                    <small>Admin paneline erişebilir. Yetkileri atanan role göre belirlenir.</small>
+                                </div>
+                            </div>
+                            <div class="uf-role-card">
+                                <div class="uf-role-card-icon accent-green"><i class="bi bi-person-fill"></i></div>
+                                <div class="uf-role-card-info">
+                                    <strong>Kullanıcı</strong>
+                                    <small>Sadece front tarafa erişebilir. Admin paneli göremez.</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

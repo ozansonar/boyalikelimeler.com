@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\UserType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -23,6 +25,7 @@ class UserUpdateRequest extends FormRequest
             'last_name'       => ['required', 'string', 'max:100'],
             'email'           => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($userId)],
             'password'        => ['nullable', 'string', 'min:8', 'confirmed'],
+            'type'            => ['required', new Enum(UserType::class)],
             'role_id'         => ['required', 'exists:roles,id'],
             'email_verified'       => ['nullable', 'boolean'],
             'golden_pen_periods_sent'         => ['nullable'],
@@ -50,6 +53,8 @@ class UserUpdateRequest extends FormRequest
             'email.unique'        => 'Bu e-posta adresi zaten kayıtlı.',
             'password.min'        => 'Şifre en az 8 karakter olmalıdır.',
             'password.confirmed'  => 'Şifreler eşleşmiyor.',
+            'type.required'                            => 'Kullanıcı tipi zorunludur.',
+            'type.Illuminate\Validation\Rules\Enum'    => 'Geçersiz kullanıcı tipi.',
             'role_id.required'                         => 'Rol seçimi zorunludur.',
             'role_id.exists'                           => 'Geçersiz rol.',
             'golden_pen_periods.*.starts_at.required'  => 'Dönem başlangıç tarihi zorunludur.',

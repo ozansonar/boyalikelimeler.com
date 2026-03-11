@@ -106,6 +106,7 @@ final class UserService
                 'name'              => $data['first_name'] . ' ' . $data['last_name'],
                 'email'             => $data['email'],
                 'password'          => $data['password'],
+                'type'              => $data['type'] ?? 'kullanici',
                 'role_id'           => $data['role_id'],
                 'email_verified_at' => ! empty($data['email_verified']) ? now() : null,
             ]);
@@ -128,9 +129,12 @@ final class UserService
     public function update(User $user, array $data): User
     {
         return DB::transaction(function () use ($user, $data): User {
+            $roleChanged = (int) $user->role_id !== (int) $data['role_id'];
+
             $updateData = [
                 'name'              => $data['first_name'] . ' ' . $data['last_name'],
                 'email'             => $data['email'],
+                'type'              => $data['type'] ?? $user->type,
                 'role_id'           => $data['role_id'],
                 'email_verified_at' => ! empty($data['email_verified']) ? ($user->email_verified_at ?? now()) : null,
             ];
@@ -140,6 +144,10 @@ final class UserService
             }
 
             $user->update($updateData);
+
+            if ($roleChanged) {
+                $user->clearPermissionCache();
+            }
 
             if (isset($data['golden_pen_periods_sent'])) {
                 $this->goldenPenPeriodService->syncPeriods($user, $data['golden_pen_periods'] ?? []);
