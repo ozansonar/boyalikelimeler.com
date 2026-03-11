@@ -11,6 +11,7 @@ use App\Mail\LiteraryWorkRevisionRequestedMail;
 use App\Mail\LiteraryWorkSubmittedMail;
 use App\Mail\LiteraryWorkRevisedMail;
 use App\Mail\LiteraryWorkUpdatedMail;
+use App\Models\DailyView;
 use App\Models\LiteraryCategory;
 use App\Models\LiteraryRevision;
 use App\Models\LiteraryWork;
@@ -626,6 +627,15 @@ final class LiteraryWorkService
     public function incrementViews(LiteraryWork $work): void
     {
         $work->increment('view_count');
+
+        DailyView::updateOrCreate(
+            [
+                'viewable_type' => LiteraryWork::class,
+                'viewable_id'   => $work->id,
+                'view_date'     => now()->toDateString(),
+            ],
+            [],
+        )->increment('view_count');
     }
 
     // ─── Front: Related works (same category) ───
