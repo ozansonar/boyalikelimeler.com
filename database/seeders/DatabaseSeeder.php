@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             DemoCommentSeeder::class,
             QnaCategorySeeder::class,
             QnaQuestionSeeder::class,
+            QnaAnswerSeeder::class,
         ]);
     }
 }
