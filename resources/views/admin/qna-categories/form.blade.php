@@ -20,14 +20,16 @@
     </nav>
 
     <!-- Page Header -->
-    <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" data-aos="fade-down">
-        <div>
-            <h1 class="page-title">{{ $isEdit ? $category->name . ' — Düzenle' : 'Yeni Kategori Oluştur' }}</h1>
-            <p class="page-subtitle">Söz Meydanı soru/cevap kategorisi</p>
+    <div class="page-header d-flex align-items-start align-items-sm-center justify-content-between flex-column flex-sm-row gap-3 mb-4" data-aos="fade-down">
+        <div class="d-flex align-items-center gap-3">
+            <a href="{{ route('admin.qna.categories.index') }}" class="btn-glass" title="Geri Dön">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h1 class="page-title mb-0">{{ $isEdit ? $category->name . ' — Düzenle' : 'Yeni Kategori Oluştur' }}</h1>
+                <p class="page-subtitle mb-0">Söz Meydanı soru/cevap kategorisi</p>
+            </div>
         </div>
-        <a href="{{ route('admin.qna.categories.index') }}" class="btn-glass">
-            <i class="bi bi-arrow-left me-1"></i>Geri Dön
-        </a>
     </div>
 
     <form method="POST"
@@ -37,68 +39,91 @@
             @method('PUT')
         @endif
 
+        <!-- Kategori Bilgileri -->
         <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-header-custom">
+                <div class="form-section-header mb-0">
+                    <div class="form-section-icon bg-icon-teal"><i class="bi bi-folder"></i></div>
+                    <div>
+                        <h6 class="mb-0">Kategori Bilgileri</h6>
+                        <small class="text-muted">Kategorinin temel bilgilerini girin</small>
+                    </div>
+                </div>
+            </div>
             <div class="card-body-custom">
-                <h5 class="form-section-title"><i class="bi bi-folder me-2"></i>Kategori Bilgileri</h5>
-
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label-dark" for="name">Kategori Adı <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control-dark @error('name') is-invalid @enderror"
-                               id="name" name="name" value="{{ old('name', $category->name ?? '') }}" required>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="name">Kategori Adı <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                               id="name" name="name" value="{{ old('name', $category->name ?? '') }}"
+                               placeholder="Kategori adını yazın..." required>
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">Kategorinin görünen adı</div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label-dark" for="slug">Slug <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control-dark @error('slug') is-invalid @enderror"
-                               id="slug" name="slug" value="{{ old('slug', $category->slug ?? '') }}" required>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="slug">Slug <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('slug') is-invalid @enderror"
+                               id="slug" name="slug" value="{{ old('slug', $category->slug ?? '') }}"
+                               placeholder="otomatik-olusturulur" required>
                         @error('slug')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">URL'de kullanılacak kısa ad (otomatik oluşturulur)</div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label-dark" for="icon">İkon (Font Awesome class) <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control-dark @error('icon') is-invalid @enderror"
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="icon">İkon (Font Awesome class) <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('icon') is-invalid @enderror"
                                id="icon" name="icon" value="{{ old('icon', $category->icon ?? 'fa-solid fa-comments') }}"
                                placeholder="fa-solid fa-book-open" required>
                         @error('icon')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">Font Awesome ikon class'ı (ör: fa-solid fa-book-open)</div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label-dark" for="color_class">Renk Class'ı <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control-dark @error('color_class') is-invalid @enderror"
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="color_class">Renk Class'ı <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('color_class') is-invalid @enderror"
                                id="color_class" name="color_class" value="{{ old('color_class', $category->color_class ?? 'qna-cat-card__icon-wrap--default') }}"
                                placeholder="qna-cat-card__icon-wrap--edebiyat" required>
                         @error('color_class')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">Kategori kartındaki ikon renk class'ı</div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label-dark" for="sort_order">Sıralama</label>
-                        <input type="number" class="form-control-dark @error('sort_order') is-invalid @enderror"
-                               id="sort_order" name="sort_order" value="{{ old('sort_order', $category->sort_order ?? 0) }}" min="0">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label" for="sort_order">Sıralama</label>
+                        <input type="number" class="form-control @error('sort_order') is-invalid @enderror"
+                               id="sort_order" name="sort_order" value="{{ old('sort_order', $category->sort_order ?? 0) }}"
+                               min="0" placeholder="0">
                         @error('sort_order')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">Düşük değer = Daha üstte görünür</div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label-dark" for="is_active">Durum</label>
-                        <div class="form-check form-switch mt-2">
-                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1"
-                                   {{ old('is_active', $category->is_active ?? true) ? 'checked' : '' }}>
-                            <label class="form-check-label text-clr-secondary" for="is_active">Aktif</label>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label mb-3">Durum</label>
+                        <div class="ca-toggle-item">
+                            <div class="ca-toggle-info">
+                                <span>Aktif</span>
+                                <small>Kategori sitede görünür olur</small>
+                            </div>
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1"
+                                       {{ old('is_active', $category->is_active ?? true) ? 'checked' : '' }}>
+                            </div>
                         </div>
                     </div>
                     <div class="col-12">
-                        <label class="form-label-dark" for="description">Açıklama</label>
-                        <textarea class="form-control-dark @error('description') is-invalid @enderror"
-                                  id="description" name="description" rows="3">{{ old('description', $category->description ?? '') }}</textarea>
+                        <label class="form-label" for="description">Açıklama</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror"
+                                  id="description" name="description" rows="3"
+                                  placeholder="Kategori hakkında kısa bir açıklama yazın...">{{ old('description', $category->description ?? '') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">Opsiyonel — Kategori listeleme sayfasında gösterilir</div>
                     </div>
                 </div>
             </div>
@@ -106,13 +131,15 @@
 
         <!-- Form Actions -->
         <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="150">
-            <div class="card-body-custom d-flex justify-content-between align-items-center">
-                <a href="{{ route('admin.qna.categories.index') }}" class="btn-glass">
-                    <i class="bi bi-x-lg me-1"></i>İptal
-                </a>
-                <button type="submit" class="btn-teal">
-                    <i class="bi bi-check-lg me-1"></i>{{ $isEdit ? 'Güncelle' : 'Oluştur' }}
-                </button>
+            <div class="card-body-custom">
+                <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3">
+                    <a href="{{ route('admin.qna.categories.index') }}" class="btn-glass">
+                        <i class="bi bi-x-lg me-1"></i>Vazgeç
+                    </a>
+                    <button type="submit" class="btn-teal">
+                        <i class="bi bi-check-lg me-1"></i>{{ $isEdit ? 'Güncelle' : 'Oluştur' }}
+                    </button>
+                </div>
             </div>
         </div>
     </form>
