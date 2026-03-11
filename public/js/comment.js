@@ -110,7 +110,6 @@
                 ratingInput.value = '';
                 updateStars(0);
                 if (charCount) charCount.textContent = '0';
-                if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                 $form.validationEngine('hideAll');
             } else if (data.errors) {
                 var errorList = [];
@@ -146,6 +145,7 @@
         .finally(function () {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalHtml;
+            if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
         });
     }
 

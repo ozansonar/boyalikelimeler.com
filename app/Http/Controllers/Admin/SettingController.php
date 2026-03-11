@@ -283,6 +283,11 @@ class SettingController extends Controller
             'secret_key' => 'nullable|string|max:200',
         ]);
 
+        if ($data['secret_key'] === null || $data['secret_key'] === '') {
+            $existing = $this->settingService->getGroup('recaptcha');
+            $data['secret_key'] = $existing['secret_key'] ?? '';
+        }
+
         $this->settingService->updateGroup('recaptcha', $data);
 
         return redirect()->route('admin.settings.index', ['tab' => 'recaptcha'])

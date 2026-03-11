@@ -9,12 +9,10 @@
     @error('g-recaptcha-response')
         <span class="auth-form__error-text d-block mt-1">{{ $message }}</span>
     @enderror
-@endif
 
-@once
-    @if($isEnabled && $siteKey)
+    @once
         @push('scripts')
             <script src="https://www.google.com/recaptcha/api.js?hl=tr" async defer></script>
         @endpush
-    @endif
-@endonce
+    @endonce
+@endif

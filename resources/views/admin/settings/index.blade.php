@@ -872,12 +872,7 @@
 
                         <div class="stg-field">
                             <label class="stg-label">Secret Key (Private Key)</label>
-                            <div class="stg-input-group">
-                                <input type="password" name="secret_key" id="recaptchaSecretKey" class="stg-input" value="{{ old('secret_key', $recaptcha['secret_key'] ?? '') }}" placeholder="6Lc..." autocomplete="off">
-                                <button type="button" class="stg-input-group-btn" onclick="toggleRecaptchaSecret()" title="Göster/Gizle">
-                                    <i class="bi bi-eye" id="recaptchaSecretIcon"></i>
-                                </button>
-                            </div>
+                            <input type="password" name="secret_key" class="stg-input" value="" placeholder="{{ !empty($recaptcha['secret_key']) ? '••••••••  (değiştirmek için yeni key girin)' : '6Lc...' }}" autocomplete="off">
                             <small class="stg-hint">Google reCAPTCHA admin panelinden aldığınız gizli anahtar</small>
                             @error('secret_key') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
@@ -1095,16 +1090,5 @@
     });
 })();
 
-function toggleRecaptchaSecret() {
-    var input = document.getElementById('recaptchaSecretKey');
-    var icon = document.getElementById('recaptchaSecretIcon');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.replace('bi-eye', 'bi-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.replace('bi-eye-slash', 'bi-eye');
-    }
-}
 </script>
 @endpush

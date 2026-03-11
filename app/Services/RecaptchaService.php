@@ -10,6 +10,9 @@ final class RecaptchaService
 {
     private const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
+    /** @var array<string, string|null>|null */
+    private ?array $cachedSettings = null;
+
     public function __construct(
         private readonly SettingService $settingService,
     ) {}
@@ -49,10 +52,6 @@ final class RecaptchaService
 
         $secretKey = $this->getSettings()['secret_key'] ?? '';
 
-        if (empty($secretKey)) {
-            return true;
-        }
-
         $response = Http::asForm()->post(self::VERIFY_URL, [
             'secret'   => $secretKey,
             'response' => $token,
@@ -67,6 +66,10 @@ final class RecaptchaService
      */
     private function getSettings(): array
     {
-        return $this->settingService->getGroup('recaptcha');
+        if ($this->cachedSettings === null) {
+            $this->cachedSettings = $this->settingService->getGroup('recaptcha');
+        }
+
+        return $this->cachedSettings;
     }
 }
