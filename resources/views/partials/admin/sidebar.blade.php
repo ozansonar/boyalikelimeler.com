@@ -15,7 +15,7 @@
             </a>
         @endif
 
-        @if($sidebarUser->hasAnyPermission('home-sliders.view', 'advertisements.view'))
+        @if($sidebarUser->hasAnyPermission('home-sliders.view', 'advertisements.view', 'polls.view'))
             <div class="nav-section-title">Ana Sayfa</div>
             @if($sidebarUser->hasPermission('home-sliders.view'))
                 <a href="{{ route('admin.home-sliders.index') }}" class="nav-link {{ request()->routeIs('admin.home-sliders.*') ? 'active' : '' }}">
