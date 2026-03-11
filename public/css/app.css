@@ -2724,7 +2724,7 @@ p {
     }
 
     .hero-slider {
-        height: 200px;
+        height: 260px;
     }
 
     .hero-slider__arrow {
@@ -2734,12 +2734,31 @@ p {
     }
 
     .hero-slider__content {
-        padding: 1.5rem;
+        padding: 1rem 2.5rem;
     }
 
     .hero-slider__badge {
         font-size: 0.6rem;
         letter-spacing: 2px;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero-slider__title {
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+    }
+
+    .hero-slider__divider {
+        margin: 0.5rem auto;
+    }
+
+    .hero-slider__text {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .footer-bk {
