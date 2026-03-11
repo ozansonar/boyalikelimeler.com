@@ -592,31 +592,35 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="list-block list-block--auto mb-3" data-aos="fade-left" data-aos-duration="600">
-                        <h3 class="list-block__title">
-                            <i class="fa-solid fa-film me-2"></i>Haftanın Film Önerisi
-                        </h3>
-                        <a href="#" class="list-block__item">
-                            <i class="fa-solid fa-clapperboard list-block__item-icon"></i>
-                            <span>Paterson (2016) — Jim Jarmusch</span>
-                        </a>
-                        <a href="#" class="list-block__item">
-                            <i class="fa-solid fa-clapperboard list-block__item-icon"></i>
-                            <span>Dead Poets Society (1989)</span>
-                        </a>
-                        <a href="#" class="list-block__item">
-                            <i class="fa-solid fa-clapperboard list-block__item-icon"></i>
-                            <span>Midnight in Paris (2011)</span>
-                        </a>
-                        <a href="#" class="list-block__item">
-                            <i class="fa-solid fa-clapperboard list-block__item-icon"></i>
-                            <span>Bright Star (2009)</span>
-                        </a>
-                        <a href="#" class="list-block__item">
-                            <i class="fa-solid fa-clapperboard list-block__item-icon"></i>
-                            <span>Il Postino (1994)</span>
-                        </a>
-                    </div>
+                    @if(!empty($weeklyMovies))
+                        <div class="list-block list-block--auto mb-3" data-aos="fade-left" data-aos-duration="600">
+                            <h3 class="list-block__title">
+                                <i class="fa-solid fa-film me-2"></i>Haftanın Film Önerisi
+                            </h3>
+                            @foreach($weeklyMovies as $movie)
+                                @php
+                                    $label = e($movie['title'] ?? '');
+                                    if (!empty($movie['year'])) {
+                                        $label .= ' (' . e($movie['year']) . ')';
+                                    }
+                                    if (!empty($movie['director'])) {
+                                        $label .= ' — ' . e($movie['director']);
+                                    }
+                                @endphp
+                                @if(!empty($movie['link']))
+                                    <a href="{{ $movie['link'] }}" target="_blank" rel="noopener noreferrer nofollow" class="list-block__item">
+                                        <i class="fa-solid fa-clapperboard list-block__item-icon"></i>
+                                        <span>{{ $label }}</span>
+                                    </a>
+                                @else
+                                    <span class="list-block__item">
+                                        <i class="fa-solid fa-clapperboard list-block__item-icon"></i>
+                                        <span>{{ $label }}</span>
+                                    </span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
 
                     <div class="poll" data-aos="fade-left" data-aos-delay="200">
                         <h3 class="poll__title"><i class="fa-solid fa-chart-bar me-2"></i>Anket</h3>

@@ -128,6 +128,66 @@
                         </div>
                     </div>
                 </form>
+
+                <!-- Haftanın Film Önerileri -->
+                <form action="{{ route('admin.settings.update.weekly-movies') }}" method="POST" class="mt-4">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="stg-panel-header">
+                        <div>
+                            <h5><i class="bi bi-film"></i> Haftanın Film Önerisi</h5>
+                            <p>Anasayfa sidebar'da gösterilen haftalık film listesini yönetin</p>
+                        </div>
+                        <button type="submit" class="stg-save-btn"><i class="bi bi-check-lg"></i> Kaydet</button>
+                    </div>
+
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Gösterim Ayarı</h6>
+                            <p>Sidebar'da kaç film gösterileceğini belirleyin</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Gösterilecek Film Sayısı</label>
+                            <input type="number" name="weekly_movies_count" class="stg-input" min="1" max="20" value="{{ old('weekly_movies_count', $homepage['weekly_movies_count'] ?? '5') }}">
+                            <small class="stg-hint">Sidebar'da listelenecek maksimum film sayısı</small>
+                        </div>
+                    </div>
+
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Film Listesi</h6>
+                            <p>Film adı zorunlu, yıl / yönetmen / link opsiyoneldir</p>
+                        </div>
+
+                        <div id="weeklyMoviesList">
+                            @php
+                                $movies = json_decode($homepage['weekly_movies'] ?? '[]', true) ?: [];
+                            @endphp
+                            @forelse($movies as $i => $movie)
+                                <div class="stg-movie-row mb-3" data-index="{{ $i }}">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <span class="stg-movie-number">{{ $i + 1 }}</span>
+                                        <input type="text" name="movies[{{ $i }}][title]" class="stg-input flex-grow-1" value="{{ $movie['title'] ?? '' }}" placeholder="Film adı *" required>
+                                        <button type="button" class="btn btn-sm btn-outline-danger stg-movie-remove rounded-circle" title="Kaldır"><i class="bi bi-trash"></i></button>
+                                    </div>
+                                    <div class="d-flex gap-2 ms-4">
+                                        <input type="text" name="movies[{{ $i }}][year]" class="stg-input" value="{{ $movie['year'] ?? '' }}" placeholder="Yıl" maxlength="4">
+                                        <input type="text" name="movies[{{ $i }}][director]" class="stg-input" value="{{ $movie['director'] ?? '' }}" placeholder="Yönetmen">
+                                        <input type="url" name="movies[{{ $i }}][link]" class="stg-input flex-grow-1" value="{{ $movie['link'] ?? '' }}" placeholder="Link (opsiyonel)">
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-muted" id="noMovieText">Henüz film eklenmemiş.</p>
+                            @endforelse
+                        </div>
+
+                        <button type="button" class="btn btn-sm btn-teal mt-2" id="addMovieBtn">
+                            <i class="bi bi-plus-lg me-1"></i> Film Ekle
+                        </button>
+                    </div>
+                </form>
             </div>
 
             {{-- ==================== 1. GENEL AYARLAR ==================== --}}
@@ -838,4 +898,67 @@
 
 @push('scripts')
 <script src="{{ asset('assets/admin/js/settings.js') }}"></script>
+<script>
+(function () {
+    'use strict';
+
+    var list = document.getElementById('weeklyMoviesList');
+    var addBtn = document.getElementById('addMovieBtn');
+    if (!list || !addBtn) return;
+
+    function getNextIndex() {
+        var rows = list.querySelectorAll('.stg-movie-row');
+        var max = -1;
+        rows.forEach(function (r) {
+            var idx = parseInt(r.getAttribute('data-index'), 10);
+            if (idx > max) max = idx;
+        });
+        return max + 1;
+    }
+
+    function renumberRows() {
+        var rows = list.querySelectorAll('.stg-movie-row');
+        rows.forEach(function (row, i) {
+            var num = row.querySelector('.stg-movie-number');
+            if (num) num.textContent = i + 1;
+        });
+
+        var noText = document.getElementById('noMovieText');
+        if (noText) {
+            noText.style.display = rows.length === 0 ? '' : 'none';
+        }
+    }
+
+    addBtn.addEventListener('click', function () {
+        var idx = getNextIndex();
+        var html =
+            '<div class="stg-movie-row mb-3" data-index="' + idx + '">' +
+                '<div class="d-flex align-items-center gap-2 mb-2">' +
+                    '<span class="stg-movie-number"></span>' +
+                    '<input type="text" name="movies[' + idx + '][title]" class="stg-input flex-grow-1" placeholder="Film adı *" required>' +
+                    '<button type="button" class="btn btn-sm btn-outline-danger stg-movie-remove rounded-circle" title="Kaldır"><i class="bi bi-trash"></i></button>' +
+                '</div>' +
+                '<div class="d-flex gap-2 ms-4">' +
+                    '<input type="text" name="movies[' + idx + '][year]" class="stg-input" placeholder="Yıl" maxlength="4">' +
+                    '<input type="text" name="movies[' + idx + '][director]" class="stg-input" placeholder="Yönetmen">' +
+                    '<input type="url" name="movies[' + idx + '][link]" class="stg-input flex-grow-1" placeholder="Link (opsiyonel)">' +
+                '</div>' +
+            '</div>';
+
+        var noText = document.getElementById('noMovieText');
+        if (noText) noText.style.display = 'none';
+
+        list.insertAdjacentHTML('beforeend', html);
+        renumberRows();
+        list.lastElementChild.querySelector('input').focus();
+    });
+
+    list.addEventListener('click', function (e) {
+        var btn = e.target.closest('.stg-movie-remove');
+        if (!btn) return;
+        btn.closest('.stg-movie-row').remove();
+        renumberRows();
+    });
+})();
+</script>
 @endpush

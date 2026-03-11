@@ -97,12 +97,28 @@ final class SettingService
     }
 
     /**
+     * @return array<int, array{title: string, year: string, director: string, link: string}>
+     */
+    public function getWeeklyMovies(): array
+    {
+        return Cache::remember(self::CACHE_KEY . '.weekly_movies', self::CACHE_TTL, function (): array {
+            $homepage = $this->getGroup('homepage');
+            $json = $homepage['weekly_movies'] ?? '[]';
+            $movies = json_decode($json, true) ?: [];
+            $count = (int) ($homepage['weekly_movies_count'] ?? 5);
+
+            return array_slice($movies, 0, $count);
+        });
+    }
+
+    /**
      * Clear the settings cache.
      */
     public function clearCache(): void
     {
         Cache::forget(self::CACHE_KEY);
         Cache::forget(self::CACHE_KEY . '.grouped');
+        Cache::forget(self::CACHE_KEY . '.weekly_movies');
 
         $groups = Setting::distinct()->pluck('group');
         foreach ($groups as $group) {
