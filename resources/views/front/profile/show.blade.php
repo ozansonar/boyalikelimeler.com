@@ -362,7 +362,7 @@
                         @endforeach
 
                         @if($works->hasPages())
-                            <nav class="member-pagination" aria-label="Eser sayfalama">
+                            <nav class="member-pagination my-4" aria-label="Eser sayfalama">
                                 @if($works->onFirstPage())
                                     <button class="member-pagination__btn member-pagination__btn--prev" type="button" disabled aria-label="Önceki sayfa">
                                         <i class="fa-solid fa-chevron-left"></i>
@@ -438,7 +438,7 @@
                         @endforeach
 
                         @if($posts->hasPages())
-                            <nav class="member-pagination" aria-label="Yazı sayfalama">
+                            <nav class="member-pagination my-4" aria-label="Yazı sayfalama">
                                 @if($posts->onFirstPage())
                                     <button class="member-pagination__btn member-pagination__btn--prev" type="button" disabled aria-label="Önceki sayfa">
                                         <i class="fa-solid fa-chevron-left"></i>
