@@ -14,13 +14,13 @@ use Illuminate\Database\Seeder;
 class QnaAnswerSeeder extends Seeder
 {
     /**
-     * Soru slug prefix → 5 cevap.
+     * Soru slug → 5 cevap.
      *
      * @var array<string, list<string>>
      */
     private array $answers = [
         // ── Edebiyat ──
-        'turk-edebiyatinda-en-etkili-roman' => [
+        'turk-edebiyatinda-en-etkili-roman-hangisidir-sizce' => [
             '<p>Benim için Oğuz Atay\'ın Tutunamayanlar\'ı tartışmasız bir numaradır. Türk aydınının bunalımını bu kadar derinlemesine işleyen başka bir roman yok. Postmodern anlatımı da dönemine göre çok ileri.</p>',
             '<p>Yaşar Kemal\'in İnce Memed\'i bence en etkili romandır. Anadolu insanının direniş hikâyesini evrensel bir dille anlatması onu dünya edebiyatı klasikleri arasına soktu. Nobel\'e aday gösterilmesi boşuna değil.</p>',
             '<p>Ahmet Hamdi Tanpınar\'ın Huzur romanını öneriyorum. İstanbul\'u, Doğu-Batı sentezini ve bireysel huzursuzluğu bu denli katmanlı işleyen başka bir eser düşünemiyorum. Her okuduğumda yeni şeyler keşfediyorum.</p>',
@@ -52,14 +52,14 @@ class QnaAnswerSeeder extends Seeder
         ],
 
         // ── Tarih ──
-        'osmanli-imparatorlugunun-en-parlak-donemi' => [
+        'osmanli-imparatorlugunun-en-parlak-donemi-hangisidir' => [
             '<p>Kanuni dönemi denmesinin sebebi sadece askeri başarılar değil. Mimar Sinan\'ın eserleri, Bâkî\'nin şiirleri, hukuk reformları... Kültürel ve idari zirve bir arada yaşanmış. Ben de Kanuni dönemi diyorum.</p>',
             '<p>Fatih Sultan Mehmet dönemi bence daha kritiktir. İstanbul\'un fethi sadece askeri değil, bir çağ kapayıp çağ açan bir olay. Üniversite kurması, farklı dinlere hoşgörüsü çok ilerici.</p>',
             '<p>Tarihçi Halil İnalcık\'ın görüşüne katılıyorum: Kanuni sonrası "duraklama" aslında bir mit. İmparatorluk 17. yüzyılda da güçlüydü. Ama zirve olarak 1520-1566 arası yaygın kabul görüyor.</p>',
             '<p>Ben II. Bayezid dönemini küçümsememek gerektiğini düşünüyorum. İspanya\'dan sürülen Yahudileri kabul etmesi, ticaret ağlarının genişlemesi önemli. Ama "altın çağ" denince Kanuni dönemi öne çıkıyor.</p>',
             '<p>Sokullu Mehmed Paşa dönemini de dahil etmek lazım. Kanuni\'nin son yılları ve II. Selim dönemi, Sokullu\'nun dehası sayesinde parlak geçti. Don-Volga kanalı projesi bile tek başına vizyonu gösterir.</p>',
         ],
-        'kurtulus-savasinin-en-kritik-donum-noktasi' => [
+        'kurtulus-savasinin-en-kritik-donum-noktasi-neydi' => [
             '<p>Sakarya Meydan Muharebesi bence en kritik dönüm noktasıdır. 22 gün 22 gece süren bu savaş kaybedilseydi Ankara düşecek ve direniş çökecekti. Mustafa Kemal\'in "Hattı müdafaa yoktur, sathı müdafaa vardır" emri tarihi değiştirdi.</p>',
             '<p>Büyük Taarruz kesin sonucu getirdi ama bence asıl dönüm noktası TBMM\'nin açılmasıdır. Savaşı kazanacak siyasi irade ve meşruiyet buradan doğdu. Meclis olmasa ordu olmaz, ordu olmasa zafer olmazdı.</p>',
             '<p>I. İnönü Muharebesi psikolojik açıdan en kritik olandır. İlk kez düzenli ordu bir zafer kazandı ve "bu iş olabilir" inancı doğdu. Moral etkisi diğer tüm savaşlara yansıdı.</p>',
@@ -91,7 +91,7 @@ class QnaAnswerSeeder extends Seeder
             '<p>Galericiler ve koleksiyonerler hâlâ fiziksel eserlere yatırım yapıyor. Dijital sanat piyasası büyüyor ama geleneksel sanat piyasasının yerini almaktan çok uzak. İkisi farklı ekosistemler.</p>',
             '<p>Ben ikisini birleştiren sanatçıları çok beğeniyorum. Önce kâğıda çizim yapıp sonra dijitalde renklendiren, AR ile zenginleştiren işler var. Gelecek hibrit sanatta bence.</p>',
         ],
-        'muzik-egitimine-baslamak-icin-en-uygun-yas' => [
+        'muzik-egitimine-baslamak-icin-en-uygun-yas-kactir' => [
             '<p>Piyano için 5-6 yaş ideal başlangıç. Ama 4 yaşında Orff eğitimiyle ritim ve müzikalite geliştirmek çok faydalı. Küçük yaşta başlayanların kulak gelişimi daha iyi oluyor.</p>',
             '<p>Keman için 4-5 yaş önerilir çünkü erken başlamak kas hafızası için önemli. Suzuki metodu küçük çocuklar için çok etkili. Ama çocuğun zorla değil, keyifle yapması şart.</p>',
             '<p>Yetişkin olarak da başarılı olabilirsiniz, motivasyonunuz varsa. 30 yaşında piyano öğrenmeye başladım ve 3 yılda Chopin çalabilecek seviyeye geldim. Çocuklar kadar hızlı değilsiniz ama bilinçli çalışmayla ilerlersiniz.</p>',
@@ -116,7 +116,7 @@ class QnaAnswerSeeder extends Seeder
         ],
 
         // ── Teknoloji ──
-        'yazilim-ogrenmek-isteyenlere-ilk-dil-olarak' => [
+        'yazilim-ogrenmek-isteyenlere-ilk-dil-olarak-ne-onerirsiniz' => [
             '<p>Python ile başla, tereddüt etme. Sözdizimi temiz ve okunabilir, hata mesajları anlaşılır. Web, veri bilimi, yapay zekâ, otomasyon — her alanda kullanabilirsin. Udemy\'de Colt Steele veya Angela Yu kursları çok iyi.</p>',
             '<p>Hedefe göre değişir. Web geliştirme istiyorsan JavaScript ile başla çünkü hem frontend hem backend yapabilirsin. Genel programlama mantığı öğrenmek istiyorsan Python daha uygun.</p>',
             '<p>CS50 kursunu öneririm (Harvard, ücretsiz). C ile başlıyor ama temel bilgisayar bilimi kavramlarını o kadar iyi anlatıyor ki, sonra hangi dile geçersen geç sağlam temelin oluyor.</p>',
@@ -132,7 +132,7 @@ class QnaAnswerSeeder extends Seeder
         ],
 
         // ── Dil Bilgisi ──
-        'turkcede-en-cok-yapilan-yazim-hatalari' => [
+        'turkcede-en-cok-yapilan-yazim-hatalari-nelerdir' => [
             '<p>"De/da" ayrımı en yaygın hata. Bağlaç olan "de/da" ayrı, ek olan "-de/-da" bitişik yazılır. Test: "de/da" çıkarılınca cümle anlam kaybediyorsa bağlaçtır, ayrı yazılır. "Ben de geldim" (bağlaç) vs "evde kaldım" (ek).</p>',
             '<p>"Ki" bağlacı genellikle ayrı yazılır: "dedi ki", "biliyorum ki". Ama "hâlbuki", "mademki", "oysaki" gibi kalıplaşmış kelimeler bitişik. "-ki" eki ise her zaman bitişik: "evdeki", "bahçedeki".</p>',
             '<p>Kesme işareti hatası çok yaygın. Özel isimlere gelen ekler kesme ile ayrılır: "Ankara\'da" ama "Büyük Millet Meclisi\'ne" değil "Büyük Millet Meclisine" (çünkü kurum adı). TDK\'nın kılavuzunu kontrol etmekte fayda var.</p>',
@@ -148,14 +148,14 @@ class QnaAnswerSeeder extends Seeder
         ],
 
         // ── Mitoloji ──
-        'turk-mitolojisinde-en-ilginc-yaratik' => [
+        'turk-mitolojisinde-en-ilginc-yaratik-hangisidir' => [
             '<p>Tepegöz bence en ilginç olanı. Dede Korkut Hikâyeleri\'ndeki bu tek gözlü dev, Yunan mitolojisindeki Kyklop\'tan bağımsız olarak ortaya çıkmış olabilir. Basat\'ın Tepegöz\'ü öldürme hikâyesi Odysseus-Polyphemos ile şaşırtıcı benzerlikler taşıyor.</p>',
             '<p>Al Karısı (Albastı) çok ilginç ve az bilinen bir figür. Lohusa kadınlara ve yeni doğan bebeklere musallat olan kötü ruh olarak anlatılır. Orta Asya\'dan Anadolu\'ya taşınmış, hâlâ bazı yörelerde inanılıyor.</p>',
             '<p>Koncolos (veya Konçolos) — Türk mitolojisindeki vampir benzeri yaratık. Ölen kişinin ruhu bedene geri dönüp geceleri dolaşır. Anadolu\'da "Concolis" olarak da biliniyor. Batı vampir mitinden farklı özellikleri var.</p>',
             '<p>Anka kuşu (Zümrüdüanka/Simurg) en bilineni ama detaylarını az kişi bilir. Kaf Dağı\'nda yaşar, tüm bilgeliğe sahiptir. Attâr\'ın "Mantıku\'t-Tayr" (Kuşların Dili) eserinde otuz kuşun Simurg\'u araması aslında kendilerini aramasıdır.</p>',
             '<p>Yelbegen (veya Celbeğen) — çok başlı dev. Başları kesilince yeniden çıkar. Altay ve Sibirya Türk mitolojisinde geçer. Yunan mitolojisindeki Hydra\'ya benzer ama bağımsız bir gelenek. Alp Er Tonga destanında karşımıza çıkıyor.</p>',
         ],
-        'yunan-ve-roma-mitolojisi-arasindaki-temel-farklar' => [
+        'yunan-ve-roma-mitolojisi-arasindaki-temel-farklar-nelerdir' => [
             '<p>En büyük fark yaklaşımdadır. Yunan mitolojisi tanrıları insani zaaflarıyla anlatır — kıskanç, âşık, intikamcı. Roma mitolojisi ise tanrıları daha ciddi, devlet odaklı ve fonksiyonel gösterir. Romalılar pragmatikti, tanrıları da öyle.</p>',
             '<p>Ares Yunan\'da sevilmeyen, kaba kuvveti temsil eden bir tanrıydı. Mars ise Roma\'nın en saygın tanrılarından biriydi, Romulus ve Remus\'un babası. Savaş kavramına bakış tamamen farklı.</p>',
             '<p>Yunan mitolojisi bireysel kahramanlık hikâyelerine odaklanır (Herakles, Odysseus). Roma mitolojisi ise kuruluş ve devlet mitlerine ağırlık verir (Aeneas, Romulus). Toplumsal değerler farklı olduğu için mitler de farklılaştı.</p>',
@@ -192,8 +192,7 @@ class QnaAnswerSeeder extends Seeder
         }
 
         foreach ($questions as $question) {
-            $slugPrefix = $this->findSlugPrefix($question->slug);
-            $answerTexts = $this->answers[$slugPrefix] ?? null;
+            $answerTexts = $this->answers[$question->slug] ?? null;
 
             if ($answerTexts === null) {
                 continue;
@@ -233,16 +232,5 @@ class QnaAnswerSeeder extends Seeder
 
             $question->update(['answer_count' => 5]);
         }
-    }
-
-    private function findSlugPrefix(string $slug): string
-    {
-        foreach (array_keys($this->answers) as $prefix) {
-            if (str_starts_with($slug, $prefix)) {
-                return $prefix;
-            }
-        }
-
-        return '';
     }
 }
