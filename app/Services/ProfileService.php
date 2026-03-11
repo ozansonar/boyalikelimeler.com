@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\LiteraryWorkStatus;
+use App\Enums\LiteraryWorkType;
 use App\Enums\PostStatus;
 use App\Models\Favorite;
 use App\Models\LiteraryWork;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -21,23 +23,25 @@ final class ProfileService
         private readonly UploadService $uploadService,
     ) {}
     /**
-     * @return array{posts: Collection, works: Collection, stats: array}
+     * @return array{posts: LengthAwarePaginator, works: LengthAwarePaginator, stats: array, favoriteWorks: Collection, favoritePosts: Collection}
      */
-    public function getProfileData(User $user, int $postLimit = 6, int $workLimit = 10): array
+    public function getProfileData(User $user, int $perPage = 5): array
     {
-        $posts = $user->posts()
-            ->with('category')
-            ->where('status', PostStatus::Published)
-            ->orderByDesc('published_at')
-            ->limit($postLimit)
-            ->get();
-
         $works = $user->literaryWorks()
             ->with('category')
             ->where('status', LiteraryWorkStatus::Approved)
             ->orderByDesc('published_at')
-            ->limit($workLimit)
-            ->get();
+            ->paginate($perPage, ['*'], 'eser_sayfa')
+            ->withQueryString()
+            ->fragment('eserler');
+
+        $posts = $user->posts()
+            ->with('category')
+            ->where('status', PostStatus::Published)
+            ->orderByDesc('published_at')
+            ->paginate($perPage, ['*'], 'yazi_sayfa')
+            ->withQueryString()
+            ->fragment('yazilar');
 
         $stats = $this->getWriterStats($user);
 
@@ -48,7 +52,7 @@ final class ProfileService
     }
 
     /**
-     * @return array{total_posts: int, published_posts: int, total_views: int, total_works: int, approved_works: int, total_work_views: int}
+     * @return array{total_posts: int, published_posts: int, total_views: int, total_works: int, approved_works: int, total_work_views: int, work_type_counts: array<string, int>}
      */
     public function getWriterStats(User $user): array
     {
@@ -64,13 +68,21 @@ final class ProfileService
             COALESCE(SUM(view_count), 0) as views
         ", [LiteraryWorkStatus::Approved->value])->first();
 
+        $workTypeCounts = $user->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->selectRaw('work_type, COUNT(*) as cnt')
+            ->groupBy('work_type')
+            ->pluck('cnt', 'work_type')
+            ->toArray();
+
         return [
-            'total_posts'      => (int) $postStats->total,
-            'published_posts'  => (int) $postStats->published,
-            'total_views'      => (int) $postStats->views,
-            'total_works'      => (int) $workStats->total,
-            'approved_works'   => (int) $workStats->approved,
-            'total_work_views' => (int) $workStats->views,
+            'total_posts'       => (int) $postStats->total,
+            'published_posts'   => (int) $postStats->published,
+            'total_views'       => (int) $postStats->views,
+            'total_works'       => (int) $workStats->total,
+            'approved_works'    => (int) $workStats->approved,
+            'total_work_views'  => (int) $workStats->views,
+            'work_type_counts'  => $workTypeCounts,
         ];
     }
 

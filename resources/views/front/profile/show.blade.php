@@ -144,13 +144,13 @@
 
             {{-- Stats Bar --}}
             <div class="profile-stats">
-                @if($stats['approved_works'] > 0)
+                @foreach($stats['work_type_counts'] as $typeValue => $typeCount)
                     <div class="profile-stats__item">
-                        <span class="profile-stats__number">{{ $stats['approved_works'] }}</span>
-                        <span class="profile-stats__label">Eser</span>
+                        <span class="profile-stats__number">{{ $typeCount }}</span>
+                        <span class="profile-stats__label">{{ \App\Enums\LiteraryWorkType::from($typeValue)->label() }}</span>
                     </div>
                     <div class="profile-stats__divider"></div>
-                @endif
+                @endforeach
                 <div class="profile-stats__item">
                     <span class="profile-stats__number">{{ $stats['published_posts'] }}</span>
                     <span class="profile-stats__label">Yazı</span>
@@ -306,11 +306,13 @@
                 <div class="col-lg-8 order-lg-2 order-1">
 
                     {{-- Edebiyat Eserleri --}}
-                    @if($works->isNotEmpty())
-                        <div class="profile-card mb-3">
+                    @if($works->isNotEmpty() || $works->currentPage() > 1)
+                        <div class="profile-card mb-3" id="eserler">
                             <h3 class="profile-card__title">
                                 <i class="fa-solid fa-book-open me-2"></i>Edebiyat Eserleri
-                                <span class="profile-tabs__count ms-2">{{ $stats['approved_works'] }}</span>
+                                @foreach($stats['work_type_counts'] as $typeValue => $typeCount)
+                                    <span class="profile-tabs__count ms-2">{{ \App\Enums\LiteraryWorkType::from($typeValue)->label() }}: {{ $typeCount }}</span>
+                                @endforeach
                             </h3>
                         </div>
 
@@ -358,11 +360,17 @@
                                 </article>
                             </a>
                         @endforeach
+
+                        @if($works->hasPages())
+                            <nav class="profile-pagination" aria-label="Eser sayfalama">
+                                {{ $works->links('vendor.pagination.bootstrap-5') }}
+                            </nav>
+                        @endif
                     @endif
 
                     {{-- Blog Yazıları --}}
-                    @if($posts->isNotEmpty())
-                        <div class="profile-card mb-3">
+                    @if($posts->isNotEmpty() || $posts->currentPage() > 1)
+                        <div class="profile-card mb-3" id="yazilar">
                             <h3 class="profile-card__title">
                                 <i class="fa-solid fa-newspaper me-2"></i>Blog Yazıları
                                 <span class="profile-tabs__count ms-2">{{ $stats['published_posts'] }}</span>
@@ -404,6 +412,12 @@
                                 </div>
                             </article>
                         @endforeach
+
+                        @if($posts->hasPages())
+                            <nav class="profile-pagination" aria-label="Yazı sayfalama">
+                                {{ $posts->links('vendor.pagination.bootstrap-5') }}
+                            </nav>
+                        @endif
                     @endif
 
                     {{-- Beğenilen Eserler --}}
@@ -505,7 +519,7 @@
                     @endif
 
                     {{-- Boş durum --}}
-                    @if($works->isEmpty() && $posts->isEmpty())
+                    @if($works->total() === 0 && $posts->total() === 0)
                         <div class="profile-card text-center">
                             <i class="fa-solid fa-feather-pointed fa-3x mb-3" aria-hidden="true"></i>
                             <p class="profile-card__text">Henüz yayınlanmış içerik bulunmuyor.</p>
