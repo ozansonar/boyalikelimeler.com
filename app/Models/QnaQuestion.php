@@ -33,10 +33,12 @@ class QnaQuestion extends Model
     protected function casts(): array
     {
         return [
-            'status'       => QnaStatus::class,
-            'view_count'   => 'integer',
-            'like_count'   => 'integer',
-            'answer_count' => 'integer',
+            'user_id'          => 'integer',
+            'qna_category_id'  => 'integer',
+            'status'           => QnaStatus::class,
+            'view_count'       => 'integer',
+            'like_count'       => 'integer',
+            'answer_count'     => 'integer',
         ];
     }
 
