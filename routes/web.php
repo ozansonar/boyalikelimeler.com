@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/advertisement/{advertisement}/click', [HomeController::class, 'trackAdClick'])->name('advertisement.click');
+Route::post('/advertisement/{advertisement}/view', [HomeController::class, 'trackAdView'])->name('advertisement.view');
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

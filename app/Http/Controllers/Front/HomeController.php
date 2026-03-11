@@ -43,4 +43,12 @@ final class HomeController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function trackAdView(int $advertisement): JsonResponse
+    {
+        $ad = $this->advertisementService->find($advertisement);
+        $this->advertisementService->incrementView($ad);
+
+        return response()->json(['success' => true]);
+    }
 }

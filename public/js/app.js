@@ -331,6 +331,55 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    /* -- Advertisement Click & View Tracking ------------------ */
+    var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    var csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+
+    // Click tracking
+    document.querySelectorAll('[data-ad-id]').forEach(function (link) {
+        link.addEventListener('click', function () {
+            var adId = this.getAttribute('data-ad-id');
+            if (!adId) return;
+
+            navigator.sendBeacon(
+                '/advertisement/' + adId + '/click',
+                new Blob(
+                    [JSON.stringify({ _token: csrfToken })],
+                    { type: 'application/json' }
+                )
+            );
+        });
+    });
+
+    // View tracking with IntersectionObserver
+    var adElements = document.querySelectorAll('[data-ad-id]');
+    if (adElements.length > 0 && 'IntersectionObserver' in window) {
+        var viewedAds = {};
+        var adObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+
+                var adId = entry.target.getAttribute('data-ad-id');
+                if (!adId || viewedAds[adId]) return;
+
+                viewedAds[adId] = true;
+                adObserver.unobserve(entry.target);
+
+                navigator.sendBeacon(
+                    '/advertisement/' + adId + '/view',
+                    new Blob(
+                        [JSON.stringify({ _token: csrfToken })],
+                        { type: 'application/json' }
+                    )
+                );
+            });
+        }, { threshold: 0.5 });
+
+        adElements.forEach(function (el) {
+            adObserver.observe(el);
+        });
+    }
+
     /* -- AOS.js Init ----------------------------------------- */
     if (typeof AOS !== 'undefined') {
         AOS.init({
