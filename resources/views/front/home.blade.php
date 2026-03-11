@@ -419,7 +419,7 @@
                         </div>
                         <h3 class="cta-box__title">Dergimizi Alın</h3>
                         <p class="cta-box__text">Boyalı Kelimeler dergisinin yeni sayısı çıktı! Dergiyi edinmek için bizimle iletişime geçin.</p>
-                        <a href="{{ route('contact.show') }}" class="cta-box__btn">
+                        <a href="http://wa.me/+905537091992?text=Merhaba%2C%20Dergilerinizi%20%C3%A7ok%20be%C4%9Fendim%20%21%20Sat%C4%B1n%20almak%20istiyorum." target="_blank" rel="noopener noreferrer" class="cta-box__btn">
                             <i class="fa-solid fa-envelope me-1"></i> İletişime Geç
                         </a>
                     </div>
