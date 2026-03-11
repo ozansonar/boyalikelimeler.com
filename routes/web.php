@@ -195,6 +195,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     });
     Route::middleware('permission:settings.edit')->group(function () {
         Route::put('settings/homepage', [SettingController::class, 'updateHomepage'])->name('settings.update.homepage');
+        Route::put('settings/weekly-movies', [SettingController::class, 'updateWeeklyMovies'])->name('settings.update.weekly-movies');
         Route::put('settings/general', [SettingController::class, 'updateGeneral'])->name('settings.update.general');
         Route::put('settings/contact', [SettingController::class, 'updateContact'])->name('settings.update.contact');
         Route::put('settings/social', [SettingController::class, 'updateSocial'])->name('settings.update.social');

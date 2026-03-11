@@ -12887,6 +12887,29 @@ a.btn-glass {
   box-shadow: 0 0 16px rgba(20,184,166,0.3);
 }
 
+/* --- Movie Row --- */
+.stg-movie-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.stg-movie-row {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-body);
+}
+
 /* --- Section --- */
 .stg-section {
   background: var(--bg-card);

@@ -32,8 +32,9 @@ final class HomeController extends Controller
         $hero = $this->settingService->getGroup('homepage');
         $sidebarAds = $this->advertisementService->getActiveByPosition(AdvertisementPosition::Sidebar);
         $tallAds = $this->advertisementService->getActiveByPosition(AdvertisementPosition::Tall);
+        $weeklyMovies = $this->settingService->getWeeklyMovies();
 
-        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds'));
+        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies'));
     }
 
     public function trackAdClick(int $advertisement): JsonResponse

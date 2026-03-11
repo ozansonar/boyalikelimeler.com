@@ -54,6 +54,37 @@ class SettingController extends Controller
             ->with('success', 'Anasayfa ayarları başarıyla güncellendi.');
     }
 
+    public function updateWeeklyMovies(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'weekly_movies_count'    => 'required|integer|min:1|max:20',
+            'movies'                 => 'nullable|array',
+            'movies.*.title'         => 'required|string|max:200',
+            'movies.*.year'          => 'nullable|string|max:4',
+            'movies.*.director'      => 'nullable|string|max:200',
+            'movies.*.link'          => 'nullable|url|max:500',
+        ]);
+
+        $movies = collect($request->input('movies', []))
+            ->filter(fn (array $m): bool => !empty($m['title']))
+            ->values()
+            ->map(fn (array $m): array => [
+                'title'    => $m['title'],
+                'year'     => $m['year'] ?? '',
+                'director' => $m['director'] ?? '',
+                'link'     => $m['link'] ?? '',
+            ])
+            ->toArray();
+
+        $this->settingService->updateGroup('homepage', [
+            'weekly_movies'       => json_encode($movies, JSON_UNESCAPED_UNICODE),
+            'weekly_movies_count' => (string) $request->input('weekly_movies_count'),
+        ]);
+
+        return redirect()->route('admin.settings.index', ['tab' => 'homepage'])
+            ->with('success', 'Film önerileri başarıyla güncellendi.');
+    }
+
     public function updateGeneral(Request $request): RedirectResponse
     {
         $data = $request->validate([

@@ -58,6 +58,16 @@ class SettingSeeder extends Seeder
             ['group' => 'smtp', 'key' => 'from_name',           'value' => 'Boyalı Kelimeler'],
             ['group' => 'smtp', 'key' => 'from_email',          'value' => 'noreply@boyalikelimeler.com'],
 
+            // ─── Haftanın Film Önerisi ───
+            ['group' => 'homepage', 'key' => 'weekly_movies',       'value' => json_encode([
+                ['title' => 'Paterson', 'year' => '2016', 'director' => 'Jim Jarmusch', 'link' => ''],
+                ['title' => 'Dead Poets Society', 'year' => '1989', 'director' => '', 'link' => ''],
+                ['title' => 'Midnight in Paris', 'year' => '2011', 'director' => '', 'link' => ''],
+                ['title' => 'Bright Star', 'year' => '2009', 'director' => '', 'link' => ''],
+                ['title' => 'Il Postino', 'year' => '1994', 'director' => '', 'link' => ''],
+            ], JSON_UNESCAPED_UNICODE)],
+            ['group' => 'homepage', 'key' => 'weekly_movies_count', 'value' => '5'],
+
             // ─── Bakım Modu ───
             ['group' => 'maintenance', 'key' => 'enabled',      'value' => '0'],
             ['group' => 'maintenance', 'key' => 'message',      'value' => 'Sistemimiz şu anda planlı bakım çalışması nedeniyle geçici olarak hizmet dışıdır. En kısa sürede geri döneceğiz.'],
