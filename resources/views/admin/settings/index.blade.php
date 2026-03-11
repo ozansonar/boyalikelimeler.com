@@ -266,7 +266,14 @@
                                     <input type="file" name="logo" id="logoInput" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden>
                                     <button type="button" class="stg-btn stg-btn-sm" onclick="document.getElementById('logoInput').click()"><i class="bi bi-upload"></i> Logo Yükle</button>
                                     @if(!empty($general['logo']))
-                                        <a href="{{ route('admin.settings.remove-logo') }}" class="stg-btn stg-btn-sm stg-btn-ghost" id="logoRemoveBtn" onclick="return confirm('Logo kaldırılsın mı?')"><i class="bi bi-trash3"></i> Kaldır</a>
+                                        <a href="javascript:void(0)" class="stg-btn stg-btn-sm stg-btn-ghost" id="logoRemoveBtn" onclick="openConfirmModal({
+                                            title: 'Logo Kaldır',
+                                            message: 'Mevcut logo kaldırılacak. Devam etmek istiyor musunuz?',
+                                            iconClass: 'bi-trash3',
+                                            type: 'warning',
+                                            btnHtml: '<i class=\'bi bi-trash3\'></i> Evet, Kaldır',
+                                            onConfirm: function() { window.location.href = '{{ route('admin.settings.remove-logo') }}'; }
+                                        })"><i class="bi bi-trash3"></i> Kaldır</a>
                                     @endif
                                     <small class="text-muted">PNG, JPG, SVG veya WebP. Maks. 2 MB</small>
                                 </div>
@@ -288,7 +295,14 @@
                                     <input type="file" name="favicon" id="faviconInput" accept="image/png,image/x-icon,image/svg+xml" hidden>
                                     <button type="button" class="stg-btn stg-btn-sm" onclick="document.getElementById('faviconInput').click()"><i class="bi bi-upload"></i> Favicon Yükle</button>
                                     @if(!empty($general['favicon']))
-                                        <a href="{{ route('admin.settings.remove-favicon') }}" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="return confirm('Favicon kaldırılsın mı?')"><i class="bi bi-trash3"></i> Kaldır</a>
+                                        <a href="javascript:void(0)" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="openConfirmModal({
+                                            title: 'Favicon Kaldır',
+                                            message: 'Mevcut favicon kaldırılacak. Devam etmek istiyor musunuz?',
+                                            iconClass: 'bi-trash3',
+                                            type: 'warning',
+                                            btnHtml: '<i class=\'bi bi-trash3\'></i> Evet, Kaldır',
+                                            onConfirm: function() { window.location.href = '{{ route('admin.settings.remove-favicon') }}'; }
+                                        })"><i class="bi bi-trash3"></i> Kaldır</a>
                                     @endif
                                     <small class="text-muted">PNG, ICO veya SVG. Maks. 512 KB, 32x32px önerilir</small>
                                 </div>
@@ -620,7 +634,14 @@
                                     <input type="file" name="mail_logo" id="mailLogoInput" accept="image/png,image/jpeg" hidden>
                                     <button type="button" class="stg-btn stg-btn-sm" onclick="document.getElementById('mailLogoInput').click()"><i class="bi bi-upload"></i> Logo Yükle</button>
                                     @if(!empty($smtp['mail_logo']))
-                                        <a href="{{ route('admin.settings.remove-mail-logo') }}" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="return confirm('Mail logosu kaldırılsın mı?')"><i class="bi bi-trash3"></i> Kaldır</a>
+                                        <a href="javascript:void(0)" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="openConfirmModal({
+                                            title: 'Mail Logosu Kaldır',
+                                            message: 'Mevcut mail logosu kaldırılacak. Devam etmek istiyor musunuz?',
+                                            iconClass: 'bi-trash3',
+                                            type: 'warning',
+                                            btnHtml: '<i class=\'bi bi-trash3\'></i> Evet, Kaldır',
+                                            onConfirm: function() { window.location.href = '{{ route('admin.settings.remove-mail-logo') }}'; }
+                                        })"><i class="bi bi-trash3"></i> Kaldır</a>
                                     @endif
                                     <small class="text-muted">PNG veya JPG. Maks. 1 MB. Önerilen boyut: 200x60px</small>
                                 </div>
@@ -707,7 +728,14 @@
                             <p>E-posta şablonu renkleri, footer yazısı ve sosyal medya ayarları</p>
                         </div>
                         <div class="d-flex gap-2">
-                            <a href="{{ route('admin.settings.mail-theme.reset') }}" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="return confirm('Mail teması varsayılan değerlere sıfırlansın mı?')"><i class="bi bi-arrow-counterclockwise"></i> Sıfırla</a>
+                            <a href="javascript:void(0)" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="openConfirmModal({
+                                title: 'Mail Temasını Sıfırla',
+                                message: 'Mail teması varsayılan değerlere sıfırlanacak. Devam etmek istiyor musunuz?',
+                                iconClass: 'bi-arrow-counterclockwise',
+                                type: 'warning',
+                                btnHtml: '<i class=\'bi bi-arrow-counterclockwise\'></i> Evet, Sıfırla',
+                                onConfirm: function() { window.location.href = '{{ route('admin.settings.mail-theme.reset') }}'; }
+                            })"><i class="bi bi-arrow-counterclockwise"></i> Sıfırla</a>
                             <button type="submit" class="stg-save-btn"><i class="bi bi-check-lg"></i> Kaydet</button>
                         </div>
                     </div>
@@ -1013,7 +1041,14 @@
                                     <span>Önbelleği Temizle</span>
                                     <small>Tüm uygulama önbelleğini temizle</small>
                                 </div>
-                                <a href="{{ route('admin.settings.clear-cache') }}" class="stg-btn stg-btn-sm stg-btn-warning" onclick="return confirm('Önbellek temizlensin mi?')"><i class="bi bi-trash3"></i> Temizle</a>
+                                <a href="javascript:void(0)" class="stg-btn stg-btn-sm stg-btn-warning" onclick="openConfirmModal({
+                                    title: 'Önbelleği Temizle',
+                                    message: 'Tüm önbellek temizlenecek. Devam etmek istiyor musunuz?',
+                                    iconClass: 'bi-trash3',
+                                    type: 'warning',
+                                    btnHtml: '<i class=\'bi bi-trash3\'></i> Evet, Temizle',
+                                    onConfirm: function() { window.location.href = '{{ route('admin.settings.clear-cache') }}'; }
+                                })"><i class="bi bi-trash3"></i> Temizle</a>
                             </div>
                         </div>
                     </div>

@@ -132,9 +132,16 @@
                                         <i class="bi bi-eye"></i>
                                     </a>
                                     @if($log->body && ($log->isFailed() || $log->isSent()))
-                                        <form action="{{ route('admin.mail-logs.resend', $log) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu mail yeniden gönderilecek. Emin misiniz?')">
+                                        <form id="resendMailForm-{{ $log->id }}" action="{{ route('admin.mail-logs.resend', $log) }}" method="POST" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="usr-action-btn text-teal" title="Yeniden Gönder">
+                                            <button type="button" class="usr-action-btn text-teal" title="Yeniden Gönder" onclick="openConfirmModal({
+                                                title: 'Maili Yeniden Gönder',
+                                                message: 'Bu mail {{ $log->to_email }} adresine yeniden gönderilecek. Devam etmek istiyor musunuz?',
+                                                iconClass: 'bi-envelope-arrow-up-fill',
+                                                type: 'info',
+                                                btnHtml: '<i class=\'bi bi-arrow-repeat\'></i> Evet, Gönder',
+                                                onConfirm: function() { document.getElementById('resendMailForm-{{ $log->id }}').submit(); }
+                                            })">
                                                 <i class="bi bi-arrow-repeat"></i>
                                             </button>
                                         </form>

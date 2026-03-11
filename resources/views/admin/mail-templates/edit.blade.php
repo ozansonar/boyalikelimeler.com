@@ -23,8 +23,14 @@
             </div>
         </div>
         <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('admin.mail-templates.reset', $template) }}" class="btn-glass"
-               onclick="return confirm('Bu şablon varsayılan değerlere sıfırlanacak. Emin misiniz?')">
+            <a href="javascript:void(0)" class="btn-glass" onclick="openConfirmModal({
+                title: 'Şablonu Sıfırla',
+                message: 'Bu şablon varsayılan değerlere sıfırlanacak. Devam etmek istiyor musunuz?',
+                iconClass: 'bi-arrow-counterclockwise',
+                type: 'warning',
+                btnHtml: '<i class=\'bi bi-arrow-counterclockwise\'></i> Evet, Sıfırla',
+                onConfirm: function() { window.location.href = '{{ route('admin.mail-templates.reset', $template) }}'; }
+            })">
                 <i class="bi bi-arrow-counterclockwise me-1"></i>Varsayılana Dön
             </a>
             <button class="btn-teal" onclick="document.getElementById('templateForm').submit()">
