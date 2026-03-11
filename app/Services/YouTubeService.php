@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +14,8 @@ final class YouTubeService
     private const CACHE_KEY = 'youtube.channel_videos';
     private const CACHE_TTL = 21600; // 6 hours
     private const RSS_URL = 'https://www.youtube.com/feeds/videos.xml';
+    private const RSS_FETCH_LIMIT = 30; // Fetch more to compensate for filtered Shorts
+    private const SHORTS_URL = 'https://www.youtube.com/shorts/';
 
     public function __construct(
         private readonly SettingService $settingService,
@@ -59,7 +62,10 @@ final class YouTubeService
                 return [];
             }
 
-            return $this->parseRssFeed($response->body(), $limit);
+            $allVideos = $this->parseRssFeed($response->body(), self::RSS_FETCH_LIMIT);
+            $filtered = $this->filterOutShorts($allVideos);
+
+            return array_slice($filtered, 0, $limit);
         } catch (\Throwable $e) {
             Log::error('YouTube RSS feed error', [
                 'channel_id' => $channelId,
@@ -111,6 +117,45 @@ final class YouTubeService
         }
 
         return $videos;
+    }
+
+    /**
+     * Filter out YouTube Shorts from video list using concurrent HTTP checks.
+     *
+     * @param  array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}> $videos
+     * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
+     */
+    private function filterOutShorts(array $videos): array
+    {
+        if (empty($videos)) {
+            return [];
+        }
+
+        $responses = Http::pool(function (Pool $pool) use ($videos): array {
+            $requests = [];
+            foreach ($videos as $video) {
+                $requests[$video['id']] = $pool
+                    ->as($video['id'])
+                    ->timeout(5)
+                    ->withoutRedirecting()
+                    ->head(self::SHORTS_URL . $video['id']);
+            }
+
+            return $requests;
+        });
+
+        $normalVideos = [];
+        foreach ($videos as $video) {
+            $response = $responses[$video['id']] ?? null;
+
+            // If Shorts URL returns 200, it's a Short → skip it
+            // If it redirects (3xx) or fails, it's a normal video → keep it
+            if ($response === null || $response->status() !== 200) {
+                $normalVideos[] = $video;
+            }
+        }
+
+        return $normalVideos;
     }
 
     /**
