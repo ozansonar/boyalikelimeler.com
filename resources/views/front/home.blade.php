@@ -395,9 +395,22 @@
                     </div>
 
                     <!-- Reklam Alanı -->
-                    <div class="ad-banner ad-banner--sidebar mt-3">
-                        <p class="ad-banner__text mb-0"><i class="fa-solid fa-bullhorn me-2"></i>Reklam Alanı</p>
-                    </div>
+                    @if($sidebarAds->isNotEmpty())
+                        @php $sidebarAd = $sidebarAds->first(); @endphp
+                        <div class="ad-banner ad-banner--sidebar mt-3">
+                            @if($sidebarAd->link)
+                                <a href="{{ $sidebarAd->link }}" target="{{ $sidebarAd->link_target }}" rel="noopener noreferrer nofollow" data-ad-id="{{ $sidebarAd->id }}">
+                                    <img src="{{ upload_url($sidebarAd->image, 'md') }}" alt="{{ $sidebarAd->title }}" class="img-fluid rounded" loading="lazy">
+                                </a>
+                            @else
+                                <img src="{{ upload_url($sidebarAd->image, 'md') }}" alt="{{ $sidebarAd->title }}" class="img-fluid rounded" loading="lazy">
+                            @endif
+                        </div>
+                    @else
+                        <div class="ad-banner ad-banner--sidebar mt-3">
+                            <p class="ad-banner__text mb-0"><i class="fa-solid fa-bullhorn me-2"></i>Reklam Alanı</p>
+                        </div>
+                    @endif
 
                     <!-- Dergimizi Almak İçin İletişime Geç -->
                     <div class="cta-box cta-box--magazine mt-3" data-aos="fade-left" data-aos-delay="200">
@@ -665,11 +678,24 @@
 
                         <!-- Reklam — tall right -->
                         <div class="creative-grid__tall creative-grid__tall--right">
-                            <div class="ad-banner ad-banner--tall">
-                                <p class="ad-banner__text mb-0">
-                                    <i class="fa-solid fa-bullhorn me-2"></i>Reklam Alanı
-                                </p>
-                            </div>
+                            @if($tallAds->isNotEmpty())
+                                @php $tallAd = $tallAds->first(); @endphp
+                                <div class="ad-banner ad-banner--tall">
+                                    @if($tallAd->link)
+                                        <a href="{{ $tallAd->link }}" target="{{ $tallAd->link_target }}" rel="noopener noreferrer nofollow" data-ad-id="{{ $tallAd->id }}">
+                                            <img src="{{ upload_url($tallAd->image, 'lg') }}" alt="{{ $tallAd->title }}" class="img-fluid rounded" loading="lazy">
+                                        </a>
+                                    @else
+                                        <img src="{{ upload_url($tallAd->image, 'lg') }}" alt="{{ $tallAd->title }}" class="img-fluid rounded" loading="lazy">
+                                    @endif
+                                </div>
+                            @else
+                                <div class="ad-banner ad-banner--tall">
+                                    <p class="ad-banner__text mb-0">
+                                        <i class="fa-solid fa-bullhorn me-2"></i>Reklam Alanı
+                                    </p>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

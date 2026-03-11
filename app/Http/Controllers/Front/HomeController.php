@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Front;
 
+use App\Enums\AdvertisementPosition;
 use App\Http\Controllers\Controller;
+use App\Services\AdvertisementService;
 use App\Services\HomeService;
 use App\Services\HomeSliderService;
 use App\Services\SettingService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 final class HomeController extends Controller
@@ -16,6 +19,7 @@ final class HomeController extends Controller
         private readonly HomeService $homeService,
         private readonly HomeSliderService $homeSliderService,
         private readonly SettingService $settingService,
+        private readonly AdvertisementService $advertisementService,
     ) {}
 
     public function index(): View
@@ -26,7 +30,17 @@ final class HomeController extends Controller
         $latestPosts = $this->homeService->getLatestPosts(6);
         $homeSliders = $this->homeSliderService->getActiveSliders();
         $hero = $this->settingService->getGroup('homepage');
+        $sidebarAds = $this->advertisementService->getActiveByPosition(AdvertisementPosition::Sidebar);
+        $tallAds = $this->advertisementService->getActiveByPosition(AdvertisementPosition::Tall);
 
-        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero'));
+        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds'));
+    }
+
+    public function trackAdClick(int $advertisement): JsonResponse
+    {
+        $ad = $this->advertisementService->find($advertisement);
+        $this->advertisementService->incrementClick($ad);
+
+        return response()->json(['success' => true]);
     }
 }

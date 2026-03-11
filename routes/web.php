@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthorsPageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\HomeSliderController;
 use App\Http\Controllers\Admin\LiteraryCategoryController;
 use App\Http\Controllers\Admin\LiteraryWorkController;
@@ -40,6 +41,7 @@ use App\Http\Controllers\Front\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('/advertisement/{advertisement}/click', [HomeController::class, 'trackAdClick'])->name('advertisement.click');
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -266,6 +268,17 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::post('home-sliders/update-order', [HomeSliderController::class, 'updateOrder'])->name('home-sliders.update-order');
     });
     Route::delete('home-sliders/{home_slider}', [HomeSliderController::class, 'destroy'])->name('home-sliders.destroy')->middleware('permission:home-sliders.delete');
+
+    // Advertisement Management
+    Route::middleware('permission:advertisements.view')->group(function () {
+        Route::get('advertisements', [AdvertisementController::class, 'index'])->name('advertisements.index');
+    });
+    Route::get('advertisements/create', [AdvertisementController::class, 'create'])->name('advertisements.create')->middleware('permission:advertisements.create');
+    Route::post('advertisements', [AdvertisementController::class, 'store'])->name('advertisements.store')->middleware('permission:advertisements.create');
+    Route::get('advertisements/{advertisement}/edit', [AdvertisementController::class, 'edit'])->name('advertisements.edit')->middleware('permission:advertisements.edit');
+    Route::put('advertisements/{advertisement}', [AdvertisementController::class, 'update'])->name('advertisements.update')->middleware('permission:advertisements.edit');
+    Route::patch('advertisements/{advertisement}', [AdvertisementController::class, 'update'])->name('advertisements.update.patch')->middleware('permission:advertisements.edit');
+    Route::delete('advertisements/{advertisement}', [AdvertisementController::class, 'destroy'])->name('advertisements.destroy')->middleware('permission:advertisements.delete');
 
     // Role & Permission Management
     Route::middleware('permission:roles.view')->group(function () {

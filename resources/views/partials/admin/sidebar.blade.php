@@ -15,11 +15,18 @@
             </a>
         @endif
 
-        @if($sidebarUser->hasPermission('home-sliders.view'))
+        @if($sidebarUser->hasAnyPermission('home-sliders.view', 'advertisements.view'))
             <div class="nav-section-title">Ana Sayfa</div>
-            <a href="{{ route('admin.home-sliders.index') }}" class="nav-link {{ request()->routeIs('admin.home-sliders.*') ? 'active' : '' }}">
-                <i class="bi bi-display-fill"></i> Slider Yönetimi
-            </a>
+            @if($sidebarUser->hasPermission('home-sliders.view'))
+                <a href="{{ route('admin.home-sliders.index') }}" class="nav-link {{ request()->routeIs('admin.home-sliders.*') ? 'active' : '' }}">
+                    <i class="bi bi-display-fill"></i> Slider Yönetimi
+                </a>
+            @endif
+            @if($sidebarUser->hasPermission('advertisements.view'))
+                <a href="{{ route('admin.advertisements.index') }}" class="nav-link {{ request()->routeIs('admin.advertisements.*') ? 'active' : '' }}">
+                    <i class="bi bi-megaphone-fill"></i> Reklam Yönetimi
+                </a>
+            @endif
         @endif
 
         @if($sidebarUser->hasAnyPermission('posts.view', 'categories.view', 'pages.view', 'authors-page.manage', 'painters-page.manage'))
