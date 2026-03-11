@@ -141,6 +141,13 @@
                             <small class="stg-hint">YouTube kanal ID'si (UC ile başlar). Kanal sayfası → Sağ tık → Sayfa kaynağını görüntüle → "channel_id" aratın. Boş bırakılırsa video bölümü gizlenir.</small>
                             @error('youtube_channel_id') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">YouTube Data API Key</label>
+                            <input type="text" name="youtube_api_key" class="stg-input" value="{{ old('youtube_api_key', $homepage['youtube_api_key'] ?? '') }}" placeholder="AIzaSy...">
+                            <small class="stg-hint">Google Cloud Console → APIs & Services → Credentials → API Key oluşturun. YouTube Data API v3'ü etkinleştirmeniz gerekir. Bu sayede Shorts filtrelenir ve daha fazla video gösterilir.</small>
+                            @error('youtube_api_key') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
                     </div>
                 </form>
 
