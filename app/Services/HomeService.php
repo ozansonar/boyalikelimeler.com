@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Cache;
 
 final class HomeService
 {
+    public function __construct(
+        private readonly YouTubeService $youTubeService,
+    ) {}
+
+    /**
+     * Get YouTube channel videos.
+     *
+     * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
+     */
+    public function getYouTubeVideos(int $limit = 15): array
+    {
+        return $this->youTubeService->getChannelVideos($limit);
+    }
     /**
      * Get latest approved written works.
      *

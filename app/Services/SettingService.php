@@ -124,5 +124,13 @@ final class SettingService
         foreach ($groups as $group) {
             Cache::forget(self::CACHE_KEY . ".group.{$group}");
         }
+
+        // YouTube cache - channel ID may have changed
+        $channelId = Setting::where('group', 'homepage')
+            ->where('key', 'youtube_channel_id')
+            ->value('value');
+        if (!empty($channelId)) {
+            Cache::forget('youtube.channel_videos.' . $channelId);
+        }
     }
 }
