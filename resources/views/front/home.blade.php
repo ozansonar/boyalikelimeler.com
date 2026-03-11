@@ -390,10 +390,6 @@
                                 <img src="{{ upload_url($sidebarAd->image, 'md') }}" alt="{{ $sidebarAd->title }}" class="img-fluid rounded" loading="lazy">
                             @endif
                         </div>
-                    @else
-                        <div class="ad-banner ad-banner--sidebar mt-3">
-                            <p class="ad-banner__text mb-0"><i class="fa-solid fa-bullhorn me-2"></i>Reklam Alanı</p>
-                        </div>
                     @endif
 
                     <!-- Dergimizi Almak İçin İletişime Geç -->
@@ -682,8 +678,8 @@
                         </a>
 
                         <!-- Reklam — tall right -->
-                        <div class="creative-grid__tall creative-grid__tall--right">
-                            @if($tallAds->isNotEmpty())
+                        @if($tallAds->isNotEmpty())
+                            <div class="creative-grid__tall creative-grid__tall--right">
                                 @php $tallAd = $tallAds->first(); @endphp
                                 <div class="ad-banner ad-banner--tall">
                                     @if($tallAd->link)
@@ -694,14 +690,8 @@
                                         <img src="{{ upload_url($tallAd->image, 'lg') }}" alt="{{ $tallAd->title }}" class="img-fluid rounded" loading="lazy">
                                     @endif
                                 </div>
-                            @else
-                                <div class="ad-banner ad-banner--tall">
-                                    <p class="ad-banner__text mb-0">
-                                        <i class="fa-solid fa-bullhorn me-2"></i>Reklam Alanı
-                                    </p>
-                                </div>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Row 2: YouTube Kanal Videoları -->
