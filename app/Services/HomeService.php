@@ -25,7 +25,7 @@ final class HomeService
      *
      * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
      */
-    public function getYouTubeVideos(int $limit = 15): array
+    public function getYouTubeVideos(int $limit = 10): array
     {
         return $this->youTubeService->getChannelVideos($limit);
     }

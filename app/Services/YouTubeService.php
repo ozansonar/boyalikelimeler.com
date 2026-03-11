@@ -13,8 +13,8 @@ final class YouTubeService
     private const CACHE_KEY = 'youtube.channel_videos';
     private const CACHE_TTL = 21600; // 6 hours
     private const API_BASE = 'https://www.googleapis.com/youtube/v3';
-    private const MAX_PAGES = 3; // Maximum API pages to fetch (safety limit)
-    private const SHORTS_MAX_SECONDS = 60;
+    private const MAX_PAGES = 5; // Maximum API pages to fetch (safety limit)
+    private const SHORTS_MAX_SECONDS = 180; // YouTube allows Shorts up to 3 minutes
 
     public function __construct(
         private readonly SettingService $settingService,
@@ -25,7 +25,7 @@ final class YouTubeService
      *
      * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
      */
-    public function getChannelVideos(int $limit = 15): array
+    public function getChannelVideos(int $limit = 10): array
     {
         $channelId = $this->settingService->get('youtube_channel_id');
         $apiKey = $this->settingService->get('youtube_api_key');
@@ -143,7 +143,7 @@ final class YouTubeService
     private function fetchVideoDetails(array $videoIds, string $apiKey): array
     {
         $response = Http::timeout(10)->get(self::API_BASE . '/videos', [
-            'part' => 'contentDetails,snippet',
+            'part' => 'contentDetails,snippet,liveStreamingDetails',
             'id' => implode(',', $videoIds),
             'key' => $apiKey,
         ]);
@@ -162,14 +162,19 @@ final class YouTubeService
         foreach ($items as $item) {
             $videoId = $item['id'] ?? '';
             $duration = $item['contentDetails']['duration'] ?? 'PT0S';
+            $liveBroadcast = $item['snippet']['liveBroadcastContent'] ?? 'none';
+            $title = $item['snippet']['title'] ?? '';
 
             $videos[] = [
                 'id' => $videoId,
-                'title' => $item['snippet']['title'] ?? '',
+                'title' => $title,
                 'thumbnail' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
                 'published_at' => $item['snippet']['publishedAt'] ?? '',
                 'link' => "https://www.youtube.com/watch?v={$videoId}",
                 'duration_seconds' => $this->parseDuration($duration),
+                'is_live' => $liveBroadcast !== 'none',
+                'has_live_details' => isset($item['liveStreamingDetails']),
+                'is_shorts_tag' => $this->hasShortsTag($title, $item['snippet']['description'] ?? ''),
             ];
         }
 
@@ -177,9 +182,9 @@ final class YouTubeService
     }
 
     /**
-     * Filter out Shorts (videos under 60 seconds).
+     * Filter out Shorts, live streams and upcoming broadcasts.
      *
-     * @param  array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string, duration_seconds: int}> $videos
+     * @param  array<int, array> $videos
      * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
      */
     private function filterNormalVideos(array $videos): array
@@ -187,13 +192,31 @@ final class YouTubeService
         $normal = [];
 
         foreach ($videos as $video) {
-            if ($video['duration_seconds'] > self::SHORTS_MAX_SECONDS) {
-                unset($video['duration_seconds']);
-                $normal[] = $video;
+            // Skip live streams and upcoming broadcasts
+            if ($video['is_live'] || $video['has_live_details']) {
+                continue;
             }
+
+            // Skip Shorts: duration check OR #shorts tag in title/description
+            if ($video['duration_seconds'] <= self::SHORTS_MAX_SECONDS || $video['is_shorts_tag']) {
+                continue;
+            }
+
+            unset($video['duration_seconds'], $video['is_live'], $video['has_live_details'], $video['is_shorts_tag']);
+            $normal[] = $video;
         }
 
         return $normal;
+    }
+
+    /**
+     * Check if title or description contains #shorts hashtag.
+     */
+    private function hasShortsTag(string $title, string $description): bool
+    {
+        $text = mb_strtolower($title . ' ' . $description);
+
+        return str_contains($text, '#shorts') || str_contains($text, '#short');
     }
 
     /**
