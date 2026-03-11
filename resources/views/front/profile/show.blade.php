@@ -362,8 +362,32 @@
                         @endforeach
 
                         @if($works->hasPages())
-                            <nav class="profile-pagination" aria-label="Eser sayfalama">
-                                {{ $works->links() }}
+                            <nav class="member-pagination" aria-label="Eser sayfalama">
+                                @if($works->onFirstPage())
+                                    <button class="member-pagination__btn member-pagination__btn--prev" type="button" disabled aria-label="Önceki sayfa">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                @else
+                                    <a href="{{ $works->previousPageUrl() }}#eserler" class="member-pagination__btn member-pagination__btn--prev" aria-label="Önceki sayfa">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </a>
+                                @endif
+
+                                <div class="member-pagination__pages">
+                                    @foreach($works->getUrlRange(max(1, $works->currentPage() - 2), min($works->lastPage(), $works->currentPage() + 2)) as $page => $url)
+                                        <a href="{{ $url }}#eserler" class="member-pagination__page {{ $page === $works->currentPage() ? 'member-pagination__page--active' : '' }}">{{ $page }}</a>
+                                    @endforeach
+                                </div>
+
+                                @if($works->hasMorePages())
+                                    <a href="{{ $works->nextPageUrl() }}#eserler" class="member-pagination__btn member-pagination__btn--next" aria-label="Sonraki sayfa">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                @else
+                                    <button class="member-pagination__btn member-pagination__btn--next" type="button" disabled aria-label="Sonraki sayfa">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                @endif
                             </nav>
                         @endif
                     @endif
@@ -414,8 +438,32 @@
                         @endforeach
 
                         @if($posts->hasPages())
-                            <nav class="profile-pagination" aria-label="Yazı sayfalama">
-                                {{ $posts->links() }}
+                            <nav class="member-pagination" aria-label="Yazı sayfalama">
+                                @if($posts->onFirstPage())
+                                    <button class="member-pagination__btn member-pagination__btn--prev" type="button" disabled aria-label="Önceki sayfa">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                @else
+                                    <a href="{{ $posts->previousPageUrl() }}#yazilar" class="member-pagination__btn member-pagination__btn--prev" aria-label="Önceki sayfa">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </a>
+                                @endif
+
+                                <div class="member-pagination__pages">
+                                    @foreach($posts->getUrlRange(max(1, $posts->currentPage() - 2), min($posts->lastPage(), $posts->currentPage() + 2)) as $page => $url)
+                                        <a href="{{ $url }}#yazilar" class="member-pagination__page {{ $page === $posts->currentPage() ? 'member-pagination__page--active' : '' }}">{{ $page }}</a>
+                                    @endforeach
+                                </div>
+
+                                @if($posts->hasMorePages())
+                                    <a href="{{ $posts->nextPageUrl() }}#yazilar" class="member-pagination__btn member-pagination__btn--next" aria-label="Sonraki sayfa">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                @else
+                                    <button class="member-pagination__btn member-pagination__btn--next" type="button" disabled aria-label="Sonraki sayfa">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                @endif
                             </nav>
                         @endif
                     @endif
