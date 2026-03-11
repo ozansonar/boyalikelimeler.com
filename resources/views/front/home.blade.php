@@ -930,7 +930,7 @@
                     </div>
 
                     <!-- 2 Küçük CTA Kutusu -->
-                    <div class="row g-3 mt-auto">
+                    <div class="row g-3">
                         <div class="col-6" data-aos="zoom-in" data-aos-delay="0">
                             <a href="{{ route('register') }}" class="text-decoration-none d-block">
                                 <div class="mini-cta">

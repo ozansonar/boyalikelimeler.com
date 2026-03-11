@@ -2043,7 +2043,6 @@ p {
     border: var(--border-silver);
     border-radius: 0.75rem;
     padding: 1.5rem;
-    flex-grow: 1;
 }
 
 .quote-comment__header {
