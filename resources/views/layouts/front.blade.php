@@ -139,7 +139,7 @@
                                 <i class="fa-solid fa-user me-1"></i>{{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end navbar-bk__user-dropdown">
-                                @if(auth()->user()->role?->slug === App\Enums\RoleSlug::SuperAdmin->value || auth()->user()->role?->slug === App\Enums\RoleSlug::Admin->value)
+                                @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
                                     <li>
                                         <a class="dropdown-item" href="{{ route('admin.dashboard') }}" target="_blank">
                                             <i class="fa-solid fa-gauge-high me-2"></i>Admin Panel
@@ -154,7 +154,7 @@
                                     </a>
                                 </li>
 
-                                @if(auth()->user()->role?->slug === App\Enums\RoleSlug::Yazar->value || auth()->user()->role?->slug === App\Enums\RoleSlug::SuperAdmin->value || auth()->user()->role?->slug === App\Enums\RoleSlug::Admin->value)
+                                @if(auth()->user()->isYazar() || auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
                                     <li>
                                         <a class="dropdown-item" href="{{ route('myposts.index') }}">
                                             <i class="fa-solid fa-file-lines me-2"></i>Yazılarım

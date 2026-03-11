@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Enums\RoleSlug;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ class AdminMiddleware
 
         $user = auth()->user();
 
-        if (!$user->hasRole(RoleSlug::SuperAdmin) && !$user->hasRole(RoleSlug::Admin)) {
+        if (!$user->isSuperAdmin() && !$user->isAdmin()) {
             abort(403, 'Bu sayfaya erişim yetkiniz yok.');
         }
 

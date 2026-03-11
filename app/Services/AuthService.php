@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\RoleSlug;
+use App\Enums\UserType;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Mail\NewUserRegisteredMail;
@@ -38,6 +39,7 @@ final class AuthService
                 'name'     => $request->validated('first_name') . ' ' . $request->validated('last_name'),
                 'email'    => $request->validated('email'),
                 'password' => $request->validated('password'),
+                'type'     => UserType::Kullanici,
                 'role_id'  => $role->id,
             ]);
 
@@ -51,12 +53,7 @@ final class AuthService
 
     private function notifyAdmins(User $newUser): void
     {
-        $adminRoles = Role::whereIn('slug', [
-            RoleSlug::SuperAdmin->value,
-            RoleSlug::Admin->value,
-        ])->pluck('id');
-
-        $admins = User::whereIn('role_id', $adminRoles)
+        $admins = User::whereIn('type', [UserType::SuperAdmin, UserType::Admin])
             ->whereNotNull('email_verified_at')
             ->get();
 
