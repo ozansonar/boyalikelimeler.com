@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         QnaQuestion::query()
-            ->whereRaw('slug != LOWER(slug)')
+            ->whereRaw('BINARY slug != LOWER(slug)')
             ->each(function (QnaQuestion $question): void {
                 $newSlug = Str::lower($question->slug);
 
