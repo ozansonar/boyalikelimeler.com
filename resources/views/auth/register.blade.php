@@ -202,8 +202,8 @@
                                    required
                                    {{ old('terms') ? 'checked' : '' }}>
                             <label class="auth-form__check-label" for="terms">
-                                <a href="#" class="auth-form__link">Kullanım koşullarını</a> ve
-                                <a href="#" class="auth-form__link">gizlilik politikasını</a> kabul ediyorum
+                                <a href="{{ url('/kullanim-kosullari') }}" class="auth-form__link" target="_blank" rel="noopener noreferrer">Kullanım koşullarını</a> ve
+                                <a href="{{ url('/gizlilik-politikasi') }}" class="auth-form__link" target="_blank" rel="noopener noreferrer">gizlilik politikasını</a> kabul ediyorum
                             </label>
                             @error('terms')
                                 <span class="auth-form__error-text d-block">{{ $message }}</span>
@@ -214,16 +214,6 @@
                             <i class="fa-solid fa-user-plus me-2"></i>Kayıt Ol
                         </button>
                     </form>
-
-                    <div class="login-card__divider">
-                        <span class="login-card__divider-text">veya</span>
-                    </div>
-
-                    <div class="login-card__social">
-                        <button type="button" class="login-card__social-btn login-card__social-btn--google" disabled title="Yakında aktif olacak">
-                            <i class="fa-brands fa-google me-2"></i>Google ile Kayıt Ol
-                        </button>
-                    </div>
 
                     <div class="login-card__footer">
                         <p class="login-card__footer-text">

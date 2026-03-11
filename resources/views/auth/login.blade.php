@@ -123,16 +123,6 @@
                         </button>
                     </form>
 
-                    <div class="login-card__divider">
-                        <span class="login-card__divider-text">veya</span>
-                    </div>
-
-                    <div class="login-card__social">
-                        <button type="button" class="login-card__social-btn login-card__social-btn--google" disabled title="Yakında aktif olacak">
-                            <i class="fa-brands fa-google me-2"></i>Google ile Giriş
-                        </button>
-                    </div>
-
                     <div class="login-card__footer">
                         <p class="login-card__footer-text">
                             Hesabınız yok mu?
