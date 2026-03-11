@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\Gender;
 use App\Enums\RoleSlug;
+use App\Enums\UserType;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerifyEmailMail;
 use App\Traits\HasPermission;
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'email',
         'password',
+        'type',
         'role_id',
         'bio',
         'about',
@@ -68,6 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password'          => 'hashed',
             'birthdate'         => 'date',
             'interests'         => 'array',
+            'type'                 => UserType::class,
             'gender'               => Gender::class,
             'is_public'               => 'boolean',
             'show_email'              => 'boolean',
@@ -146,12 +149,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdmin(): bool
     {
-        return $this->hasRole(RoleSlug::Admin);
+        return $this->type === UserType::Admin;
     }
 
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole(RoleSlug::SuperAdmin);
+        return $this->type === UserType::SuperAdmin;
     }
 
     public function isYazar(): bool
