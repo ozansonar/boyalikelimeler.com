@@ -123,12 +123,12 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::delete('profile/avatar', [AdminProfileController::class, 'removeAvatar'])->name('profile.avatar.remove');
 
     // User Management
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create')->middleware('permission:users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store')->middleware('permission:users.create');
     Route::middleware('permission:users.view')->group(function () {
         Route::get('users', [UserController::class, 'index'])->name('users.index');
         Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
     });
-    Route::get('users/create', [UserController::class, 'create'])->name('users.create')->middleware('permission:users.create');
-    Route::post('users', [UserController::class, 'store'])->name('users.store')->middleware('permission:users.create');
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('permission:users.edit');
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update')->middleware('permission:users.edit');
     Route::patch('users/{user}', [UserController::class, 'update'])->name('users.update.patch')->middleware('permission:users.edit');
