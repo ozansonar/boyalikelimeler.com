@@ -83,14 +83,35 @@
                         <div class="form-text">Font Awesome ikon class'ı (ör: fa-solid fa-book-open)</div>
                     </div>
                     <div class="col-12 col-md-6">
-                        <label class="form-label" for="color_class">Renk Class'ı <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('color_class') is-invalid @enderror"
-                               id="color_class" name="color_class" value="{{ old('color_class', $category->color_class ?? 'qna-cat-card__icon-wrap--default') }}"
-                               placeholder="qna-cat-card__icon-wrap--edebiyat" required>
+                        <label class="form-label" for="color_class">Renk Teması <span class="text-danger">*</span></label>
+                        @php
+                            $colorOptions = [
+                                'qna-cat-card__icon-wrap--edebiyat'  => ['label' => 'Altın (Edebiyat)', 'color' => '#D4AF37'],
+                                'qna-cat-card__icon-wrap--psikoloji' => ['label' => 'Mor (Psikoloji)', 'color' => '#a78bfa'],
+                                'qna-cat-card__icon-wrap--aile'      => ['label' => 'Kırmızı (Aile)', 'color' => '#fb7185'],
+                                'qna-cat-card__icon-wrap--yazi'      => ['label' => 'Mavi (Yazı)', 'color' => '#93c5fd'],
+                                'qna-cat-card__icon-wrap--gorsel'    => ['label' => 'Pembe (Görsel)', 'color' => '#f472b6'],
+                                'qna-cat-card__icon-wrap--sohbet'    => ['label' => 'Turuncu (Sohbet)', 'color' => '#fbbf24'],
+                                'qna-cat-card__icon-wrap--serbest'   => ['label' => 'Yeşil (Serbest)', 'color' => '#5dd39e'],
+                                'qna-cat-card__icon-wrap--astroloji' => ['label' => 'Cyan (Astroloji)', 'color' => '#67e8f9'],
+                            ];
+                            $currentColor = old('color_class', $category->color_class ?? 'qna-cat-card__icon-wrap--edebiyat');
+                        @endphp
+                        <select class="form-select @error('color_class') is-invalid @enderror"
+                                id="color_class" name="color_class" required>
+                            @foreach($colorOptions as $value => $option)
+                                <option value="{{ $value }}" @selected($currentColor === $value)>
+                                    {{ $option['label'] }}
+                                </option>
+                            @endforeach
+                        </select>
                         @error('color_class')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text">Kategori kartındaki ikon renk class'ı</div>
+                        <div class="form-text">
+                            Kategori kartındaki ikon renk teması
+                            <span id="colorPreview" class="color-preview-dot"></span>
+                        </div>
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label" for="sort_order">Sıralama</label>
@@ -145,3 +166,28 @@
     </form>
 
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const colorSelect = document.getElementById('color_class');
+        const colorPreview = document.getElementById('colorPreview');
+        const colorMap = {
+            'qna-cat-card__icon-wrap--edebiyat': '#D4AF37',
+            'qna-cat-card__icon-wrap--psikoloji': '#a78bfa',
+            'qna-cat-card__icon-wrap--aile': '#fb7185',
+            'qna-cat-card__icon-wrap--yazi': '#93c5fd',
+            'qna-cat-card__icon-wrap--gorsel': '#f472b6',
+            'qna-cat-card__icon-wrap--sohbet': '#fbbf24',
+            'qna-cat-card__icon-wrap--serbest': '#5dd39e',
+            'qna-cat-card__icon-wrap--astroloji': '#67e8f9'
+        };
+
+        colorPreview.style.backgroundColor = colorMap[colorSelect.value] || '#D4AF37';
+
+        colorSelect.addEventListener('change', function () {
+            colorPreview.style.backgroundColor = colorMap[this.value] || '#D4AF37';
+        });
+    });
+</script>
+@endpush
