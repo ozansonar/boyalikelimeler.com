@@ -10512,6 +10512,19 @@ p {
 .qna-modal__header {
     border-bottom: 1px solid rgba(155, 158, 163, 0.1);
     padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.qna-modal .auth-form__input,
+.qna-modal .auth-form__input option {
+    color: var(--color-cream);
+    background-color: var(--color-black-deep);
+}
+
+.qna-modal .auth-form__input::placeholder {
+    color: var(--color-silver-dark);
 }
 
 .qna-modal__title {

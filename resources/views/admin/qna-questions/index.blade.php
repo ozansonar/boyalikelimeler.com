@@ -65,7 +65,7 @@
                     @if(!empty($filters['status']))
                         <input type="hidden" name="status" value="{{ $filters['status'] }}">
                     @endif
-                    <select name="category" class="form-select-dark" onchange="this.form.submit()" style="width: auto; min-width: 150px;">
+                    <select name="category" class="cl-filter-select" onchange="this.form.submit()">
                         <option value="">Tüm Kategoriler</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ ($filters['category'] ?? '') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>

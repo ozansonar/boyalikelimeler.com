@@ -232,33 +232,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // =====================================================
-    // Toast Helper
+    // Toast Helper — Global BkModal kullanır
     // =====================================================
     function showQnaToast(message, type) {
-        // Try to use existing status modal system
-        var statusModal = document.getElementById('statusModal');
-        if (statusModal) {
-            var iconEl = statusModal.querySelector('.status-modal-icon i');
-            var iconWrap = statusModal.querySelector('.status-modal-icon');
-            var msgEl = statusModal.querySelector('.status-modal-message');
-
-            if (iconEl && iconWrap && msgEl) {
-                if (type === 'success') {
-                    iconWrap.className = 'status-modal-icon success';
-                    iconEl.className = 'bi bi-check-circle';
-                } else {
-                    iconWrap.className = 'status-modal-icon danger';
-                    iconEl.className = 'bi bi-exclamation-circle';
-                }
-                msgEl.textContent = message;
-                var bsModal = new bootstrap.Modal(statusModal);
-                bsModal.show();
-                return;
-            }
-        }
-
-        // Fallback: simple alert
-        alert(message);
+        var modalType = type === 'success' ? 'success' : 'danger';
+        window.BkModal.show(modalType, message);
     }
 
 });

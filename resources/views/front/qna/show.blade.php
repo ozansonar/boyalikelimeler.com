@@ -62,7 +62,7 @@
                         <h1 class="qna-detail__title">{{ $question->title }}</h1>
 
                         <div class="qna-detail__body">
-                            {!! nl2br(e(strip_tags($question->body))) !!}
+                            {!! nl2br(e($question->body)) !!}
                         </div>
 
                         <div class="qna-detail__actions">
@@ -122,7 +122,7 @@
                                     </button>
                                 </div>
                                 <div class="qna-detail-answer__body">
-                                    {!! nl2br(e(strip_tags($answer->body))) !!}
+                                    {!! nl2br(e($answer->body)) !!}
                                 </div>
                             </div>
                         @endforeach
