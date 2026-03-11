@@ -30,7 +30,7 @@
                 <label class="form-label">Pozisyon <span class="text-danger">*</span></label>
                 <select class="form-select @error('position') is-invalid @enderror" name="position" required>
                     @foreach($positions as $position)
-                        <option value="{{ $position->value }}" {{ old('position', $ad->position?->value ?? '') === $position->value ? 'selected' : '' }}>
+                        <option value="{{ $position->value }}" {{ old('position', $ad?->position?->value ?? '') === $position->value ? 'selected' : '' }}>
                             {{ $position->label() }}
                         </option>
                     @endforeach
@@ -90,7 +90,7 @@
             <div class="col-md-4">
                 <label class="form-label">Başlangıç Tarihi</label>
                 <input type="date" class="form-control @error('start_date') is-invalid @enderror"
-                       name="start_date" value="{{ old('start_date', $ad->start_date?->format('Y-m-d') ?? '') }}">
+                       name="start_date" value="{{ old('start_date', $ad?->start_date?->format('Y-m-d') ?? '') }}">
                 @error('start_date')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -99,7 +99,7 @@
             <div class="col-md-4">
                 <label class="form-label">Bitiş Tarihi</label>
                 <input type="date" class="form-control @error('end_date') is-invalid @enderror"
-                       name="end_date" value="{{ old('end_date', $ad->end_date?->format('Y-m-d') ?? '') }}">
+                       name="end_date" value="{{ old('end_date', $ad?->end_date?->format('Y-m-d') ?? '') }}">
                 @error('end_date')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
