@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\QnaStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,7 +39,7 @@ class QnaCategory extends Model
 
     public function approvedQuestions(): HasMany
     {
-        return $this->hasMany(QnaQuestion::class)->where('status', 'approved');
+        return $this->hasMany(QnaQuestion::class)->where('status', QnaStatus::Approved);
     }
 
     public function scopeActive(Builder $query): Builder
@@ -59,7 +60,7 @@ class QnaCategory extends Model
     public function approvedAnswerCount(): int
     {
         return QnaAnswer::whereHas('question', function (Builder $query): void {
-            $query->where('qna_category_id', $this->id)->where('status', 'approved');
-        })->where('status', 'approved')->count();
+            $query->where('qna_category_id', $this->id)->where('status', QnaStatus::Approved);
+        })->where('status', QnaStatus::Approved)->count();
     }
 }

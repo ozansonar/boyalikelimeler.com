@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\QnaStatus;
 use App\Models\QnaAnswer;
 use App\Models\QnaCategory;
 use App\Models\QnaQuestion;
@@ -24,7 +25,7 @@ final class QnaCategoryService
             return QnaCategory::active()
                 ->ordered()
                 ->withCount([
-                    'questions as approved_questions_count' => fn (Builder $q) => $q->where('status', 'approved'),
+                    'questions as approved_questions_count' => fn (Builder $q) => $q->where('status', QnaStatus::Approved),
                 ])
                 ->get();
         });
@@ -47,7 +48,7 @@ final class QnaCategoryService
     {
         return QnaCategory::query()
             ->withCount([
-                'questions as approved_questions_count' => fn (Builder $q) => $q->where('status', 'approved'),
+                'questions as approved_questions_count' => fn (Builder $q) => $q->where('status', QnaStatus::Approved),
             ])
             ->when($filters['search'] ?? null, function (Builder $q, string $search): void {
                 $q->where('name', 'like', "%{$search}%");
@@ -97,8 +98,8 @@ final class QnaCategoryService
         return Cache::remember('qna.stats', 300, function (): array {
             return [
                 'categories' => QnaCategory::active()->count(),
-                'questions'  => QnaQuestion::where('status', 'approved')->count(),
-                'answers'    => QnaAnswer::where('status', 'approved')->count(),
+                'questions'  => QnaQuestion::where('status', QnaStatus::Approved)->count(),
+                'answers'    => QnaAnswer::where('status', QnaStatus::Approved)->count(),
             ];
         });
     }
@@ -107,5 +108,6 @@ final class QnaCategoryService
     {
         Cache::forget('qna_categories.active');
         Cache::forget('qna.stats');
+        Cache::forget('home.latest_qna_questions');
     }
 }

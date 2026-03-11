@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\QnaAnswer;
 use App\Services\QnaAnswerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,7 +34,7 @@ final class QnaAnswerController extends Controller
 
     public function approve(int $id): JsonResponse
     {
-        $answer = QnaAnswer::with(['question', 'user'])->find($id);
+        $answer = $this->answerService->findById($id);
 
         if (!$answer) {
             return response()->json(['success' => false, 'message' => 'Cevap bulunamadı.'], 404);
@@ -51,7 +50,7 @@ final class QnaAnswerController extends Controller
 
     public function reject(int $id): JsonResponse
     {
-        $answer = QnaAnswer::find($id);
+        $answer = $this->answerService->findById($id);
 
         if (!$answer) {
             return response()->json(['success' => false, 'message' => 'Cevap bulunamadı.'], 404);
@@ -67,7 +66,7 @@ final class QnaAnswerController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
-        $answer = QnaAnswer::find($id);
+        $answer = $this->answerService->findById($id);
 
         if (!$answer) {
             return response()->json(['success' => false, 'message' => 'Cevap bulunamadı.'], 404);

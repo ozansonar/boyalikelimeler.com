@@ -38,6 +38,11 @@ final class QnaAnswerService
         });
     }
 
+    public function findById(int $id): ?QnaAnswer
+    {
+        return QnaAnswer::with(['question', 'user'])->find($id);
+    }
+
     public function approve(QnaAnswer $answer): QnaAnswer
     {
         return DB::transaction(function () use ($answer): QnaAnswer {
@@ -124,9 +129,9 @@ final class QnaAnswerService
     {
         return [
             'total'    => QnaAnswer::count(),
-            'pending'  => QnaAnswer::where('status', 'pending')->count(),
-            'approved' => QnaAnswer::where('status', 'approved')->count(),
-            'rejected' => QnaAnswer::where('status', 'rejected')->count(),
+            'pending'  => QnaAnswer::where('status', QnaStatus::Pending)->count(),
+            'approved' => QnaAnswer::where('status', QnaStatus::Approved)->count(),
+            'rejected' => QnaAnswer::where('status', QnaStatus::Rejected)->count(),
         ];
     }
 

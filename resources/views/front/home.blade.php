@@ -265,42 +265,26 @@
                         <!-- Tab: Soru Cevap -->
                         <div class="tabs-bk__panel" id="tab-sorucevap" role="tabpanel">
                             <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body">
-                                            <i class="fa-solid fa-comments text-gold mb-2 d-block"></i>
-                                            <h4 class="card-bk__title">Şiir nasıl yazılır?</h4>
-                                            <p class="card-bk__text">İlk şiirimi yazacağım ama nereden başlayacağımı bilmiyorum...</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-message me-1"></i>12 cevap</span>
-                                        </div>
+                                @forelse($latestQnaQuestions as $qnaQuestion)
+                                    <div class="col-md-4">
+                                        <a href="{{ route('qna.show', ['categorySlug' => $qnaQuestion->category?->slug, 'questionSlug' => $qnaQuestion->slug]) }}" class="text-decoration-none">
+                                            <div class="card-bk">
+                                                <div class="card-bk__body">
+                                                    <i class="fa-solid fa-comments text-gold mb-2 d-block"></i>
+                                                    <h4 class="card-bk__title">{{ $qnaQuestion->title }}</h4>
+                                                    <p class="card-bk__text">{{ Str::limit(strip_tags($qnaQuestion->body), 80) }}</p>
+                                                </div>
+                                                <div class="card-bk__footer">
+                                                    <span class="card-bk__meta"><i class="fa-regular fa-message me-1"></i>{{ $qnaQuestion->approved_answer_count }} cevap</span>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body">
-                                            <i class="fa-solid fa-comments text-gold mb-2 d-block"></i>
-                                            <h4 class="card-bk__title">En iyi edebiyat kitapları?</h4>
-                                            <p class="card-bk__text">2026 yılında mutlaka okunması gereken kitaplar hangileri?</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-message me-1"></i>24 cevap</span>
-                                        </div>
+                                @empty
+                                    <div class="col-12">
+                                        <p class="text-center text-muted">Henüz onaylanmış soru bulunmuyor.</p>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body">
-                                            <i class="fa-solid fa-comments text-gold mb-2 d-block"></i>
-                                            <h4 class="card-bk__title">Sanatçı bloku nasıl aşılır?</h4>
-                                            <p class="card-bk__text">Uzun süredir yazamıyorum, yaratıcılığım tıkandı. Önerileriniz...</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-message me-1"></i>18 cevap</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforelse
                             </div>
                         </div>
 

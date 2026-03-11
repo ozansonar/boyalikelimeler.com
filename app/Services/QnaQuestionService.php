@@ -175,9 +175,9 @@ final class QnaQuestionService
     {
         return [
             'total'    => QnaQuestion::count(),
-            'pending'  => QnaQuestion::where('status', 'pending')->count(),
-            'approved' => QnaQuestion::where('status', 'approved')->count(),
-            'rejected' => QnaQuestion::where('status', 'rejected')->count(),
+            'pending'  => QnaQuestion::where('status', QnaStatus::Pending)->count(),
+            'approved' => QnaQuestion::where('status', QnaStatus::Approved)->count(),
+            'rejected' => QnaQuestion::where('status', QnaStatus::Rejected)->count(),
         ];
     }
 

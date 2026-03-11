@@ -56,7 +56,7 @@ class QnaQuestion extends Model
 
     public function approvedAnswers(): HasMany
     {
-        return $this->hasMany(QnaAnswer::class)->where('status', 'approved');
+        return $this->hasMany(QnaAnswer::class)->where('status', QnaStatus::Approved);
     }
 
     public function likes(): MorphMany
