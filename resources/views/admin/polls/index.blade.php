@@ -77,19 +77,19 @@
                                     @endif
                                 </td>
                                 <td data-label="İşlem">
-                                    <div class="usr-actions">
-                                        <a class="usr-action-btn" title="Sonuçlar" href="{{ route('admin.polls.results', $poll) }}">
-                                            <i class="bi bi-bar-chart"></i>
+                                    <div class="usr-actions align-items-center">
+                                        <a class="usr-action-btn poll-action-chart" title="Sonuçlar" href="{{ route('admin.polls.results', $poll) }}">
+                                            <i class="bi bi-bar-chart-fill"></i>
                                         </a>
-                                        <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.polls.edit', $poll) }}">
-                                            <i class="bi bi-pencil"></i>
+                                        <a class="usr-action-btn poll-action-edit" title="Düzenle" href="{{ route('admin.polls.edit', $poll) }}">
+                                            <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form method="POST" action="{{ route('admin.polls.toggle-active', $poll) }}" class="d-inline">
+                                        <form method="POST" action="{{ route('admin.polls.toggle-active', $poll) }}" class="d-inline-flex align-items-center">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="usr-action-btn {{ $poll->is_active ? 'success' : '' }}" title="{{ $poll->is_active ? 'Pasif Yap' : 'Aktif Yap' }}">
-                                                <i class="bi {{ $poll->is_active ? 'bi-toggle-on' : 'bi-toggle-off' }}"></i>
-                                            </button>
+                                            <div class="form-check form-switch poll-toggle-switch mb-0" title="{{ $poll->is_active ? 'Pasif Yap' : 'Aktif Yap' }}">
+                                                <input class="form-check-input" type="checkbox" {{ $poll->is_active ? 'checked' : '' }} onchange="this.closest('form').submit()">
+                                            </div>
                                         </form>
                                         <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $poll->id }}, '{{ addslashes(Str::limit($poll->question, 40)) }}')">
                                             <i class="bi bi-trash"></i>
