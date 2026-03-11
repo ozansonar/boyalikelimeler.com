@@ -58,7 +58,7 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        {!! nl2br(e($question->body)) !!}
+                        {!! nl2br(e(strip_tags($question->body))) !!}
                     </div>
                     <div class="d-flex gap-3 text-clr-secondary">
                         <span><i class="bi bi-eye me-1"></i>{{ $question->view_count }} görüntülenme</span>
@@ -102,19 +102,19 @@
                                     @endif
                                 </div>
                             </div>
-                            <p class="mb-2">{!! nl2br(e($answer->body)) !!}</p>
+                            <p class="mb-2">{!! nl2br(e(strip_tags($answer->body))) !!}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="usr-meta"><i class="bi bi-hand-thumbs-up me-1"></i>{{ $answer->like_count }} beğeni</span>
                                 <div class="usr-actions">
                                     @if($answer->status->value === 'pending')
-                                        <button class="usr-action-btn success" title="Onayla" onclick="openQnaApproveModal({{ $answer->id }}, '{{ addslashes(Str::limit($answer->body, 40)) }}', 'answer')">
+                                        <button class="usr-action-btn success" title="Onayla" onclick="openQnaApproveModal({{ $answer->id }}, '{{ addslashes(Str::limit(strip_tags($answer->body), 40)) }}', 'answer')">
                                             <i class="bi bi-check-lg"></i>
                                         </button>
-                                        <button class="usr-action-btn warning" title="Reddet" onclick="openQnaRejectModal({{ $answer->id }}, '{{ addslashes(Str::limit($answer->body, 40)) }}', 'answer')">
+                                        <button class="usr-action-btn warning" title="Reddet" onclick="openQnaRejectModal({{ $answer->id }}, '{{ addslashes(Str::limit(strip_tags($answer->body), 40)) }}', 'answer')">
                                             <i class="bi bi-x-lg"></i>
                                         </button>
                                     @endif
-                                    <button class="usr-action-btn danger" title="Sil" onclick="openQnaDeleteModal({{ $answer->id }}, '{{ addslashes(Str::limit($answer->body, 40)) }}', 'answer')">
+                                    <button class="usr-action-btn danger" title="Sil" onclick="openQnaDeleteModal({{ $answer->id }}, '{{ addslashes(Str::limit(strip_tags($answer->body), 40)) }}', 'answer')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
