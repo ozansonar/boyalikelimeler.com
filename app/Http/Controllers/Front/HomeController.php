@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Services\AdvertisementService;
 use App\Services\HomeService;
 use App\Services\HomeSliderService;
+use App\Services\PollService;
 use App\Services\SettingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -20,6 +21,7 @@ final class HomeController extends Controller
         private readonly HomeSliderService $homeSliderService,
         private readonly SettingService $settingService,
         private readonly AdvertisementService $advertisementService,
+        private readonly PollService $pollService,
     ) {}
 
     public function index(): View
@@ -34,7 +36,17 @@ final class HomeController extends Controller
         $tallAds = $this->advertisementService->getActiveByPosition(AdvertisementPosition::Tall);
         $weeklyMovies = $this->settingService->getWeeklyMovies();
 
-        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies'));
+        $activePoll = $this->pollService->getActivePoll();
+        $pollHasVoted = false;
+        $pollResults = null;
+        if ($activePoll) {
+            $pollHasVoted = $this->pollService->hasVoted($activePoll->id, request()->ip());
+            if ($pollHasVoted) {
+                $pollResults = $this->pollService->getResults($activePoll->id);
+            }
+        }
+
+        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies', 'activePoll', 'pollHasVoted', 'pollResults'));
     }
 
     public function trackAdClick(int $advertisement): JsonResponse

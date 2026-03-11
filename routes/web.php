@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\MailTemplateController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PaintersPageController;
+use App\Http\Controllers\Admin\PollController as AdminPollController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
@@ -37,6 +38,7 @@ use App\Http\Controllers\Front\SearchController;
 use App\Http\Controllers\Front\LiteraryWorkController as FrontLiteraryWorkController;
 use App\Http\Controllers\Front\MyPostController;
 use App\Http\Controllers\Front\PageController;
+use App\Http\Controllers\Front\PollController as FrontPollController;
 use App\Http\Controllers\Front\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -282,6 +284,18 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::patch('advertisements/{advertisement}', [AdvertisementController::class, 'update'])->name('advertisements.update.patch')->middleware('permission:advertisements.edit');
     Route::delete('advertisements/{advertisement}', [AdvertisementController::class, 'destroy'])->name('advertisements.destroy')->middleware('permission:advertisements.delete');
 
+    // Poll Management (Anket Yönetimi)
+    Route::middleware('permission:polls.view')->group(function () {
+        Route::get('polls', [AdminPollController::class, 'index'])->name('polls.index');
+        Route::get('polls/{id}/results', [AdminPollController::class, 'results'])->name('polls.results')->where('id', '[0-9]+');
+    });
+    Route::get('polls/create', [AdminPollController::class, 'create'])->name('polls.create')->middleware('permission:polls.create');
+    Route::post('polls', [AdminPollController::class, 'store'])->name('polls.store')->middleware('permission:polls.create');
+    Route::get('polls/{id}/edit', [AdminPollController::class, 'edit'])->name('polls.edit')->where('id', '[0-9]+')->middleware('permission:polls.edit');
+    Route::put('polls/{id}', [AdminPollController::class, 'update'])->name('polls.update')->where('id', '[0-9]+')->middleware('permission:polls.edit');
+    Route::patch('polls/{id}/toggle-active', [AdminPollController::class, 'toggleActive'])->name('polls.toggle-active')->where('id', '[0-9]+')->middleware('permission:polls.edit');
+    Route::delete('polls/{id}', [AdminPollController::class, 'destroy'])->name('polls.destroy')->where('id', '[0-9]+')->middleware('permission:polls.delete');
+
     // Role & Permission Management
     Route::middleware('permission:roles.view')->group(function () {
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
@@ -320,6 +334,10 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     });
     Route::delete('literary-works/{literaryWork}', [LiteraryWorkController::class, 'destroy'])->name('literary-works.destroy')->middleware('permission:literary-works.delete');
 });
+
+// Poll (Frontend — Anket)
+Route::post('/anket/vote', [FrontPollController::class, 'vote'])->name('poll.vote')->middleware('throttle:10,1');
+Route::get('/anket/{pollId}/results', [FrontPollController::class, 'results'])->name('poll.results')->where('pollId', '[0-9]+');
 
 // Comments (Frontend)
 Route::post('/yorum', [CommentController::class, 'store'])->name('comment.store')->middleware('throttle:5,1');
