@@ -6,7 +6,9 @@ Merhaba,
 **"{{ $comment->contentTitle() }}"** başlıklı {{ $comment->contentTypeLabel() }} içeriğine yeni bir yorum yapıldı.
 
 **Yazan:** {{ $comment->fullName() }}
+
 **E-posta:** {{ $comment->commenterEmail() }}
+
 **Puan:** {{ str_repeat('★', $comment->rating) }}{{ str_repeat('☆', 5 - $comment->rating) }} ({{ $comment->rating }}/5)
 
 **Yorum:**

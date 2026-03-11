@@ -6,6 +6,7 @@ Merhaba,
 **Söz Meydanı**'nda yeni bir soru soruldu ve onayınızı bekliyor.
 
 **Kategori:** {{ $question->category?->name }}
+
 **Soran:** {{ $question->user?->name }}
 
 **Soru Başlığı:** {{ $question->title }}
