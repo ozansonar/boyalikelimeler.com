@@ -15,7 +15,7 @@
             </a>
         @endif
 
-        @if($sidebarUser->hasAnyPermission('home-sliders.view', 'advertisements.view', 'polls.view'))
+        @if($sidebarUser->hasAnyPermission('home-sliders.view', 'advertisements.view', 'polls.view', 'daily-questions.view'))
             <div class="nav-section-title">Ana Sayfa</div>
             @if($sidebarUser->hasPermission('home-sliders.view'))
                 <a href="{{ route('admin.home-sliders.index') }}" class="nav-link {{ request()->routeIs('admin.home-sliders.*') ? 'active' : '' }}">
@@ -30,6 +30,11 @@
             @if($sidebarUser->hasPermission('polls.view'))
                 <a href="{{ route('admin.polls.index') }}" class="nav-link {{ request()->routeIs('admin.polls.*') ? 'active' : '' }}">
                     <i class="bi bi-bar-chart-fill"></i> Anket Yönetimi
+                </a>
+            @endif
+            @if($sidebarUser->hasPermission('daily-questions.view'))
+                <a href="{{ route('admin.daily-questions.index') }}" class="nav-link {{ request()->routeIs('admin.daily-questions.*') ? 'active' : '' }}">
+                    <i class="bi bi-question-circle-fill"></i> Günün Sorusu
                 </a>
             @endif
         @endif

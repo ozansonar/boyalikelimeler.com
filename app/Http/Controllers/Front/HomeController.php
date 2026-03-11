@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Services\AdvertisementService;
 use App\Services\HomeService;
 use App\Services\HomeSliderService;
+use App\Services\DailyQuestionService;
 use App\Services\PollService;
 use App\Services\SettingService;
 use Illuminate\Http\JsonResponse;
@@ -22,6 +23,7 @@ final class HomeController extends Controller
         private readonly SettingService $settingService,
         private readonly AdvertisementService $advertisementService,
         private readonly PollService $pollService,
+        private readonly DailyQuestionService $dailyQuestionService,
     ) {}
 
     public function index(): View
@@ -46,7 +48,19 @@ final class HomeController extends Controller
             }
         }
 
-        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies', 'activePoll', 'pollHasVoted', 'pollResults'));
+        $dailyQuestion = $this->dailyQuestionService->getActiveQuestion();
+        $dailyQuestionAnswered = false;
+        if ($dailyQuestion) {
+            $cookieToken = request()->cookie('dq_token');
+            $dailyQuestionAnswered = $this->dailyQuestionService->hasAnswered(
+                $dailyQuestion->id,
+                auth()->id(),
+                request()->ip(),
+                $cookieToken
+            );
+        }
+
+        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies', 'activePoll', 'pollHasVoted', 'pollResults', 'dailyQuestion', 'dailyQuestionAnswered'));
     }
 
     public function trackAdClick(int $advertisement): JsonResponse

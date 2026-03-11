@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\MailTemplateController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PaintersPageController;
+use App\Http\Controllers\Admin\DailyQuestionController as AdminDailyQuestionController;
 use App\Http\Controllers\Admin\PollController as AdminPollController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\RoleController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\Front\SearchController;
 use App\Http\Controllers\Front\LiteraryWorkController as FrontLiteraryWorkController;
 use App\Http\Controllers\Front\MyPostController;
 use App\Http\Controllers\Front\PageController;
+use App\Http\Controllers\Front\DailyQuestionController as FrontDailyQuestionController;
 use App\Http\Controllers\Front\PollController as FrontPollController;
 use App\Http\Controllers\Front\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -296,6 +298,18 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::patch('polls/{id}/toggle-active', [AdminPollController::class, 'toggleActive'])->name('polls.toggle-active')->where('id', '[0-9]+')->middleware('permission:polls.edit');
     Route::delete('polls/{id}', [AdminPollController::class, 'destroy'])->name('polls.destroy')->where('id', '[0-9]+')->middleware('permission:polls.delete');
 
+    // Daily Question Management (Günün Sorusu)
+    Route::middleware('permission:daily-questions.view')->group(function () {
+        Route::get('daily-questions', [AdminDailyQuestionController::class, 'index'])->name('daily-questions.index');
+        Route::get('daily-questions/{id}/answers', [AdminDailyQuestionController::class, 'answers'])->name('daily-questions.answers')->where('id', '[0-9]+');
+    });
+    Route::get('daily-questions/create', [AdminDailyQuestionController::class, 'create'])->name('daily-questions.create')->middleware('permission:daily-questions.create');
+    Route::post('daily-questions', [AdminDailyQuestionController::class, 'store'])->name('daily-questions.store')->middleware('permission:daily-questions.create');
+    Route::get('daily-questions/{id}/edit', [AdminDailyQuestionController::class, 'edit'])->name('daily-questions.edit')->where('id', '[0-9]+')->middleware('permission:daily-questions.edit');
+    Route::put('daily-questions/{id}', [AdminDailyQuestionController::class, 'update'])->name('daily-questions.update')->where('id', '[0-9]+')->middleware('permission:daily-questions.edit');
+    Route::delete('daily-questions/{id}', [AdminDailyQuestionController::class, 'destroy'])->name('daily-questions.destroy')->where('id', '[0-9]+')->middleware('permission:daily-questions.delete');
+    Route::delete('daily-questions/{questionId}/answers/{answerId}', [AdminDailyQuestionController::class, 'destroyAnswer'])->name('daily-questions.answers.destroy')->where(['questionId' => '[0-9]+', 'answerId' => '[0-9]+'])->middleware('permission:daily-questions.delete');
+
     // Role & Permission Management
     Route::middleware('permission:roles.view')->group(function () {
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
@@ -338,6 +352,9 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
 // Poll (Frontend — Anket)
 Route::post('/anket/vote', [FrontPollController::class, 'vote'])->name('poll.vote')->middleware('throttle:10,1');
 Route::get('/anket/{pollId}/results', [FrontPollController::class, 'results'])->name('poll.results')->where('pollId', '[0-9]+');
+
+// Daily Question (Frontend — Günün Sorusu)
+Route::post('/gunun-sorusu/cevapla', [FrontDailyQuestionController::class, 'answer'])->name('daily-question.answer')->middleware('throttle:10,1');
 
 // Comments (Frontend)
 Route::post('/yorum', [CommentController::class, 'store'])->name('comment.store')->middleware('throttle:5,1');

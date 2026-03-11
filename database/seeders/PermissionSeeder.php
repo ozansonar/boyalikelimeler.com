@@ -111,6 +111,12 @@ class PermissionSeeder extends Seeder
             ['name' => 'Anket Oluştur', 'slug' => 'polls.create', 'group' => 'polls', 'sort_order' => 151],
             ['name' => 'Anket Düzenle', 'slug' => 'polls.edit', 'group' => 'polls', 'sort_order' => 152],
             ['name' => 'Anket Sil', 'slug' => 'polls.delete', 'group' => 'polls', 'sort_order' => 153],
+
+            // Günün Sorusu
+            ['name' => 'Günün Sorusunu Görüntüle', 'slug' => 'daily-questions.view', 'group' => 'daily-questions', 'sort_order' => 160],
+            ['name' => 'Günün Sorusu Oluştur', 'slug' => 'daily-questions.create', 'group' => 'daily-questions', 'sort_order' => 161],
+            ['name' => 'Günün Sorusu Düzenle', 'slug' => 'daily-questions.edit', 'group' => 'daily-questions', 'sort_order' => 162],
+            ['name' => 'Günün Sorusu Sil', 'slug' => 'daily-questions.delete', 'group' => 'daily-questions', 'sort_order' => 163],
         ];
 
         foreach ($permissions as $permission) {
