@@ -6,6 +6,7 @@ Merhaba {{ $question->user?->name }},
 Harika haber! **Söz Meydanı**'nda sorduğunuz soru onaylandı ve yayına alındı.
 
 **Kategori:** {{ $question->category?->name }}
+
 **Soru:** {{ $question->title }}
 
 Artık diğer üyeler sorunuzu görebilir ve cevap yazabilir.

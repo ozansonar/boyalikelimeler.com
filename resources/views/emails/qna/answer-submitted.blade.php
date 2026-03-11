@@ -6,6 +6,7 @@ Merhaba,
 **Söz Meydanı**'nda bir soruya yeni bir cevap yazıldı ve onayınızı bekliyor.
 
 **Soru:** {{ $answer->question?->title }}
+
 **Cevaplayan:** {{ $answer->user?->name }}
 
 **Cevap:**
