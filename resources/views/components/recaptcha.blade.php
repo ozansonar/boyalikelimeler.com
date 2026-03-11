@@ -5,7 +5,7 @@
 @endphp
 
 @if($isEnabled && $siteKey)
-    <div class="g-recaptcha" data-sitekey="{{ $siteKey }}"></div>
+    <div class="g-recaptcha" data-sitekey="{{ $siteKey }}" data-theme="dark"></div>
     @error('g-recaptcha-response')
         <span class="auth-form__error-text d-block mt-1">{{ $message }}</span>
     @enderror
