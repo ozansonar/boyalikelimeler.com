@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AuthorStatisticsController;
 use App\Http\Controllers\Admin\AuthorsPageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
@@ -355,6 +356,12 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::put('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update')->middleware('permission:roles.edit');
     Route::post('roles/assign', [RoleController::class, 'assignRole'])->name('roles.assign')->middleware('permission:roles.assign');
     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy')->middleware('permission:roles.delete');
+
+    // Author Statistics (Yazar İstatistikleri)
+    Route::middleware('permission:author-statistics.view')->group(function () {
+        Route::get('author-statistics', [AuthorStatisticsController::class, 'index'])->name('author-statistics.index');
+        Route::get('author-statistics/{user}', [AuthorStatisticsController::class, 'show'])->name('author-statistics.show');
+    });
 
     // Literary Category Management (Edebiyat Kategorileri)
     Route::middleware('permission:literary-categories.view')->group(function () {

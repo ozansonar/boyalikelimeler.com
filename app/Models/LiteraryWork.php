@@ -98,6 +98,11 @@ class LiteraryWork extends Model
         return $this->status === LiteraryWorkStatus::Unpublished;
     }
 
+    public function dailyViews(): MorphMany
+    {
+        return $this->morphMany(DailyView::class, 'viewable');
+    }
+
     public function favorites(): MorphMany
     {
         return $this->morphMany(Favorite::class, 'favoriteable');

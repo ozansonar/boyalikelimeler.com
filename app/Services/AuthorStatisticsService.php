@@ -1,0 +1,300 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Enums\LiteraryWorkStatus;
+use App\Models\DailyView;
+use App\Models\LiteraryWork;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+
+final class AuthorStatisticsService
+{
+    // ─── Summary Stats (top cards) ───
+
+    /**
+     * @return array{total_authors: int, top_author_name: string, top_author_views: int, top_publisher_name: string, top_publisher_count: int, avg_views_per_author: float}
+     */
+    public function getSummaryStats(): array
+    {
+        return Cache::remember('author_statistics.summary', 300, function (): array {
+            $totalAuthors = User::whereHas('literaryWorks', fn ($q) => $q->where('status', LiteraryWorkStatus::Approved))
+                ->count();
+
+            $topAuthorThisMonth = $this->getTopAuthorByViewsThisMonth();
+            $topPublisherThisMonth = $this->getTopPublisherThisMonth();
+
+            $totalViews = (int) LiteraryWork::where('status', LiteraryWorkStatus::Approved)->sum('view_count');
+            $avgViews = $totalAuthors > 0 ? round($totalViews / $totalAuthors, 1) : 0;
+
+            return [
+                'total_authors'       => $totalAuthors,
+                'top_author_name'     => $topAuthorThisMonth['name'] ?? '-',
+                'top_author_views'    => $topAuthorThisMonth['views'] ?? 0,
+                'top_publisher_name'  => $topPublisherThisMonth['name'] ?? '-',
+                'top_publisher_count' => $topPublisherThisMonth['count'] ?? 0,
+                'avg_views_per_author' => $avgViews,
+            ];
+        });
+    }
+
+    // ─── Paginated Author List ───
+
+    public function paginateAuthors(int $perPage, array $filters = []): LengthAwarePaginator
+    {
+        $query = User::select('users.*')
+            ->whereHas('literaryWorks', fn ($q) => $q->where('status', LiteraryWorkStatus::Approved))
+            ->withCount(['literaryWorks as approved_works_count' => fn ($q) => $q->where('status', LiteraryWorkStatus::Approved)])
+            ->withSum(['literaryWorks as total_views' => fn ($q) => $q->where('status', LiteraryWorkStatus::Approved)], 'view_count');
+
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search): void {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%");
+            });
+        }
+
+        $now = Carbon::now();
+        $lwClass = LiteraryWork::class;
+        $approvedStatus = LiteraryWorkStatus::Approved->value;
+
+        $query->addSelect([
+            'views_last_7d' => DailyView::selectRaw('COALESCE(SUM(daily_views.view_count), 0)')
+                ->join('literary_works', function ($join) use ($lwClass): void {
+                    $join->on('daily_views.viewable_id', '=', 'literary_works.id')
+                        ->where('daily_views.viewable_type', '=', $lwClass);
+                })
+                ->whereColumn('literary_works.user_id', 'users.id')
+                ->where('literary_works.status', $approvedStatus)
+                ->whereNull('literary_works.deleted_at')
+                ->where('daily_views.view_date', '>=', $now->copy()->subDays(7)->toDateString()),
+            'views_last_30d' => DailyView::selectRaw('COALESCE(SUM(daily_views.view_count), 0)')
+                ->join('literary_works', function ($join) use ($lwClass): void {
+                    $join->on('daily_views.viewable_id', '=', 'literary_works.id')
+                        ->where('daily_views.viewable_type', '=', $lwClass);
+                })
+                ->whereColumn('literary_works.user_id', 'users.id')
+                ->where('literary_works.status', $approvedStatus)
+                ->whereNull('literary_works.deleted_at')
+                ->where('daily_views.view_date', '>=', $now->copy()->subDays(30)->toDateString()),
+            'views_last_90d' => DailyView::selectRaw('COALESCE(SUM(daily_views.view_count), 0)')
+                ->join('literary_works', function ($join) use ($lwClass): void {
+                    $join->on('daily_views.viewable_id', '=', 'literary_works.id')
+                        ->where('daily_views.viewable_type', '=', $lwClass);
+                })
+                ->whereColumn('literary_works.user_id', 'users.id')
+                ->where('literary_works.status', $approvedStatus)
+                ->whereNull('literary_works.deleted_at')
+                ->where('daily_views.view_date', '>=', $now->copy()->subDays(90)->toDateString()),
+        ]);
+
+        $sort = $filters['sort'] ?? 'total_views';
+        $dir = $filters['dir'] ?? 'desc';
+        $allowedSorts = ['name', 'approved_works_count', 'total_views', 'views_last_7d', 'views_last_30d', 'views_last_90d', 'created_at'];
+        $sort = in_array($sort, $allowedSorts, true) ? $sort : 'total_views';
+        $dir = in_array($dir, ['asc', 'desc'], true) ? $dir : 'desc';
+
+        return $query->orderBy($sort, $dir)->paginate($perPage)->withQueryString();
+    }
+
+    // ─── Author Detail Data ───
+
+    /**
+     * @return array{author: User, work_stats: array, daily_views: array, top_works: Collection, monthly_comparison: array}
+     */
+    public function getAuthorDetail(User $author): array
+    {
+        $author->loadCount([
+            'literaryWorks as total_works_count',
+            'literaryWorks as approved_works_count' => fn ($q) => $q->where('status', LiteraryWorkStatus::Approved),
+            'literaryWorks as pending_works_count' => fn ($q) => $q->where('status', LiteraryWorkStatus::Pending),
+        ]);
+
+        $totalViews = (int) $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->sum('view_count');
+
+        $totalComments = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->withCount('approvedComments')
+            ->get()
+            ->sum('approved_comments_count');
+
+        $totalFavorites = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->withCount('favorites')
+            ->get()
+            ->sum('favorites_count');
+
+        $workStats = [
+            'total_works'    => $author->total_works_count,
+            'approved_works' => $author->approved_works_count,
+            'pending_works'  => $author->pending_works_count,
+            'total_views'    => $totalViews,
+            'total_comments' => $totalComments,
+            'total_favorites' => $totalFavorites,
+        ];
+
+        $dailyViews = $this->getAuthorDailyViews($author, 30);
+        $topWorks = $this->getAuthorTopWorks($author, 10);
+        $monthlyComparison = $this->getMonthlyComparison($author);
+        $categoryDistribution = $this->getCategoryDistribution($author);
+
+        return [
+            'author'                => $author,
+            'workStats'             => $workStats,
+            'dailyViews'            => $dailyViews,
+            'topWorks'              => $topWorks,
+            'monthlyComparison'     => $monthlyComparison,
+            'categoryDistribution'  => $categoryDistribution,
+        ];
+    }
+
+    // ─── Private Helpers ───
+
+    private function getTopAuthorByViewsThisMonth(): array
+    {
+        $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
+
+        $result = DB::table('daily_views')
+            ->join('literary_works', function ($join): void {
+                $join->on('daily_views.viewable_id', '=', 'literary_works.id')
+                    ->where('daily_views.viewable_type', '=', LiteraryWork::class);
+            })
+            ->join('users', 'literary_works.user_id', '=', 'users.id')
+            ->where('daily_views.view_date', '>=', $startOfMonth)
+            ->where('literary_works.status', LiteraryWorkStatus::Approved->value)
+            ->whereNull('literary_works.deleted_at')
+            ->whereNull('users.deleted_at')
+            ->select('users.name', DB::raw('SUM(daily_views.view_count) as total_views'))
+            ->groupBy('users.id', 'users.name')
+            ->orderByDesc('total_views')
+            ->first();
+
+        return $result ? ['name' => $result->name, 'views' => (int) $result->total_views] : [];
+    }
+
+    private function getTopPublisherThisMonth(): array
+    {
+        $startOfMonth = Carbon::now()->startOfMonth();
+
+        $result = DB::table('literary_works')
+            ->join('users', 'literary_works.user_id', '=', 'users.id')
+            ->where('literary_works.status', LiteraryWorkStatus::Approved->value)
+            ->where('literary_works.published_at', '>=', $startOfMonth)
+            ->whereNull('literary_works.deleted_at')
+            ->whereNull('users.deleted_at')
+            ->select('users.name', DB::raw('COUNT(*) as works_count'))
+            ->groupBy('users.id', 'users.name')
+            ->orderByDesc('works_count')
+            ->first();
+
+        return $result ? ['name' => $result->name, 'count' => (int) $result->works_count] : [];
+    }
+
+    private function getAuthorDailyViews(User $author, int $days): array
+    {
+        $startDate = Carbon::now()->subDays($days - 1)->toDateString();
+
+        $workIds = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->pluck('id');
+
+        if ($workIds->isEmpty()) {
+            return ['labels' => [], 'values' => []];
+        }
+
+        $data = DailyView::where('viewable_type', LiteraryWork::class)
+            ->whereIn('viewable_id', $workIds)
+            ->where('view_date', '>=', $startDate)
+            ->selectRaw('view_date, SUM(view_count) as total')
+            ->groupBy('view_date')
+            ->orderBy('view_date')
+            ->pluck('total', 'view_date')
+            ->toArray();
+
+        $labels = [];
+        $values = [];
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $key = $date->toDateString();
+            $labels[] = $date->format('d M');
+            $values[] = (int) ($data[$key] ?? 0);
+        }
+
+        return ['labels' => $labels, 'values' => $values];
+    }
+
+    private function getAuthorTopWorks(User $author, int $limit): Collection
+    {
+        return $author->literaryWorks()
+            ->with('category:id,name')
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->withCount('approvedComments')
+            ->withCount('favorites')
+            ->orderByDesc('view_count')
+            ->limit($limit)
+            ->get(['id', 'title', 'slug', 'view_count', 'literary_category_id', 'work_type', 'published_at']);
+    }
+
+    private function getMonthlyComparison(User $author): array
+    {
+        $workIds = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->pluck('id');
+
+        if ($workIds->isEmpty()) {
+            return ['this_month' => 0, 'last_month' => 0, 'change_percent' => 0];
+        }
+
+        $thisMonthStart = Carbon::now()->startOfMonth()->toDateString();
+        $lastMonthStart = Carbon::now()->subMonth()->startOfMonth()->toDateString();
+        $lastMonthEnd = Carbon::now()->subMonth()->endOfMonth()->toDateString();
+
+        $thisMonth = (int) DailyView::where('viewable_type', LiteraryWork::class)
+            ->whereIn('viewable_id', $workIds)
+            ->where('view_date', '>=', $thisMonthStart)
+            ->sum('view_count');
+
+        $lastMonth = (int) DailyView::where('viewable_type', LiteraryWork::class)
+            ->whereIn('viewable_id', $workIds)
+            ->whereBetween('view_date', [$lastMonthStart, $lastMonthEnd])
+            ->sum('view_count');
+
+        $changePercent = $lastMonth > 0
+            ? round((($thisMonth - $lastMonth) / $lastMonth) * 100, 1)
+            : ($thisMonth > 0 ? 100.0 : 0.0);
+
+        return [
+            'this_month'     => $thisMonth,
+            'last_month'     => $lastMonth,
+            'change_percent' => $changePercent,
+        ];
+    }
+
+    private function getCategoryDistribution(User $author): Collection
+    {
+        return $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved)
+            ->join('literary_categories', 'literary_works.literary_category_id', '=', 'literary_categories.id')
+            ->select('literary_categories.name', DB::raw('COUNT(*) as count'), DB::raw('SUM(literary_works.view_count) as total_views'))
+            ->groupBy('literary_categories.id', 'literary_categories.name')
+            ->orderByDesc('count')
+            ->get();
+    }
+
+    // ─── Cache Invalidation ───
+
+    public function clearCache(): void
+    {
+        Cache::forget('author_statistics.summary');
+    }
+}

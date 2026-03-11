@@ -46,6 +46,9 @@ class PermissionSeeder extends Seeder
             ['name' => 'Eser Onayla/Reddet', 'slug' => 'literary-works.moderate', 'group' => 'literary-works', 'sort_order' => 52],
             ['name' => 'Eser Sil', 'slug' => 'literary-works.delete', 'group' => 'literary-works', 'sort_order' => 53],
 
+            // Yazar İstatistikleri
+            ['name' => 'Yazar İstatistiklerini Görüntüle', 'slug' => 'author-statistics.view', 'group' => 'author-statistics', 'sort_order' => 55],
+
             // Edebiyat Kategorileri
             ['name' => 'Edebi Kategorileri Görüntüle', 'slug' => 'literary-categories.view', 'group' => 'literary-categories', 'sort_order' => 60],
             ['name' => 'Edebi Kategori Oluştur', 'slug' => 'literary-categories.create', 'group' => 'literary-categories', 'sort_order' => 61],
