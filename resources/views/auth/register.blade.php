@@ -202,8 +202,8 @@
                                    required
                                    {{ old('terms') ? 'checked' : '' }}>
                             <label class="auth-form__check-label" for="terms">
-                                <a href="#" class="auth-form__link">Kullanım koşullarını</a> ve
-                                <a href="#" class="auth-form__link">gizlilik politikasını</a> kabul ediyorum
+                                <a href="{{ url('/kullanim-kosullari') }}" class="auth-form__link">Kullanım koşullarını</a> ve
+                                <a href="{{ url('/gizlilik-politikasi') }}" class="auth-form__link">gizlilik politikasını</a> kabul ediyorum
                             </label>
                             @error('terms')
                                 <span class="auth-form__error-text d-block">{{ $message }}</span>
