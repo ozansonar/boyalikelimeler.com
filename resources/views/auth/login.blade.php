@@ -24,15 +24,15 @@
 
                     <div class="login-welcome__stats">
                         <div class="login-welcome__stat">
-                            <span class="login-welcome__stat-number">1.200+</span>
+                            <span class="login-welcome__stat-number">{{ number_format($activeAuthorCount, 0, ',', '.') }}+</span>
                             <span class="login-welcome__stat-label">Aktif Yazar</span>
                         </div>
                         <div class="login-welcome__stat">
-                            <span class="login-welcome__stat-number">5.400+</span>
+                            <span class="login-welcome__stat-number">{{ number_format($totalWorkCount, 0, ',', '.') }}+</span>
                             <span class="login-welcome__stat-label">Eser</span>
                         </div>
                         <div class="login-welcome__stat">
-                            <span class="login-welcome__stat-number">320+</span>
+                            <span class="login-welcome__stat-number">{{ number_format($painterCount, 0, ',', '.') }}+</span>
                             <span class="login-welcome__stat-label">Ressam</span>
                         </div>
                     </div>

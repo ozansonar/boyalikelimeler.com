@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\AuthorService;
 use App\Services\CommentService;
 use App\Services\ContactService;
 use App\Services\LiteraryWorkService;
@@ -50,6 +51,15 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.admin', function ($view): void {
             $general = app(SettingService::class)->getGroup('general');
             $view->with('siteFavicon', ! empty($general['favicon']) ? upload_url($general['favicon']) : null);
+        });
+
+        View::composer('auth.login', function ($view): void {
+            $authorStats = app(AuthorService::class)->getStats();
+            $visualStats = app(LiteraryWorkService::class)->getPublishedStatsByType('visual');
+
+            $view->with('activeAuthorCount', $authorStats['author_count']);
+            $view->with('totalWorkCount', $authorStats['total_works']);
+            $view->with('painterCount', $visualStats['author_count']);
         });
 
         View::composer('partials.admin.sidebar', function ($view): void {
