@@ -38,6 +38,11 @@
         formData.append('subject', subject);
         formData.append('message', message);
 
+        var recaptchaInput = form.querySelector('[name="g-recaptcha-response"]');
+        if (recaptchaInput && recaptchaInput.value) {
+            formData.append('g-recaptcha-response', recaptchaInput.value);
+        }
+
         fetch(form.action, {
             method: 'POST',
             headers: {
@@ -51,6 +56,7 @@
             if (data.success) {
                 if (window.BkModal) window.BkModal.success(data.message);
                 form.reset();
+                if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
             } else if (data.errors) {
                 var errorList = [];
                 Object.values(data.errors).forEach(function (errs) {

@@ -210,6 +210,8 @@
                             @enderror
                         </div>
 
+                        <x-recaptcha />
+
                         <button type="submit" class="auth-form__submit">
                             <i class="fa-solid fa-user-plus me-2"></i>Kayıt Ol
                         </button>

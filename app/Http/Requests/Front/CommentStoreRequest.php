@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Front;
 
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 final class CommentStoreRequest extends FormRequest
@@ -19,10 +20,11 @@ final class CommentStoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'commentable_type' => ['required', 'string', 'in:literary_work,post'],
-            'commentable_id'   => ['required', 'integer', 'min:1'],
-            'body'             => ['required', 'string', 'min:10', 'max:3000'],
-            'rating'           => ['required', 'integer', 'min:1', 'max:5'],
+            'commentable_type'     => ['required', 'string', 'in:literary_work,post'],
+            'commentable_id'       => ['required', 'integer', 'min:1'],
+            'body'                 => ['required', 'string', 'min:10', 'max:3000'],
+            'rating'               => ['required', 'integer', 'min:1', 'max:5'],
+            'g-recaptcha-response' => ['sometimes', new RecaptchaRule()],
         ];
 
         if (!$this->user()) {

@@ -209,6 +209,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::put('settings/social', [SettingController::class, 'updateSocial'])->name('settings.update.social');
         Route::put('settings/seo', [SettingController::class, 'updateSeo'])->name('settings.update.seo');
         Route::put('settings/smtp', [SettingController::class, 'updateSmtp'])->name('settings.update.smtp');
+        Route::put('settings/recaptcha', [SettingController::class, 'updateRecaptcha'])->name('settings.update.recaptcha');
         Route::put('settings/maintenance', [SettingController::class, 'updateMaintenance'])->name('settings.update.maintenance');
         Route::get('settings/remove-logo', [SettingController::class, 'removeLogo'])->name('settings.remove-logo');
         Route::get('settings/remove-favicon', [SettingController::class, 'removeFavicon'])->name('settings.remove-favicon');
