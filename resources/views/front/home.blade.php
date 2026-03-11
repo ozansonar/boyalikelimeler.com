@@ -395,12 +395,12 @@
                     <!-- Dergimizi Almak İçin İletişime Geç -->
                     <div class="cta-box cta-box--magazine mt-3" data-aos="fade-left" data-aos-delay="200">
                         <div class="cta-box__icon">
-                            <i class="fa-solid fa-book-open"></i>
+                            <i class="fa-brands fa-whatsapp"></i>
                         </div>
                         <h3 class="cta-box__title">Dergimizi Alın</h3>
                         <p class="cta-box__text">Boyalı Kelimeler dergisinin yeni sayısı çıktı! Dergiyi edinmek için bizimle iletişime geçin.</p>
-                        <a href="http://wa.me/+905537091992?text=Merhaba%2C%20Dergilerinizi%20%C3%A7ok%20be%C4%9Fendim%20%21%20Sat%C4%B1n%20almak%20istiyorum." target="_blank" rel="noopener noreferrer" class="cta-box__btn">
-                            <i class="fa-solid fa-envelope me-1"></i> İletişime Geç
+                        <a href="https://wa.me/+905537091992?text=Merhaba%2C%20Dergilerinizi%20%C3%A7ok%20be%C4%9Fendim%20%21%20Sat%C4%B1n%20almak%20istiyorum." target="_blank" rel="noopener noreferrer" class="cta-box__btn">
+                            <i class="fa-brands fa-whatsapp me-1"></i> İletişime Geç
                         </a>
                     </div>
                 </div>
