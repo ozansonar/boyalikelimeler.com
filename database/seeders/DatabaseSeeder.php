@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             DemoLiteraryWorkSeeder::class,
             DemoCommentSeeder::class,
             QnaCategorySeeder::class,
+            QnaQuestionSeeder::class,
         ]);
     }
 }
