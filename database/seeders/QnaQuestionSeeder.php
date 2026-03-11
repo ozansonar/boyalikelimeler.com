@@ -146,7 +146,7 @@ class QnaQuestionSeeder extends Seeder
                     'user_id'         => $userId,
                     'qna_category_id' => $category->id,
                     'title'           => $questionData['title'],
-                    'slug'            => Str::slug($questionData['title']) . '-' . strtolower(Str::random(5)),
+                    'slug'            => Str::slug($questionData['title']),
                     'body'            => $questionData['body'],
                     'status'          => QnaStatus::Approved,
                     'view_count'      => rand(10, 300),
