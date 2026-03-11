@@ -99,6 +99,12 @@ class PermissionSeeder extends Seeder
             // Mail Şablonları
             ['name' => 'Mail Şablonlarını Görüntüle', 'slug' => 'mail-templates.view', 'group' => 'mail-templates', 'sort_order' => 135],
             ['name' => 'Mail Şablonu Düzenle', 'slug' => 'mail-templates.edit', 'group' => 'mail-templates', 'sort_order' => 136],
+
+            // Reklamlar
+            ['name' => 'Reklamları Görüntüle', 'slug' => 'advertisements.view', 'group' => 'advertisements', 'sort_order' => 140],
+            ['name' => 'Reklam Oluştur', 'slug' => 'advertisements.create', 'group' => 'advertisements', 'sort_order' => 141],
+            ['name' => 'Reklam Düzenle', 'slug' => 'advertisements.edit', 'group' => 'advertisements', 'sort_order' => 142],
+            ['name' => 'Reklam Sil', 'slug' => 'advertisements.delete', 'group' => 'advertisements', 'sort_order' => 143],
         ];
 
         foreach ($permissions as $permission) {
