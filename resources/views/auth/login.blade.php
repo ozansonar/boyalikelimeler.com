@@ -118,6 +118,8 @@
                             <a href="{{ route('password.request') }}" class="auth-form__link login-card__forgot">Şifremi Unuttum</a>
                         </div>
 
+                        <x-recaptcha />
+
                         <button type="submit" class="auth-form__submit">
                             <i class="fa-solid fa-right-to-bracket me-2"></i>Giriş Yap
                         </button>

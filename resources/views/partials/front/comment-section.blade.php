@@ -133,6 +133,9 @@
                     </div>
                 </div>
                 <div class="col-12">
+                    <x-recaptcha />
+                </div>
+                <div class="col-12">
                     <button type="submit" class="cmt-form__submit" id="commentSubmitBtn">
                         <i class="fa-solid fa-paper-plane me-2"></i>Yorum Gönder
                     </button>

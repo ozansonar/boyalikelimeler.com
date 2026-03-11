@@ -129,6 +129,11 @@
                                     </div>
                                 </div>
 
+                                <!-- reCAPTCHA -->
+                                <div class="col-12">
+                                    <x-recaptcha />
+                                </div>
+
                                 <!-- Submit -->
                                 <div class="col-12">
                                     <button type="submit" class="contact-form__submit" id="contactSubmitBtn">

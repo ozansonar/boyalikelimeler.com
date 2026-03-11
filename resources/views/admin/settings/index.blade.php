@@ -54,6 +54,10 @@
                     <i class="bi bi-palette"></i>
                     <div><span>Mail Teması</span><small>Renk, footer & sosyal medya</small></div>
                 </a>
+                <a href="#stg-recaptcha" class="stg-nav-item {{ ($tab ?? '') === 'recaptcha' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-recaptcha')">
+                    <i class="bi bi-shield-check"></i>
+                    <div><span>reCAPTCHA</span><small>Google reCAPTCHA v2 doğrulama</small></div>
+                </a>
                 <a href="#stg-maintenance" class="stg-nav-item {{ ($tab ?? '') === 'maintenance' ? 'active' : '' }}" onclick="switchSettingsTab(this,'stg-maintenance')">
                     <i class="bi bi-tools"></i>
                     <div><span>Bakım Modu</span><small>Planlı bakım & sistem durumu</small></div>
@@ -71,6 +75,7 @@
                 <option value="stg-seo" {{ ($tab ?? '') === 'seo' ? 'selected' : '' }}>SEO</option>
                 <option value="stg-email" {{ ($tab ?? '') === 'smtp' ? 'selected' : '' }}>E-posta (SMTP)</option>
                 <option value="stg-mail-theme" {{ ($tab ?? '') === 'mail_theme' ? 'selected' : '' }}>Mail Teması</option>
+                <option value="stg-recaptcha" {{ ($tab ?? '') === 'recaptcha' ? 'selected' : '' }}>reCAPTCHA</option>
                 <option value="stg-maintenance" {{ ($tab ?? '') === 'maintenance' ? 'selected' : '' }}>Bakım Modu</option>
             </select>
         </div>
@@ -815,7 +820,109 @@
                 </form>
             </div>
 
-            {{-- ==================== 7. BAKIM MODU ==================== --}}
+            {{-- ==================== 7. RECAPTCHA ==================== --}}
+            <div class="stg-panel {{ ($tab ?? '') === 'recaptcha' ? 'active' : '' }}" id="stg-recaptcha">
+                <form action="{{ route('admin.settings.update.recaptcha') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="stg-panel-header">
+                        <div>
+                            <h5><i class="bi bi-shield-check"></i> Google reCAPTCHA v2</h5>
+                            <p>Form spam koruması için Google reCAPTCHA onay kutusu ayarları</p>
+                        </div>
+                        <button type="submit" class="stg-save-btn"><i class="bi bi-check-lg"></i> Kaydet</button>
+                    </div>
+
+                    <!-- Durum -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>reCAPTCHA Durumu</h6>
+                            <p>Form doğrulamasını açıp kapatabilirsiniz</p>
+                        </div>
+
+                        <div class="stg-toggle-list">
+                            <div class="stg-toggle-item">
+                                <div class="stg-toggle-info">
+                                    <span>reCAPTCHA Doğrulama</span>
+                                    <small>Açık olduğunda formlarda "Ben robot değilim" onay kutusu gösterilir</small>
+                                </div>
+                                <label class="stg-switch">
+                                    <input type="hidden" name="enabled" value="0">
+                                    <input type="checkbox" name="enabled" value="1" {{ ($recaptcha['enabled'] ?? '0') === '1' ? 'checked' : '' }}>
+                                    <span class="stg-switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API Anahtarları -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>API Anahtarları</h6>
+                            <p>Google reCAPTCHA v2 "I'm not a robot" Checkbox anahtarları</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Site Key (Public Key)</label>
+                            <input type="text" name="site_key" class="stg-input" value="{{ old('site_key', $recaptcha['site_key'] ?? '') }}" placeholder="6Lc...">
+                            <small class="stg-hint">Google reCAPTCHA admin panelinden aldığınız site anahtarı</small>
+                            @error('site_key') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">Secret Key (Private Key)</label>
+                            <input type="password" name="secret_key" class="stg-input" value="" placeholder="{{ !empty($recaptcha['secret_key']) ? '••••••••  (değiştirmek için yeni key girin)' : '6Lc...' }}" autocomplete="off">
+                            <small class="stg-hint">Google reCAPTCHA admin panelinden aldığınız gizli anahtar</small>
+                            @error('secret_key') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+                    </div>
+
+                    <!-- Bilgilendirme -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Bilgilendirme</h6>
+                            <p>reCAPTCHA uygulandığı formlar</p>
+                        </div>
+
+                        <div class="stg-toggle-list">
+                            <div class="stg-toggle-item">
+                                <div class="stg-toggle-info">
+                                    <span><i class="bi bi-check-circle text-success me-1"></i> Giriş Yap</span>
+                                    <small>/giris sayfası</small>
+                                </div>
+                            </div>
+                            <div class="stg-toggle-item">
+                                <div class="stg-toggle-info">
+                                    <span><i class="bi bi-check-circle text-success me-1"></i> Kayıt Ol</span>
+                                    <small>/kayit-ol sayfası</small>
+                                </div>
+                            </div>
+                            <div class="stg-toggle-item">
+                                <div class="stg-toggle-info">
+                                    <span><i class="bi bi-check-circle text-success me-1"></i> Şifremi Unuttum</span>
+                                    <small>/sifremi-unuttum sayfası</small>
+                                </div>
+                            </div>
+                            <div class="stg-toggle-item">
+                                <div class="stg-toggle-info">
+                                    <span><i class="bi bi-check-circle text-success me-1"></i> İletişim</span>
+                                    <small>/iletisim sayfası</small>
+                                </div>
+                            </div>
+                            <div class="stg-toggle-item">
+                                <div class="stg-toggle-info">
+                                    <span><i class="bi bi-check-circle text-success me-1"></i> Yorum Formları</span>
+                                    <small>İçerik ve blog yorum formları</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            {{-- ==================== 8. BAKIM MODU ==================== --}}
             <div class="stg-panel {{ ($tab ?? '') === 'maintenance' ? 'active' : '' }}" id="stg-maintenance">
                 <form action="{{ route('admin.settings.update.maintenance') }}" method="POST">
                     @csrf
@@ -982,5 +1089,6 @@
         renumberRows();
     });
 })();
+
 </script>
 @endpush

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Front;
 
 use App\Enums\ContactSubject;
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -21,10 +22,11 @@ final class ContactStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fullname' => ['required', 'string', 'max:100'],
-            'email'    => ['required', 'email', 'max:255'],
-            'subject'  => ['required', 'string', new Enum(ContactSubject::class)],
-            'message'  => ['required', 'string', 'min:10', 'max:5000'],
+            'fullname'             => ['required', 'string', 'max:100'],
+            'email'                => ['required', 'email', 'max:255'],
+            'subject'              => ['required', 'string', new Enum(ContactSubject::class)],
+            'message'              => ['required', 'string', 'min:10', 'max:5000'],
+            'g-recaptcha-response' => ['sometimes', new RecaptchaRule()],
         ];
     }
 

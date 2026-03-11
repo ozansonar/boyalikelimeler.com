@@ -35,6 +35,7 @@ class SettingController extends Controller
             'seo'         => $allSettings['seo'] ?? [],
             'smtp'        => $allSettings['smtp'] ?? [],
             'mailTheme'   => $allSettings['mail_theme'] ?? [],
+            'recaptcha'      => $allSettings['recaptcha'] ?? [],
             'maintenance'    => $allSettings['maintenance'] ?? [],
             'tab'            => $request->query('tab', 'general'),
         ]);
@@ -272,6 +273,25 @@ class SettingController extends Controller
 
         return redirect()->route('admin.settings.index', ['tab' => 'mail_theme'])
             ->with('success', 'Mail teması varsayılan değerlere sıfırlandı.');
+    }
+
+    public function updateRecaptcha(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'enabled'    => 'required|in:0,1',
+            'site_key'   => 'nullable|string|max:200',
+            'secret_key' => 'nullable|string|max:200',
+        ]);
+
+        if ($data['secret_key'] === null || $data['secret_key'] === '') {
+            $existing = $this->settingService->getGroup('recaptcha');
+            $data['secret_key'] = $existing['secret_key'] ?? '';
+        }
+
+        $this->settingService->updateGroup('recaptcha', $data);
+
+        return redirect()->route('admin.settings.index', ['tab' => 'recaptcha'])
+            ->with('success', 'reCAPTCHA ayarları başarıyla güncellendi.');
     }
 
     public function updateMaintenance(Request $request): RedirectResponse

@@ -38,6 +38,11 @@
         formData.append('subject', subject);
         formData.append('message', message);
 
+        var recaptchaInput = form.querySelector('[name="g-recaptcha-response"]');
+        if (recaptchaInput && recaptchaInput.value) {
+            formData.append('g-recaptcha-response', recaptchaInput.value);
+        }
+
         fetch(form.action, {
             method: 'POST',
             headers: {
@@ -71,6 +76,7 @@
         .finally(function () {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalHtml;
+            if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
         });
     });
 

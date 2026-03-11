@@ -145,6 +145,7 @@
         .finally(function () {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalHtml;
+            if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
         });
     }
 
