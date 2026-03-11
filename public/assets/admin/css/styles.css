@@ -25492,3 +25492,14 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
     gap: 6px;
   }
 }
+
+/* -- Color Preview Dot (QnA Category Form) ---- */
+.color-preview-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-left: 0.25rem;
+    background: #D4AF37;
+}
