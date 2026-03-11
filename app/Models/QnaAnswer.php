@@ -28,8 +28,10 @@ class QnaAnswer extends Model
     protected function casts(): array
     {
         return [
-            'status'     => QnaStatus::class,
-            'like_count' => 'integer',
+            'qna_question_id' => 'integer',
+            'user_id'         => 'integer',
+            'status'          => QnaStatus::class,
+            'like_count'      => 'integer',
         ];
     }
 
