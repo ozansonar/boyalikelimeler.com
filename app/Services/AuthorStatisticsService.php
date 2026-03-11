@@ -28,18 +28,22 @@ final class AuthorStatisticsService
             $totalAuthors = User::whereHas('literaryWorks', fn ($q) => $q->where('status', LiteraryWorkStatus::Approved))
                 ->count();
 
-            $topAuthorThisMonth = $this->getTopAuthorByViewsThisMonth();
+            $topAuthor = $this->getTopAuthorByTotalViews();
             $topPublisherThisMonth = $this->getTopPublisherThisMonth();
 
             $totalViews = (int) LiteraryWork::where('status', LiteraryWorkStatus::Approved)->sum('view_count');
-            $avgViews = $totalAuthors > 0 ? round($totalViews / $totalAuthors, 1) : 0;
+            $avgViews = $totalAuthors > 0 ? (int) round($totalViews / $totalAuthors) : 0;
+
+            $totalApprovedWorks = LiteraryWork::where('status', LiteraryWorkStatus::Approved)->count();
 
             return [
-                'total_authors'       => $totalAuthors,
-                'top_author_name'     => $topAuthorThisMonth['name'] ?? '-',
-                'top_author_views'    => $topAuthorThisMonth['views'] ?? 0,
-                'top_publisher_name'  => $topPublisherThisMonth['name'] ?? '-',
-                'top_publisher_count' => $topPublisherThisMonth['count'] ?? 0,
+                'total_authors'        => $totalAuthors,
+                'total_views'          => $totalViews,
+                'total_works'          => $totalApprovedWorks,
+                'top_author_name'      => $topAuthor['name'] ?? '-',
+                'top_author_views'     => $topAuthor['views'] ?? 0,
+                'top_publisher_name'   => $topPublisherThisMonth['name'] ?? '-',
+                'top_publisher_count'  => $topPublisherThisMonth['count'] ?? 0,
                 'avg_views_per_author' => $avgViews,
             ];
         });
@@ -160,21 +164,14 @@ final class AuthorStatisticsService
 
     // ─── Private Helpers ───
 
-    private function getTopAuthorByViewsThisMonth(): array
+    private function getTopAuthorByTotalViews(): array
     {
-        $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
-
-        $result = DB::table('daily_views')
-            ->join('literary_works', function ($join): void {
-                $join->on('daily_views.viewable_id', '=', 'literary_works.id')
-                    ->where('daily_views.viewable_type', '=', LiteraryWork::class);
-            })
+        $result = DB::table('literary_works')
             ->join('users', 'literary_works.user_id', '=', 'users.id')
-            ->where('daily_views.view_date', '>=', $startOfMonth)
             ->where('literary_works.status', LiteraryWorkStatus::Approved->value)
             ->whereNull('literary_works.deleted_at')
             ->whereNull('users.deleted_at')
-            ->select('users.name', DB::raw('SUM(daily_views.view_count) as total_views'))
+            ->select('users.name', DB::raw('SUM(literary_works.view_count) as total_views'))
             ->groupBy('users.id', 'users.name')
             ->orderByDesc('total_views')
             ->first();

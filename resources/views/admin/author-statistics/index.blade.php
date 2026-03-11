@@ -19,47 +19,47 @@
     <!-- KPI Cards -->
     <div class="row g-4 mb-4">
         <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="0">
-            <div class="anl-kpi-card">
+            <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-teal">
                         <i class="bi bi-people-fill"></i>
                     </div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($stats['total_authors']) }}</h3>
-                <span class="anl-kpi-label">Aktif Yazar Sayısı</span>
+                <span class="anl-kpi-label">Onaylı eseri olan yazar sayısı</span>
             </div>
         </div>
         <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="anl-kpi-card">
+            <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-blue">
                         <i class="bi bi-eye-fill"></i>
                     </div>
                 </div>
-                <h3 class="anl-kpi-value">{{ $stats['top_author_name'] }}</h3>
-                <span class="anl-kpi-label">Bu Ay En Çok Okunan Yazar ({{ number_format($stats['top_author_views']) }} okunma)</span>
+                <h3 class="anl-kpi-value">{{ number_format($stats['total_views']) }}</h3>
+                <span class="anl-kpi-label">Toplam okunma ({{ number_format($stats['total_works']) }} eser)</span>
             </div>
         </div>
         <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="anl-kpi-card">
+            <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-green">
-                        <i class="bi bi-journal-text"></i>
+                        <i class="bi bi-trophy-fill"></i>
                     </div>
                 </div>
-                <h3 class="anl-kpi-value">{{ $stats['top_publisher_name'] }}</h3>
-                <span class="anl-kpi-label">Bu Ay En Çok Eser Yayınlayan ({{ number_format($stats['top_publisher_count']) }} eser)</span>
+                <h3 class="anl-kpi-value">{{ $stats['top_author_name'] }}</h3>
+                <span class="anl-kpi-label">En çok okunan yazar ({{ number_format($stats['top_author_views']) }})</span>
             </div>
         </div>
         <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="anl-kpi-card">
+            <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-orange">
                         <i class="bi bi-bar-chart-fill"></i>
                     </div>
                 </div>
-                <h3 class="anl-kpi-value">{{ number_format($stats['avg_views_per_author'], 1) }}</h3>
-                <span class="anl-kpi-label">Ortalama Okunma / Yazar</span>
+                <h3 class="anl-kpi-value">{{ number_format($stats['avg_views_per_author']) }}</h3>
+                <span class="anl-kpi-label">Yazar başına ortalama okunma</span>
             </div>
         </div>
     </div>
@@ -67,26 +67,25 @@
     <!-- Filters -->
     <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="150">
         <div class="card-body-custom">
-            <form method="GET" action="{{ route('admin.author-statistics.index') }}" class="cl-toolbar">
-                <div class="cl-search">
-                    <i class="bi bi-search cl-search-icon"></i>
-                    <input type="text" name="search" class="cl-search-input" placeholder="Yazar ara..."
-                           value="{{ $filters['search'] ?? '' }}">
+            <form method="GET" action="{{ route('admin.author-statistics.index') }}" class="usr-toolbar">
+                <div class="usr-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Yazar adı veya kullanıcı adı ile ara...">
                 </div>
-                <div class="cl-filters">
-                    <select name="per_page" class="cl-select" onchange="this.form.submit()">
+
+                <div class="usr-filters">
+                    <select class="usr-filter-select" name="per_page" onchange="this.form.submit()">
                         @foreach([10, 25, 50, 100] as $pp)
-                            <option value="{{ $pp }}" {{ $perPage === $pp ? 'selected' : '' }}>{{ $pp }} kayıt</option>
+                            <option value="{{ $pp }}" {{ $perPage === $pp ? 'selected' : '' }}>{{ $pp }} / sayfa</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="cl-actions">
-                    <button type="submit" class="btn-teal btn-sm">
-                        <i class="bi bi-search"></i> Ara
-                    </button>
-                    <a href="{{ route('admin.author-statistics.index') }}" class="btn-glass btn-sm">
-                        <i class="bi bi-arrow-counterclockwise"></i> Sıfırla
-                    </a>
+
+                <div class="usr-toolbar-actions">
+                    <button type="submit" class="btn-glass"><i class="bi bi-funnel me-1"></i>Filtrele</button>
+                    @if(!empty($filters['search']))
+                        <a href="{{ route('admin.author-statistics.index') }}" class="btn-glass"><i class="bi bi-x-lg me-1"></i>Temizle</a>
+                    @endif
                 </div>
             </form>
         </div>
@@ -195,14 +194,35 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination -->
+            @if($authors->hasPages())
+                <div class="usr-pagination">
+                    <div class="usr-pagination-info">
+                        <span>Toplam <strong>{{ number_format($authors->total()) }}</strong> yazardan <strong>{{ $authors->firstItem() }}-{{ $authors->lastItem() }}</strong> gösteriliyor</span>
+                    </div>
+                    <div class="usr-pagination-controls">
+                        <div class="usr-page-btns">
+                            @if($authors->onFirstPage())
+                                <button class="usr-page-btn" disabled><i class="bi bi-chevron-left"></i></button>
+                            @else
+                                <a href="{{ $authors->previousPageUrl() }}" class="usr-page-btn"><i class="bi bi-chevron-left"></i></a>
+                            @endif
+
+                            @foreach($authors->getUrlRange(max(1, $authors->currentPage() - 2), min($authors->lastPage(), $authors->currentPage() + 2)) as $page => $url)
+                                <a href="{{ $url }}" class="usr-page-btn {{ $page === $authors->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+                            @endforeach
+
+                            @if($authors->hasMorePages())
+                                <a href="{{ $authors->nextPageUrl() }}" class="usr-page-btn"><i class="bi bi-chevron-right"></i></a>
+                            @else
+                                <button class="usr-page-btn" disabled><i class="bi bi-chevron-right"></i></button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
-
-    <!-- Pagination -->
-    @if($authors->hasPages())
-        <div data-aos="fade-up" data-aos-delay="250">
-            {{ $authors->links() }}
-        </div>
-    @endif
 
 @endsection
