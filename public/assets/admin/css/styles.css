@@ -15508,8 +15508,9 @@ a.btn-glass {
 }
 
 .usr-meta {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 /* Action Buttons */
@@ -19601,13 +19602,13 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
 }
 .cl-table thead th {
   padding: 14px 16px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 0.8px;
+  color: var(--teal-light);
+  background: rgba(20, 184, 166, 0.04);
+  border-bottom: 1px solid rgba(20, 184, 166, 0.1);
   white-space: nowrap;
 }
 .cl-th-sortable {
@@ -19624,14 +19625,18 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   opacity: 0.5;
 }
 .cl-table tbody tr {
-  border-bottom: 1px solid var(--border-color);
-  transition: background 0.15s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+.cl-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
 }
 .cl-table tbody tr:last-child {
   border-bottom: none;
 }
 .cl-table tbody tr:hover {
-  background: rgba(20, 184, 166, 0.03);
+  background: rgba(20, 184, 166, 0.06);
+  border-color: rgba(20, 184, 166, 0.12);
 }
 .cl-table tbody td {
   padding: 14px 16px;
@@ -25502,4 +25507,76 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
     vertical-align: middle;
     margin-left: 0.25rem;
     background: #D4AF37;
+}
+
+/* -- Status Badge Color Aliases (BEM shorthand) -- */
+.usr-status-badge-green {
+  background: color-mix(in srgb, var(--neon-green) 15%, transparent);
+  color: var(--neon-green);
+}
+.usr-status-badge-orange {
+  background: color-mix(in srgb, var(--neon-orange) 15%, transparent);
+  color: var(--neon-orange);
+}
+.usr-status-badge-red {
+  background: color-mix(in srgb, #ef4444 15%, transparent);
+  color: #ef4444;
+}
+
+/* -- Colored Icon Box (Category Tables) -------- */
+.cl-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all var(--transition-fast);
+}
+.cl-icon-box--edebiyat {
+  background: rgba(212, 175, 55, 0.12);
+  color: #D4AF37;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+.cl-icon-box--psikoloji {
+  background: rgba(139, 92, 246, 0.12);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+.cl-icon-box--aile {
+  background: rgba(244, 63, 94, 0.12);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+.cl-icon-box--yazi {
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+.cl-icon-box--gorsel {
+  background: rgba(236, 72, 153, 0.12);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+}
+.cl-icon-box--sohbet {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+.cl-icon-box--serbest {
+  background: rgba(32, 201, 151, 0.12);
+  color: #5dd39e;
+  border: 1px solid rgba(32, 201, 151, 0.2);
+}
+.cl-icon-box--astroloji {
+  background: rgba(6, 182, 212, 0.12);
+  color: #67e8f9;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+.cl-icon-box--default {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.15);
 }

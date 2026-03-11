@@ -64,7 +64,7 @@
                             <tr>
                                 <td>
                                     <div class="cl-content-cell">
-                                        <div class="cl-content-thumb draft">
+                                        <div class="cl-icon-box cl-icon-box--{{ str_replace('qna-cat-card__icon-wrap--', '', $category->color_class) }}">
                                             <i class="{{ $category->icon }}"></i>
                                         </div>
                                         <div class="cl-content-info">
