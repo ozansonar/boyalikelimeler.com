@@ -10517,14 +10517,26 @@ p {
     justify-content: space-between;
 }
 
-.qna-modal .auth-form__input,
-.qna-modal .auth-form__input option {
-    color: var(--color-cream);
-    background-color: var(--color-black-deep);
+#askQuestionModal .auth-form__input,
+#askQuestionModal .auth-form__input option,
+#askQuestionModal select.auth-form__input {
+    color: var(--color-cream) !important;
+    background-color: var(--color-black-deep) !important;
+    border-color: rgba(155, 158, 163, 0.25);
 }
 
-.qna-modal .auth-form__input::placeholder {
-    color: var(--color-silver-dark);
+#askQuestionModal .auth-form__input:focus {
+    color: var(--color-white) !important;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.15);
+}
+
+#askQuestionModal .auth-form__input::placeholder {
+    color: var(--color-silver-dark) !important;
+}
+
+#askQuestionModal .auth-form__label {
+    color: var(--color-cream);
 }
 
 .qna-modal__title {
