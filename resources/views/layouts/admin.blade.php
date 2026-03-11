@@ -14,6 +14,7 @@
     <link href="{{ asset('vendor/fonts/fonts.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/bootstrap/5.3.8/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/font-awesome/6.7.2/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/aos/2.3.4/aos.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/styles.css') }}?v={{ filemtime(public_path('assets/admin/css/styles.css')) }}" rel="stylesheet">
     @stack('styles')
