@@ -622,14 +622,31 @@
                         </div>
                     @endif
 
-                    <div class="poll" data-aos="fade-left" data-aos-delay="200">
-                        <h3 class="poll__title"><i class="fa-solid fa-chart-bar me-2"></i>Anket</h3>
-                        <p class="poll__question">En çok hangi edebiyat türünü seviyorsunuz?</p>
-                        <button class="poll__option" type="button">Şiir</button>
-                        <button class="poll__option" type="button">Hikaye</button>
-                        <button class="poll__option" type="button">Roman</button>
-                        <button class="poll__option" type="button">Deneme</button>
-                    </div>
+                    @if($activePoll)
+                        <div class="poll" data-aos="fade-left" data-aos-delay="200" id="pollWidget" data-poll-id="{{ $activePoll->id }}">
+                            <h3 class="poll__title"><i class="fa-solid fa-chart-bar me-2"></i>Anket</h3>
+                            <p class="poll__question">{{ $activePoll->question }}</p>
+
+                            @if($pollHasVoted && $pollResults)
+                                @foreach($pollResults as $result)
+                                    <div class="poll__result">
+                                        <div class="poll__result-header">
+                                            <span class="poll__result-text">{{ $result['option_text'] }}</span>
+                                            <span class="poll__result-pct">{{ $result['percentage'] }}%</span>
+                                        </div>
+                                        <div class="poll__result-bar">
+                                            <div class="poll__result-fill" data-width="{{ $result['percentage'] }}"></div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                <p class="poll__total">Toplam <strong>{{ array_sum(array_column($pollResults, 'vote_count')) }}</strong> oy</p>
+                            @else
+                                @foreach($activePoll->options as $option)
+                                    <button class="poll__option" type="button" data-option-id="{{ $option->id }}">{{ $option->option_text }}</button>
+                                @endforeach
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -1945,6 +1945,76 @@ p {
     color: var(--color-gold);
 }
 
+.poll__option--loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.poll__result {
+    margin-bottom: 0.75rem;
+}
+
+.poll__result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+}
+
+.poll__result-text {
+    font-size: 0.9rem;
+    color: var(--color-silver-light);
+}
+
+.poll__result-pct {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-gold);
+}
+
+.poll__result-bar {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(155, 158, 163, 0.15);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.poll__result-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
+    border-radius: 4px;
+    width: 0;
+    transition: width 0.8s ease-out;
+}
+
+.poll__total {
+    font-size: 0.8rem;
+    color: var(--color-silver);
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.poll__message {
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+}
+
+.poll__message--success {
+    color: #4ade80;
+    background-color: rgba(74, 222, 128, 0.08);
+}
+
+.poll__message--error {
+    color: #fb7185;
+    background-color: rgba(251, 113, 133, 0.08);
+}
+
 /* -- Quote Block --------------------------------------------- */
 .quote-block {
     background-color: var(--color-black-card);

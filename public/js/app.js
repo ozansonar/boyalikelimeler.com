@@ -291,16 +291,119 @@ document.addEventListener('DOMContentLoaded', function () {
         heroSliderInterval = setInterval(nextHeroSlide, SLIDER_DURATION);
     }
 
-    /* -- Poll Selection -------------------------------------- */
-    const pollOptions = document.querySelectorAll('.poll__option');
-    pollOptions.forEach(function (option) {
-        option.addEventListener('click', function () {
-            pollOptions.forEach(function (o) {
-                o.classList.remove('poll__option--selected');
+    /* -- Poll Widget (AJAX) ---------------------------------- */
+    var pollWidget = document.getElementById('pollWidget');
+    if (pollWidget) {
+        var pollId = pollWidget.getAttribute('data-poll-id');
+        var csrfToken = document.querySelector('meta[name="csrf-token"]');
+        var token = csrfToken ? csrfToken.getAttribute('content') : '';
+
+        /* Animate result bars on load */
+        var existingBars = pollWidget.querySelectorAll('.poll__result-fill[data-width]');
+        if (existingBars.length > 0) {
+            setTimeout(function () {
+                existingBars.forEach(function (bar) {
+                    bar.style.width = bar.getAttribute('data-width') + '%';
+                });
+            }, 300);
+        }
+
+        /* Handle option click */
+        pollWidget.addEventListener('click', function (e) {
+            var btn = e.target.closest('.poll__option');
+            if (!btn || btn.classList.contains('poll__option--loading')) return;
+
+            var optionId = btn.getAttribute('data-option-id');
+            if (!optionId) return;
+
+            /* Visual feedback */
+            var allBtns = pollWidget.querySelectorAll('.poll__option');
+            allBtns.forEach(function (b) {
+                b.classList.remove('poll__option--selected');
+                b.classList.add('poll__option--loading');
             });
-            this.classList.add('poll__option--selected');
+            btn.classList.add('poll__option--selected');
+
+            fetch('/anket/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    poll_id: parseInt(pollId),
+                    option_id: parseInt(optionId)
+                })
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data.results) {
+                    renderPollResults(data.results, data.total_votes, data.message);
+                } else {
+                    showPollMessage(data.message || 'Bir hata oluştu.', 'error');
+                    allBtns.forEach(function (b) {
+                        b.classList.remove('poll__option--loading');
+                    });
+                }
+            })
+            .catch(function () {
+                showPollMessage('Bağlantı hatası. Lütfen tekrar deneyin.', 'error');
+                allBtns.forEach(function (b) {
+                    b.classList.remove('poll__option--loading');
+                });
+            });
         });
-    });
+
+        function renderPollResults(results, totalVotes, message) {
+            var question = pollWidget.querySelector('.poll__question');
+            var title = pollWidget.querySelector('.poll__title');
+            var html = '';
+
+            if (title) html += title.outerHTML;
+            if (question) html += question.outerHTML;
+
+            results.forEach(function (r) {
+                html += '<div class="poll__result">' +
+                    '<div class="poll__result-header">' +
+                    '<span class="poll__result-text">' + escapeHtml(r.option_text) + '</span>' +
+                    '<span class="poll__result-pct">' + r.percentage + '%</span>' +
+                    '</div>' +
+                    '<div class="poll__result-bar">' +
+                    '<div class="poll__result-fill" data-width="' + r.percentage + '"></div>' +
+                    '</div></div>';
+            });
+
+            html += '<p class="poll__total">Toplam <strong>' + totalVotes + '</strong> oy</p>';
+
+            if (message) {
+                html += '<p class="poll__message poll__message--success">' + escapeHtml(message) + '</p>';
+            }
+
+            pollWidget.innerHTML = html;
+
+            setTimeout(function () {
+                pollWidget.querySelectorAll('.poll__result-fill[data-width]').forEach(function (bar) {
+                    bar.style.width = bar.getAttribute('data-width') + '%';
+                });
+            }, 50);
+        }
+
+        function showPollMessage(msg, type) {
+            var existing = pollWidget.querySelector('.poll__message');
+            if (existing) existing.remove();
+            var p = document.createElement('p');
+            p.className = 'poll__message poll__message--' + type;
+            p.textContent = msg;
+            pollWidget.appendChild(p);
+        }
+
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(text));
+            return div.innerHTML;
+        }
+    }
 
     /* -- Scroll Animations ----------------------------------- */
     /* AOS.js handles scroll animations (see AOS.init above) */

@@ -27,6 +27,11 @@
                     <i class="bi bi-megaphone-fill"></i> Reklam Yönetimi
                 </a>
             @endif
+            @if($sidebarUser->hasPermission('polls.view'))
+                <a href="{{ route('admin.polls.index') }}" class="nav-link {{ request()->routeIs('admin.polls.*') ? 'active' : '' }}">
+                    <i class="bi bi-bar-chart-fill"></i> Anket Yönetimi
+                </a>
+            @endif
         @endif
 
         @if($sidebarUser->hasAnyPermission('posts.view', 'categories.view', 'pages.view', 'authors-page.manage', 'painters-page.manage'))
