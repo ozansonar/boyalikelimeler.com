@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -13,61 +12,82 @@ final class YouTubeService
 {
     private const CACHE_KEY = 'youtube.channel_videos';
     private const CACHE_TTL = 21600; // 6 hours
-    private const RSS_URL = 'https://www.youtube.com/feeds/videos.xml';
-    private const RSS_FETCH_LIMIT = 30; // Fetch more to compensate for filtered Shorts
-    private const SHORTS_URL = 'https://www.youtube.com/shorts/';
+    private const API_BASE = 'https://www.googleapis.com/youtube/v3';
+    private const MAX_PAGES = 3; // Maximum API pages to fetch (safety limit)
+    private const SHORTS_MAX_SECONDS = 60;
 
     public function __construct(
         private readonly SettingService $settingService,
     ) {}
 
     /**
-     * Get latest videos from the YouTube channel via RSS feed.
+     * Get latest non-Shorts videos from the YouTube channel.
      *
      * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
      */
     public function getChannelVideos(int $limit = 15): array
     {
         $channelId = $this->settingService->get('youtube_channel_id');
+        $apiKey = $this->settingService->get('youtube_api_key');
 
-        if (empty($channelId)) {
+        if (empty($channelId) || empty($apiKey)) {
             return [];
         }
 
         return Cache::remember(
             self::CACHE_KEY . '.' . $channelId,
             self::CACHE_TTL,
-            fn (): array => $this->fetchVideosFromRss($channelId, $limit)
+            fn (): array => $this->fetchVideosFromApi($channelId, $apiKey, $limit)
         );
     }
 
     /**
-     * Fetch and parse YouTube RSS feed.
+     * Fetch videos using YouTube Data API v3, filtering out Shorts.
      *
      * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
      */
-    private function fetchVideosFromRss(string $channelId, int $limit): array
+    private function fetchVideosFromApi(string $channelId, string $apiKey, int $limit): array
     {
         try {
-            $response = Http::timeout(10)->get(self::RSS_URL, [
-                'channel_id' => $channelId,
-            ]);
+            // Convert channel ID to uploads playlist ID (UC... → UU...)
+            $uploadsPlaylistId = 'UU' . substr($channelId, 2);
 
-            if (!$response->successful()) {
-                Log::warning('YouTube RSS feed fetch failed', [
-                    'channel_id' => $channelId,
-                    'status' => $response->status(),
-                ]);
+            $videos = [];
+            $pageToken = null;
 
-                return [];
+            for ($page = 0; $page < self::MAX_PAGES; $page++) {
+                $playlistItems = $this->fetchPlaylistItems($uploadsPlaylistId, $apiKey, $pageToken);
+
+                if (empty($playlistItems['items'])) {
+                    break;
+                }
+
+                $videoIds = array_map(
+                    fn (array $item): string => $item['contentDetails']['videoId'] ?? '',
+                    $playlistItems['items']
+                );
+                $videoIds = array_filter($videoIds);
+
+                if (!empty($videoIds)) {
+                    $videoDetails = $this->fetchVideoDetails($videoIds, $apiKey);
+                    $normalVideos = $this->filterNormalVideos($videoDetails);
+                    $videos = array_merge($videos, $normalVideos);
+                }
+
+                if (count($videos) >= $limit) {
+                    break;
+                }
+
+                $pageToken = $playlistItems['nextPageToken'] ?? null;
+
+                if ($pageToken === null) {
+                    break;
+                }
             }
 
-            $allVideos = $this->parseRssFeed($response->body(), self::RSS_FETCH_LIMIT);
-            $filtered = $this->filterOutShorts($allVideos);
-
-            return array_slice($filtered, 0, $limit);
+            return array_slice($videos, 0, $limit);
         } catch (\Throwable $e) {
-            Log::error('YouTube RSS feed error', [
+            Log::error('YouTube API error', [
                 'channel_id' => $channelId,
                 'message' => $e->getMessage(),
             ]);
@@ -77,42 +97,79 @@ final class YouTubeService
     }
 
     /**
-     * Parse RSS XML into a structured video array.
+     * Fetch items from a YouTube playlist.
      *
-     * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
+     * @return array{items: array, nextPageToken: ?string}
      */
-    private function parseRssFeed(string $xml, int $limit): array
+    private function fetchPlaylistItems(string $playlistId, string $apiKey, ?string $pageToken = null): array
     {
-        $feed = @simplexml_load_string($xml);
+        $params = [
+            'part' => 'contentDetails,snippet',
+            'playlistId' => $playlistId,
+            'maxResults' => 50,
+            'key' => $apiKey,
+        ];
 
-        if ($feed === false) {
+        if ($pageToken !== null) {
+            $params['pageToken'] = $pageToken;
+        }
+
+        $response = Http::timeout(10)->get(self::API_BASE . '/playlistItems', $params);
+
+        if (!$response->successful()) {
+            Log::warning('YouTube playlistItems API failed', [
+                'playlist_id' => $playlistId,
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
+            return ['items' => [], 'nextPageToken' => null];
+        }
+
+        $data = $response->json();
+
+        return [
+            'items' => $data['items'] ?? [],
+            'nextPageToken' => $data['nextPageToken'] ?? null,
+        ];
+    }
+
+    /**
+     * Fetch video details (duration) for given video IDs.
+     *
+     * @param  array<string> $videoIds
+     * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string, duration_seconds: int}>
+     */
+    private function fetchVideoDetails(array $videoIds, string $apiKey): array
+    {
+        $response = Http::timeout(10)->get(self::API_BASE . '/videos', [
+            'part' => 'contentDetails,snippet',
+            'id' => implode(',', $videoIds),
+            'key' => $apiKey,
+        ]);
+
+        if (!$response->successful()) {
+            Log::warning('YouTube videos API failed', [
+                'status' => $response->status(),
+            ]);
+
             return [];
         }
 
+        $items = $response->json('items') ?? [];
         $videos = [];
-        $namespaces = $feed->getNamespaces(true);
-        $entries = $feed->entry ?? [];
 
-        foreach ($entries as $entry) {
-            if (count($videos) >= $limit) {
-                break;
-            }
-
-            $yt = $entry->children($namespaces['yt'] ?? 'http://www.youtube.com/xml/schemas/2015');
-            $media = $entry->children($namespaces['media'] ?? 'http://search.yahoo.com/mrss/');
-
-            $videoId = (string) ($yt->videoId ?? '');
-
-            if (empty($videoId)) {
-                continue;
-            }
+        foreach ($items as $item) {
+            $videoId = $item['id'] ?? '';
+            $duration = $item['contentDetails']['duration'] ?? 'PT0S';
 
             $videos[] = [
                 'id' => $videoId,
-                'title' => (string) ($entry->title ?? ''),
+                'title' => $item['snippet']['title'] ?? '',
                 'thumbnail' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
-                'published_at' => (string) ($entry->published ?? ''),
+                'published_at' => $item['snippet']['publishedAt'] ?? '',
                 'link' => "https://www.youtube.com/watch?v={$videoId}",
+                'duration_seconds' => $this->parseDuration($duration),
             ];
         }
 
@@ -120,42 +177,37 @@ final class YouTubeService
     }
 
     /**
-     * Filter out YouTube Shorts from video list using concurrent HTTP checks.
+     * Filter out Shorts (videos under 60 seconds).
      *
-     * @param  array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}> $videos
+     * @param  array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string, duration_seconds: int}> $videos
      * @return array<int, array{id: string, title: string, thumbnail: string, published_at: string, link: string}>
      */
-    private function filterOutShorts(array $videos): array
+    private function filterNormalVideos(array $videos): array
     {
-        if (empty($videos)) {
-            return [];
-        }
+        $normal = [];
 
-        $responses = Http::pool(function (Pool $pool) use ($videos): array {
-            $requests = [];
-            foreach ($videos as $video) {
-                $requests[$video['id']] = $pool
-                    ->as($video['id'])
-                    ->timeout(5)
-                    ->withoutRedirecting()
-                    ->head(self::SHORTS_URL . $video['id']);
-            }
-
-            return $requests;
-        });
-
-        $normalVideos = [];
         foreach ($videos as $video) {
-            $response = $responses[$video['id']] ?? null;
-
-            // If Shorts URL returns 200, it's a Short → skip it
-            // If it redirects (3xx) or fails, it's a normal video → keep it
-            if ($response === null || $response->status() !== 200) {
-                $normalVideos[] = $video;
+            if ($video['duration_seconds'] > self::SHORTS_MAX_SECONDS) {
+                unset($video['duration_seconds']);
+                $normal[] = $video;
             }
         }
 
-        return $normalVideos;
+        return $normal;
+    }
+
+    /**
+     * Parse ISO 8601 duration (PT1H2M3S) to seconds.
+     */
+    private function parseDuration(string $duration): int
+    {
+        try {
+            $interval = new \DateInterval($duration);
+
+            return ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
+        } catch (\Throwable) {
+            return 0;
+        }
     }
 
     /**

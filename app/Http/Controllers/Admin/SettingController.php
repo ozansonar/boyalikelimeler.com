@@ -48,6 +48,7 @@ class SettingController extends Controller
             'hero_tagline'        => 'nullable|string|max:200',
             'hero_description'    => 'nullable|string|max:1000',
             'youtube_channel_id'  => 'nullable|string|max:100',
+            'youtube_api_key'     => 'nullable|string|max:100',
         ]);
 
         $this->settingService->updateGroup('homepage', $data);
