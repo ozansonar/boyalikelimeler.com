@@ -127,6 +127,21 @@
                             @error('hero_description') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
+
+                    <!-- YouTube Kanal Videoları -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6><i class="bi bi-youtube text-neon-red me-2"></i>YouTube Kanal Videoları</h6>
+                            <p>Anasayfada otomatik gösterilecek YouTube kanal videolarının ayarları</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">YouTube Kanal ID</label>
+                            <input type="text" name="youtube_channel_id" class="stg-input" value="{{ old('youtube_channel_id', $homepage['youtube_channel_id'] ?? '') }}" placeholder="UCxxxxxxxxxxxxxxxxxxxxxx">
+                            <small class="stg-hint">YouTube kanal ID'si (UC ile başlar). Kanal sayfası → Sağ tık → Sayfa kaynağını görüntüle → "channel_id" aratın. Boş bırakılırsa video bölümü gizlenir.</small>
+                            @error('youtube_channel_id') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+                    </div>
                 </form>
 
                 <!-- Haftanın Film Önerileri -->

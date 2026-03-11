@@ -37,6 +37,7 @@ final class HomeController extends Controller
         $sidebarAds = $this->advertisementService->getActiveByPosition(AdvertisementPosition::Sidebar);
         $tallAds = $this->advertisementService->getActiveByPosition(AdvertisementPosition::Tall);
         $weeklyMovies = $this->settingService->getWeeklyMovies();
+        $youtubeVideos = $this->homeService->getYouTubeVideos();
 
         $activePoll = $this->pollService->getActivePoll();
         $pollHasVoted = false;
@@ -60,7 +61,7 @@ final class HomeController extends Controller
             );
         }
 
-        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies', 'activePoll', 'pollHasVoted', 'pollResults', 'dailyQuestion', 'dailyQuestionAnswered'));
+        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies', 'youtubeVideos', 'activePoll', 'pollHasVoted', 'pollResults', 'dailyQuestion', 'dailyQuestionAnswered'));
     }
 
     public function trackAdClick(int $advertisement): JsonResponse

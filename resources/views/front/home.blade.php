@@ -721,6 +721,7 @@
                     </div>
 
                     <!-- Row 2: YouTube Kanal Videoları -->
+                    @if(count($youtubeVideos) > 0)
                     <div class="video-gallery" data-aos="fade-up" data-aos-delay="100">
                         <div class="video-gallery__header">
                             <h3 class="video-gallery__title">
@@ -737,139 +738,25 @@
                         </div>
                         <div class="swiper video-gallery__swiper">
                             <div class="swiper-wrapper">
+                                @foreach($youtubeVideos as $video)
                                 <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="QNnvNzWAdy4">
+                                    <a href="#" class="video-gallery__item" data-video-id="{{ $video['id'] }}">
                                         <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/QNnvNzWAdy4/mqdefault.jpg"
-                                                 alt="Beden Bir Sanat Eseri midir?"
+                                            <img src="{{ $video['thumbnail'] }}"
+                                                 alt="{{ $video['title'] }}"
                                                  class="video-gallery__img" loading="lazy">
                                             <div class="video-gallery__play">
                                                 <i class="fa-solid fa-play"></i>
                                             </div>
                                         </div>
-                                        <p class="video-gallery__name">Beden Bir Sanat Eseri midir?</p>
+                                        <p class="video-gallery__name">{{ Str::limit($video['title'], 40) }}</p>
                                     </a>
                                 </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="L_urE5Dvf7Q">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/L_urE5Dvf7Q/mqdefault.jpg"
-                                                 alt="Pratik Çizimler: Kolay Ağaçlar ve Yengeç"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Pratik Çizimler: Kolay Ağaçlar</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="_e95zQvYVGU">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/_e95zQvYVGU/mqdefault.jpg"
-                                                 alt="Boyalı Kelimeler Şiir Gecesi"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Şiir Gecesi</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="H80BOUoNzP8">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/H80BOUoNzP8/mqdefault.jpg"
-                                                 alt="Sessiz Çöküş: Toplum Nereye Gidiyor?"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Sessiz Çöküş: Toplum Nereye?</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="mxodbZBE5qk">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/mxodbZBE5qk/mqdefault.jpg"
-                                                 alt="Edebiyat Öğretmeni ile Sanatın İzinde"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Sanatın İzinde</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="dQw4w9WgXcQ">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg"
-                                                 alt="Sanat ve Hayat Üzerine"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Sanat ve Hayat Üzerine</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="9bZkp7q19f0">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/9bZkp7q19f0/mqdefault.jpg"
-                                                 alt="Kalem ve Tuval Buluşması"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Kalem ve Tuval Buluşması</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="kJQP7kiw5Fk">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/kJQP7kiw5Fk/mqdefault.jpg"
-                                                 alt="Edebiyat Sohbetleri"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Edebiyat Sohbetleri</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="RgKAFK5djSk">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/RgKAFK5djSk/mqdefault.jpg"
-                                                 alt="Şiirin Güçlü Sesi"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Şiirin Güçlü Sesi</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="#" class="video-gallery__item" data-video-id="JGwWNGJdvx8">
-                                        <div class="video-gallery__thumb">
-                                            <img src="https://img.youtube.com/vi/JGwWNGJdvx8/mqdefault.jpg"
-                                                 alt="Görsel Sanatlara Giriş"
-                                                 class="video-gallery__img" loading="lazy">
-                                            <div class="video-gallery__play">
-                                                <i class="fa-solid fa-play"></i>
-                                            </div>
-                                        </div>
-                                        <p class="video-gallery__name">Görsel Sanatlara Giriş</p>
-                                    </a>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
+                    @endif
 
                     <!-- Video Modal -->
                     <div class="video-modal" id="videoModal">

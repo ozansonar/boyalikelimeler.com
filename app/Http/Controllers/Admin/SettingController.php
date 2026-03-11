@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\TestMail;
 use App\Services\SettingService;
 use App\Services\UploadService;
+use App\Services\YouTubeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,13 +43,16 @@ class SettingController extends Controller
     public function updateHomepage(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'hero_title'       => 'required|string|max:200',
-            'hero_subtitle'    => 'nullable|string|max:300',
-            'hero_tagline'     => 'nullable|string|max:200',
-            'hero_description' => 'nullable|string|max:1000',
+            'hero_title'          => 'required|string|max:200',
+            'hero_subtitle'       => 'nullable|string|max:300',
+            'hero_tagline'        => 'nullable|string|max:200',
+            'hero_description'    => 'nullable|string|max:1000',
+            'youtube_channel_id'  => 'nullable|string|max:100',
         ]);
 
         $this->settingService->updateGroup('homepage', $data);
+
+        app(YouTubeService::class)->clearCache();
 
         return redirect()->route('admin.settings.index', ['tab' => 'homepage'])
             ->with('success', 'Anasayfa ayarları başarıyla güncellendi.');
