@@ -363,7 +363,7 @@
 
                         @if($works->hasPages())
                             <nav class="profile-pagination" aria-label="Eser sayfalama">
-                                {{ $works->links('vendor.pagination.bootstrap-5') }}
+                                {{ $works->links() }}
                             </nav>
                         @endif
                     @endif
@@ -415,7 +415,7 @@
 
                         @if($posts->hasPages())
                             <nav class="profile-pagination" aria-label="Yazı sayfalama">
-                                {{ $posts->links('vendor.pagination.bootstrap-5') }}
+                                {{ $posts->links() }}
                             </nav>
                         @endif
                     @endif
