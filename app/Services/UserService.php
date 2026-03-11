@@ -122,6 +122,10 @@ final class UserService
             Cache::forget('admin.users.stats');
             Cache::forget('admin.users.role_counts');
 
+            if (empty($data['email_verified'])) {
+                $user->sendEmailVerificationNotification();
+            }
+
             return $user;
         });
     }
