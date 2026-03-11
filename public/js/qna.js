@@ -235,13 +235,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Toast Helper — Global BkModal kullanır
     // =====================================================
     function showQnaToast(message, type) {
-        if (window.BkModal && typeof window.BkModal.show === 'function') {
-            var modalType = type === 'success' ? 'success' : 'danger';
-            window.BkModal.show(modalType, message);
-            return;
-        }
-
-        alert(message);
+        var modalType = type === 'success' ? 'success' : 'danger';
+        window.BkModal.show(modalType, message);
     }
 
 });
