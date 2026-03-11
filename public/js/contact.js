@@ -39,7 +39,7 @@
         formData.append('message', message);
 
         var recaptchaInput = form.querySelector('[name="g-recaptcha-response"]');
-        if (recaptchaInput && recaptchaInput.value) {
+        if (recaptchaInput) {
             formData.append('g-recaptcha-response', recaptchaInput.value);
         }
 
