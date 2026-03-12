@@ -633,7 +633,7 @@
                     <!-- Row 1: Creative 3-column grid -->
                     <div class="creative-grid mb-3" data-aos="fade-up" data-aos-duration="700">
                         <!-- Altın Fırça — tall left -->
-                        <a href="{{ url('ressamlar') }}" class="text-decoration-none d-block creative-grid__tall creative-grid__tall--left">
+                        <a href="{{ route('painters.golden-brush-index') }}" class="text-decoration-none d-block creative-grid__tall creative-grid__tall--left">
                             <div class="category-card category-card--tall">
                                 <div class="category-card__icon">
                                     <i class="fa-solid fa-paintbrush"></i>
