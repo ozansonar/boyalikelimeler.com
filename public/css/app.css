@@ -1880,6 +1880,10 @@ p {
 .category-card__text {
     font-size: 0.8rem;
     color: var(--color-silver-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
 }
 
 /* -- Film Onerisi / List Block ------------------------------- */
