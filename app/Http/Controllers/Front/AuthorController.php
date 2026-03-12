@@ -34,6 +34,16 @@ class AuthorController extends Controller
         ]);
     }
 
+    public function goldenPenIndex(): View
+    {
+        $pageSettings = $this->settingService->getGroup('authors_page');
+
+        return view('front.authors.golden-pen-index', [
+            'months'       => $this->authorService->getGoldenPenMonthsPaginated(12),
+            'pageSettings' => $pageSettings,
+        ]);
+    }
+
     public function goldenPenMonth(string $yearMonth): View
     {
         $pageSettings = $this->settingService->getGroup('authors_page');
