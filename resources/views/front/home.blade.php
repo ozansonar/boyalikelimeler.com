@@ -546,7 +546,7 @@
                     <div class="row g-3">
                         @foreach($contentCategories as $cat)
                             <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
-                                <a href="{{ route('blog.index', ['kategori' => $cat->slug]) }}" class="text-decoration-none d-block">
+                                <a href="{{ route('blog.category', $cat->slug) }}" class="text-decoration-none d-block">
                                     <div class="category-card">
                                         <div class="category-card__icon">
                                             <i class="fa-solid fa-pen-fancy"></i>
