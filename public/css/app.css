@@ -8991,12 +8991,14 @@ p {
     margin: 1.25rem auto;
 }
 .cdetail-content img.img-align-left {
-    display: block;
-    margin: 1.25rem auto 1.25rem 0;
+    float: left;
+    margin: 0.25rem 1.5rem 1rem 0;
+    max-width: 50%;
 }
 .cdetail-content img.img-align-right {
-    display: block;
-    margin: 1.25rem 0 1.25rem auto;
+    float: right;
+    margin: 0.25rem 0 1rem 1.5rem;
+    max-width: 50%;
 }
 .cdetail-content img.img-align-center {
     display: block;
@@ -9030,12 +9032,14 @@ p {
     margin: 1.25rem 0;
 }
 .cdetail-content figure.align-left {
-    display: block;
-    margin: 1.25rem auto 1.25rem 0;
+    float: left;
+    margin: 0.25rem 1.5rem 1rem 0;
+    max-width: 50%;
 }
 .cdetail-content figure.align-right {
-    display: block;
-    margin: 1.25rem 0 1.25rem auto;
+    float: right;
+    margin: 0.25rem 0 1rem 1.5rem;
+    max-width: 50%;
 }
 .cdetail-content figure.align-center {
     display: block;
