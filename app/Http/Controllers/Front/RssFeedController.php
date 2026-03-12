@@ -92,7 +92,7 @@ class RssFeedController extends Controller
         $posts = Post::query()
             ->where('status', PostStatus::Published)
             ->whereNotNull('published_at')
-            ->with('category:id,name')
+            ->with('category:id,name,slug')
             ->select('id', 'title', 'slug', 'excerpt', 'body', 'category_id', 'published_at')
             ->orderByDesc('published_at')
             ->limit(self::FEED_LIMIT)
