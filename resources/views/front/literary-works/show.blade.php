@@ -351,6 +351,9 @@
         img.setAttribute('loading', 'lazy');
         img.removeAttribute('width');
         img.removeAttribute('height');
+        if (img.style.cssFloat) img.style.cssFloat = '';
+        if (img.style.float) img.style.removeProperty('float');
+        if (img.style.margin) img.style.removeProperty('margin');
     });
     </script>
 @endpush
