@@ -154,6 +154,21 @@
                             @error('youtube_api_key') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
+
+                    <!-- Sidebar Video -->
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6><i class="bi bi-play-btn-fill text-neon-red me-2"></i>Sidebar YouTube Video</h6>
+                            <p>Anasayfa sağ sidebar'da "En Çok Okunanlar" ile "Dergimizi Alın" arasında gösterilecek YouTube videosu</p>
+                        </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label">YouTube Video Key</label>
+                            <input type="text" name="sidebar_youtube_video_key" class="stg-input" value="{{ old('sidebar_youtube_video_key', $homepage['sidebar_youtube_video_key'] ?? '') }}" placeholder="dQw4w9WgXcQ">
+                            <small class="stg-hint">YouTube video URL'sindeki key değeri. Örnek: https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong> → sadece <strong>dQw4w9WgXcQ</strong> kısmını yazın. Boş bırakılırsa video kutusu gizlenir.</small>
+                            @error('sidebar_youtube_video_key') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+                    </div>
                 </form>
 
                 <!-- Haftanın Film Önerileri -->

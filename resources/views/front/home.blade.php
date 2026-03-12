@@ -392,6 +392,25 @@
                         </div>
                     @endif
 
+                    <!-- Sidebar YouTube Video -->
+                    @if(!empty($hero['sidebar_youtube_video_key']))
+                        <div class="cta-box cta-box--video mt-3" data-aos="fade-left" data-aos-delay="150">
+                            <h3 class="cta-box__title">
+                                <i class="fa-brands fa-youtube me-2"></i>Videomuz
+                            </h3>
+                            <div class="cta-box__video-wrapper">
+                                <iframe
+                                    src="https://www.youtube.com/embed/{{ $hero['sidebar_youtube_video_key'] }}"
+                                    title="YouTube video"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                    loading="lazy"
+                                ></iframe>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Dergimizi Almak İçin İletişime Geç -->
                     <div class="cta-box cta-box--magazine mt-3" data-aos="fade-left" data-aos-delay="200">
                         <div class="cta-box__icon">
