@@ -62,7 +62,6 @@ class LoginController extends Controller
     {
         $this->authService->logout($request);
 
-        return redirect()->route('login')
-            ->with('success', 'Başarıyla çıkış yapıldı.');
+        return redirect()->route('login');
     }
 }
