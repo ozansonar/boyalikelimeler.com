@@ -122,35 +122,38 @@ final class AuthorStatisticsService
             'literaryWorks as pending_works_count' => fn ($q) => $q->where('status', LiteraryWorkStatus::Pending),
         ]);
 
-        $totalViews = (int) $author->literaryWorks()
+        $approvedWorks = $author->literaryWorks()
             ->where('status', LiteraryWorkStatus::Approved)
-            ->sum('view_count');
+            ->withCount(['approvedComments', 'favorites'])
+            ->get();
 
-        $totalComments = $author->literaryWorks()
-            ->where('status', LiteraryWorkStatus::Approved)
-            ->withCount('approvedComments')
-            ->get()
-            ->sum('approved_comments_count');
+        $totalViews = (int) $approvedWorks->sum('view_count');
+        $totalComments = (int) $approvedWorks->sum('approved_comments_count');
+        $totalFavorites = (int) $approvedWorks->sum('favorites_count');
+        $avgViewsPerWork = $approvedWorks->count() > 0 ? (int) round($totalViews / $approvedWorks->count()) : 0;
 
-        $totalFavorites = $author->literaryWorks()
+        $firstPublished = $author->literaryWorks()
             ->where('status', LiteraryWorkStatus::Approved)
-            ->withCount('favorites')
-            ->get()
-            ->sum('favorites_count');
+            ->whereNotNull('published_at')
+            ->orderBy('published_at')
+            ->value('published_at');
 
         $workStats = [
-            'total_works'    => $author->total_works_count,
-            'approved_works' => $author->approved_works_count,
-            'pending_works'  => $author->pending_works_count,
-            'total_views'    => $totalViews,
-            'total_comments' => $totalComments,
-            'total_favorites' => $totalFavorites,
+            'total_works'       => $author->total_works_count,
+            'approved_works'    => $author->approved_works_count,
+            'pending_works'     => $author->pending_works_count,
+            'total_views'       => $totalViews,
+            'total_comments'    => $totalComments,
+            'total_favorites'   => $totalFavorites,
+            'avg_views_per_work' => $avgViewsPerWork,
+            'first_published'   => $firstPublished ? Carbon::parse($firstPublished) : null,
         ];
 
         $dailyViews = $this->getAuthorDailyViews($author, 30);
         $topWorks = $this->getAuthorTopWorks($author, 10);
         $monthlyComparison = $this->getMonthlyComparison($author);
         $categoryDistribution = $this->getCategoryDistribution($author);
+        $workViewsChart = $this->getWorkViewsChartData($approvedWorks);
 
         return [
             'author'                => $author,
@@ -159,6 +162,7 @@ final class AuthorStatisticsService
             'topWorks'              => $topWorks,
             'monthlyComparison'     => $monthlyComparison,
             'categoryDistribution'  => $categoryDistribution,
+            'workViewsChart'        => $workViewsChart,
         ];
     }
 
@@ -286,6 +290,30 @@ final class AuthorStatisticsService
             ->groupBy('literary_categories.id', 'literary_categories.name')
             ->orderByDesc('count')
             ->get();
+    }
+
+    private function getWorkViewsChartData(Collection $approvedWorks): array
+    {
+        $sorted = $approvedWorks->sortByDesc('view_count')->take(10);
+
+        $labels = [];
+        $views = [];
+        $comments = [];
+        $favorites = [];
+
+        foreach ($sorted as $work) {
+            $labels[] = \Illuminate\Support\Str::limit($work->title, 30);
+            $views[] = (int) $work->view_count;
+            $comments[] = (int) $work->approved_comments_count;
+            $favorites[] = (int) $work->favorites_count;
+        }
+
+        return [
+            'labels'    => $labels,
+            'views'     => $views,
+            'comments'  => $comments,
+            'favorites' => $favorites,
+        ];
     }
 
     // ─── Cache Invalidation ───
