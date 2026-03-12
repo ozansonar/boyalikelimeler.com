@@ -8,6 +8,7 @@ use App\Enums\LiteraryWorkStatus;
 use App\Enums\LiteraryWorkType;
 use App\Enums\PostStatus;
 use App\Enums\QnaStatus;
+use App\Models\Category;
 use App\Models\LiteraryWork;
 use App\Models\Post;
 use App\Models\QnaQuestion;
@@ -109,6 +110,21 @@ final class HomeService
                 ->with(['user', 'category'])
                 ->withCount(['approvedAnswers as approved_answer_count'])
                 ->orderByDesc('created_at')
+                ->limit($limit)
+                ->get()
+        );
+    }
+
+    /**
+     * Get first N active categories ordered by sort_order.
+     *
+     * @return Collection<int, Category>
+     */
+    public function getContentCategories(int $limit = 4): Collection
+    {
+        return Cache::remember('home.content_categories', 600, fn (): Collection =>
+            Category::where('is_active', true)
+                ->orderBy('sort_order')
                 ->limit($limit)
                 ->get()
         );

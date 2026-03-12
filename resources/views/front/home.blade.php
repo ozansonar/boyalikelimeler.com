@@ -544,50 +544,19 @@
                         <i class="fa-solid fa-pen-fancy me-2"></i>İçeriklerimiz
                     </h3>
                     <div class="row g-3">
-                        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="0">
-                            <a href="{{ route('blog.index') }}" class="text-decoration-none d-block">
-                                <div class="category-card">
-                                    <div class="category-card__icon">
-                                        <i class="fa-solid fa-palette"></i>
+                        @foreach($contentCategories as $cat)
+                            <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
+                                <a href="{{ route('blog.index', ['kategori' => $cat->slug]) }}" class="text-decoration-none d-block">
+                                    <div class="category-card">
+                                        <div class="category-card__icon">
+                                            <i class="fa-solid fa-pen-fancy"></i>
+                                        </div>
+                                        <h3 class="category-card__title">{{ $cat->name }}</h3>
+                                        <p class="category-card__text">{{ $cat->description ?: $cat->name }}</p>
                                     </div>
-                                    <h3 class="category-card__title">Sanat</h3>
-                                    <p class="category-card__text">Görsel Sanatlar</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="100">
-                            <a href="{{ route('blog.index') }}" class="text-decoration-none d-block">
-                                <div class="category-card">
-                                    <div class="category-card__icon">
-                                        <i class="fa-solid fa-book-open"></i>
-                                    </div>
-                                    <h3 class="category-card__title">Edebiyat</h3>
-                                    <p class="category-card__text">Yazın Dünyası</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="200">
-                            <a href="{{ route('blog.index') }}" class="text-decoration-none d-block">
-                                <div class="category-card">
-                                    <div class="category-card__icon">
-                                        <i class="fa-solid fa-masks-theater"></i>
-                                    </div>
-                                    <h3 class="category-card__title">Kültür</h3>
-                                    <p class="category-card__text">Kültür-Sanat</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="300">
-                            <a href="{{ route('blog.index') }}" class="text-decoration-none d-block">
-                                <div class="category-card">
-                                    <div class="category-card__icon">
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                    </div>
-                                    <h3 class="category-card__title">Etkinlik</h3>
-                                    <p class="category-card__text">Etkinlikler</p>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-lg-4">

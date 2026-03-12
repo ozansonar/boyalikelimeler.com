@@ -50,6 +50,7 @@ final class HomeController extends Controller
         }
 
         $latestQnaQuestions = $this->homeService->getLatestQnaQuestions(3);
+        $contentCategories = $this->homeService->getContentCategories(4);
 
         $dailyQuestion = $this->dailyQuestionService->getActiveQuestion();
         $dailyQuestionAnswered = false;
@@ -63,7 +64,7 @@ final class HomeController extends Controller
             );
         }
 
-        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies', 'youtubeVideos', 'activePoll', 'pollHasVoted', 'pollResults', 'dailyQuestion', 'dailyQuestionAnswered', 'latestQnaQuestions'));
+        return view('front.home', compact('latestWrittenWorks', 'latestVisualWorks', 'popularWorks', 'latestPosts', 'homeSliders', 'hero', 'sidebarAds', 'tallAds', 'weeklyMovies', 'youtubeVideos', 'activePoll', 'pollHasVoted', 'pollResults', 'dailyQuestion', 'dailyQuestionAnswered', 'latestQnaQuestions', 'contentCategories'));
     }
 
     public function trackAdClick(int $advertisement): JsonResponse
