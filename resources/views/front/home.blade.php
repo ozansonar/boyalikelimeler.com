@@ -664,7 +664,7 @@
                     <!-- Row 1: Creative 3-column grid -->
                     <div class="creative-grid mb-3" data-aos="fade-up" data-aos-duration="700">
                         <!-- Altın Fırça — tall left -->
-                        <a href="#" class="text-decoration-none d-block creative-grid__tall creative-grid__tall--left">
+                        <a href="{{ url('ressamlar') }}" class="text-decoration-none d-block creative-grid__tall creative-grid__tall--left">
                             <div class="category-card category-card--tall">
                                 <div class="category-card__icon">
                                     <i class="fa-solid fa-paintbrush"></i>
@@ -675,7 +675,7 @@
                         </a>
 
                         <!-- Hakkımızda — top middle -->
-                        <a href="#" class="text-decoration-none d-block creative-grid__top">
+                        <a href="{{ url('hakkimizda') }}" class="text-decoration-none d-block creative-grid__top">
                             <div class="category-card">
                                 <div class="category-card__icon">
                                     <i class="fa-solid fa-circle-info"></i>
@@ -685,13 +685,13 @@
                             </div>
                         </a>
 
-                        <!-- Değerlerimiz — bottom middle -->
-                        <a href="#" class="text-decoration-none d-block creative-grid__bottom">
+                        <!-- Dergimiz — bottom middle -->
+                        <a href="{{ url('dergimiz') }}" class="text-decoration-none d-block creative-grid__bottom">
                             <div class="category-card">
                                 <div class="category-card__icon">
                                     <i class="fa-solid fa-gem"></i>
                                 </div>
-                                <h3 class="category-card__title">Değerlerimiz</h3>
+                                <h3 class="category-card__title">Dergimiz</h3>
                                 <p class="category-card__text">İlkelerimiz</p>
                             </div>
                         </a>
