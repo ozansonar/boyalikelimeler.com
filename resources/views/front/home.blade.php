@@ -505,7 +505,7 @@
                             </a>
                         </div>
                         <div class="col-6" data-aos="zoom-in" data-aos-delay="100">
-                            <a href="{{ url('yazarlar') }}" class="text-decoration-none d-block">
+                            <a href="{{ route('authors.golden-pen-index') }}" class="text-decoration-none d-block">
                                 <div class="category-card">
                                     <div class="category-card__icon">
                                         <i class="fa-solid fa-award"></i>

@@ -415,6 +415,7 @@ Route::get('/icerik/{slug}', [FrontLiteraryWorkController::class, 'show'])->name
 
 // Authors (Frontend — Yazarlar)
 Route::get('/yazarlar', [AuthorController::class, 'index'])->name('authors.index');
+Route::get('/altin-kalemlerimiz', [AuthorController::class, 'goldenPenIndex'])->name('authors.golden-pen-index');
 Route::get('/yazarlar/altin-kalem/{yearMonth}', [AuthorController::class, 'goldenPenMonth'])
     ->name('authors.golden-pen-month')
     ->where('yearMonth', '\d{4}-\d{2}');

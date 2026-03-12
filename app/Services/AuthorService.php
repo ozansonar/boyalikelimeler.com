@@ -72,6 +72,26 @@ final class AuthorService
     }
 
     /**
+     * @return \Illuminate\Pagination\LengthAwarePaginator<int, array{key: string, label: string}>
+     */
+    public function getGoldenPenMonthsPaginated(int $perPage = 12): \Illuminate\Pagination\LengthAwarePaginator
+    {
+        $allMonths = array_reverse($this->getGoldenPenMonths());
+
+        $page = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+        $offset = ($page - 1) * $perPage;
+        $items = array_slice($allMonths, $offset, $perPage);
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            count($allMonths),
+            $perPage,
+            $page,
+            ['path' => route('authors.golden-pen-index')],
+        );
+    }
+
+    /**
      * @return array{label: string, authors: Collection<int, User>}|null
      */
     public function getGoldenPenAuthorsByMonth(string $yearMonth): ?array
