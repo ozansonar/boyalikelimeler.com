@@ -240,7 +240,7 @@
                                         </div>
                                         <div class="col-md-8">
                                             <label class="form-label">Bağlantı (URL)</label>
-                                            <input type="url" class="form-control" name="boxes[{{ $i }}][link]" value="{{ $box->link }}" placeholder="https://ornek.com">
+                                            <input type="text" class="form-control" name="boxes[{{ $i }}][link]" value="{{ $box->link }}" placeholder="iletisim veya https://ornek.com">
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Link Hedefi</label>
