@@ -149,20 +149,27 @@ final class AuthorStatisticsService
             'first_published'   => $firstPublished ? Carbon::parse($firstPublished) : null,
         ];
 
+        $workIds = $approvedWorks->pluck('id');
         $dailyViews = $this->getAuthorDailyViews($author, 30);
+        $weeklyViews = $this->getAuthorDailyViews($author, 7);
         $topWorks = $this->getAuthorTopWorks($author, 10);
         $monthlyComparison = $this->getMonthlyComparison($author);
         $categoryDistribution = $this->getCategoryDistribution($author);
         $workViewsChart = $this->getWorkViewsChartData($approvedWorks);
+        $weeklyTrend = $this->getWeeklyTrend($workIds);
+        $monthlyTrend = $this->getMonthlyTrend($workIds);
 
         return [
             'author'                => $author,
             'workStats'             => $workStats,
             'dailyViews'            => $dailyViews,
+            'weeklyViews'           => $weeklyViews,
             'topWorks'              => $topWorks,
             'monthlyComparison'     => $monthlyComparison,
             'categoryDistribution'  => $categoryDistribution,
             'workViewsChart'        => $workViewsChart,
+            'weeklyTrend'           => $weeklyTrend,
+            'monthlyTrend'          => $monthlyTrend,
         ];
     }
 
@@ -290,6 +297,56 @@ final class AuthorStatisticsService
             ->groupBy('literary_categories.id', 'literary_categories.name')
             ->orderByDesc('count')
             ->get();
+    }
+
+    private function getWeeklyTrend(Collection $workIds): array
+    {
+        $labels = [];
+        $values = [];
+
+        if ($workIds->isEmpty()) {
+            return ['labels' => array_fill(0, 4, '-'), 'values' => array_fill(0, 4, 0)];
+        }
+
+        for ($i = 3; $i >= 0; $i--) {
+            $weekStart = Carbon::now()->subWeeks($i)->startOfWeek()->toDateString();
+            $weekEnd = Carbon::now()->subWeeks($i)->endOfWeek()->toDateString();
+
+            $total = (int) DailyView::where('viewable_type', LiteraryWork::class)
+                ->whereIn('viewable_id', $workIds)
+                ->whereBetween('view_date', [$weekStart, $weekEnd])
+                ->sum('view_count');
+
+            $labels[] = Carbon::parse($weekStart)->format('d M') . ' – ' . Carbon::parse($weekEnd)->format('d M');
+            $values[] = $total;
+        }
+
+        return ['labels' => $labels, 'values' => $values];
+    }
+
+    private function getMonthlyTrend(Collection $workIds): array
+    {
+        $labels = [];
+        $values = [];
+
+        if ($workIds->isEmpty()) {
+            return ['labels' => array_fill(0, 6, '-'), 'values' => array_fill(0, 6, 0)];
+        }
+
+        for ($i = 5; $i >= 0; $i--) {
+            $monthStart = Carbon::now()->subMonths($i)->startOfMonth()->toDateString();
+            $monthEnd = Carbon::now()->subMonths($i)->endOfMonth()->toDateString();
+
+            $total = (int) DailyView::where('viewable_type', LiteraryWork::class)
+                ->whereIn('viewable_id', $workIds)
+                ->whereBetween('view_date', [$monthStart, $monthEnd])
+                ->sum('view_count');
+
+            $labels[] = Carbon::now()->subMonths($i)->translatedFormat('M Y');
+            $values[] = $total;
+        }
+
+        return ['labels' => $labels, 'values' => $values];
     }
 
     private function getWorkViewsChartData(Collection $approvedWorks): array

@@ -40,9 +40,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="0">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-teal">
-                        <i class="bi bi-journal-check"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-teal"><i class="bi bi-journal-check"></i></div>
                 </div>
                 <h3 class="anl-kpi-value">{{ $workStats['approved_works'] }}</h3>
                 <span class="anl-kpi-label">Yayında Olan Eser</span>
@@ -51,9 +49,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="50">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-orange">
-                        <i class="bi bi-hourglass-split"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-orange"><i class="bi bi-hourglass-split"></i></div>
                 </div>
                 <h3 class="anl-kpi-value">{{ $workStats['pending_works'] }}</h3>
                 <span class="anl-kpi-label">Onay Bekleyen Eser</span>
@@ -62,9 +58,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="100">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-blue">
-                        <i class="bi bi-eye-fill"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-blue"><i class="bi bi-eye-fill"></i></div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($workStats['total_views']) }}</h3>
                 <span class="anl-kpi-label">Toplam Görüntülenme</span>
@@ -73,9 +67,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="150">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-purple">
-                        <i class="bi bi-bar-chart-line-fill"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-purple"><i class="bi bi-bar-chart-line-fill"></i></div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($workStats['avg_views_per_work']) }}</h3>
                 <span class="anl-kpi-label">Eser Başına Ort. Okunma</span>
@@ -88,9 +80,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="200">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-green">
-                        <i class="bi bi-chat-dots-fill"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-green"><i class="bi bi-chat-dots-fill"></i></div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($workStats['total_comments']) }}</h3>
                 <span class="anl-kpi-label">Toplam Yorum Sayısı</span>
@@ -99,9 +89,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="250">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-purple">
-                        <i class="bi bi-heart-fill"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-purple"><i class="bi bi-heart-fill"></i></div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($workStats['total_favorites']) }}</h3>
                 <span class="anl-kpi-label">Toplam Favori Sayısı</span>
@@ -110,9 +98,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="300">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-teal">
-                        <i class="bi bi-graph-up-arrow"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-teal"><i class="bi bi-graph-up-arrow"></i></div>
                     @if($monthlyComparison['change_percent'] != 0)
                         <span class="anl-kpi-trend {{ $monthlyComparison['change_percent'] > 0 ? 'positive' : 'negative' }}">
                             <i class="bi bi-arrow-{{ $monthlyComparison['change_percent'] > 0 ? 'up' : 'down' }}-short"></i>%{{ abs($monthlyComparison['change_percent']) }}
@@ -126,9 +112,7 @@
         <div class="col-xl-3 col-sm-6" data-aos="fade-up" data-aos-delay="350">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
-                    <div class="anl-kpi-icon anl-kpi-icon-blue">
-                        <i class="bi bi-calendar-check"></i>
-                    </div>
+                    <div class="anl-kpi-icon anl-kpi-icon-blue"><i class="bi bi-calendar-check"></i></div>
                 </div>
                 <h3 class="anl-kpi-value ast-kpi-value-sm">{{ $workStats['first_published']?->translatedFormat('d M Y') ?? '-' }}</h3>
                 <span class="anl-kpi-label">İlk Yayın Tarihi</span>
@@ -136,44 +120,98 @@
         </div>
     </div>
 
-    <!-- Charts Row 1: Daily Views + Category Distribution -->
+    <!-- Charts Row 1: Son 7 Gün + Son 30 Gün -->
     <div class="row g-4 mb-4">
-        <div class="col-xl-8" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-xl-6" data-aos="fade-up" data-aos-delay="100">
             <div class="card-dark h-100">
                 <div class="card-header-custom">
-                    <h6><i class="bi bi-bar-chart-fill me-2 text-teal"></i>Son 30 Gün Okunma Grafiği</h6>
+                    <h6><i class="bi bi-calendar-week me-2 text-teal"></i>Son 7 Gün — Günlük Okunma</h6>
                 </div>
                 <div class="card-body-custom">
-                    <div class="ast-chart-container" id="dailyViewsChart"
-                         data-labels='@json($dailyViews['labels'])'
-                         data-values='@json($dailyViews['values'])'>
+                    <div class="ast-area-chart" id="weeklyAreaChart"
+                         data-labels='@json($weeklyViews['labels'])'
+                         data-values='@json($weeklyViews['values'])'
+                         data-color="#14b8a6"
+                         data-height="220">
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-xl-6" data-aos="fade-up" data-aos-delay="150">
+            <div class="card-dark h-100">
+                <div class="card-header-custom">
+                    <h6><i class="bi bi-calendar-month me-2 text-teal"></i>Son 30 Gün — Günlük Okunma</h6>
+                </div>
+                <div class="card-body-custom">
+                    <div class="ast-area-chart" id="monthlyAreaChart"
+                         data-labels='@json($dailyViews['labels'])'
+                         data-values='@json($dailyViews['values'])'
+                         data-color="#3b82f6"
+                         data-height="220">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="col-xl-4" data-aos="fade-up" data-aos-delay="150">
+    <!-- Charts Row 2: Haftalık Trend + Aylık Trend -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="card-dark h-100">
+                <div class="card-header-custom">
+                    <h6><i class="bi bi-bar-chart me-2 text-teal"></i>Son 4 Hafta — Haftalık Toplam</h6>
+                </div>
+                <div class="card-body-custom">
+                    <div class="ast-vbar-chart" id="weeklyTrendChart"
+                         data-labels='@json($weeklyTrend['labels'])'
+                         data-values='@json($weeklyTrend['values'])'
+                         data-color="#14b8a6"
+                         data-height="220">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6" data-aos="fade-up" data-aos-delay="250">
+            <div class="card-dark h-100">
+                <div class="card-header-custom">
+                    <h6><i class="bi bi-graph-up me-2 text-teal"></i>Son 6 Ay — Aylık Toplam</h6>
+                </div>
+                <div class="card-body-custom">
+                    <div class="ast-vbar-chart" id="monthlyTrendChart"
+                         data-labels='@json($monthlyTrend['labels'])'
+                         data-values='@json($monthlyTrend['values'])'
+                         data-color="#a855f7"
+                         data-height="220">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 3: Category Donut + Work Comparison -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-4" data-aos="fade-up" data-aos-delay="100">
             <div class="card-dark h-100">
                 <div class="card-header-custom">
                     <h6><i class="bi bi-pie-chart-fill me-2 text-teal"></i>Kategori Dağılımı</h6>
                 </div>
                 <div class="card-body-custom">
                     @if($categoryDistribution->isNotEmpty())
+                        @php
+                            $catColors = ['#14b8a6','#3b82f6','#f97316','#a855f7','#22c55e','#ef4444','#eab308','#ec4899'];
+                            $catTotal = $categoryDistribution->sum('count');
+                        @endphp
                         <div class="ast-donut-wrapper mb-3" id="categoryDonutChart"
-                             data-labels='@json($categoryDistribution->pluck("name"))'
-                             data-values='@json($categoryDistribution->pluck("count"))'
-                             data-colors='["#14b8a6","#3b82f6","#f97316","#a855f7","#22c55e","#ef4444","#eab308","#ec4899"]'>
+                             data-labels='@json($categoryDistribution->pluck("name")->values())'
+                             data-values='@json($categoryDistribution->pluck("count")->values())'
+                             data-colors='@json($catColors)'>
                         </div>
                         <div class="ast-category-list">
                             @foreach($categoryDistribution as $cat)
-                                @php
-                                    $totalCatWorks = $categoryDistribution->sum('count');
-                                    $percent = $totalCatWorks > 0 ? round(($cat->count / $totalCatWorks) * 100, 1) : 0;
-                                    $colors = ['#14b8a6','#3b82f6','#f97316','#a855f7','#22c55e','#ef4444','#eab308','#ec4899'];
-                                @endphp
+                                @php $percent = $catTotal > 0 ? round(($cat->count / $catTotal) * 100, 1) : 0; @endphp
                                 <div class="d-flex align-items-center justify-content-between py-2 {{ !$loop->last ? 'border-bottom border-secondary border-opacity-25' : '' }}">
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="ast-legend-dot" style="background: {{ $colors[$loop->index % count($colors)] }}"></span>
+                                        <span class="ast-legend-dot" style="background: {{ $catColors[$loop->index % count($catColors)] }}"></span>
                                         <div>
                                             <div class="fw-semibold text-clr-primary" style="font-size: 0.85rem">{{ $cat->name }}</div>
                                             <small class="text-clr-muted">{{ $cat->count }} eser &middot; {{ number_format((int) $cat->total_views) }} okunma</small>
@@ -189,12 +227,9 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Charts Row 2: Work Comparison -->
-    <div class="row g-4 mb-4">
-        <div class="col-12" data-aos="fade-up" data-aos-delay="200">
-            <div class="card-dark">
+        <div class="col-xl-8" data-aos="fade-up" data-aos-delay="150">
+            <div class="card-dark h-100">
                 <div class="card-header-custom">
                     <h6><i class="bi bi-trophy-fill me-2 text-teal"></i>Eser Bazlı Karşılaştırma — Okunma, Yorum & Favori</h6>
                 </div>
