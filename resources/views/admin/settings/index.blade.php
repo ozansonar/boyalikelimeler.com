@@ -646,7 +646,7 @@
                                     @endif
                                 </div>
                                 <div class="stg-logo-actions">
-                                    <input type="file" name="mail_logo" id="mailLogoInput" accept="image/png,image/jpeg" hidden>
+                                    <input type="file" name="mail_logo" id="mailLogoInput" accept="image/png" hidden>
                                     <button type="button" class="stg-btn stg-btn-sm" onclick="document.getElementById('mailLogoInput').click()"><i class="bi bi-upload"></i> Logo Yükle</button>
                                     @if(!empty($smtp['mail_logo']))
                                         <a href="javascript:void(0)" class="stg-btn stg-btn-sm stg-btn-ghost" onclick="openConfirmModal({
@@ -658,7 +658,7 @@
                                             onConfirm: function() { window.location.href = '{{ route('admin.settings.remove-mail-logo') }}'; }
                                         })"><i class="bi bi-trash3"></i> Kaldır</a>
                                     @endif
-                                    <small class="text-muted">PNG veya JPG. Maks. 1 MB. Önerilen boyut: 200x60px</small>
+                                    <small class="text-muted">Sadece PNG. Maks. 1 MB. Boyut: 400×400px</small>
                                 </div>
                             </div>
                         </div>
