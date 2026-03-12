@@ -190,9 +190,9 @@ class SettingController extends Controller
         }
 
         if ($request->hasFile('mail_logo')) {
-            $request->validate(['mail_logo' => 'image|mimes:png,jpg,jpeg|max:1024']);
+            $request->validate(['mail_logo' => 'image|mimes:png|max:1024']);
             $oldLogo = $this->settingService->getGroup('smtp')['mail_logo'] ?? null;
-            $data['mail_logo'] = $this->uploadService->replaceImage($request->file('mail_logo'), 'settings', $oldLogo, 'mail-logo');
+            $data['mail_logo'] = $this->uploadService->replacePngImage($request->file('mail_logo'), 'settings', $oldLogo, 'mail-logo', 400, 400);
         }
 
         $this->settingService->updateGroup('smtp', $data);

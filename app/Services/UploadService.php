@@ -86,6 +86,56 @@ final class UploadService
     }
 
     /**
+     * Upload an image as PNG (no WebP conversion, no responsive variants).
+     * Used for mail logos that need to remain PNG for email client compatibility.
+     *
+     * @param  string       $directory   Sub-directory under public/uploads
+     * @param  string|null  $slug        SEO-friendly slug for filename
+     * @param  int          $width       Target width
+     * @param  int          $height      Target height
+     * @return string  Relative path stored in DB (e.g. "settings/mail-logo-20260312-a7xk2.png")
+     */
+    public function uploadPngImage(
+        UploadedFile $file,
+        string $directory,
+        ?string $slug = null,
+        int $width = 400,
+        int $height = 400,
+    ): string {
+        $baseName = $this->generateBaseName($slug);
+        $this->ensureDirectory($directory);
+        $this->ensureDirectory($directory . '/originals');
+
+        $originalExt = strtolower($file->getClientOriginalExtension()) ?: 'png';
+        $originalName = $baseName . '.' . $originalExt;
+        $file->move($this->uploadsPath($directory . '/originals'), $originalName);
+
+        $pngName = $baseName . '.png';
+        $originalFullPath = $this->uploadsPath($directory . '/originals/' . $originalName);
+        $destPath = $this->uploadsPath($directory . '/' . $pngName);
+
+        $this->resizeToPng($originalFullPath, $destPath, $width, $height);
+
+        return $directory . '/' . $pngName;
+    }
+
+    /**
+     * Replace an existing image with a new PNG: delete old, upload new.
+     */
+    public function replacePngImage(
+        UploadedFile $file,
+        string $directory,
+        ?string $oldPath,
+        ?string $slug = null,
+        int $width = 400,
+        int $height = 400,
+    ): string {
+        $this->deleteImage($oldPath);
+
+        return $this->uploadPngImage($file, $directory, $slug, $width, $height);
+    }
+
+    /**
      * Replace an existing image: delete old, upload new.
      */
     public function replaceImage(
@@ -123,8 +173,20 @@ final class UploadService
         // Delete main file
         File::delete($fullPath);
 
-        // Non-WebP files have no variants or originals
-        if ($extension !== 'webp') {
+        // Non-WebP/PNG files have no variants or originals
+        if (! in_array($extension, ['webp', 'png'], true)) {
+            return;
+        }
+
+        // PNG files have originals but no variants
+        if ($extension === 'png') {
+            $originalsDir = $directory . '/originals';
+            if (File::isDirectory($originalsDir)) {
+                $originals = File::glob($originalsDir . '/' . $baseName . '.*');
+                foreach ($originals as $original) {
+                    File::delete($original);
+                }
+            }
             return;
         }
 
@@ -322,6 +384,69 @@ final class UploadService
                 $config['crop'],
             );
         }
+    }
+
+    /**
+     * Resize an image and save as PNG (preserving transparency).
+     */
+    private function resizeToPng(string $sourcePath, string $destPath, int $width, int $height): void
+    {
+        $imageInfo = @getimagesize($sourcePath);
+        if ($imageInfo === false) {
+            File::copy($sourcePath, $destPath);
+            return;
+        }
+
+        $mime = $imageInfo['mime'];
+        $srcImage = match ($mime) {
+            'image/jpeg' => @imagecreatefromjpeg($sourcePath),
+            'image/png'  => @imagecreatefrompng($sourcePath),
+            'image/webp' => @imagecreatefromwebp($sourcePath),
+            'image/gif'  => @imagecreatefromgif($sourcePath),
+            default      => false,
+        };
+
+        if ($srcImage === false) {
+            File::copy($sourcePath, $destPath);
+            return;
+        }
+
+        $srcWidth = imagesx($srcImage);
+        $srcHeight = imagesy($srcImage);
+
+        $dstImage = imagecreatetruecolor($width, $height);
+        imagealphablending($dstImage, false);
+        imagesavealpha($dstImage, true);
+
+        $transparent = imagecolorallocatealpha($dstImage, 0, 0, 0, 127);
+        imagefill($dstImage, 0, 0, $transparent);
+
+        // Center-crop resize to target dimensions
+        $srcRatio = $srcWidth / $srcHeight;
+        $dstRatio = $width / $height;
+
+        if ($srcRatio > $dstRatio) {
+            $cropHeight = $srcHeight;
+            $cropWidth = (int) round($srcHeight * $dstRatio);
+            $cropX = (int) round(($srcWidth - $cropWidth) / 2);
+            $cropY = 0;
+        } else {
+            $cropWidth = $srcWidth;
+            $cropHeight = (int) round($srcWidth / $dstRatio);
+            $cropX = 0;
+            $cropY = (int) round(($srcHeight - $cropHeight) / 2);
+        }
+
+        imagecopyresampled(
+            $dstImage, $srcImage,
+            0, 0, $cropX, $cropY,
+            $width, $height, $cropWidth, $cropHeight,
+        );
+
+        imagepng($dstImage, $destPath, 9);
+
+        imagedestroy($srcImage);
+        imagedestroy($dstImage);
     }
 
     /**
