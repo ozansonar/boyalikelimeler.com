@@ -2,7 +2,7 @@
 
 @section('title', ($post->meta_title ?: $post->title) . ' — Boyalı Kelimeler Blog')
 @section('meta_description', $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160))
-@section('canonical', route('blog.show', $post->slug))
+@section('canonical', $post->url())
 @section('og_title', ($post->meta_title ?: $post->title) . ' — Boyalı Kelimeler Blog')
 @section('og_description', $post->meta_description ?: Str::limit(strip_tags((string) $post->excerpt), 160))
 @section('og_type', 'article')
@@ -43,7 +43,7 @@
             'url' => url('/'),
             'logo' => ['@type' => 'ImageObject', 'url' => asset('images/logo.svg')],
         ],
-        'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('blog.show', $post->slug)],
+        'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $post->url()],
         'articleSection' => $post->category?->name,
         'wordCount' => preg_match_all('/\pL+/u', strip_tags((string) $post->body)),
         'commentCount' => $postComments->count(),
@@ -84,7 +84,7 @@
             'itemListElement' => array_values(array_filter([
                 ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
                 ['@type' => 'ListItem', 'position' => 2, 'name' => 'Blog', 'item' => route('blog.index')],
-                $post->category ? ['@type' => 'ListItem', 'position' => 3, 'name' => $post->category->name, 'item' => route('blog.index', ['kategori' => $post->category->slug])] : null,
+                $post->category ? ['@type' => 'ListItem', 'position' => 3, 'name' => $post->category->name, 'item' => route('blog.category', $post->category->slug)] : null,
                 ['@type' => 'ListItem', 'position' => $post->category ? 4 : 3, 'name' => $post->title],
             ])),
         ],
@@ -117,7 +117,7 @@
                             <i class="fa-solid fa-chevron-right"></i>
                         </li>
                         <li class="blog-page-header__breadcrumb-item">
-                            <a href="{{ route('blog.index', ['kategori' => $post->category->slug]) }}" class="blog-page-header__breadcrumb-link">{{ $post->category->name }}</a>
+                            <a href="{{ route('blog.category', $post->category->slug) }}" class="blog-page-header__breadcrumb-link">{{ $post->category->name }}</a>
                         </li>
                     @endif
                     <li class="blog-page-header__breadcrumb-sep">
@@ -210,7 +210,7 @@
                         </div>
                         <div class="blogd-actions__right">
                             @include('partials.front.share-buttons', [
-                                'shareUrl' => route('blog.show', $post->slug),
+                                'shareUrl' => $post->url(),
                                 'shareTitle' => $post->title,
                             ])
                         </div>
@@ -233,7 +233,7 @@
                             <ul class="blogd-sidebar__cat-list">
                                 @foreach($categories as $cat)
                                     <li>
-                                        <a href="{{ route('blog.index', ['kategori' => $cat->slug]) }}" class="blogd-sidebar__cat-link">
+                                        <a href="{{ route('blog.category', $cat->slug) }}" class="blogd-sidebar__cat-link">
                                             <i class="fa-solid fa-folder me-2"></i>{{ $cat->name }}
                                             <span class="blogd-sidebar__cat-count">{{ $cat->posts()->where('status', 'published')->count() }}</span>
                                         </a>
@@ -250,7 +250,7 @@
                             </h4>
                             <div class="blogd-sidebar__popular">
                                 @foreach($popularPosts as $popular)
-                                    <a href="{{ route('blog.show', $popular->slug) }}" class="blogd-sidebar__popular-item">
+                                    <a href="{{ $popular->url() }}" class="blogd-sidebar__popular-item">
                                         <div class="blogd-sidebar__popular-thumb">
                                             <i class="fa-solid fa-newspaper"></i>
                                         </div>

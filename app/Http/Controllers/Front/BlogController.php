@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Services\CategoryService;
 use App\Services\PostService;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -18,21 +16,29 @@ class BlogController extends Controller
         private readonly CategoryService $categoryService,
     ) {}
 
-    public function index(Request $request): View
+    public function index(?string $categorySlug = null): View
     {
-        $categoryId = $request->input('kategori') ? Category::where('slug', $request->input('kategori'))->value('id') : null;
+        $category = null;
+
+        if ($categorySlug) {
+            $category = $this->categoryService->findActiveBySlug($categorySlug);
+
+            if (! $category) {
+                abort(404);
+            }
+        }
 
         return view('front.blog.index', [
-            'posts'           => $this->postService->getPublishedPosts(9, $categoryId),
+            'posts'           => $this->postService->getPublishedPosts(9, $category?->id),
             'categories'      => $this->categoryService->activeList(),
             'featuredPosts'   => $this->postService->getFeaturedPosts(3),
             'popularPosts'    => $this->postService->getPopularPosts(5),
             'stats'           => $this->postService->getPublishedStats(),
-            'currentCategory' => $request->input('kategori'),
+            'currentCategory' => $categorySlug,
         ]);
     }
 
-    public function show(string $slug): View
+    public function show(string $categorySlug, string $slug): View
     {
         $post = $this->postService->findPublishedBySlug($slug);
 

@@ -145,7 +145,7 @@
                             @php
                                 $contentUrl = $comment->contentType() === 'icerik'
                                     ? route('literary-works.show', $comment->commentable->slug)
-                                    : route('blog.show', $comment->commentable->slug);
+                                    : $comment->commentable->url();
                             @endphp
                             <a href="{{ $contentUrl }}" target="_blank" class="text-teal small d-inline-block mt-2">
                                 <i class="bi bi-box-arrow-up-right me-1"></i>İçeriği görüntüle

@@ -92,7 +92,7 @@ class RssFeedController extends Controller
         $posts = Post::query()
             ->where('status', PostStatus::Published)
             ->whereNotNull('published_at')
-            ->with('category:id,name')
+            ->with('category:id,name,slug')
             ->select('id', 'title', 'slug', 'excerpt', 'body', 'category_id', 'published_at')
             ->orderByDesc('published_at')
             ->limit(self::FEED_LIMIT)
@@ -118,11 +118,11 @@ class RssFeedController extends Controller
         foreach ($posts as $post) {
             $xml .= $this->buildItem(
                 title: $post->title,
-                link: route('blog.show', $post->slug),
+                link: $post->url(),
                 description: $post->excerpt ?: Str::limit(strip_tags((string) $post->body), 300),
                 category: $post->category?->name,
                 pubDate: $post->published_at->toRssString(),
-                guid: route('blog.show', $post->slug),
+                guid: $post->url(),
             );
         }
 
