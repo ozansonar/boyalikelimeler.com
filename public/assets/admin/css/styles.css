@@ -25714,6 +25714,24 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   font-size: 1.2rem !important;
 }
 
+/* ---- Area Chart ---- */
+.ast-area-chart {
+  width: 100%;
+  overflow: hidden;
+}
+.ast-area-chart svg {
+  display: block;
+}
+
+/* ---- Vertical Bar Chart ---- */
+.ast-vbar-chart {
+  width: 100%;
+  overflow: hidden;
+}
+.ast-vbar-chart svg {
+  display: block;
+}
+
 /* ---- Donut Chart ---- */
 .ast-donut-wrapper {
   display: flex;
