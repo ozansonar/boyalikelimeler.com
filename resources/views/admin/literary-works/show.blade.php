@@ -58,7 +58,7 @@
                         </div>
                     @endif
 
-                    <div class="literary-work-body">
+                    <div class="literary-work-body clearfix">
                         {!! $work->body !!}
                     </div>
                 </div>
