@@ -143,7 +143,7 @@
                         <div class="search-results__grid">
                             @foreach($results['posts'] as $post)
                                 <article class="blog-card">
-                                    <a href="{{ route('blog.show', $post->slug) }}" class="blog-card__thumb-link">
+                                    <a href="{{ $post->url() }}" class="blog-card__thumb-link">
                                         <div class="blog-card__thumb">
                                             @if($post->cover_image)
                                                 <img src="{{ asset('uploads/' . $post->cover_image) }}"
@@ -169,7 +169,7 @@
                                             </time>
                                         @endif
                                         <h3 class="blog-card__title">
-                                            <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                                            <a href="{{ $post->url() }}">{{ $post->title }}</a>
                                         </h3>
                                         @if($post->excerpt)
                                             <p class="blog-card__excerpt">{{ Str::limit($post->excerpt, 120) }}</p>

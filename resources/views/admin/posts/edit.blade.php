@@ -24,7 +24,7 @@
         </div>
         <div class="d-flex gap-2 flex-wrap">
             @if($post->isPublished())
-                <a href="{{ route('blog.show', $post->slug) }}" class="btn-glass" target="_blank">
+                <a href="{{ $post->url() }}" class="btn-glass" target="_blank">
                     <i class="bi bi-eye me-1"></i>Görüntüle
                 </a>
             @endif

@@ -71,7 +71,7 @@
                     <div class="blog-grid">
                         @forelse($posts as $post)
                             <article class="blog-card">
-                                <a href="{{ route('blog.show', $post->slug) }}" class="blog-card__thumb-link">
+                                <a href="{{ $post->url() }}" class="blog-card__thumb-link">
                                     <div class="blog-card__thumb">
                                         @if($post->cover_image)
                                             <img src="{{ asset('uploads/' . $post->cover_image) }}"
@@ -95,7 +95,7 @@
                                         </time>
                                     @endif
                                     <h3 class="blog-card__title">
-                                        <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                                        <a href="{{ $post->url() }}">{{ $post->title }}</a>
                                     </h3>
                                     @if($post->excerpt)
                                         <p class="blog-card__excerpt">
@@ -190,7 +190,7 @@
                             </h4>
                             <div class="blog-sidebar__popular">
                                 @foreach($popularPosts as $index => $popular)
-                                    <a href="{{ route('blog.show', $popular->slug) }}" class="blog-sidebar__popular-item">
+                                    <a href="{{ $popular->url() }}" class="blog-sidebar__popular-item">
                                         <div class="blog-sidebar__popular-rank">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</div>
                                         <div class="blog-sidebar__popular-info">
                                             <h5 class="blog-sidebar__popular-title">{{ $popular->title }}</h5>

@@ -414,7 +414,7 @@
                                     @endif
                                     <div class="profile-post__body">
                                         <h3 class="profile-post__title">
-                                            <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                                            <a href="{{ $post->url() }}">{{ $post->title }}</a>
                                         </h3>
                                         @if($post->excerpt)
                                             <p class="profile-post__excerpt">{{ Str::limit($post->excerpt, 200) }}</p>
@@ -539,7 +539,7 @@
                                     @endif
                                     <div class="profile-post__body">
                                         <h3 class="profile-post__title">
-                                            <a href="{{ route('blog.show', $favPost->slug) }}">{{ $favPost->title }}</a>
+                                            <a href="{{ $favPost->url() }}">{{ $favPost->title }}</a>
                                         </h3>
                                         @if($favPost->excerpt)
                                             <p class="profile-post__excerpt">{{ Str::limit($favPost->excerpt, 200) }}</p>

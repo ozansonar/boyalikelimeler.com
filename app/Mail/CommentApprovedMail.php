@@ -33,7 +33,7 @@ class CommentApprovedMail extends BaseMailable
     {
         $contentUrl = $this->comment->commentable_type === LiteraryWork::class
             ? route('literary-works.show', $this->comment->commentable?->slug ?? '')
-            : route('blog.show', $this->comment->commentable?->slug ?? '');
+            : ($this->comment->commentable?->url() ?? '#');
 
         return [
             '{author_name}'    => $this->comment->commentable?->author?->name ?? '',

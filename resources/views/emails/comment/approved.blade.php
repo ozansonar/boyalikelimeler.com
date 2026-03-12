@@ -17,7 +17,7 @@ Harika haber! **"{{ $comment->contentTitle() }}"** başlıklı {{ $comment->cont
 İçeriği Görüntüle
 </x-mail::button>
 @else
-<x-mail::button :url="route('blog.show', $comment->commentable?->slug ?? '')">
+<x-mail::button :url="$comment->commentable?->url() ?? '#'">
 Blog Yazısını Görüntüle
 </x-mail::button>
 @endif

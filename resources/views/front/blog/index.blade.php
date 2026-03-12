@@ -6,7 +6,7 @@
 @section('og_title', 'Blog — Boyalı Kelimeler')
 @section('og_description', 'Sanat, edebiyat, kültür ve etkinlik haberleri.')
 
-@if(request('kategori'))
+@if($currentCategory)
     @section('robots', 'noindex, follow')
 @endif
 
@@ -40,7 +40,7 @@
                 'itemListElement' => $posts->map(fn ($p, $i) => [
                     '@type' => 'ListItem',
                     'position' => ($posts->currentPage() - 1) * $posts->perPage() + $i + 1,
-                    'url' => route('blog.show', $p->slug),
+                    'url' => $p->url(),
                     'name' => $p->title,
                 ])->all(),
             ],
@@ -126,7 +126,7 @@
                     <i class="fa-solid fa-star me-1"></i>Öne Çıkan
                 </span>
                 <h1 class="blog-hero__title">
-                    <a href="{{ route('blog.show', $featuredPosts->first()->slug) }}">{{ $featuredPosts->first()->title }}</a>
+                    <a href="{{ $featuredPosts->first()->url() }}">{{ $featuredPosts->first()->title }}</a>
                 </h1>
                 @if($featuredPosts->first()->excerpt)
                     <p class="blog-hero__excerpt">
@@ -146,7 +146,7 @@
                         <i class="fa-solid fa-eye me-1"></i>{{ number_format($featuredPosts->first()->view_count) }}
                     </span>
                 </div>
-                <a href="{{ route('blog.show', $featuredPosts->first()->slug) }}" class="blog-hero__read-btn">
+                <a href="{{ $featuredPosts->first()->url() }}" class="blog-hero__read-btn">
                     <i class="fa-solid fa-arrow-right me-2"></i>Yazıyı Oku
                 </a>
             </div>
@@ -159,7 +159,7 @@
         <div class="container">
             <div class="blog-highlights__grid">
                 @foreach($featuredPosts->skip(1)->take(3) as $featured)
-                    <a href="{{ route('blog.show', $featured->slug) }}" class="blog-highlight">
+                    <a href="{{ $featured->url() }}" class="blog-highlight">
                         <div class="blog-highlight__icon">
                             <i class="fa-solid fa-newspaper"></i>
                         </div>
@@ -191,18 +191,18 @@
                 <div class="col-lg-8">
 
                     <!-- Toolbar: Filter -->
-                    <form method="GET" action="{{ route('blog.index') }}" class="blog-toolbar">
+                    <div class="blog-toolbar">
                         <div class="blog-toolbar__filters">
-                            <select name="kategori" class="wpost-form__input blog-toolbar__select" onchange="this.form.submit()">
-                                <option value="">Tüm Kategoriler</option>
+                            <select class="wpost-form__input blog-toolbar__select" onchange="if(this.value){window.location.href=this.value}">
+                                <option value="{{ route('blog.index') }}" {{ !$currentCategory ? 'selected' : '' }}>Tüm Kategoriler</option>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->slug }}" {{ $currentCategory === $cat->slug ? 'selected' : '' }}>
+                                    <option value="{{ route('blog.category', $cat->slug) }}" {{ $currentCategory === $cat->slug ? 'selected' : '' }}>
                                         {{ $cat->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                    </form>
+                    </div>
 
                     <!-- Sonuç Bilgisi -->
                     <div class="blog-result-info">
@@ -215,7 +215,7 @@
                     <div class="blog-grid">
                         @forelse($posts as $post)
                             <article class="blog-card">
-                                <a href="{{ route('blog.show', $post->slug) }}" class="blog-card__thumb-link">
+                                <a href="{{ $post->url() }}" class="blog-card__thumb-link">
                                     <div class="blog-card__thumb">
                                         @if($post->cover_image)
                                             <img src="{{ asset('uploads/' . $post->cover_image) }}"
@@ -241,7 +241,7 @@
                                         </time>
                                     @endif
                                     <h3 class="blog-card__title">
-                                        <a href="{{ route('blog.show', $post->slug) }}">{{ $post->title }}</a>
+                                        <a href="{{ $post->url() }}">{{ $post->title }}</a>
                                     </h3>
                                     @if($post->excerpt)
                                         <p class="blog-card__excerpt">
@@ -319,7 +319,7 @@
                                 </li>
                                 @foreach($categories as $cat)
                                     <li>
-                                        <a href="{{ route('blog.index', ['kategori' => $cat->slug]) }}"
+                                        <a href="{{ route('blog.category', $cat->slug) }}"
                                            class="blog-sidebar__cat-link {{ $currentCategory === $cat->slug ? 'blog-sidebar__cat-link--active' : '' }}">
                                             <i class="fa-solid fa-folder me-2"></i>{{ $cat->name }}
                                             <span class="blog-sidebar__cat-count">{{ $cat->posts()->where('status', 'published')->count() }}</span>
@@ -337,7 +337,7 @@
                             </h4>
                             <div class="blog-sidebar__popular">
                                 @foreach($popularPosts as $index => $popular)
-                                    <a href="{{ route('blog.show', $popular->slug) }}" class="blog-sidebar__popular-item">
+                                    <a href="{{ $popular->url() }}" class="blog-sidebar__popular-item">
                                         <div class="blog-sidebar__popular-rank">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</div>
                                         <div class="blog-sidebar__popular-info">
                                             <h5 class="blog-sidebar__popular-title">{{ $popular->title }}</h5>

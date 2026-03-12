@@ -139,7 +139,7 @@
                                 <td class="d-none d-md-table-cell">
                                     <span class="cl-category-badge tech">{{ $comment->contentTypeLabel() }}</span>
                                     @if($comment->commentable)
-                                        <a href="{{ $comment->contentType() === 'icerik' ? route('literary-works.show', $comment->commentable->slug) : route('blog.show', $comment->commentable->slug) }}"
+                                        <a href="{{ $comment->contentType() === 'icerik' ? route('literary-works.show', $comment->commentable->slug) : $comment->commentable->url() }}"
                                            target="_blank" class="cl-content-meta d-block mt-1 text-teal" title="İçeriği yeni sekmede aç">
                                             {{ Str::limit($comment->contentTitle(), 30) }} <i class="bi bi-box-arrow-up-right ms-1"></i>
                                         </a>

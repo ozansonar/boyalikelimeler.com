@@ -59,14 +59,15 @@ class SitemapController extends Controller
 
         // Blog posts
         Post::query()
+            ->with('category:id,slug')
             ->where('status', PostStatus::Published)
             ->whereNotNull('published_at')
-            ->select('slug', 'updated_at')
+            ->select('id', 'slug', 'category_id', 'updated_at')
             ->orderByDesc('published_at')
             ->chunk(500, function ($posts) use (&$urls): void {
                 foreach ($posts as $post) {
                     $urls[] = $this->url(
-                        route('blog.show', $post->slug),
+                        $post->url(),
                         $post->updated_at->format('Y-m-d'),
                         'weekly',
                         '0.7'

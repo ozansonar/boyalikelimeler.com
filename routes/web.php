@@ -79,7 +79,8 @@ Route::post('/sifre-sifirla', [ResetPasswordController::class, 'reset'])->name('
 
 // Blog (Frontend)
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/{categorySlug}', [BlogController::class, 'index'])->name('blog.category');
+Route::get('/blog/{categorySlug}/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Profile (public)
 Route::get('/yazar/{user:username}', [ProfileController::class, 'show'])->name('profile.show');

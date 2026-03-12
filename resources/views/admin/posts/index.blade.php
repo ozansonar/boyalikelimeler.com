@@ -164,7 +164,7 @@
                                 <td>
                                     <div class="usr-actions">
                                         @if($post->isPublished())
-                                            <a class="usr-action-btn" title="Görüntüle" href="{{ route('blog.show', $post->slug) }}" target="_blank"><i class="bi bi-eye"></i></a>
+                                            <a class="usr-action-btn" title="Görüntüle" href="{{ $post->url() }}" target="_blank"><i class="bi bi-eye"></i></a>
                                         @endif
                                         <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.posts.edit', $post) }}"><i class="bi bi-pencil"></i></a>
                                         <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $post->id }}, '{{ addslashes($post->title) }}')"><i class="bi bi-trash"></i></button>

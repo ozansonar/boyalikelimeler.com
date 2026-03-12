@@ -99,4 +99,9 @@ class Post extends Model
         $wordCount = str_word_count(strip_tags((string) $this->body));
         return max(1, (int) ceil($wordCount / 200));
     }
+
+    public function url(): string
+    {
+        return route('blog.show', [$this->category?->slug ?? 'genel', $this->slug]);
+    }
 }
