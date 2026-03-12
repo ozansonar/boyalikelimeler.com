@@ -494,7 +494,7 @@
                 <div class="col-lg-8">
                     <div class="row g-3">
                         <div class="col-6" data-aos="zoom-in" data-aos-delay="0">
-                            <a href="#" class="text-decoration-none d-block">
+                            <a href="{{ url('soz-meydani') }}" class="text-decoration-none d-block">
                                 <div class="category-card">
                                     <div class="category-card__icon">
                                         <i class="fa-solid fa-comments"></i>
@@ -505,7 +505,7 @@
                             </a>
                         </div>
                         <div class="col-6" data-aos="zoom-in" data-aos-delay="100">
-                            <a href="#" class="text-decoration-none d-block">
+                            <a href="{{ url('yazarlar') }}" class="text-decoration-none d-block">
                                 <div class="category-card">
                                     <div class="category-card__icon">
                                         <i class="fa-solid fa-award"></i>
@@ -516,7 +516,7 @@
                             </a>
                         </div>
                         <div class="col-6" data-aos="zoom-in" data-aos-delay="200">
-                            <a href="#" class="text-decoration-none d-block">
+                            <a href="{{ url('sanat-okulu') }}" class="text-decoration-none d-block">
                                 <div class="category-card">
                                     <div class="category-card__icon">
                                         <i class="fa-solid fa-graduation-cap"></i>
@@ -527,7 +527,7 @@
                             </a>
                         </div>
                         <div class="col-6" data-aos="zoom-in" data-aos-delay="300">
-                            <a href="#" class="text-decoration-none d-block">
+                            <a href="{{ url('blog/astroloji') }}" class="text-decoration-none d-block">
                                 <div class="category-card">
                                     <div class="category-card__icon">
                                         <i class="fa-solid fa-star"></i>
