@@ -14358,6 +14358,10 @@ p {
     padding: 3rem 0;
 }
 
+.error-page--fullscreen {
+    min-height: 100vh;
+}
+
 .error-page__content {
     text-align: center;
     max-width: 520px;
