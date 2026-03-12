@@ -93,7 +93,7 @@
                                     </div>
                                     <h3 class="team-card__title">Yönetim Ekibi</h3>
                                     <p class="team-card__text">Sanatın yolunu aydınlatan isimler</p>
-                                    <a href="#" class="team-card__link">Keşfet <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                                    <a href="{{ url('sair-erdem-ve-yoldaslari-yonetim-ekibi') }}" class="team-card__link">Keşfet <i class="fa-solid fa-arrow-right ms-1"></i></a>
                                 </div>
                             </div>
                             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
@@ -103,7 +103,7 @@
                                     </div>
                                     <h3 class="team-card__title">Yazarlarımız</h3>
                                     <p class="team-card__text">Kelimelere hayat veren kalemler</p>
-                                    <a href="#" class="team-card__link">Keşfet <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                                    <a href="{{ url('yazarlar') }}" class="team-card__link">Keşfet <i class="fa-solid fa-arrow-right ms-1"></i></a>
                                 </div>
                             </div>
                             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
@@ -113,7 +113,7 @@
                                     </div>
                                     <h3 class="team-card__title">Ressamlarımız</h3>
                                     <p class="team-card__text">Tuvale ruh üfleyen sanatçılar</p>
-                                    <a href="#" class="team-card__link">Keşfet <i class="fa-solid fa-arrow-right ms-1"></i></a>
+                                    <a href="{{ url('ressamlar') }}" class="team-card__link">Keşfet <i class="fa-solid fa-arrow-right ms-1"></i></a>
                                 </div>
                             </div>
                         </div>
