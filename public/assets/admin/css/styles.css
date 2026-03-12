@@ -25670,73 +25670,9 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   margin-top: 2px;
 }
 
-/* ---- Author Statistics Chart ---- */
-.ast-chart-container {
-  position: relative;
-  height: 280px;
-}
-.ast-bar {
-  display: inline-block;
-  min-width: 8px;
-  border-radius: 4px 4px 0 0;
-  background: var(--teal-primary);
-  transition: height 0.4s ease, opacity 0.3s ease;
-  opacity: 0.8;
-  cursor: pointer;
-  position: relative;
-}
-.ast-bar:hover {
-  opacity: 1;
-}
-.ast-bar-tooltip {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 4px 8px;
-  font-size: 0.72rem;
-  color: var(--text-primary);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s;
-  z-index: 10;
-}
-.ast-bar:hover .ast-bar-tooltip {
-  opacity: 1;
-}
-
-/* ---- Smaller KPI value for dates ---- */
+/* ---- Author Statistics Chart.js ---- */
 .ast-kpi-value-sm {
   font-size: 1.2rem !important;
-}
-
-/* ---- Area Chart ---- */
-.ast-area-chart {
-  width: 100%;
-  overflow: hidden;
-}
-.ast-area-chart svg {
-  display: block;
-}
-
-/* ---- Vertical Bar Chart ---- */
-.ast-vbar-chart {
-  width: 100%;
-  overflow: hidden;
-}
-.ast-vbar-chart svg {
-  display: block;
-}
-
-/* ---- Donut Chart ---- */
-.ast-donut-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0;
 }
 
 /* ---- Legend Dot ---- */
@@ -25754,87 +25690,9 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   overflow-y: auto;
 }
 
-/* ---- Horizontal Bar Chart ---- */
-.ast-hbar-container {
-  min-height: 200px;
-}
-.ast-hbar-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.ast-hbar-row {
-  display: grid;
-  grid-template-columns: 160px 1fr 220px;
-  align-items: center;
-  gap: 12px;
-}
-.ast-hbar-label {
-  font-size: 0.82rem;
-  color: var(--text-primary);
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.ast-hbar-bars {
-  position: relative;
-  height: 28px;
-  background: rgba(255,255,255,0.04);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-.ast-hbar-bar {
-  height: 100%;
-  border-radius: var(--radius-sm);
-  transition: width 0.6s ease;
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-}
-.ast-hbar-views {
-  background: linear-gradient(90deg, rgba(20,184,166,0.7), rgba(20,184,166,0.4));
-}
-.ast-hbar-value {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  white-space: nowrap;
-}
-.ast-hbar-stats {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-.ast-hbar-stat {
-  font-size: 0.78rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.ast-hbar-stat small {
-  font-weight: 400;
-  opacity: 0.7;
-}
-
 /* ---- Author Statistics Responsive ---- */
 @media (max-width: 991.98px) {
   .anl-kpi-value { font-size: 1.3rem; }
-  .ast-hbar-row {
-    grid-template-columns: 120px 1fr 180px;
-  }
-}
-@media (max-width: 767.98px) {
-  .ast-hbar-row {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-  .ast-hbar-bars {
-    height: 22px;
-  }
-  .ast-hbar-stats {
-    gap: 8px;
-    padding-left: 4px;
-  }
 }
 @media (max-width: 575.98px) {
   .anl-kpi-value { font-size: 1.1rem; }

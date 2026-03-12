@@ -128,12 +128,7 @@
                     <h6><i class="bi bi-calendar-week me-2 text-teal"></i>Son 7 Gün — Günlük Okunma</h6>
                 </div>
                 <div class="card-body-custom">
-                    <div class="ast-area-chart" id="weeklyAreaChart"
-                         data-labels='@json($weeklyViews['labels'])'
-                         data-values='@json($weeklyViews['values'])'
-                         data-color="#14b8a6"
-                         data-height="220">
-                    </div>
+                    <canvas id="chartWeekly" height="220"></canvas>
                 </div>
             </div>
         </div>
@@ -143,12 +138,7 @@
                     <h6><i class="bi bi-calendar-month me-2 text-teal"></i>Son 30 Gün — Günlük Okunma</h6>
                 </div>
                 <div class="card-body-custom">
-                    <div class="ast-area-chart" id="monthlyAreaChart"
-                         data-labels='@json($dailyViews['labels'])'
-                         data-values='@json($dailyViews['values'])'
-                         data-color="#3b82f6"
-                         data-height="220">
-                    </div>
+                    <canvas id="chartMonthly" height="220"></canvas>
                 </div>
             </div>
         </div>
@@ -162,12 +152,7 @@
                     <h6><i class="bi bi-bar-chart me-2 text-teal"></i>Son 4 Hafta — Haftalık Toplam</h6>
                 </div>
                 <div class="card-body-custom">
-                    <div class="ast-vbar-chart" id="weeklyTrendChart"
-                         data-labels='@json($weeklyTrend['labels'])'
-                         data-values='@json($weeklyTrend['values'])'
-                         data-color="#14b8a6"
-                         data-height="220">
-                    </div>
+                    <canvas id="chartWeeklyTrend" height="220"></canvas>
                 </div>
             </div>
         </div>
@@ -177,12 +162,7 @@
                     <h6><i class="bi bi-graph-up me-2 text-teal"></i>Son 6 Ay — Aylık Toplam</h6>
                 </div>
                 <div class="card-body-custom">
-                    <div class="ast-vbar-chart" id="monthlyTrendChart"
-                         data-labels='@json($monthlyTrend['labels'])'
-                         data-values='@json($monthlyTrend['values'])'
-                         data-color="#a855f7"
-                         data-height="220">
-                    </div>
+                    <canvas id="chartMonthlyTrend" height="220"></canvas>
                 </div>
             </div>
         </div>
@@ -201,10 +181,8 @@
                             $catColors = ['#14b8a6','#3b82f6','#f97316','#a855f7','#22c55e','#ef4444','#eab308','#ec4899'];
                             $catTotal = $categoryDistribution->sum('count');
                         @endphp
-                        <div class="ast-donut-wrapper mb-3" id="categoryDonutChart"
-                             data-labels='@json($categoryDistribution->pluck("name")->values())'
-                             data-values='@json($categoryDistribution->pluck("count")->values())'
-                             data-colors='@json($catColors)'>
+                        <div class="d-flex justify-content-center mb-3">
+                            <canvas id="chartCategoryDonut" width="200" height="200"></canvas>
                         </div>
                         <div class="ast-category-list">
                             @foreach($categoryDistribution as $cat)
@@ -234,12 +212,7 @@
                     <h6><i class="bi bi-trophy-fill me-2 text-teal"></i>Eser Bazlı Karşılaştırma — Okunma, Yorum & Favori</h6>
                 </div>
                 <div class="card-body-custom">
-                    <div class="ast-hbar-container" id="workComparisonChart"
-                         data-labels='@json($workViewsChart['labels'])'
-                         data-views='@json($workViewsChart['views'])'
-                         data-comments='@json($workViewsChart['comments'])'
-                         data-favorites='@json($workViewsChart['favorites'])'>
-                    </div>
+                    <canvas id="chartWorkComparison" height="280"></canvas>
                 </div>
             </div>
         </div>
@@ -311,5 +284,25 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script>
+        window.astChartData = {
+            weekly:       { labels: @json($weeklyViews['labels']), values: @json($weeklyViews['values']) },
+            monthly:      { labels: @json($dailyViews['labels']), values: @json($dailyViews['values']) },
+            weeklyTrend:  { labels: @json($weeklyTrend['labels']), values: @json($weeklyTrend['values']) },
+            monthlyTrend: { labels: @json($monthlyTrend['labels']), values: @json($monthlyTrend['values']) },
+            category: {
+                labels: @json($categoryDistribution->pluck('name')->values()),
+                values: @json($categoryDistribution->pluck('count')->values()->map(fn($v) => (int) $v)),
+                colors: @json($catColors ?? ['#14b8a6','#3b82f6','#f97316','#a855f7','#22c55e','#ef4444','#eab308','#ec4899'])
+            },
+            workComparison: {
+                labels:    @json($workViewsChart['labels']),
+                views:     @json($workViewsChart['views']),
+                comments:  @json($workViewsChart['comments']),
+                favorites: @json($workViewsChart['favorites'])
+            }
+        };
+    </script>
     <script src="{{ asset('assets/admin/js/author-statistics.js') }}"></script>
 @endpush
