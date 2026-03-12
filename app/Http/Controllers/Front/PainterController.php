@@ -34,6 +34,16 @@ class PainterController extends Controller
         ]);
     }
 
+    public function goldenBrushIndex(): View
+    {
+        $pageSettings = $this->settingService->getGroup('painters_page');
+
+        return view('front.painters.golden-brush-index', [
+            'months'       => $this->painterService->getGoldenBrushMonthsPaginated(12),
+            'pageSettings' => $pageSettings,
+        ]);
+    }
+
     public function goldenBrushMonth(string $yearMonth): View
     {
         $pageSettings = $this->settingService->getGroup('painters_page');

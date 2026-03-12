@@ -145,6 +145,26 @@ final class PainterService
     }
 
     /**
+     * @return \Illuminate\Pagination\LengthAwarePaginator<int, array{key: string, label: string}>
+     */
+    public function getGoldenBrushMonthsPaginated(int $perPage = 12): \Illuminate\Pagination\LengthAwarePaginator
+    {
+        $allMonths = array_reverse($this->getGoldenBrushMonths());
+
+        $page = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+        $offset = ($page - 1) * $perPage;
+        $items = array_slice($allMonths, $offset, $perPage);
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            count($allMonths),
+            $perPage,
+            $page,
+            ['path' => route('painters.golden-brush-index')],
+        );
+    }
+
+    /**
      * @return array{label: string, painters: Collection<int, User>}|null
      */
     public function getGoldenBrushPaintersByMonth(string $yearMonth): ?array

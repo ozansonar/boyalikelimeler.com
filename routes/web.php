@@ -421,6 +421,7 @@ Route::get('/yazarlar/altin-kalem/{yearMonth}', [AuthorController::class, 'golde
     ->where('yearMonth', '\d{4}-\d{2}');
 
 Route::get('/ressamlar', [PainterController::class, 'index'])->name('painters.index');
+Route::get('/altin-fircalarimiz', [PainterController::class, 'goldenBrushIndex'])->name('painters.golden-brush-index');
 Route::get('/ressamlar/altin-firca/{yearMonth}', [PainterController::class, 'goldenBrushMonth'])
     ->name('painters.golden-brush-month')
     ->where('yearMonth', '\d{4}-\d{2}');
