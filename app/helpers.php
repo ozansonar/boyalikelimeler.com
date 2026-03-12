@@ -25,6 +25,32 @@ if (! function_exists('responsive_body')) {
             return '';
         }
 
+        // Step 0: Sanitize inline float/margin styles from img tags (TinyMCE alignleft/right adds these)
+        $html = (string) preg_replace_callback(
+            '/<img\b([^>]*)>/i',
+            static function (array $matches): string {
+                $tag = $matches[0];
+                $attrs = $matches[1];
+
+                // Remove float from inline style
+                if (preg_match('/style=["\']([^"\']*)["\']/', $attrs, $styleMatch)) {
+                    $style = $styleMatch[1];
+                    $style = (string) preg_replace('/\bfloat\s*:\s*[^;]+;?/i', '', $style);
+                    $style = (string) preg_replace('/\bmargin\s*:\s*[^;]+;?/i', '', $style);
+                    $style = trim($style, ' ;');
+
+                    if ($style === '') {
+                        $tag = str_replace($styleMatch[0], '', $tag);
+                    } else {
+                        $tag = str_replace($styleMatch[0], 'style="' . $style . '"', $tag);
+                    }
+                }
+
+                return $tag;
+            },
+            $html,
+        ) ?? $html;
+
         // Map img-w classes to percentage of content column (~800px at desktop)
         $widthMap = [
             'img-w-20'  => 0.20,
