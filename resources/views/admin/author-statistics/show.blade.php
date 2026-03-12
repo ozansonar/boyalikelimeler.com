@@ -285,24 +285,6 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-    <script>
-        window.astChartData = {
-            weekly:       { labels: @json($weeklyViews['labels']), values: @json($weeklyViews['values']) },
-            monthly:      { labels: @json($dailyViews['labels']), values: @json($dailyViews['values']) },
-            weeklyTrend:  { labels: @json($weeklyTrend['labels']), values: @json($weeklyTrend['values']) },
-            monthlyTrend: { labels: @json($monthlyTrend['labels']), values: @json($monthlyTrend['values']) },
-            category: {
-                labels: @json($categoryDistribution->pluck('name')->values()),
-                values: @json($categoryDistribution->pluck('count')->values()->map(fn($v) => (int) $v)),
-                colors: @json($catColors ?? ['#14b8a6','#3b82f6','#f97316','#a855f7','#22c55e','#ef4444','#eab308','#ec4899'])
-            },
-            workComparison: {
-                labels:    @json($workViewsChart['labels']),
-                views:     @json($workViewsChart['views']),
-                comments:  @json($workViewsChart['comments']),
-                favorites: @json($workViewsChart['favorites'])
-            }
-        };
-    </script>
+    <script>window.astChartData = {!! $chartDataJson !!};</script>
     <script src="{{ asset('assets/admin/js/author-statistics.js') }}"></script>
 @endpush

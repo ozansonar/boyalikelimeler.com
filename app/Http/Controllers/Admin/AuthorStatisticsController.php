@@ -36,6 +36,23 @@ class AuthorStatisticsController extends Controller
     {
         $data = $this->statisticsService->getAuthorDetail($user);
 
+        $catColors = ['#14b8a6','#3b82f6','#f97316','#a855f7','#22c55e','#ef4444','#eab308','#ec4899'];
+
+        $data['chartDataJson'] = json_encode([
+            'weekly'         => $data['weeklyViews'],
+            'monthly'        => $data['dailyViews'],
+            'weeklyTrend'    => $data['weeklyTrend'],
+            'monthlyTrend'   => $data['monthlyTrend'],
+            'category'       => [
+                'labels' => $data['categoryDistribution']->pluck('name')->values(),
+                'values' => $data['categoryDistribution']->pluck('count')->values()->map(fn ($v) => (int) $v),
+                'colors' => $catColors,
+            ],
+            'workComparison' => $data['workViewsChart'],
+        ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+
+        $data['catColors'] = $catColors;
+
         return view('admin.author-statistics.show', $data);
     }
 }
