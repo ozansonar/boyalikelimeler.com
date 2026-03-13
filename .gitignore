@@ -22,6 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+error_log
 public/error_log
 public/uploads/
 storage/debugbar/
