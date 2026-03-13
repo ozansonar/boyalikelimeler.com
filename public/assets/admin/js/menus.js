@@ -8,7 +8,7 @@ function openEditModal(id, title, url, icon, target, isActive, sortOrder, parent
     var form = document.getElementById('editItemForm');
     if (!form) return;
 
-    form.action = ITEM_BASE_URL + '/items/' + id;
+    form.action = ITEM_BASE_URL + '/' + id;
 
     document.getElementById('editTitle').value = title;
     document.getElementById('editUrl').value = url;
