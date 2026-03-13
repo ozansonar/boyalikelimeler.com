@@ -135,9 +135,6 @@
                             <button class="tabs-bk__item"
                                     role="tab" aria-selected="false"
                                     data-tab-target="tab-sorucevap">Soru Cevap</button>
-                            <button class="tabs-bk__item"
-                                    role="tab" aria-selected="false"
-                                    data-tab-target="tab-sanatokulu">Sanat Okulu</button>
                         </div>
 
                         <!-- Tab: Yazılar -->
@@ -288,47 +285,6 @@
                             </div>
                         </div>
 
-                        <!-- Tab: Sanat Okulu -->
-                        <div class="tabs-bk__panel" id="tab-sanatokulu" role="tabpanel">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body text-center py-4">
-                                            <i class="fa-solid fa-play-circle fa-3x text-gold mb-2 d-block"></i>
-                                            <h4 class="card-bk__title">Şiirde Ölçü ve Kafiye</h4>
-                                            <p class="card-bk__text">Temel aruz ölçüsü dersi</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-clock me-1"></i>25 dk</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body text-center py-4">
-                                            <i class="fa-solid fa-play-circle fa-3x text-gold mb-2 d-block"></i>
-                                            <h4 class="card-bk__title">Hikaye Yazma Teknikleri</h4>
-                                            <p class="card-bk__text">Karakter geliştirme yöntemleri</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-clock me-1"></i>32 dk</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-bk">
-                                        <div class="card-bk__body text-center py-4">
-                                            <i class="fa-solid fa-play-circle fa-3x text-gold mb-2 d-block"></i>
-                                            <h4 class="card-bk__title">Yağlıboya Başlangıç</h4>
-                                            <p class="card-bk__text">Temel boya teknikleri</p>
-                                        </div>
-                                        <div class="card-bk__footer">
-                                            <span class="card-bk__meta"><i class="fa-regular fa-clock me-1"></i>40 dk</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
