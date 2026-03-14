@@ -176,12 +176,14 @@ final class PostService
 
     public function getFeaturedPosts(int $limit = 5): \Illuminate\Database\Eloquent\Collection
     {
-        return Post::with(['category', 'author'])
-            ->where('status', PostStatus::Published)
-            ->where('is_featured', true)
-            ->orderByDesc('published_at')
-            ->limit($limit)
-            ->get();
+        return Cache::remember('posts.featured.' . $limit, 600, function () use ($limit): \Illuminate\Database\Eloquent\Collection {
+            return Post::with(['category', 'author'])
+                ->where('status', PostStatus::Published)
+                ->where('is_featured', true)
+                ->orderByDesc('published_at')
+                ->limit($limit)
+                ->get();
+        });
     }
 
     public function getPopularPosts(int $limit = 5): \Illuminate\Database\Eloquent\Collection
@@ -210,6 +212,7 @@ final class PostService
     {
         Cache::forget('admin.posts.stats');
         Cache::forget('admin.posts.status_counts');
+        Cache::forget('posts.featured.5');
         Cache::forget('posts.popular.5');
         Cache::forget('posts.published.stats');
     }

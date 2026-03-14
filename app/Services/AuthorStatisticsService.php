@@ -87,14 +87,12 @@ final class AuthorStatisticsService
 
         if (!empty($filters['min_works'])) {
             $minWorks = (int) $filters['min_works'];
-            $minWorksSubquery = LiteraryWork::selectRaw('COUNT(*)')
-                ->whereColumn('literary_works.user_id', 'users.id')
-                ->where('status', LiteraryWorkStatus::Approved)
-                ->whereNull('literary_works.deleted_at');
-            if ($workType) {
-                $minWorksSubquery->where('work_type', $workType);
-            }
-            $query->where(DB::raw("({$minWorksSubquery->toRawSql()})"), '>=', $minWorks);
+            $query->whereHas('literaryWorks', function ($q) use ($workType): void {
+                $q->where('status', LiteraryWorkStatus::Approved);
+                if ($workType) {
+                    $q->where('work_type', $workType);
+                }
+            }, '>=', $minWorks);
         }
 
         if (!empty($filters['joined'])) {
@@ -183,16 +181,21 @@ final class AuthorStatisticsService
 
         $commentCountSubquery = \App\Models\Comment::selectRaw('COUNT(*)')
             ->where('commentable_type', $lwClass)
-            ->whereColumn('commentable_id', DB::raw(
-                "(SELECT literary_works.id FROM literary_works WHERE literary_works.user_id = users.id AND literary_works.status = '{$approvedStatus}' AND literary_works.deleted_at IS NULL" .
-                ($workType ? " AND literary_works.work_type = '{$workType}'" : '') .
-                ' LIMIT 1)'
-            ))
+            ->whereIn('commentable_id', function ($q) use ($approvedStatus, $workType): void {
+                $q->select('id')
+                    ->from('literary_works')
+                    ->whereColumn('literary_works.user_id', 'users.id')
+                    ->where('literary_works.status', $approvedStatus)
+                    ->whereNull('literary_works.deleted_at');
+                if ($workType) {
+                    $q->where('literary_works.work_type', $workType);
+                }
+            })
             ->where('is_approved', true);
 
         $totalCommentsSubquery = DB::table('comments')
             ->selectRaw('COUNT(*)')
-            ->whereRaw("commentable_type = '{$lwClass}'")
+            ->where('commentable_type', $lwClass)
             ->whereIn('commentable_id', function ($q) use ($approvedStatus, $workType): void {
                 $q->select('id')
                     ->from('literary_works')
@@ -208,7 +211,7 @@ final class AuthorStatisticsService
 
         $totalFavoritesSubquery = DB::table('favorites')
             ->selectRaw('COUNT(*)')
-            ->whereRaw("favoriteable_type = '{$lwClass}'")
+            ->where('favoriteable_type', $lwClass)
             ->whereIn('favoriteable_id', function ($q) use ($approvedStatus, $workType): void {
                 $q->select('id')
                     ->from('literary_works')
@@ -222,7 +225,7 @@ final class AuthorStatisticsService
 
         $avgRatingSubquery = DB::table('comments')
             ->selectRaw('ROUND(AVG(rating), 1)')
-            ->whereRaw("commentable_type = '{$lwClass}'")
+            ->where('commentable_type', $lwClass)
             ->whereIn('commentable_id', function ($q) use ($approvedStatus, $workType): void {
                 $q->select('id')
                     ->from('literary_works')
