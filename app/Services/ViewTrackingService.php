@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\DailyView;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ViewTrackingService
 {
@@ -31,14 +32,27 @@ class ViewTrackingService
         $viewable->increment('view_count');
 
         if ($withDailyView) {
-            DailyView::updateOrCreate(
-                [
-                    'viewable_type' => $viewable->getMorphClass(),
-                    'viewable_id'   => $viewable->getKey(),
-                    'view_date'     => now()->toDateString(),
-                ],
-                [],
-            )->increment('view_count');
+            $today = now()->toDateString();
+
+            DB::table('daily_views')
+                ->updateOrInsert(
+                    [
+                        'viewable_type' => $viewable->getMorphClass(),
+                        'viewable_id'   => $viewable->getKey(),
+                        'view_date'     => $today,
+                    ],
+                    [
+                        'view_count' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                );
+
+            DB::table('daily_views')
+                ->where('viewable_type', $viewable->getMorphClass())
+                ->where('viewable_id', $viewable->getKey())
+                ->where('view_date', $today)
+                ->increment('view_count', 1, ['updated_at' => now()]);
         }
 
         // Cache until end of day (max 24h)
