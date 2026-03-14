@@ -40,6 +40,7 @@ class SettingSeeder extends Seeder
             ['group' => 'social', 'key' => 'youtube',           'value' => null],
             ['group' => 'social', 'key' => 'tiktok',            'value' => null],
             ['group' => 'social', 'key' => 'linkedin',          'value' => null],
+            ['group' => 'social', 'key' => 'whatsapp',          'value' => null],
 
             // ─── SEO ───
             ['group' => 'seo', 'key' => 'meta_title',           'value' => 'Boyalı Kelimeler — Edebiyat ve Sanat Platformu'],
