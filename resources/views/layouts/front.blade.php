@@ -221,18 +221,36 @@
                         fırçaların konuştuğu bir sanat hareketi. 2026.
                     </p>
                     <div class="footer-bk__social mt-3">
-                        <a href="#" class="footer-bk__social-link" aria-label="Instagram">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                        <a href="#" class="footer-bk__social-link" aria-label="Twitter">
-                            <i class="fa-brands fa-x-twitter"></i>
-                        </a>
-                        <a href="#" class="footer-bk__social-link" aria-label="YouTube">
-                            <i class="fa-brands fa-youtube"></i>
-                        </a>
-                        <a href="#" class="footer-bk__social-link" aria-label="Facebook">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
+                        @if(!empty($socialLinks['instagram']))
+                            <a href="{{ $socialLinks['instagram'] }}" class="footer-bk__social-link" target="_blank" rel="noopener noreferrer nofollow" aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        @endif
+                        @if(!empty($socialLinks['twitter']))
+                            <a href="{{ $socialLinks['twitter'] }}" class="footer-bk__social-link" target="_blank" rel="noopener noreferrer nofollow" aria-label="Twitter">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+                        @endif
+                        @if(!empty($socialLinks['youtube']))
+                            <a href="{{ $socialLinks['youtube'] }}" class="footer-bk__social-link" target="_blank" rel="noopener noreferrer nofollow" aria-label="YouTube">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                        @endif
+                        @if(!empty($socialLinks['facebook']))
+                            <a href="{{ $socialLinks['facebook'] }}" class="footer-bk__social-link" target="_blank" rel="noopener noreferrer nofollow" aria-label="Facebook">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                        @endif
+                        @if(!empty($socialLinks['tiktok']))
+                            <a href="{{ $socialLinks['tiktok'] }}" class="footer-bk__social-link" target="_blank" rel="noopener noreferrer nofollow" aria-label="TikTok">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </a>
+                        @endif
+                        @if(!empty($socialLinks['linkedin']))
+                            <a href="{{ $socialLinks['linkedin'] }}" class="footer-bk__social-link" target="_blank" rel="noopener noreferrer nofollow" aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <div class="col-6 col-lg-2">
