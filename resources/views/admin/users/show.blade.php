@@ -470,34 +470,37 @@
 
                             foreach ($posts as $post) {
                                 $activities->push([
-                                    'type'  => 'post',
-                                    'icon'  => 'bi-file-earmark-text',
-                                    'color' => 'lg-clr-blue',
-                                    'text'  => '<strong>' . e($post->title) . '</strong> başlıklı yazı oluşturuldu',
-                                    'badge' => $post->status->label(),
-                                    'date'  => $post->created_at,
+                                    'type'   => 'post',
+                                    'icon'   => 'bi-file-earmark-text',
+                                    'color'  => 'lg-clr-blue',
+                                    'title'  => $post->title,
+                                    'suffix' => 'başlıklı yazı oluşturuldu',
+                                    'badge'  => $post->status->label(),
+                                    'date'   => $post->created_at,
                                 ]);
                             }
 
                             foreach ($literaryWorks as $work) {
                                 $activities->push([
-                                    'type'  => 'literary',
-                                    'icon'  => 'bi-journal-richtext',
-                                    'color' => 'lg-clr-green',
-                                    'text'  => '<strong>' . e($work->title) . '</strong> edebi eseri eklendi',
-                                    'badge' => $work->status->label(),
-                                    'date'  => $work->created_at,
+                                    'type'   => 'literary',
+                                    'icon'   => 'bi-journal-richtext',
+                                    'color'  => 'lg-clr-green',
+                                    'title'  => $work->title,
+                                    'suffix' => 'edebi eseri eklendi',
+                                    'badge'  => $work->status->label(),
+                                    'date'   => $work->created_at,
                                 ]);
                             }
 
                             foreach ($comments as $comment) {
                                 $activities->push([
-                                    'type'  => 'comment',
-                                    'icon'  => 'bi-chat-left-dots-fill',
-                                    'color' => 'lg-clr-purple',
-                                    'text'  => '<strong>' . e($comment->contentTitle()) . '</strong> içeriğine yorum yapıldı',
-                                    'badge' => $comment->is_approved ? 'Onaylı' : 'Beklemede',
-                                    'date'  => $comment->created_at,
+                                    'type'   => 'comment',
+                                    'icon'   => 'bi-chat-left-dots-fill',
+                                    'color'  => 'lg-clr-purple',
+                                    'title'  => $comment->contentTitle(),
+                                    'suffix' => 'içeriğine yorum yapıldı',
+                                    'badge'  => $comment->is_approved ? 'Onaylı' : 'Beklemede',
+                                    'date'   => $comment->created_at,
                                 ]);
                             }
 
@@ -511,7 +514,7 @@
                                 <div class="prf-log-item">
                                     <div class="prf-log-icon {{ $activity['color'] }}"><i class="bi {{ $activity['icon'] }}"></i></div>
                                     <div class="prf-log-body">
-                                        <span>{!! $activity['text'] !!} <small class="text-clr-muted">({{ $activity['badge'] }})</small></span>
+                                        <span><strong>{{ $activity['title'] }}</strong> {{ $activity['suffix'] }} <small class="text-clr-muted">({{ $activity['badge'] }})</small></span>
                                         <small>{{ $activity['date']->format('H:i') }}</small>
                                     </div>
                                 </div>
