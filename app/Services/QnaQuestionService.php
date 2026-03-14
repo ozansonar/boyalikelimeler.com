@@ -107,7 +107,7 @@ final class QnaQuestionService
 
     public function incrementViewCount(QnaQuestion $question): void
     {
-        $question->increment('view_count');
+        app(ViewTrackingService::class)->recordView($question);
     }
 
     /**

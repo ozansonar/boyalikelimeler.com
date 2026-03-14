@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\PostStatus;
-use App\Models\DailyView;
 use App\Models\Post;
 use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -150,16 +149,7 @@ final class PostService
 
     public function incrementViews(Post $post): void
     {
-        $post->increment('view_count');
-
-        DailyView::updateOrCreate(
-            [
-                'viewable_type' => Post::class,
-                'viewable_id'   => $post->id,
-                'view_date'     => now()->toDateString(),
-            ],
-            [],
-        )->increment('view_count');
+        app(ViewTrackingService::class)->recordView($post);
     }
 
     public function getPublishedPosts(int $perPage = 12, ?int $categoryId = null): LengthAwarePaginator
