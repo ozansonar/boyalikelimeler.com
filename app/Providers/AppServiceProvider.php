@@ -45,9 +45,13 @@ class AppServiceProvider extends ServiceProvider
             $view->with('footerCompetitionsMenu', $menuService->getByLocation('footer_competitions'));
             $view->with('footerCorporateMenu', $menuService->getByLocation('footer_corporate'));
 
-            $general = app(SettingService::class)->getGroup('general');
+            $settingService = app(SettingService::class);
+
+            $general = $settingService->getGroup('general');
             $view->with('siteLogo', ! empty($general['logo']) ? upload_url($general['logo']) : null);
             $view->with('siteFavicon', ! empty($general['favicon']) ? upload_url($general['favicon']) : null);
+
+            $view->with('socialLinks', $settingService->getGroup('social'));
         });
 
         View::composer('layouts.admin', function ($view): void {
