@@ -214,5 +214,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/mail-logs.js') }}"></script>
+<script src="{{ asset('assets/admin/js/mail-logs.js') }}?v={{ filemtime(public_path('assets/admin/js/mail-logs.js')) }}"></script>
 @endpush

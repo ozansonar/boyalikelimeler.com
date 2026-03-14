@@ -234,5 +234,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/users.js') }}"></script>
+<script src="{{ asset('assets/admin/js/users.js') }}?v={{ filemtime(public_path('assets/admin/js/users.js')) }}"></script>
 @endpush

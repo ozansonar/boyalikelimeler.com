@@ -79,5 +79,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/menus.js') }}"></script>
+<script src="{{ asset('assets/admin/js/menus.js') }}?v={{ filemtime(public_path('assets/admin/js/menus.js')) }}"></script>
 @endpush

@@ -1084,7 +1084,7 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/settings.js') }}"></script>
+<script src="{{ asset('assets/admin/js/settings.js') }}?v={{ filemtime(public_path('assets/admin/js/settings.js')) }}"></script>
 <script>
 (function () {
     'use strict';

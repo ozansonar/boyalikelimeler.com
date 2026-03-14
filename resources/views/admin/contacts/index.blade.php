@@ -266,5 +266,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/admin/js/messages.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/messages.js') }}?v={{ filemtime(public_path('assets/admin/js/messages.js')) }}"></script>
 @endpush

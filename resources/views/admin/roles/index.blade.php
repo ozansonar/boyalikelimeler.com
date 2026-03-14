@@ -489,5 +489,5 @@
     const ROLES_DATA = @json($roles->mapWithKeys(fn ($role) => [$role->id => $role->permissions->pluck('id')]));
     const ROLE_UPDATE_BASE_URL = '{{ url("admin/roles") }}';
 </script>
-<script src="{{ asset('assets/admin/js/roles-permissions.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/admin/js/roles-permissions.js') }}?v={{ filemtime(public_path('assets/admin/js/roles-permissions.js')) }}"></script>
 @endpush

@@ -290,5 +290,5 @@
         workStatus: @json($workStatus),
     };
 </script>
-<script src="{{ asset('assets/admin/js/dashboard.js') }}"></script>
+<script src="{{ asset('assets/admin/js/dashboard.js') }}?v={{ filemtime(public_path('assets/admin/js/dashboard.js')) }}"></script>
 @endpush

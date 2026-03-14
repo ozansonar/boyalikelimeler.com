@@ -286,5 +286,5 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script>window.astChartData = {!! $chartDataJson !!};</script>
-    <script src="{{ asset('assets/admin/js/author-statistics.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/author-statistics.js') }}?v={{ filemtime(public_path('assets/admin/js/author-statistics.js')) }}"></script>
 @endpush
