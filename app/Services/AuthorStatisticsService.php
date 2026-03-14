@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\LiteraryWorkStatus;
+use App\Enums\LiteraryWorkType;
 use App\Models\DailyView;
 use App\Models\LiteraryWork;
 use App\Models\Post;
@@ -22,19 +23,28 @@ final class AuthorStatisticsService
     /**
      * @return array{total_authors: int, top_author_name: string, top_author_views: int, top_publisher_name: string, top_publisher_count: int, avg_views_per_author: float}
      */
-    public function getSummaryStats(): array
+    public function getSummaryStats(?string $workType = null): array
     {
-        return Cache::remember('author_statistics.summary', 300, function (): array {
-            $totalAuthors = User::whereHas('literaryWorks', fn ($q) => $q->where('status', LiteraryWorkStatus::Approved))
-                ->count();
+        $cacheKey = 'author_statistics.summary' . ($workType ? ".{$workType}" : '');
 
-            $topAuthor = $this->getTopAuthorByTotalViews();
-            $topPublisherThisMonth = $this->getTopPublisherThisMonth();
+        return Cache::remember($cacheKey, 300, function () use ($workType): array {
+            $workTypeFilter = fn ($q) => $workType
+                ? $q->where('status', LiteraryWorkStatus::Approved)->where('work_type', $workType)
+                : $q->where('status', LiteraryWorkStatus::Approved);
 
-            $totalViews = (int) LiteraryWork::where('status', LiteraryWorkStatus::Approved)->sum('view_count');
+            $totalAuthors = User::whereHas('literaryWorks', $workTypeFilter)->count();
+
+            $topAuthor = $this->getTopAuthorByTotalViews($workType);
+            $topPublisherThisMonth = $this->getTopPublisherThisMonth($workType);
+
+            $worksQuery = LiteraryWork::where('status', LiteraryWorkStatus::Approved);
+            if ($workType) {
+                $worksQuery->where('work_type', $workType);
+            }
+            $totalViews = (int) (clone $worksQuery)->sum('view_count');
+            $totalApprovedWorks = (clone $worksQuery)->count();
+
             $avgViews = $totalAuthors > 0 ? (int) round($totalViews / $totalAuthors) : 0;
-
-            $totalApprovedWorks = LiteraryWork::where('status', LiteraryWorkStatus::Approved)->count();
 
             return [
                 'total_authors'        => $totalAuthors,
@@ -53,10 +63,16 @@ final class AuthorStatisticsService
 
     public function paginateAuthors(int $perPage, array $filters = []): LengthAwarePaginator
     {
+        $workType = $filters['work_type'] ?? null;
+
+        $workTypeFilter = fn ($q) => $workType
+            ? $q->where('status', LiteraryWorkStatus::Approved)->where('work_type', $workType)
+            : $q->where('status', LiteraryWorkStatus::Approved);
+
         $query = User::select('users.*')
-            ->whereHas('literaryWorks', fn ($q) => $q->where('status', LiteraryWorkStatus::Approved))
-            ->withCount(['literaryWorks as approved_works_count' => fn ($q) => $q->where('status', LiteraryWorkStatus::Approved)])
-            ->withSum(['literaryWorks as total_views' => fn ($q) => $q->where('status', LiteraryWorkStatus::Approved)], 'view_count');
+            ->whereHas('literaryWorks', $workTypeFilter)
+            ->withCount(['literaryWorks as approved_works_count' => $workTypeFilter])
+            ->withSum(['literaryWorks as total_views' => $workTypeFilter], 'view_count');
 
         if (!empty($filters['search'])) {
             $search = $filters['search'];
@@ -70,34 +86,28 @@ final class AuthorStatisticsService
         $lwClass = LiteraryWork::class;
         $approvedStatus = LiteraryWorkStatus::Approved->value;
 
+        $buildViewSubquery = function (int $days) use ($lwClass, $approvedStatus, $now, $workType) {
+            $sub = DailyView::selectRaw('COALESCE(SUM(daily_views.view_count), 0)')
+                ->join('literary_works', function ($join) use ($lwClass): void {
+                    $join->on('daily_views.viewable_id', '=', 'literary_works.id')
+                        ->where('daily_views.viewable_type', '=', $lwClass);
+                })
+                ->whereColumn('literary_works.user_id', 'users.id')
+                ->where('literary_works.status', $approvedStatus)
+                ->whereNull('literary_works.deleted_at')
+                ->where('daily_views.view_date', '>=', $now->copy()->subDays($days)->toDateString());
+
+            if ($workType) {
+                $sub->where('literary_works.work_type', $workType);
+            }
+
+            return $sub;
+        };
+
         $query->addSelect([
-            'views_last_7d' => DailyView::selectRaw('COALESCE(SUM(daily_views.view_count), 0)')
-                ->join('literary_works', function ($join) use ($lwClass): void {
-                    $join->on('daily_views.viewable_id', '=', 'literary_works.id')
-                        ->where('daily_views.viewable_type', '=', $lwClass);
-                })
-                ->whereColumn('literary_works.user_id', 'users.id')
-                ->where('literary_works.status', $approvedStatus)
-                ->whereNull('literary_works.deleted_at')
-                ->where('daily_views.view_date', '>=', $now->copy()->subDays(7)->toDateString()),
-            'views_last_30d' => DailyView::selectRaw('COALESCE(SUM(daily_views.view_count), 0)')
-                ->join('literary_works', function ($join) use ($lwClass): void {
-                    $join->on('daily_views.viewable_id', '=', 'literary_works.id')
-                        ->where('daily_views.viewable_type', '=', $lwClass);
-                })
-                ->whereColumn('literary_works.user_id', 'users.id')
-                ->where('literary_works.status', $approvedStatus)
-                ->whereNull('literary_works.deleted_at')
-                ->where('daily_views.view_date', '>=', $now->copy()->subDays(30)->toDateString()),
-            'views_last_90d' => DailyView::selectRaw('COALESCE(SUM(daily_views.view_count), 0)')
-                ->join('literary_works', function ($join) use ($lwClass): void {
-                    $join->on('daily_views.viewable_id', '=', 'literary_works.id')
-                        ->where('daily_views.viewable_type', '=', $lwClass);
-                })
-                ->whereColumn('literary_works.user_id', 'users.id')
-                ->where('literary_works.status', $approvedStatus)
-                ->whereNull('literary_works.deleted_at')
-                ->where('daily_views.view_date', '>=', $now->copy()->subDays(90)->toDateString()),
+            'views_last_7d'  => $buildViewSubquery(7),
+            'views_last_30d' => $buildViewSubquery(30),
+            'views_last_90d' => $buildViewSubquery(90),
         ]);
 
         $sort = $filters['sort'] ?? 'total_views';
@@ -175,26 +185,31 @@ final class AuthorStatisticsService
 
     // ─── Private Helpers ───
 
-    private function getTopAuthorByTotalViews(): array
+    private function getTopAuthorByTotalViews(?string $workType = null): array
     {
-        $result = DB::table('literary_works')
+        $query = DB::table('literary_works')
             ->join('users', 'literary_works.user_id', '=', 'users.id')
             ->where('literary_works.status', LiteraryWorkStatus::Approved->value)
             ->whereNull('literary_works.deleted_at')
             ->whereNull('users.deleted_at')
             ->select('users.name', DB::raw('SUM(literary_works.view_count) as total_views'))
             ->groupBy('users.id', 'users.name')
-            ->orderByDesc('total_views')
-            ->first();
+            ->orderByDesc('total_views');
+
+        if ($workType) {
+            $query->where('literary_works.work_type', $workType);
+        }
+
+        $result = $query->first();
 
         return $result ? ['name' => $result->name, 'views' => (int) $result->total_views] : [];
     }
 
-    private function getTopPublisherThisMonth(): array
+    private function getTopPublisherThisMonth(?string $workType = null): array
     {
         $startOfMonth = Carbon::now()->startOfMonth();
 
-        $result = DB::table('literary_works')
+        $query = DB::table('literary_works')
             ->join('users', 'literary_works.user_id', '=', 'users.id')
             ->where('literary_works.status', LiteraryWorkStatus::Approved->value)
             ->where('literary_works.published_at', '>=', $startOfMonth)
@@ -202,8 +217,13 @@ final class AuthorStatisticsService
             ->whereNull('users.deleted_at')
             ->select('users.name', DB::raw('COUNT(*) as works_count'))
             ->groupBy('users.id', 'users.name')
-            ->orderByDesc('works_count')
-            ->first();
+            ->orderByDesc('works_count');
+
+        if ($workType) {
+            $query->where('literary_works.work_type', $workType);
+        }
+
+        $result = $query->first();
 
         return $result ? ['name' => $result->name, 'count' => (int) $result->works_count] : [];
     }
@@ -378,5 +398,9 @@ final class AuthorStatisticsService
     public function clearCache(): void
     {
         Cache::forget('author_statistics.summary');
+
+        foreach (LiteraryWorkType::cases() as $type) {
+            Cache::forget("author_statistics.summary.{$type->value}");
+        }
     }
 }
