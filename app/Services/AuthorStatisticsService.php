@@ -85,6 +85,80 @@ final class AuthorStatisticsService
             });
         }
 
+        if (!empty($filters['min_works'])) {
+            $minWorks = (int) $filters['min_works'];
+            $minWorksSubquery = LiteraryWork::selectRaw('COUNT(*)')
+                ->whereColumn('literary_works.user_id', 'users.id')
+                ->where('status', LiteraryWorkStatus::Approved)
+                ->whereNull('literary_works.deleted_at');
+            if ($workType) {
+                $minWorksSubquery->where('work_type', $workType);
+            }
+            $query->where(DB::raw("({$minWorksSubquery->toRawSql()})"), '>=', $minWorks);
+        }
+
+        if (!empty($filters['joined'])) {
+            $joinedDate = match ($filters['joined']) {
+                'this_month' => Carbon::now()->startOfMonth(),
+                'last_3'     => Carbon::now()->subMonths(3)->startOfDay(),
+                'last_6'     => Carbon::now()->subMonths(6)->startOfDay(),
+                'last_12'    => Carbon::now()->subYear()->startOfDay(),
+                default      => null,
+            };
+            if ($joinedDate) {
+                $query->where('users.created_at', '>=', $joinedDate);
+            }
+        }
+
+        if (!empty($filters['activity'])) {
+            $activityDays = match ($filters['activity']) {
+                'last_7'  => 7,
+                'last_30' => 30,
+                'last_90' => 90,
+                default   => null,
+            };
+            if ($activityDays !== null) {
+                $cutoff = Carbon::now()->subDays($activityDays)->toDateString();
+                $lwClass2 = LiteraryWork::class;
+                $approvedVal = LiteraryWorkStatus::Approved->value;
+                $query->whereExists(function ($sub) use ($cutoff, $lwClass2, $approvedVal, $workType): void {
+                    $sub->select(DB::raw(1))
+                        ->from('daily_views')
+                        ->join('literary_works', function ($join) use ($lwClass2): void {
+                            $join->on('daily_views.viewable_id', '=', 'literary_works.id')
+                                ->where('daily_views.viewable_type', '=', $lwClass2);
+                        })
+                        ->whereColumn('literary_works.user_id', 'users.id')
+                        ->where('literary_works.status', $approvedVal)
+                        ->whereNull('literary_works.deleted_at')
+                        ->where('daily_views.view_date', '>=', $cutoff);
+                    if ($workType) {
+                        $sub->where('literary_works.work_type', $workType);
+                    }
+                });
+            }
+            if ($filters['activity'] === 'inactive') {
+                $cutoff90 = Carbon::now()->subDays(90)->toDateString();
+                $lwClass2 = LiteraryWork::class;
+                $approvedVal = LiteraryWorkStatus::Approved->value;
+                $query->whereNotExists(function ($sub) use ($cutoff90, $lwClass2, $approvedVal, $workType): void {
+                    $sub->select(DB::raw(1))
+                        ->from('daily_views')
+                        ->join('literary_works', function ($join) use ($lwClass2): void {
+                            $join->on('daily_views.viewable_id', '=', 'literary_works.id')
+                                ->where('daily_views.viewable_type', '=', $lwClass2);
+                        })
+                        ->whereColumn('literary_works.user_id', 'users.id')
+                        ->where('literary_works.status', $approvedVal)
+                        ->whereNull('literary_works.deleted_at')
+                        ->where('daily_views.view_date', '>=', $cutoff90);
+                    if ($workType) {
+                        $sub->where('literary_works.work_type', $workType);
+                    }
+                });
+            }
+        }
+
         $now = Carbon::now();
         $lwClass = LiteraryWork::class;
         $approvedStatus = LiteraryWorkStatus::Approved->value;
