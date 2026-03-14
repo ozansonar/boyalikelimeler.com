@@ -241,7 +241,7 @@
                         <!-- Author Card -->
                         <div class="cdetail-sidebar__card">
                             <h4 class="cdetail-sidebar__title">
-                                <i class="fa-solid fa-user-pen me-2"></i>Yazar
+                                <i class="{{ $authorRoleIcon }} me-2"></i>{{ $authorRoleLabel }}
                             </h4>
                             <div class="cdetail-sidebar__author">
                                 <div class="cdetail-sidebar__author-avatar">

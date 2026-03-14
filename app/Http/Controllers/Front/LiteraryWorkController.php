@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Front;
 
+use App\Enums\LiteraryWorkType;
 use App\Http\Controllers\Controller;
 use App\Services\LiteraryCategoryService;
 use App\Services\LiteraryWorkService;
+use App\Services\ProfileService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,6 +17,7 @@ class LiteraryWorkController extends Controller
     public function __construct(
         private readonly LiteraryWorkService $workService,
         private readonly LiteraryCategoryService $categoryService,
+        private readonly ProfileService $profileService,
     ) {}
 
     public function index(Request $request): View
@@ -70,10 +73,27 @@ class LiteraryWorkController extends Controller
 
         $this->workService->incrementViews($work);
 
+        $authorStats = $this->profileService->getWriterStats($work->author);
+        $hasWritten  = ($authorStats['work_type_counts'][LiteraryWorkType::Written->value] ?? 0) > 0;
+        $hasVisual   = ($authorStats['work_type_counts'][LiteraryWorkType::Visual->value] ?? 0) > 0;
+
+        if ($hasWritten && $hasVisual) {
+            $authorRoleLabel = 'Yazar ve Ressam';
+            $authorRoleIcon  = 'fa-solid fa-feather-pointed';
+        } elseif ($hasVisual) {
+            $authorRoleLabel = 'Ressam';
+            $authorRoleIcon  = 'fa-solid fa-palette';
+        } else {
+            $authorRoleLabel = 'Yazar';
+            $authorRoleIcon  = 'fa-solid fa-user-pen';
+        }
+
         return view('front.literary-works.show', [
-            'work'         => $work,
-            'relatedWorks' => $this->workService->getRelatedWorks($work, 4),
-            'categories'   => $this->categoryService->activeList(),
+            'work'             => $work,
+            'relatedWorks'     => $this->workService->getRelatedWorks($work, 4),
+            'categories'       => $this->categoryService->activeList(),
+            'authorRoleLabel'  => $authorRoleLabel,
+            'authorRoleIcon'   => $authorRoleIcon,
         ]);
     }
 }

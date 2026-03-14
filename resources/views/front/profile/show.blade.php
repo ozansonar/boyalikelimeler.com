@@ -104,8 +104,23 @@
                     <div class="profile-header__name-row">
                         <h1 class="profile-header__name">{{ $user->name }}</h1>
                         @if($user->isYazar())
+                            @php
+                                $hasWritten = ($stats['work_type_counts'][\App\Enums\LiteraryWorkType::Written->value] ?? 0) > 0;
+                                $hasVisual  = ($stats['work_type_counts'][\App\Enums\LiteraryWorkType::Visual->value] ?? 0) > 0;
+
+                                if ($hasWritten && $hasVisual) {
+                                    $roleLabel = 'Yazar ve Ressam';
+                                    $roleIcon  = 'fa-solid fa-feather-pointed';
+                                } elseif ($hasVisual) {
+                                    $roleLabel = 'Ressam';
+                                    $roleIcon  = 'fa-solid fa-palette';
+                                } else {
+                                    $roleLabel = 'Yazar';
+                                    $roleIcon  = 'fa-solid fa-feather-pointed';
+                                }
+                            @endphp
                             <span class="profile-header__badge profile-header__badge--gold">
-                                <i class="fa-solid fa-feather-pointed me-1"></i>Yazar
+                                <i class="{{ $roleIcon }} me-1"></i>{{ $roleLabel }}
                             </span>
                         @endif
                         @if($user->isAdmin() || $user->isSuperAdmin())
