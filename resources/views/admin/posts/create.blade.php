@@ -37,5 +37,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/content-add.js') }}"></script>
+<script src="{{ asset('assets/admin/js/content-add.js') }}?v={{ filemtime(public_path('assets/admin/js/content-add.js')) }}"></script>
 @endpush

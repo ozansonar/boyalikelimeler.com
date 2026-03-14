@@ -211,5 +211,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/content-list.js') }}"></script>
+<script src="{{ asset('assets/admin/js/content-list.js') }}?v={{ filemtime(public_path('assets/admin/js/content-list.js')) }}"></script>
 @endpush

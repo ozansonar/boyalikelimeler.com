@@ -162,5 +162,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/pages.js') }}"></script>
+<script src="{{ asset('assets/admin/js/pages.js') }}?v={{ filemtime(public_path('assets/admin/js/pages.js')) }}"></script>
 @endpush

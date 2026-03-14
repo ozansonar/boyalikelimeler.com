@@ -285,5 +285,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/comments.js') }}"></script>
+<script src="{{ asset('assets/admin/js/comments.js') }}?v={{ filemtime(public_path('assets/admin/js/comments.js')) }}"></script>
 @endpush

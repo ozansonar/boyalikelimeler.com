@@ -43,8 +43,8 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/content-add.js') }}"></script>
-<script src="{{ asset('assets/admin/js/pages.js') }}"></script>
+<script src="{{ asset('assets/admin/js/content-add.js') }}?v={{ filemtime(public_path('assets/admin/js/content-add.js')) }}"></script>
+<script src="{{ asset('assets/admin/js/pages.js') }}?v={{ filemtime(public_path('assets/admin/js/pages.js')) }}"></script>
 <script src="{{ asset('vendor/sortablejs/1.15.6/Sortable.min.js') }}"></script>
-<script src="{{ asset('assets/admin/js/page-boxes.js') }}"></script>
+<script src="{{ asset('assets/admin/js/page-boxes.js') }}?v={{ filemtime(public_path('assets/admin/js/page-boxes.js')) }}"></script>
 @endpush

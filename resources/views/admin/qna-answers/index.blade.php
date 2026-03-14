@@ -189,5 +189,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/admin/js/qna.js') }}"></script>
+<script src="{{ asset('assets/admin/js/qna.js') }}?v={{ filemtime(public_path('assets/admin/js/qna.js')) }}"></script>
 @endpush
