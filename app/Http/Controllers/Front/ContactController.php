@@ -21,7 +21,8 @@ final class ContactController extends Controller
     public function show(): View
     {
         return view('front.contact', [
-            'socialLinks' => $this->settingService->getGroup('social'),
+            'socialLinks'    => $this->settingService->getGroup('social'),
+            'contactSettings' => $this->settingService->getGroup('contact'),
         ]);
     }
 

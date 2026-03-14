@@ -150,16 +150,19 @@
 
                     <!-- Info Cards -->
                     <div class="contact-info">
-                        <div class="contact-info__card">
-                            <div class="contact-info__icon-wrap">
-                                <i class="fa-solid fa-envelope"></i>
+                        @if(!empty($contactSettings['email']))
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">E-posta</h3>
+                                    @foreach(explode(',', $contactSettings['email']) as $mail)
+                                        <a href="mailto:{{ trim($mail) }}" class="contact-info__link">{{ trim($mail) }}</a>
+                                    @endforeach
+                                </div>
                             </div>
-                            <div class="contact-info__body">
-                                <h3 class="contact-info__title">E-posta</h3>
-                                <a href="mailto:info@boyalikelimeler.com" class="contact-info__link">info@boyalikelimeler.com</a>
-                                <a href="mailto:yarisma@boyalikelimeler.com" class="contact-info__link">yarisma@boyalikelimeler.com</a>
-                            </div>
-                        </div>
+                        @endif
 
                         @if(!empty($socialLinks['whatsapp']))
                             <div class="contact-info__card">
@@ -174,18 +177,17 @@
                             </div>
                         @endif
 
-                        <div class="contact-info__card">
-                            <div class="contact-info__icon-wrap">
-                                <i class="fa-solid fa-location-dot"></i>
+                        @if(!empty($contactSettings['address']))
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">Adres</h3>
+                                    <p class="contact-info__text">{!! nl2br(e($contactSettings['address'])) !!}</p>
+                                </div>
                             </div>
-                            <div class="contact-info__body">
-                                <h3 class="contact-info__title">Adres</h3>
-                                <p class="contact-info__text">
-                                    Boyalı Kelimeler Sanat Merkezi<br>
-                                    İstanbul, Türkiye
-                                </p>
-                            </div>
-                        </div>
+                        @endif
 
                         <div class="contact-info__card">
                             <div class="contact-info__icon-wrap">
