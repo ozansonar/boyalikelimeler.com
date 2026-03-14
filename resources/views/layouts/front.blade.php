@@ -293,11 +293,13 @@
                             <i class="fa-solid fa-envelope me-1 text-gold"></i> info@boyalikelimeler.com
                         </a>
                     </p>
-                    <p class="footer-bk__text">
-                        <a href="https://wa.me/+905537091992?text=Merhaba" target="_blank" rel="noopener noreferrer nofollow" class="footer-bk__link">
-                            <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
-                        </a>
-                    </p>
+                    @if(!empty($socialLinks['whatsapp']))
+                        <p class="footer-bk__text">
+                            <a href="https://wa.me/+90{{ $socialLinks['whatsapp'] }}?text=Merhaba" target="_blank" rel="noopener noreferrer nofollow" class="footer-bk__link">
+                                <i class="fa-brands fa-whatsapp me-1 text-gold"></i> WhatsApp ile ulaşın
+                            </a>
+                        </p>
+                    @endif
                 </div>
             </div>
 

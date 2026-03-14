@@ -161,16 +161,18 @@
                             </div>
                         </div>
 
-                        <div class="contact-info__card">
-                            <div class="contact-info__icon-wrap">
-                                <i class="fa-brands fa-whatsapp"></i>
+                        @if(!empty($socialLinks['whatsapp']))
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">WhatsApp</h3>
+                                    <a href="https://wa.me/+90{{ $socialLinks['whatsapp'] }}?text=Merhaba" target="_blank" rel="noopener noreferrer nofollow" class="contact-info__link">+90 {{ $socialLinks['whatsapp'] }}</a>
+                                    <p class="contact-info__note">Hafta içi 09:00 – 18:00</p>
+                                </div>
                             </div>
-                            <div class="contact-info__body">
-                                <h3 class="contact-info__title">WhatsApp</h3>
-                                <a href="#" class="contact-info__link">+90 (555) 123 45 67</a>
-                                <p class="contact-info__note">Hafta içi 09:00 – 18:00</p>
-                            </div>
-                        </div>
+                        @endif
 
                         <div class="contact-info__card">
                             <div class="contact-info__icon-wrap">

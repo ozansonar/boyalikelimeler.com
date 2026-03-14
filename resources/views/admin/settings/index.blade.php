@@ -474,6 +474,14 @@
                                 <input type="url" name="linkedin" class="stg-input" value="{{ old('linkedin', $social['linkedin'] ?? '') }}" placeholder="linkedin.com/company/boyalikelimeler">
                             </div>
                         </div>
+
+                        <div class="stg-field">
+                            <label class="stg-label"><i class="bi bi-whatsapp text-neon-green me-2"></i>WhatsApp</label>
+                            <div class="stg-input-group">
+                                <span class="stg-input-prefix">+90</span>
+                                <input type="tel" name="whatsapp" class="stg-input" value="{{ old('whatsapp', $social['whatsapp'] ?? '') }}" placeholder="5537091992">
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -144,6 +144,7 @@ class SettingController extends Controller
             'youtube'   => 'nullable|url|max:300',
             'tiktok'    => 'nullable|url|max:300',
             'linkedin'  => 'nullable|url|max:300',
+            'whatsapp'  => 'nullable|string|regex:/^[0-9]{10,15}$/|max:15',
         ]);
 
         $this->settingService->updateGroup('social', $data);
