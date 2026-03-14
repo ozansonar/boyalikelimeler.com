@@ -9,6 +9,7 @@ use App\Http\Requests\Front\PasswordChangeRequest;
 use App\Http\Requests\Front\ProfileUpdateRequest;
 use App\Models\User;
 use App\Services\ProfileService;
+use App\Services\WriterApplicationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,11 +19,17 @@ final class ProfileController extends Controller
 {
     public function __construct(
         private readonly ProfileService $profileService,
+        private readonly WriterApplicationService $writerApplicationService,
     ) {}
 
     public function show(User $user): View
     {
         $data = $this->profileService->getProfileData($user);
+
+        $writerStatus = null;
+        if (auth()->id() === $user->id) {
+            $writerStatus = $this->writerApplicationService->canUserApply($user);
+        }
 
         return view('front.profile.show', [
             'user'          => $user,
@@ -31,14 +38,16 @@ final class ProfileController extends Controller
             'stats'         => $data['stats'],
             'favoriteWorks' => $data['favoriteWorks'],
             'favoritePosts' => $data['favoritePosts'],
+            'writerStatus'  => $writerStatus,
         ]);
     }
 
     public function edit(): View
     {
         $user = auth()->user();
+        $writerStatus = $this->writerApplicationService->canUserApply($user);
 
-        return view('front.profile.edit', compact('user'));
+        return view('front.profile.edit', compact('user', 'writerStatus'));
     }
 
     public function update(ProfileUpdateRequest $request): RedirectResponse

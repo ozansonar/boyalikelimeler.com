@@ -1,7 +1,7 @@
 /**
  * Profile Page JS
  * - Profile tabs switching
- * - Writer Application Modal (multi-step)
+ * - Writer Application Modal (single-step)
  */
 (function () {
     'use strict';
@@ -18,90 +18,79 @@
     });
 
     /* -------------------------------------------------------
-       Writer Application Modal — Multi-step
+       Writer Application Modal
     ------------------------------------------------------- */
     var modal = document.getElementById('writerApplicationModal');
     if (!modal) return;
 
-    var currentStep = 1;
-    var totalSteps = 3;
-
-    var panels = [
-        document.getElementById('step1'),
-        document.getElementById('step2'),
-        document.getElementById('step3')
-    ];
-    var stepDots = document.querySelectorAll('.writer-modal__step');
-    var btnBack = document.getElementById('btnBack');
-    var btnNext = document.getElementById('btnNext');
     var btnSubmit = document.getElementById('btnSubmit');
-    var stepLabel = document.getElementById('currentStepLabel');
+    var motivationInput = document.getElementById('wf_motivation');
+    var charCount = document.getElementById('motivationCharCount');
 
-    if (!panels[0] || !btnBack || !btnNext || !btnSubmit) return;
+    if (!btnSubmit || !motivationInput) return;
 
-    function goTo(step) {
-        panels.forEach(function (p) { if (p) p.classList.add('d-none'); });
-        stepDots.forEach(function (d) {
-            d.classList.remove('writer-modal__step--active', 'writer-modal__step--done');
+    /* Character counter */
+    if (charCount) {
+        charCount.textContent = motivationInput.value.length;
+        motivationInput.addEventListener('input', function () {
+            charCount.textContent = this.value.length;
         });
-
-        if (panels[step - 1]) panels[step - 1].classList.remove('d-none');
-        currentStep = step;
-
-        stepDots.forEach(function (d, i) {
-            var n = i + 1;
-            if (n < step) d.classList.add('writer-modal__step--done');
-            if (n === step) d.classList.add('writer-modal__step--active');
-        });
-
-        btnBack.classList.toggle('d-none', step === 1);
-        btnNext.classList.toggle('d-none', step === totalSteps);
-        btnSubmit.classList.toggle('d-none', step !== totalSteps);
-
-        if (stepLabel) stepLabel.textContent = 'Adım ' + step + ' / ' + totalSteps;
     }
 
-    btnBack.addEventListener('click', function () {
-        if (currentStep > 1) goTo(currentStep - 1);
-    });
-
-    btnNext.addEventListener('click', function () {
-        if (currentStep < totalSteps) goTo(currentStep + 1);
-    });
-
+    /* Submit */
     btnSubmit.addEventListener('click', function () {
         var form = document.getElementById('writerApplicationForm');
         if (!form) return;
 
-        var formData = new FormData(form);
+        var val = motivationInput.value.trim();
+        if (val.length < 50) {
+            if (window.BkModal) window.BkModal.danger('Motivasyon metni en az 50 karakter olmalıdır.');
+            motivationInput.focus();
+            return;
+        }
+
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Gönderiliyor...';
+
         var csrfToken = document.querySelector('meta[name="csrf-token"]');
 
         fetch('/yazar-basvuru', {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken ? csrfToken.content : '',
                 'Accept': 'application/json'
             },
-            body: formData
+            body: JSON.stringify({ motivation: val })
         })
         .then(function (response) { return response.json(); })
         .then(function (data) {
             if (data.success) {
                 var bsModal = bootstrap.Modal.getInstance(modal);
                 if (bsModal) bsModal.hide();
-                if (window.BkModal) window.BkModal.success('Başvurunuz başarıyla gönderildi! E-posta ile bilgilendirileceksiniz.');
+                if (window.BkModal) {
+                    window.BkModal.success(data.message || 'Başvurunuz başarıyla gönderildi!');
+                }
+                setTimeout(function () { location.reload(); }, 2000);
             } else {
-                if (window.BkModal) window.BkModal.danger(data.message || 'Bir hata oluştu. Lütfen tekrar deneyin.');
+                if (window.BkModal) window.BkModal.danger(data.message || 'Bir hata oluştu.');
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Başvuruyu Gönder';
             }
         })
         .catch(function () {
             if (window.BkModal) window.BkModal.danger('Bağlantı hatası. Lütfen tekrar deneyin.');
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Başvuruyu Gönder';
         });
     });
 
     /* Reset on close */
     modal.addEventListener('hidden.bs.modal', function () {
-        goTo(1);
+        motivationInput.value = '';
+        if (charCount) charCount.textContent = '0';
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Başvuruyu Gönder';
     });
 
 })();

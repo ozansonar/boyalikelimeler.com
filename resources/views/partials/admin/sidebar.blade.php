@@ -115,7 +115,7 @@
             @endif
         @endif
 
-        @if($sidebarUser->hasAnyPermission('users.view', 'roles.view', 'comments.view', 'contacts.view', 'menus.view'))
+        @if($sidebarUser->hasAnyPermission('users.view', 'roles.view', 'comments.view', 'contacts.view', 'menus.view', 'writer-applications.view'))
             <div class="nav-section-title">Yönetim</div>
             @if($sidebarUser->hasPermission('users.view'))
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
@@ -134,6 +134,14 @@
                     <i class="bi bi-chat-dots-fill"></i> Yorumlar
                     @if($pendingCommentsCount > 0)
                         <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingCommentsCount }}</span>
+                    @endif
+                </a>
+            @endif
+            @if($sidebarUser->hasPermission('writer-applications.view'))
+                <a href="{{ route('admin.writer-applications.index') }}" class="nav-link {{ request()->routeIs('admin.writer-applications.*') ? 'active' : '' }}">
+                    <i class="bi bi-feather"></i> Yazar Başvuruları
+                    @if($pendingWriterApplicationsCount > 0)
+                        <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingWriterApplicationsCount }}</span>
                     @endif
                 </a>
             @endif

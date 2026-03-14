@@ -10,6 +10,7 @@ use App\Services\MenuService;
 use App\Services\QnaAnswerService;
 use App\Services\QnaQuestionService;
 use App\Services\SettingService;
+use App\Services\WriterApplicationService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -74,6 +75,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('pendingCommentsCount', app(CommentService::class)->getPendingCount());
             $view->with('unreadMessagesCount', app(ContactService::class)->getUnreadCount());
             $view->with('pendingQnaCount', app(QnaQuestionService::class)->getPendingCount() + app(QnaAnswerService::class)->getPendingCount());
+            $view->with('pendingWriterApplicationsCount', app(WriterApplicationService::class)->getPendingCount());
         });
     }
 }

@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WriterApplicationController as AdminWriterApplicationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\Front\CommentController;
 use App\Http\Controllers\Front\CategoryController as FrontCategoryController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FavoriteController;
+use App\Http\Controllers\Front\WriterApplicationController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\SearchController;
 use App\Http\Controllers\Front\LiteraryWorkController as FrontLiteraryWorkController;
@@ -94,6 +96,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/profil/sifre', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profil/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::post('/profil/kapak', [ProfileController::class, 'updateCover'])->name('profile.cover');
+
+    // Writer Application
+    Route::post('/yazar-basvuru', [WriterApplicationController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('writer-application.store');
 
     // Favorite Toggle (AJAX)
     Route::post('/favori/toggle', [FavoriteController::class, 'toggle'])->name('favorite.toggle');
@@ -223,6 +230,16 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
         Route::put('settings/mail-theme', [SettingController::class, 'updateMailTheme'])->name('settings.update.mail-theme');
         Route::post('settings/mail-theme/preview', [SettingController::class, 'previewMailTheme'])->name('settings.mail-theme.preview');
         Route::get('settings/mail-theme/reset', [SettingController::class, 'resetMailTheme'])->name('settings.mail-theme.reset');
+    });
+
+    // Writer Application Management
+    Route::middleware('permission:writer-applications.view')->group(function () {
+        Route::get('writer-applications', [AdminWriterApplicationController::class, 'index'])->name('writer-applications.index');
+        Route::get('writer-applications/{writerApplication}', [AdminWriterApplicationController::class, 'show'])->name('writer-applications.show');
+    });
+    Route::middleware('permission:writer-applications.manage')->group(function () {
+        Route::patch('writer-applications/{writerApplication}/approve', [AdminWriterApplicationController::class, 'approve'])->name('writer-applications.approve');
+        Route::patch('writer-applications/{writerApplication}/reject', [AdminWriterApplicationController::class, 'reject'])->name('writer-applications.reject');
     });
 
     // Comment Management
