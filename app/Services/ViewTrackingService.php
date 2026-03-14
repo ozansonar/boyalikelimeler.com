@@ -70,10 +70,10 @@ class ViewTrackingService
             return "u{$userId}";
         }
 
-        $sessionId = session()->getId();
         $ip        = request()->ip() ?? '0.0.0.0';
+        $userAgent = request()->userAgent() ?? 'unknown';
 
-        return 'g' . md5($sessionId . $ip);
+        return 'g' . md5($ip . '|' . $userAgent);
     }
 
     private function buildCacheKey(Model $viewable, string $viewerKey): string
