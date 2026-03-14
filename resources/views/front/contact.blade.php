@@ -204,21 +204,36 @@
                         <h3 class="contact-social__title">Sosyal Medya</h3>
                         <p class="contact-social__desc">Bizi takip edin, sanatın nabzını birlikte tutalım.</p>
                         <div class="contact-social__links">
-                            <a href="#" class="contact-social__link" aria-label="Instagram">
-                                <i class="fa-brands fa-instagram"></i>
-                            </a>
-                            <a href="#" class="contact-social__link" aria-label="Twitter">
-                                <i class="fa-brands fa-x-twitter"></i>
-                            </a>
-                            <a href="#" class="contact-social__link" aria-label="YouTube">
-                                <i class="fa-brands fa-youtube"></i>
-                            </a>
-                            <a href="#" class="contact-social__link" aria-label="Facebook">
-                                <i class="fa-brands fa-facebook-f"></i>
-                            </a>
-                            <a href="#" class="contact-social__link" aria-label="TikTok">
-                                <i class="fa-brands fa-tiktok"></i>
-                            </a>
+                            @if(!empty($socialLinks['instagram']))
+                                <a href="{{ $socialLinks['instagram'] }}" class="contact-social__link" target="_blank" rel="noopener noreferrer nofollow" aria-label="Instagram">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>
+                            @endif
+                            @if(!empty($socialLinks['twitter']))
+                                <a href="{{ $socialLinks['twitter'] }}" class="contact-social__link" target="_blank" rel="noopener noreferrer nofollow" aria-label="Twitter">
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                </a>
+                            @endif
+                            @if(!empty($socialLinks['youtube']))
+                                <a href="{{ $socialLinks['youtube'] }}" class="contact-social__link" target="_blank" rel="noopener noreferrer nofollow" aria-label="YouTube">
+                                    <i class="fa-brands fa-youtube"></i>
+                                </a>
+                            @endif
+                            @if(!empty($socialLinks['facebook']))
+                                <a href="{{ $socialLinks['facebook'] }}" class="contact-social__link" target="_blank" rel="noopener noreferrer nofollow" aria-label="Facebook">
+                                    <i class="fa-brands fa-facebook-f"></i>
+                                </a>
+                            @endif
+                            @if(!empty($socialLinks['tiktok']))
+                                <a href="{{ $socialLinks['tiktok'] }}" class="contact-social__link" target="_blank" rel="noopener noreferrer nofollow" aria-label="TikTok">
+                                    <i class="fa-brands fa-tiktok"></i>
+                                </a>
+                            @endif
+                            @if(!empty($socialLinks['linkedin']))
+                                <a href="{{ $socialLinks['linkedin'] }}" class="contact-social__link" target="_blank" rel="noopener noreferrer nofollow" aria-label="LinkedIn">
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
