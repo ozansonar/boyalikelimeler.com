@@ -201,18 +201,6 @@
                             </div>
                         @endif
 
-                        <div class="contact-info__card">
-                            <div class="contact-info__icon-wrap">
-                                <i class="fa-solid fa-clock"></i>
-                            </div>
-                            <div class="contact-info__body">
-                                <h3 class="contact-info__title">Çalışma Saatleri</h3>
-                                <p class="contact-info__text">
-                                    Pazartesi – Cuma: 09:00 – 18:00<br>
-                                    Cumartesi: 10:00 – 14:00
-                                </p>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Social Media -->
