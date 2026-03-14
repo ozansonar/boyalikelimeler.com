@@ -26,9 +26,21 @@ class WorkStatisticsController extends Controller
             'category', 'author', 'date_from', 'date_to',
         ]);
 
+        $stats = $this->workStatisticsService->getSummaryStats($filters['work_type'] ?? null);
+
+        $hasExtraFilters = !empty($filters['search']) || !empty($filters['category'])
+            || !empty($filters['author']) || !empty($filters['date_from'])
+            || !empty($filters['date_to']);
+
+        $works = $this->workStatisticsService->paginateWorks(
+            $perPage,
+            $filters,
+            !$hasExtraFilters ? $stats['total_works'] : null,
+        );
+
         return view('admin.work-statistics.index', [
-            'works'      => $this->workStatisticsService->paginateWorks($perPage, $filters),
-            'stats'      => $this->workStatisticsService->getSummaryStats($filters['work_type'] ?? null),
+            'works'      => $works,
+            'stats'      => $stats,
             'categories' => $this->workStatisticsService->getActiveCategories(),
             'authors'    => $this->workStatisticsService->getAuthorsWithWorks(),
             'filters'    => $filters,
