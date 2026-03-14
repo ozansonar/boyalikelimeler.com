@@ -32,7 +32,7 @@
 
     <!-- KPI Cards -->
     <div class="row g-4 mb-4">
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="0">
+        <div class="col-xxl-2 col-xl-4 col-sm-6" data-aos="fade-up" data-aos-delay="0">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-teal">
@@ -40,10 +40,21 @@
                     </div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($stats['total_authors']) }}</h3>
-                <span class="anl-kpi-label">Onaylı eseri olan yazar sayısı</span>
+                <span class="anl-kpi-label">Toplam Yazar</span>
             </div>
         </div>
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-xxl-2 col-xl-4 col-sm-6" data-aos="fade-up" data-aos-delay="50">
+            <div class="anl-kpi-card h-100">
+                <div class="anl-kpi-header">
+                    <div class="anl-kpi-icon anl-kpi-icon-purple">
+                        <i class="bi bi-journal-check"></i>
+                    </div>
+                </div>
+                <h3 class="anl-kpi-value">{{ number_format($stats['total_works']) }}</h3>
+                <span class="anl-kpi-label">Toplam Onaylı Eser</span>
+            </div>
+        </div>
+        <div class="col-xxl-2 col-xl-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-blue">
@@ -51,29 +62,40 @@
                     </div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($stats['total_views']) }}</h3>
-                <span class="anl-kpi-label">Toplam okunma ({{ number_format($stats['total_works']) }} eser)</span>
+                <span class="anl-kpi-label">Toplam Okunma</span>
             </div>
         </div>
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-xxl-2 col-xl-4 col-sm-6" data-aos="fade-up" data-aos-delay="150">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-green">
                         <i class="bi bi-trophy-fill"></i>
                     </div>
                 </div>
-                <h3 class="anl-kpi-value">{{ $stats['top_author_name'] }}</h3>
-                <span class="anl-kpi-label">En çok okunan yazar ({{ number_format($stats['top_author_views']) }})</span>
+                <h3 class="anl-kpi-value ast-kpi-value-sm">{{ Str::limit($stats['top_author_name'], 20) }}</h3>
+                <span class="anl-kpi-label">En Çok Okunan ({{ number_format($stats['top_author_views']) }})</span>
             </div>
         </div>
-        <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="col-xxl-2 col-xl-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
             <div class="anl-kpi-card h-100">
                 <div class="anl-kpi-header">
                     <div class="anl-kpi-icon anl-kpi-icon-orange">
+                        <i class="bi bi-pen-fill"></i>
+                    </div>
+                </div>
+                <h3 class="anl-kpi-value ast-kpi-value-sm">{{ Str::limit($stats['top_publisher_name'], 20) }}</h3>
+                <span class="anl-kpi-label">En Üretken — Bu Ay ({{ $stats['top_publisher_count'] }} eser)</span>
+            </div>
+        </div>
+        <div class="col-xxl-2 col-xl-4 col-sm-6" data-aos="fade-up" data-aos-delay="250">
+            <div class="anl-kpi-card h-100">
+                <div class="anl-kpi-header">
+                    <div class="anl-kpi-icon anl-kpi-icon-blue">
                         <i class="bi bi-bar-chart-fill"></i>
                     </div>
                 </div>
                 <h3 class="anl-kpi-value">{{ number_format($stats['avg_views_per_author']) }}</h3>
-                <span class="anl-kpi-label">Yazar başına ortalama okunma</span>
+                <span class="anl-kpi-label">Yazar Başına Ort. Okunma</span>
             </div>
         </div>
     </div>
@@ -191,6 +213,30 @@
                                     @endif
                                 </a>
                             </th>
+                            <th class="text-center d-none d-xl-table-cell">
+                                <a href="{{ route('admin.author-statistics.index', array_merge($filters, ['sort' => 'total_comments', 'dir' => ($filters['sort'] ?? '') === 'total_comments' && ($filters['dir'] ?? '') === 'desc' ? 'asc' : 'desc', 'per_page' => $perPage])) }}" class="text-decoration-none text-clr-secondary">
+                                    Yorum
+                                    @if(($filters['sort'] ?? '') === 'total_comments')
+                                        <i class="bi bi-arrow-{{ ($filters['dir'] ?? '') === 'asc' ? 'up' : 'down' }}"></i>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="text-center d-none d-xl-table-cell">
+                                <a href="{{ route('admin.author-statistics.index', array_merge($filters, ['sort' => 'total_favorites', 'dir' => ($filters['sort'] ?? '') === 'total_favorites' && ($filters['dir'] ?? '') === 'desc' ? 'asc' : 'desc', 'per_page' => $perPage])) }}" class="text-decoration-none text-clr-secondary">
+                                    Favori
+                                    @if(($filters['sort'] ?? '') === 'total_favorites')
+                                        <i class="bi bi-arrow-{{ ($filters['dir'] ?? '') === 'asc' ? 'up' : 'down' }}"></i>
+                                    @endif
+                                </a>
+                            </th>
+                            <th class="text-center d-none d-xl-table-cell">
+                                <a href="{{ route('admin.author-statistics.index', array_merge($filters, ['sort' => 'avg_rating', 'dir' => ($filters['sort'] ?? '') === 'avg_rating' && ($filters['dir'] ?? '') === 'desc' ? 'asc' : 'desc', 'per_page' => $perPage])) }}" class="text-decoration-none text-clr-secondary">
+                                    Puan
+                                    @if(($filters['sort'] ?? '') === 'avg_rating')
+                                        <i class="bi bi-arrow-{{ ($filters['dir'] ?? '') === 'asc' ? 'up' : 'down' }}"></i>
+                                    @endif
+                                </a>
+                            </th>
                             <th class="text-center">Detay</th>
                         </tr>
                     </thead>
@@ -226,6 +272,19 @@
                                 </td>
                                 <td class="text-center">
                                     <span class="fw-bold text-teal">{{ number_format((int) ($author->total_views ?? 0)) }}</span>
+                                </td>
+                                <td class="text-center d-none d-xl-table-cell">
+                                    <span class="text-clr-primary">{{ number_format((int) ($author->total_comments ?? 0)) }}</span>
+                                </td>
+                                <td class="text-center d-none d-xl-table-cell">
+                                    <span class="text-clr-primary">{{ number_format((int) ($author->total_favorites ?? 0)) }}</span>
+                                </td>
+                                <td class="text-center d-none d-xl-table-cell">
+                                    @if($author->avg_rating)
+                                        <span class="fw-semibold text-warning"><i class="bi bi-star-fill me-1"></i>{{ number_format((float) $author->avg_rating, 1) }}</span>
+                                    @else
+                                        <span class="text-clr-muted">—</span>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.author-statistics.show', $author) }}" class="btn-glass btn-sm" title="Detay">
