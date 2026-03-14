@@ -52,6 +52,11 @@ kod yorumları ve değişken isimleri İngilizce olsun.
 - Sayaç/badge sorguları (pending count, unread count vb.) → ZORUNLU cache + invalidation
 - Bir controller'da aynı service metodu 3+ kez çağrılıyorsa → toplu çeken metot yaz (ör: `getAllGrouped()`)
 - Service'te veri değiştiren her metot (store/update/delete) → ilgili count cache'i temizlemeli
+- Pagination count sorgusu, KPI/summary count ile aynı tabloyu aynı koşullarla sayıyorsa → duplicate → YASAK
+  - Çözüm: `getSummaryStats()` gibi cache'li metodu önce çağır, `total` değerini `paginateX()` metoduna `$precomputedTotal` olarak geçir
+  - Extra filtre (search, category, author, date) yoksa pagination count sorgusu atlanır (manuel `LengthAwarePaginator`)
+  - Extra filtre varsa pagination kendi count'unu çalıştırır (farklı sonuç döneceği için)
+- Aynı tabloya `COUNT(*)` ve `SUM(col)` ayrı ayrı sorgu atma → YASAK → tek sorguda `selectRaw('COUNT(*) as cnt, SUM(col) as total')` kullan
 
 ## Git
 

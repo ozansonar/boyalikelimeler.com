@@ -31,8 +31,12 @@ final class WorkStatisticsService
                 $baseQuery->where('work_type', $workType);
             }
 
-            $totalWorks = (clone $baseQuery)->count();
-            $totalViews = (int) (clone $baseQuery)->sum('view_count');
+            $aggregate = (clone $baseQuery)
+                ->selectRaw('COUNT(*) as total_count, COALESCE(SUM(view_count), 0) as total_views')
+                ->first();
+
+            $totalWorks = (int) $aggregate->total_count;
+            $totalViews = (int) $aggregate->total_views;
             $avgViews = $totalWorks > 0 ? (int) round($totalViews / $totalWorks) : 0;
 
             $todayViews = (int) DailyView::where('viewable_type', LiteraryWork::class)
@@ -62,7 +66,7 @@ final class WorkStatisticsService
 
     // ─── Paginated Works List ───
 
-    public function paginateWorks(int $perPage, array $filters = []): LengthAwarePaginator
+    public function paginateWorks(int $perPage, array $filters = [], ?int $precomputedTotal = null): LengthAwarePaginator
     {
         $query = LiteraryWork::with(['category:id,name', 'author:id,name,username,avatar'])
             ->where('status', LiteraryWorkStatus::Approved);
@@ -120,7 +124,22 @@ final class WorkStatisticsService
         $sort = in_array($sort, $allowedSorts, true) ? $sort : 'view_count';
         $dir = in_array($dir, ['asc', 'desc'], true) ? $dir : 'desc';
 
-        return $query->orderBy($sort, $dir)->paginate($perPage)->withQueryString();
+        $query->orderBy($sort, $dir);
+
+        if ($precomputedTotal !== null) {
+            $page = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+            $items = $query->forPage($page, $perPage)->get();
+
+            return (new \Illuminate\Pagination\LengthAwarePaginator(
+                $items,
+                $precomputedTotal,
+                $perPage,
+                $page,
+                ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()],
+            ))->withQueryString();
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     // ─── Filter Data ───
