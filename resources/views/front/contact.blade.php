@@ -177,6 +177,18 @@
                             </div>
                         @endif
 
+                        @if(!empty($contactSettings['phone']))
+                            <div class="contact-info__card">
+                                <div class="contact-info__icon-wrap">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div class="contact-info__body">
+                                    <h3 class="contact-info__title">Telefon</h3>
+                                    <a href="tel:{{ $contactSettings['phone'] }}" class="contact-info__link">{{ $contactSettings['phone'] }}</a>
+                                </div>
+                            </div>
+                        @endif
+
                         @if(!empty($contactSettings['address']))
                             <div class="contact-info__card">
                                 <div class="contact-info__icon-wrap">
