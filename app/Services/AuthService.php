@@ -37,6 +37,7 @@ final class AuthService
 
             $user = User::create([
                 'name'     => $request->validated('first_name') . ' ' . $request->validated('last_name'),
+                'username' => $request->validated('username'),
                 'email'    => $request->validated('email'),
                 'password' => $request->validated('password'),
                 'type'     => UserType::Kullanici,

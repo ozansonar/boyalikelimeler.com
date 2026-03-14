@@ -6,9 +6,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class RegisterController extends Controller
@@ -38,5 +41,25 @@ class RegisterController extends Controller
 
         return redirect()->route('register')
             ->with('success', 'Kayıt işleminiz başarıyla tamamlandı! E-posta adresinize gönderilen doğrulama linkine tıklayarak hesabınızı aktif hale getirebilirsiniz.');
+    }
+
+    public function checkUsername(Request $request): JsonResponse
+    {
+        $request->validate([
+            'username' => ['required', 'string', 'min:3', 'max:30', 'regex:/^[a-zA-Z0-9_]+$/'],
+        ]);
+
+        $username = $request->input('username');
+        $ignoreId = $request->input('ignore_id');
+
+        $query = User::where('username', $username);
+
+        if ($ignoreId) {
+            $query->where('id', '!=', (int) $ignoreId);
+        }
+
+        return response()->json([
+            'available' => !$query->exists(),
+        ]);
     }
 }

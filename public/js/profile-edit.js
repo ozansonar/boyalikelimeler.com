@@ -153,6 +153,63 @@
     }
 
     /* -------------------------------------------------------
+       Username Availability Check (AJAX)
+    ------------------------------------------------------- */
+    var usernameInput = document.getElementById('pf_username');
+    var usernameStatus = document.getElementById('usernameStatus');
+    var usernameTimer = null;
+
+    if (usernameInput && usernameStatus) {
+        var currentUsername = usernameInput.value.trim();
+
+        usernameInput.addEventListener('input', function () {
+            clearTimeout(usernameTimer);
+            var val = usernameInput.value.trim();
+
+            usernameStatus.classList.add('d-none');
+            usernameStatus.textContent = '';
+
+            if (val.length < 3) return;
+            if (!/^[a-zA-Z0-9_]+$/.test(val)) {
+                usernameStatus.classList.remove('d-none');
+                usernameStatus.className = 'pedit-form__username-status pedit-form__username-status--error';
+                usernameStatus.innerHTML = '<i class="fa-solid fa-xmark me-1"></i>Sadece İngilizce harf, rakam ve alt çizgi kullanılabilir.';
+                return;
+            }
+
+            if (val === currentUsername) return;
+
+            usernameTimer = setTimeout(function () {
+                var userId = document.querySelector('meta[name="user-id"]');
+                var body = { username: val };
+                if (userId) body.ignore_id = userId.content;
+
+                fetch('/check-username', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken ? csrfToken.content : '',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    usernameStatus.classList.remove('d-none');
+                    if (data.available) {
+                        usernameStatus.className = 'pedit-form__username-status pedit-form__username-status--success';
+                        usernameStatus.innerHTML = '<i class="fa-solid fa-check me-1"></i>Bu kullanıcı adı kullanılabilir.';
+                    } else {
+                        usernameStatus.className = 'pedit-form__username-status pedit-form__username-status--error';
+                        usernameStatus.innerHTML = '<i class="fa-solid fa-xmark me-1"></i>Bu kullanıcı adı zaten kullanılıyor.';
+                    }
+                })
+                .catch(function () {});
+            }, 500);
+        });
+    }
+
+    /* -------------------------------------------------------
        Interest Checkbox Toggle
     ------------------------------------------------------- */
     document.querySelectorAll('.pedit-interest__item input').forEach(function (cb) {
