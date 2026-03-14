@@ -24,9 +24,19 @@ class AuthorStatisticsController extends Controller
 
         $filters = $request->only(['search', 'sort', 'dir', 'work_type']);
 
+        $stats = $this->statisticsService->getSummaryStats($filters['work_type'] ?? null);
+
+        $hasExtraFilters = !empty($filters['search']);
+
+        $authors = $this->statisticsService->paginateAuthors(
+            $perPage,
+            $filters,
+            !$hasExtraFilters ? $stats['total_authors'] : null,
+        );
+
         return view('admin.author-statistics.index', [
-            'authors'  => $this->statisticsService->paginateAuthors($perPage, $filters),
-            'stats'    => $this->statisticsService->getSummaryStats($filters['work_type'] ?? null),
+            'authors'  => $authors,
+            'stats'    => $stats,
             'filters'  => $filters,
             'perPage'  => $perPage,
         ]);
