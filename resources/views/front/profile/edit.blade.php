@@ -74,6 +74,30 @@
                                 <i class="fa-solid fa-chevron-right pedit-nav__chevron"></i>
                             </button>
                         </nav>
+
+                        {{-- Writer Application CTA (non-writers only) --}}
+                        @if(!$user->isYazar() && !$user->isAdmin() && !$user->isSuperAdmin())
+                            <div class="writer-cta-card mt-3">
+                                <div class="writer-cta-card__glow"></div>
+                                <div class="writer-cta-card__icon">
+                                    <i class="fa-solid fa-feather-pointed"></i>
+                                </div>
+                                <h4 class="writer-cta-card__title">Yazar Olmak İstiyor musunuz?</h4>
+                                <p class="writer-cta-card__text">
+                                    Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar başvurusu yapın.
+                                </p>
+                                <button type="button"
+                                        class="writer-cta-card__btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#writerApplicationModal"
+                                        aria-haspopup="dialog">
+                                    <i class="fa-solid fa-paper-plane me-2"></i>Yazar Olma İsteğinde Bulun
+                                </button>
+                                <div class="writer-cta-card__note">
+                                    <i class="fa-solid fa-shield-halved me-1"></i>Başvurunuz 3–5 iş günü içinde değerlendirilir
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- RIGHT: Sections --}}
@@ -200,6 +224,7 @@
                                             <span class="pedit-form__hint">
                                                 <i class="fa-solid fa-circle-info me-1"></i>Yalnızca harf, rakam ve alt çizgi. 3–30 karakter.
                                             </span>
+                                            <span class="pedit-form__username-status d-none" id="usernameStatus"></span>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -636,8 +661,16 @@
         </div>
     </section>
 
+    {{-- Writer Application Modal (non-writers only) --}}
+    @if(!$user->isYazar() && !$user->isAdmin() && !$user->isSuperAdmin())
+        @include('front.profile._writer-modal')
+    @endif
+
 @endsection
 
 @push('scripts')
     <script src="{{ asset('js/profile-edit.js') }}"></script>
+    @if(!$user->isYazar() && !$user->isAdmin() && !$user->isSuperAdmin())
+        <script src="{{ asset('js/profile.js') }}"></script>
+    @endif
 @endpush

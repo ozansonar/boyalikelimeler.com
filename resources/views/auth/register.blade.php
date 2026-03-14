@@ -149,6 +149,34 @@
                             @enderror
                         </div>
 
+                        <!-- Kullanıcı Adı -->
+                        <div class="auth-form__group">
+                            <label class="auth-form__label" for="username">
+                                <i class="fa-solid fa-at me-1"></i>Kullanıcı Adı
+                            </label>
+                            <div class="auth-form__username-wrap">
+                                <span class="auth-form__username-prefix">@</span>
+                                <input type="text"
+                                       class="auth-form__input auth-form__input--prefixed @error('username') auth-form__input--error @enderror"
+                                       id="username"
+                                       name="username"
+                                       value="{{ old('username') }}"
+                                       placeholder="kullanici_adi"
+                                       required
+                                       minlength="3"
+                                       maxlength="30"
+                                       pattern="[a-zA-Z0-9_]+"
+                                       autocomplete="username">
+                            </div>
+                            <span class="auth-form__hint" id="usernameHint">
+                                <i class="fa-solid fa-circle-info me-1"></i>Sadece İngilizce harf, rakam ve alt çizgi. Profiliniz boyalikelimeler.com/@kullanici_adi olarak görünecek.
+                            </span>
+                            <span class="auth-form__username-status d-none" id="usernameStatus"></span>
+                            @error('username')
+                                <span class="auth-form__error-text">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Şifre -->
                         <div class="auth-form__group">
                             <label class="auth-form__label" for="password">
@@ -247,5 +275,64 @@
             }
         });
     });
+
+    // Username availability check
+    (function () {
+        var usernameInput = document.getElementById('username');
+        var statusEl = document.getElementById('usernameStatus');
+        var timer = null;
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        if (!usernameInput || !statusEl) return;
+
+        usernameInput.addEventListener('input', function () {
+            clearTimeout(timer);
+            var val = usernameInput.value.trim();
+
+            statusEl.classList.add('d-none');
+            statusEl.textContent = '';
+            usernameInput.classList.remove('auth-form__input--success', 'auth-form__input--error');
+
+            if (val.length < 3) return;
+            if (!/^[a-zA-Z0-9_]+$/.test(val)) {
+                statusEl.classList.remove('d-none');
+                statusEl.classList.add('auth-form__username-status--error');
+                statusEl.classList.remove('auth-form__username-status--success');
+                statusEl.innerHTML = '<i class="fa-solid fa-xmark me-1"></i>Sadece İngilizce harf, rakam ve alt çizgi kullanılabilir.';
+                usernameInput.classList.add('auth-form__input--error');
+                return;
+            }
+
+            timer = setTimeout(function () {
+                fetch('{{ route("check.username") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ username: val })
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    statusEl.classList.remove('d-none');
+                    if (data.available) {
+                        statusEl.classList.remove('auth-form__username-status--error');
+                        statusEl.classList.add('auth-form__username-status--success');
+                        statusEl.innerHTML = '<i class="fa-solid fa-check me-1"></i>Bu kullanıcı adı kullanılabilir.';
+                        usernameInput.classList.remove('auth-form__input--error');
+                        usernameInput.classList.add('auth-form__input--success');
+                    } else {
+                        statusEl.classList.remove('auth-form__username-status--success');
+                        statusEl.classList.add('auth-form__username-status--error');
+                        statusEl.innerHTML = '<i class="fa-solid fa-xmark me-1"></i>Bu kullanıcı adı zaten kullanılıyor.';
+                        usernameInput.classList.remove('auth-form__input--success');
+                        usernameInput.classList.add('auth-form__input--error');
+                    }
+                })
+                .catch(function () {});
+            }, 500);
+        });
+    })();
 </script>
 @endpush

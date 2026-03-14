@@ -60,6 +60,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+Route::post('/check-username', [RegisterController::class, 'checkUsername'])->middleware('throttle:30,1')->name('check.username');
 
 // Email Verification
 Route::get('/email/dogrula', fn () => view('auth.verify'))
