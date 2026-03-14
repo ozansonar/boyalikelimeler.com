@@ -41,8 +41,11 @@ final class AuthorStatisticsService
             if ($workType) {
                 $worksQuery->where('work_type', $workType);
             }
-            $totalViews = (int) (clone $worksQuery)->sum('view_count');
-            $totalApprovedWorks = (clone $worksQuery)->count();
+            $aggregate = (clone $worksQuery)
+                ->selectRaw('COUNT(*) as total_count, COALESCE(SUM(view_count), 0) as total_views')
+                ->first();
+            $totalViews = (int) $aggregate->total_views;
+            $totalApprovedWorks = (int) $aggregate->total_count;
 
             $avgViews = $totalAuthors > 0 ? (int) round($totalViews / $totalAuthors) : 0;
 
@@ -61,7 +64,7 @@ final class AuthorStatisticsService
 
     // ─── Paginated Author List ───
 
-    public function paginateAuthors(int $perPage, array $filters = []): LengthAwarePaginator
+    public function paginateAuthors(int $perPage, array $filters = [], ?int $precomputedTotal = null): LengthAwarePaginator
     {
         $workType = $filters['work_type'] ?? null;
 
@@ -116,7 +119,22 @@ final class AuthorStatisticsService
         $sort = in_array($sort, $allowedSorts, true) ? $sort : 'total_views';
         $dir = in_array($dir, ['asc', 'desc'], true) ? $dir : 'desc';
 
-        return $query->orderBy($sort, $dir)->paginate($perPage)->withQueryString();
+        $query->orderBy($sort, $dir);
+
+        if ($precomputedTotal !== null) {
+            $page = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+            $items = $query->forPage($page, $perPage)->get();
+
+            return (new \Illuminate\Pagination\LengthAwarePaginator(
+                $items,
+                $precomputedTotal,
+                $perPage,
+                $page,
+                ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()],
+            ))->withQueryString();
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     // ─── Author Detail Data ───
