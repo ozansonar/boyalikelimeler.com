@@ -196,6 +196,11 @@
                                     </div>
                                 @endforelse
                             </div>
+                            <div class="tabs-bk__view-all">
+                                <a href="{{ url('yazili-eserler') }}" class="tabs-bk__view-all-link">
+                                    Tümünü Gör <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
 
                         <!-- Tab: Resimler -->
@@ -256,6 +261,11 @@
                                         </div>
                                     </div>
                                 @endforelse
+                            </div>
+                            <div class="tabs-bk__view-all">
+                                <a href="{{ url('gorsel-eserler') }}" class="tabs-bk__view-all-link">
+                                    Tümünü Gör <i class="fa-solid fa-arrow-right"></i>
+                                </a>
                             </div>
                         </div>
 
