@@ -68,7 +68,7 @@
             @endif
         @endif
 
-        @if($sidebarUser->hasAnyPermission('literary-works.view', 'literary-categories.view', 'author-statistics.view'))
+        @if($sidebarUser->hasAnyPermission('literary-works.view', 'literary-categories.view', 'author-statistics.view', 'work-statistics.view'))
             <div class="nav-section-title">Edebiyat</div>
             @if($sidebarUser->hasPermission('literary-works.view'))
                 <a href="{{ route('admin.literary-works.index') }}" class="nav-link {{ request()->routeIs('admin.literary-works.*') ? 'active' : '' }}">
@@ -86,6 +86,11 @@
             @if($sidebarUser->hasPermission('author-statistics.view'))
                 <a href="{{ route('admin.author-statistics.index') }}" class="nav-link {{ request()->routeIs('admin.author-statistics.*') ? 'active' : '' }}">
                     <i class="bi bi-graph-up"></i> Yazar İstatistikleri
+                </a>
+            @endif
+            @if($sidebarUser->hasPermission('work-statistics.view'))
+                <a href="{{ route('admin.work-statistics.index') }}" class="nav-link {{ request()->routeIs('admin.work-statistics.*') ? 'active' : '' }}">
+                    <i class="bi bi-bar-chart-line"></i> Eser İstatistikleri
                 </a>
             @endif
         @endif

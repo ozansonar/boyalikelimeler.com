@@ -49,6 +49,9 @@ class PermissionSeeder extends Seeder
             // Yazar İstatistikleri
             ['name' => 'Yazar İstatistiklerini Görüntüle', 'slug' => 'author-statistics.view', 'group' => 'author-statistics', 'sort_order' => 55],
 
+            // Eser İstatistikleri
+            ['name' => 'Eser İstatistiklerini Görüntüle', 'slug' => 'work-statistics.view', 'group' => 'work-statistics', 'sort_order' => 56],
+
             // Edebiyat Kategorileri
             ['name' => 'Edebi Kategorileri Görüntüle', 'slug' => 'literary-categories.view', 'group' => 'literary-categories', 'sort_order' => 60],
             ['name' => 'Edebi Kategori Oluştur', 'slug' => 'literary-categories.create', 'group' => 'literary-categories', 'sort_order' => 61],
