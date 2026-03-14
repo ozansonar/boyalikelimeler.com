@@ -108,6 +108,23 @@
         </div>
     </div>
     @endif
+    @if($pendingWriterApplications > 0)
+    <div class="col-xl-4 col-md-6">
+        <a href="{{ route('admin.writer-applications.index', ['status' => 'pending']) }}" class="text-decoration-none">
+            <div class="card-dark">
+                <div class="card-body-custom d-flex align-items-center gap-3 py-3">
+                    <div class="bg-icon-teal-strong rounded-circle d-flex align-items-center justify-content-center" style="width:42px;height:42px;min-width:42px">
+                        <i class="bi bi-feather"></i>
+                    </div>
+                    <div>
+                        <div class="fw-600-primary">{{ $pendingWriterApplications }} Yazar Başvurusu</div>
+                        <div class="text-sm-muted">Değerlendirme bekliyor</div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    @endif
 </div>
 
 <!-- Charts Row -->

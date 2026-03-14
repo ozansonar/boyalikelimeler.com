@@ -187,29 +187,62 @@
                 {{-- LEFT: Sidebar --}}
                 <div class="col-lg-4 order-lg-1 order-2">
 
-                    {{-- Writer Application CTA Card (only for non-writers) --}}
+                    {{-- Writer Application CTA Card --}}
                     @auth
-                        @if(auth()->id() === $user->id && !$user->isYazar() && !$user->isAdmin() && !$user->isSuperAdmin())
-                            <div class="writer-cta-card">
-                                <div class="writer-cta-card__glow"></div>
-                                <div class="writer-cta-card__icon">
-                                    <i class="fa-solid fa-feather-pointed"></i>
+                        @if(auth()->id() === $user->id && $writerStatus !== null)
+                            @if($writerStatus['can_apply'])
+                                <div class="writer-cta-card">
+                                    <div class="writer-cta-card__glow"></div>
+                                    <div class="writer-cta-card__icon">
+                                        <i class="fa-solid fa-feather-pointed"></i>
+                                    </div>
+                                    <h4 class="writer-cta-card__title">Yazar Olmak İstiyor musunuz?</h4>
+                                    <p class="writer-cta-card__text">
+                                        Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar başvurusu yapın.
+                                    </p>
+                                    <button type="button"
+                                            class="writer-cta-card__btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#writerApplicationModal"
+                                            aria-haspopup="dialog">
+                                        <i class="fa-solid fa-paper-plane me-2"></i>Yazar Olma İsteğinde Bulun
+                                    </button>
+                                    <div class="writer-cta-card__note">
+                                        <i class="fa-solid fa-shield-halved me-1"></i>Başvurunuz 3–5 iş günü içinde değerlendirilir
+                                    </div>
                                 </div>
-                                <h4 class="writer-cta-card__title">Yazar Olmak İstiyor musunuz?</h4>
-                                <p class="writer-cta-card__text">
-                                    Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar başvurusu yapın.
-                                </p>
-                                <button type="button"
-                                        class="writer-cta-card__btn"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#writerApplicationModal"
-                                        aria-haspopup="dialog">
-                                    <i class="fa-solid fa-paper-plane me-2"></i>Yazar Olma İsteğinde Bulun
-                                </button>
-                                <div class="writer-cta-card__note">
-                                    <i class="fa-solid fa-shield-halved me-1"></i>Başvurunuz 3–5 iş günü içinde değerlendirilir
+                            @elseif($writerStatus['reason'] === 'pending')
+                                <div class="writer-cta-card writer-cta-card--pending">
+                                    <div class="writer-cta-card__icon">
+                                        <i class="fa-solid fa-hourglass-half"></i>
+                                    </div>
+                                    <h4 class="writer-cta-card__title">Başvurunuz Değerlendiriliyor</h4>
+                                    <p class="writer-cta-card__text">
+                                        Yazar başvurunuz editör ekibimiz tarafından incelenmektedir. Sonuç e-posta ile bildirilecektir.
+                                    </p>
+                                    <div class="writer-cta-card__note">
+                                        <i class="fa-solid fa-calendar me-1"></i>Başvuru tarihi: {{ $writerStatus['last_application']->created_at->format('d.m.Y') }}
+                                    </div>
                                 </div>
-                            </div>
+                            @elseif($writerStatus['reason'] === 'cooldown')
+                                @php
+                                    $daysLeft = 30 - (int) $writerStatus['last_application']->reviewed_at->diffInDays(now());
+                                @endphp
+                                <div class="writer-cta-card writer-cta-card--rejected">
+                                    <div class="writer-cta-card__icon">
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                    </div>
+                                    <h4 class="writer-cta-card__title">Başvurunuz Reddedildi</h4>
+                                    @if($writerStatus['last_application']->admin_note)
+                                        <p class="writer-cta-card__text">
+                                            <strong>Değerlendirme notu:</strong> {{ $writerStatus['last_application']->admin_note }}
+                                        </p>
+                                    @endif
+                                    <div class="writer-cta-card__note">
+                                        <i class="fa-solid fa-hourglass me-1"></i>{{ $daysLeft }} gün sonra tekrar başvurabilirsiniz
+                                    </div>
+                                </div>
+                            @endif
                         @endif
                     @endauth
 
@@ -603,7 +636,7 @@
 
     {{-- Writer Application Modal --}}
     @auth
-        @if(auth()->id() === $user->id && !$user->isYazar() && !$user->isAdmin() && !$user->isSuperAdmin())
+        @if(auth()->id() === $user->id && ($writerStatus['can_apply'] ?? false))
             @include('front.profile._writer-modal')
         @endif
     @endauth
