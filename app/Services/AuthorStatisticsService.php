@@ -181,15 +181,75 @@ final class AuthorStatisticsService
             return $sub;
         };
 
+        $commentCountSubquery = \App\Models\Comment::selectRaw('COUNT(*)')
+            ->where('commentable_type', $lwClass)
+            ->whereColumn('commentable_id', DB::raw(
+                "(SELECT literary_works.id FROM literary_works WHERE literary_works.user_id = users.id AND literary_works.status = '{$approvedStatus}' AND literary_works.deleted_at IS NULL" .
+                ($workType ? " AND literary_works.work_type = '{$workType}'" : '') .
+                ' LIMIT 1)'
+            ))
+            ->where('is_approved', true);
+
+        $totalCommentsSubquery = DB::table('comments')
+            ->selectRaw('COUNT(*)')
+            ->whereRaw("commentable_type = '{$lwClass}'")
+            ->whereIn('commentable_id', function ($q) use ($approvedStatus, $workType): void {
+                $q->select('id')
+                    ->from('literary_works')
+                    ->whereColumn('literary_works.user_id', 'users.id')
+                    ->where('literary_works.status', $approvedStatus)
+                    ->whereNull('literary_works.deleted_at');
+                if ($workType) {
+                    $q->where('literary_works.work_type', $workType);
+                }
+            })
+            ->where('is_approved', true)
+            ->whereNull('deleted_at');
+
+        $totalFavoritesSubquery = DB::table('favorites')
+            ->selectRaw('COUNT(*)')
+            ->whereRaw("favoriteable_type = '{$lwClass}'")
+            ->whereIn('favoriteable_id', function ($q) use ($approvedStatus, $workType): void {
+                $q->select('id')
+                    ->from('literary_works')
+                    ->whereColumn('literary_works.user_id', 'users.id')
+                    ->where('literary_works.status', $approvedStatus)
+                    ->whereNull('literary_works.deleted_at');
+                if ($workType) {
+                    $q->where('literary_works.work_type', $workType);
+                }
+            });
+
+        $avgRatingSubquery = DB::table('comments')
+            ->selectRaw('ROUND(AVG(rating), 1)')
+            ->whereRaw("commentable_type = '{$lwClass}'")
+            ->whereIn('commentable_id', function ($q) use ($approvedStatus, $workType): void {
+                $q->select('id')
+                    ->from('literary_works')
+                    ->whereColumn('literary_works.user_id', 'users.id')
+                    ->where('literary_works.status', $approvedStatus)
+                    ->whereNull('literary_works.deleted_at');
+                if ($workType) {
+                    $q->where('literary_works.work_type', $workType);
+                }
+            })
+            ->where('is_approved', true)
+            ->whereNull('deleted_at')
+            ->whereNotNull('rating')
+            ->where('rating', '>', 0);
+
         $query->addSelect([
-            'views_last_7d'  => $buildViewSubquery(7),
-            'views_last_30d' => $buildViewSubquery(30),
-            'views_last_90d' => $buildViewSubquery(90),
+            'views_last_7d'   => $buildViewSubquery(7),
+            'views_last_30d'  => $buildViewSubquery(30),
+            'views_last_90d'  => $buildViewSubquery(90),
+            'total_comments'  => $totalCommentsSubquery,
+            'total_favorites' => $totalFavoritesSubquery,
+            'avg_rating'      => $avgRatingSubquery,
         ]);
 
         $sort = $filters['sort'] ?? 'total_views';
         $dir = $filters['dir'] ?? 'desc';
-        $allowedSorts = ['name', 'approved_works_count', 'total_views', 'views_last_7d', 'views_last_30d', 'views_last_90d', 'created_at'];
+        $allowedSorts = ['name', 'approved_works_count', 'total_views', 'views_last_7d', 'views_last_30d', 'views_last_90d', 'total_comments', 'total_favorites', 'avg_rating', 'created_at'];
         $sort = in_array($sort, $allowedSorts, true) ? $sort : 'total_views';
         $dir = in_array($dir, ['asc', 'desc'], true) ? $dir : 'desc';
 
