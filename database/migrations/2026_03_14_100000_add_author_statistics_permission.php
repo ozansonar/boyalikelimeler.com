@@ -11,6 +11,12 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Restore if soft-deleted
+        Permission::withTrashed()
+            ->where('slug', 'author-statistics.view')
+            ->whereNotNull('deleted_at')
+            ->restore();
+
         Permission::firstOrCreate(
             ['slug' => 'author-statistics.view'],
             ['name' => 'Yazar İstatistiklerini Görüntüle', 'group' => 'author-statistics', 'sort_order' => 55],
