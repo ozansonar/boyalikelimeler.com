@@ -182,14 +182,15 @@ final class AuthorStatisticsService
         ];
 
         $workIds = $approvedWorks->pluck('id');
-        $dailyViews = $this->getAuthorDailyViews($author, 30, $workType);
-        $weeklyViews = $this->getAuthorDailyViews($author, 7, $workType);
+        $allViewData = $this->fetchAllViewData($workIds);
+        $dailyViews = $this->formatDailyViews($allViewData, 30);
+        $weeklyViews = $this->formatDailyViews($allViewData, 7);
         $topWorks = $this->getAuthorTopWorks($author, 10, $workType);
-        $monthlyComparison = $this->getMonthlyComparison($author, $workType);
         $categoryDistribution = $this->getCategoryDistribution($author, $workType);
         $workViewsChart = $this->getWorkViewsChartData($approvedWorks);
-        $weeklyTrend = $this->getWeeklyTrend($workIds);
-        $monthlyTrend = $this->getMonthlyTrend($workIds);
+        $weeklyTrend = $this->buildWeeklyTrend($allViewData);
+        $monthlyTrend = $this->buildMonthlyTrend($allViewData);
+        $monthlyComparison = $this->buildMonthlyComparison($monthlyTrend);
 
         return [
             'author'                => $author,
@@ -250,24 +251,18 @@ final class AuthorStatisticsService
         return $result ? ['name' => $result->name, 'count' => (int) $result->works_count] : [];
     }
 
-    private function getAuthorDailyViews(User $author, int $days, ?string $workType = null): array
+    /**
+     * @return array<string, int>
+     */
+    private function fetchAllViewData(Collection $workIds): array
     {
-        $startDate = Carbon::now()->subDays($days - 1)->toDateString();
-
-        $worksQuery = $author->literaryWorks()
-            ->where('status', LiteraryWorkStatus::Approved);
-
-        if ($workType) {
-            $worksQuery->where('work_type', $workType);
-        }
-
-        $workIds = $worksQuery->pluck('id');
-
         if ($workIds->isEmpty()) {
-            return ['labels' => [], 'values' => []];
+            return [];
         }
 
-        $data = DailyView::where('viewable_type', LiteraryWork::class)
+        $startDate = Carbon::now()->subMonths(5)->startOfMonth()->toDateString();
+
+        return DailyView::where('viewable_type', LiteraryWork::class)
             ->whereIn('viewable_id', $workIds)
             ->where('view_date', '>=', $startDate)
             ->selectRaw('view_date, SUM(view_count) as total')
@@ -275,7 +270,13 @@ final class AuthorStatisticsService
             ->orderBy('view_date')
             ->pluck('total', 'view_date')
             ->toArray();
+    }
 
+    /**
+     * @param array<string, int> $data
+     */
+    private function formatDailyViews(array $data, int $days): array
+    {
         $labels = [];
         $values = [];
         for ($i = $days - 1; $i >= 0; $i--) {
@@ -305,34 +306,13 @@ final class AuthorStatisticsService
             ->get(['id', 'title', 'slug', 'view_count', 'literary_category_id', 'work_type', 'published_at']);
     }
 
-    private function getMonthlyComparison(User $author, ?string $workType = null): array
+    private function buildMonthlyComparison(array $monthlyTrend): array
     {
-        $worksQuery = $author->literaryWorks()
-            ->where('status', LiteraryWorkStatus::Approved);
+        $values = $monthlyTrend['values'] ?? [];
+        $count = count($values);
 
-        if ($workType) {
-            $worksQuery->where('work_type', $workType);
-        }
-
-        $workIds = $worksQuery->pluck('id');
-
-        if ($workIds->isEmpty()) {
-            return ['this_month' => 0, 'last_month' => 0, 'change_percent' => 0];
-        }
-
-        $thisMonthStart = Carbon::now()->startOfMonth()->toDateString();
-        $lastMonthStart = Carbon::now()->subMonth()->startOfMonth()->toDateString();
-        $lastMonthEnd = Carbon::now()->subMonth()->endOfMonth()->toDateString();
-
-        $thisMonth = (int) DailyView::where('viewable_type', LiteraryWork::class)
-            ->whereIn('viewable_id', $workIds)
-            ->where('view_date', '>=', $thisMonthStart)
-            ->sum('view_count');
-
-        $lastMonth = (int) DailyView::where('viewable_type', LiteraryWork::class)
-            ->whereIn('viewable_id', $workIds)
-            ->whereBetween('view_date', [$lastMonthStart, $lastMonthEnd])
-            ->sum('view_count');
+        $thisMonth = $count >= 1 ? (int) $values[$count - 1] : 0;
+        $lastMonth = $count >= 2 ? (int) $values[$count - 2] : 0;
 
         $changePercent = $lastMonth > 0
             ? round((($thisMonth - $lastMonth) / $lastMonth) * 100, 1)
@@ -362,51 +342,58 @@ final class AuthorStatisticsService
             ->get();
     }
 
-    private function getWeeklyTrend(Collection $workIds): array
+    /**
+     * @param array<string, int> $viewData
+     */
+    private function buildWeeklyTrend(array $viewData): array
     {
-        $labels = [];
-        $values = [];
-
-        if ($workIds->isEmpty()) {
+        if (empty($viewData)) {
             return ['labels' => array_fill(0, 4, '-'), 'values' => array_fill(0, 4, 0)];
         }
 
+        $labels = [];
+        $values = [];
         for ($i = 3; $i >= 0; $i--) {
-            $weekStart = Carbon::now()->subWeeks($i)->startOfWeek()->toDateString();
-            $weekEnd = Carbon::now()->subWeeks($i)->endOfWeek()->toDateString();
+            $ws = Carbon::now()->subWeeks($i)->startOfWeek();
+            $we = Carbon::now()->subWeeks($i)->endOfWeek();
+            $labels[] = $ws->format('d M') . ' – ' . $we->format('d M');
 
-            $total = (int) DailyView::where('viewable_type', LiteraryWork::class)
-                ->whereIn('viewable_id', $workIds)
-                ->whereBetween('view_date', [$weekStart, $weekEnd])
-                ->sum('view_count');
-
-            $labels[] = Carbon::parse($weekStart)->format('d M') . ' – ' . Carbon::parse($weekEnd)->format('d M');
-            $values[] = $total;
+            $weekTotal = 0;
+            $cursor = $ws->copy();
+            while ($cursor->lte($we)) {
+                $weekTotal += (int) ($viewData[$cursor->toDateString()] ?? 0);
+                $cursor->addDay();
+            }
+            $values[] = $weekTotal;
         }
 
         return ['labels' => $labels, 'values' => $values];
     }
 
-    private function getMonthlyTrend(Collection $workIds): array
+    /**
+     * @param array<string, int> $viewData
+     */
+    private function buildMonthlyTrend(array $viewData): array
     {
-        $labels = [];
-        $values = [];
-
-        if ($workIds->isEmpty()) {
+        if (empty($viewData)) {
             return ['labels' => array_fill(0, 6, '-'), 'values' => array_fill(0, 6, 0)];
         }
 
+        $labels = [];
+        $values = [];
         for ($i = 5; $i >= 0; $i--) {
-            $monthStart = Carbon::now()->subMonths($i)->startOfMonth()->toDateString();
-            $monthEnd = Carbon::now()->subMonths($i)->endOfMonth()->toDateString();
+            $month = Carbon::now()->subMonths($i);
+            $ms = $month->copy()->startOfMonth();
+            $me = $month->copy()->endOfMonth();
+            $labels[] = $month->translatedFormat('M Y');
 
-            $total = (int) DailyView::where('viewable_type', LiteraryWork::class)
-                ->whereIn('viewable_id', $workIds)
-                ->whereBetween('view_date', [$monthStart, $monthEnd])
-                ->sum('view_count');
-
-            $labels[] = Carbon::now()->subMonths($i)->translatedFormat('M Y');
-            $values[] = $total;
+            $monthTotal = 0;
+            $cursor = $ms->copy();
+            while ($cursor->lte($me)) {
+                $monthTotal += (int) ($viewData[$cursor->toDateString()] ?? 0);
+                $cursor->addDay();
+            }
+            $values[] = $monthTotal;
         }
 
         return ['labels' => $labels, 'values' => $values];
