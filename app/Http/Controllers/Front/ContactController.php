@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\ContactStoreRequest;
 use App\Services\ContactService;
+use App\Services\SettingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
@@ -14,11 +15,14 @@ final class ContactController extends Controller
 {
     public function __construct(
         private readonly ContactService $contactService,
+        private readonly SettingService $settingService,
     ) {}
 
     public function show(): View
     {
-        return view('front.contact');
+        return view('front.contact', [
+            'socialLinks' => $this->settingService->getGroup('social'),
+        ]);
     }
 
     public function store(ContactStoreRequest $request): JsonResponse
