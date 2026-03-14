@@ -30,9 +30,23 @@
                 <p class="page-subtitle mb-0">{{ '@' . $author->username }} &middot; Üyelik: {{ $author->created_at?->translatedFormat('d M Y') }}</p>
             </div>
         </div>
-        <a href="{{ route('admin.author-statistics.index') }}" class="btn-glass">
+        <a href="{{ route('admin.author-statistics.index', array_filter(['work_type' => $workType ?? null])) }}" class="btn-glass">
             <i class="bi bi-arrow-left"></i> Listeye Dön
         </a>
+    </div>
+
+    <!-- Work Type Toggle -->
+    <div class="cl-status-tabs mb-4" data-aos="fade-up">
+        <a href="{{ route('admin.author-statistics.show', $author) }}" class="cl-status-tab {{ empty($workType) ? 'active' : '' }}">
+            <i class="bi bi-grid"></i>
+            <span>Tümü</span>
+        </a>
+        @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+            <a href="{{ route('admin.author-statistics.show', array_merge(['user' => $author->id], ['work_type' => $type->value])) }}" class="cl-status-tab {{ ($workType ?? '') === $type->value ? 'active' : '' }}">
+                <i class="bi {{ $type->icon() }}"></i>
+                <span>{{ $type->label() }}</span>
+            </a>
+        @endforeach
     </div>
 
     <!-- KPI Cards - Row 1: Works & Views -->

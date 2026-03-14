@@ -124,16 +124,34 @@ final class AuthorStatisticsService
     /**
      * @return array{author: User, work_stats: array, daily_views: array, top_works: Collection, monthly_comparison: array}
      */
-    public function getAuthorDetail(User $author): array
+    public function getAuthorDetail(User $author, ?string $workType = null): array
     {
+        $approvedFilter = fn ($q) => $workType
+            ? $q->where('status', LiteraryWorkStatus::Approved)->where('work_type', $workType)
+            : $q->where('status', LiteraryWorkStatus::Approved);
+
+        $pendingFilter = fn ($q) => $workType
+            ? $q->where('status', LiteraryWorkStatus::Pending)->where('work_type', $workType)
+            : $q->where('status', LiteraryWorkStatus::Pending);
+
+        $totalFilter = fn ($q) => $workType
+            ? $q->where('work_type', $workType)
+            : $q;
+
         $author->loadCount([
-            'literaryWorks as total_works_count',
-            'literaryWorks as approved_works_count' => fn ($q) => $q->where('status', LiteraryWorkStatus::Approved),
-            'literaryWorks as pending_works_count' => fn ($q) => $q->where('status', LiteraryWorkStatus::Pending),
+            'literaryWorks as total_works_count' => $totalFilter,
+            'literaryWorks as approved_works_count' => $approvedFilter,
+            'literaryWorks as pending_works_count' => $pendingFilter,
         ]);
 
-        $approvedWorks = $author->literaryWorks()
-            ->where('status', LiteraryWorkStatus::Approved)
+        $approvedWorksQuery = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved);
+
+        if ($workType) {
+            $approvedWorksQuery->where('work_type', $workType);
+        }
+
+        $approvedWorks = $approvedWorksQuery
             ->withCount(['approvedComments', 'favorites'])
             ->get();
 
@@ -142,11 +160,15 @@ final class AuthorStatisticsService
         $totalFavorites = (int) $approvedWorks->sum('favorites_count');
         $avgViewsPerWork = $approvedWorks->count() > 0 ? (int) round($totalViews / $approvedWorks->count()) : 0;
 
-        $firstPublished = $author->literaryWorks()
+        $firstPublishedQuery = $author->literaryWorks()
             ->where('status', LiteraryWorkStatus::Approved)
-            ->whereNotNull('published_at')
-            ->orderBy('published_at')
-            ->value('published_at');
+            ->whereNotNull('published_at');
+
+        if ($workType) {
+            $firstPublishedQuery->where('work_type', $workType);
+        }
+
+        $firstPublished = $firstPublishedQuery->orderBy('published_at')->value('published_at');
 
         $workStats = [
             'total_works'       => $author->total_works_count,
@@ -160,11 +182,11 @@ final class AuthorStatisticsService
         ];
 
         $workIds = $approvedWorks->pluck('id');
-        $dailyViews = $this->getAuthorDailyViews($author, 30);
-        $weeklyViews = $this->getAuthorDailyViews($author, 7);
-        $topWorks = $this->getAuthorTopWorks($author, 10);
-        $monthlyComparison = $this->getMonthlyComparison($author);
-        $categoryDistribution = $this->getCategoryDistribution($author);
+        $dailyViews = $this->getAuthorDailyViews($author, 30, $workType);
+        $weeklyViews = $this->getAuthorDailyViews($author, 7, $workType);
+        $topWorks = $this->getAuthorTopWorks($author, 10, $workType);
+        $monthlyComparison = $this->getMonthlyComparison($author, $workType);
+        $categoryDistribution = $this->getCategoryDistribution($author, $workType);
         $workViewsChart = $this->getWorkViewsChartData($approvedWorks);
         $weeklyTrend = $this->getWeeklyTrend($workIds);
         $monthlyTrend = $this->getMonthlyTrend($workIds);
@@ -228,13 +250,18 @@ final class AuthorStatisticsService
         return $result ? ['name' => $result->name, 'count' => (int) $result->works_count] : [];
     }
 
-    private function getAuthorDailyViews(User $author, int $days): array
+    private function getAuthorDailyViews(User $author, int $days, ?string $workType = null): array
     {
         $startDate = Carbon::now()->subDays($days - 1)->toDateString();
 
-        $workIds = $author->literaryWorks()
-            ->where('status', LiteraryWorkStatus::Approved)
-            ->pluck('id');
+        $worksQuery = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved);
+
+        if ($workType) {
+            $worksQuery->where('work_type', $workType);
+        }
+
+        $workIds = $worksQuery->pluck('id');
 
         if ($workIds->isEmpty()) {
             return ['labels' => [], 'values' => []];
@@ -261,23 +288,33 @@ final class AuthorStatisticsService
         return ['labels' => $labels, 'values' => $values];
     }
 
-    private function getAuthorTopWorks(User $author, int $limit): Collection
+    private function getAuthorTopWorks(User $author, int $limit, ?string $workType = null): Collection
     {
-        return $author->literaryWorks()
+        $query = $author->literaryWorks()
             ->with('category:id,name')
             ->where('status', LiteraryWorkStatus::Approved)
             ->withCount('approvedComments')
-            ->withCount('favorites')
-            ->orderByDesc('view_count')
+            ->withCount('favorites');
+
+        if ($workType) {
+            $query->where('work_type', $workType);
+        }
+
+        return $query->orderByDesc('view_count')
             ->limit($limit)
             ->get(['id', 'title', 'slug', 'view_count', 'literary_category_id', 'work_type', 'published_at']);
     }
 
-    private function getMonthlyComparison(User $author): array
+    private function getMonthlyComparison(User $author, ?string $workType = null): array
     {
-        $workIds = $author->literaryWorks()
-            ->where('status', LiteraryWorkStatus::Approved)
-            ->pluck('id');
+        $worksQuery = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved);
+
+        if ($workType) {
+            $worksQuery->where('work_type', $workType);
+        }
+
+        $workIds = $worksQuery->pluck('id');
 
         if ($workIds->isEmpty()) {
             return ['this_month' => 0, 'last_month' => 0, 'change_percent' => 0];
@@ -308,10 +345,16 @@ final class AuthorStatisticsService
         ];
     }
 
-    private function getCategoryDistribution(User $author): Collection
+    private function getCategoryDistribution(User $author, ?string $workType = null): Collection
     {
-        return $author->literaryWorks()
-            ->where('status', LiteraryWorkStatus::Approved)
+        $query = $author->literaryWorks()
+            ->where('status', LiteraryWorkStatus::Approved);
+
+        if ($workType) {
+            $query->where('literary_works.work_type', $workType);
+        }
+
+        return $query
             ->join('literary_categories', 'literary_works.literary_category_id', '=', 'literary_categories.id')
             ->select('literary_categories.name', DB::raw('COUNT(*) as count'), DB::raw('SUM(literary_works.view_count) as total_views'))
             ->groupBy('literary_categories.id', 'literary_categories.name')

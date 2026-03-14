@@ -32,9 +32,11 @@ class AuthorStatisticsController extends Controller
         ]);
     }
 
-    public function show(User $user): View
+    public function show(Request $request, User $user): View
     {
-        $data = $this->statisticsService->getAuthorDetail($user);
+        $workType = $request->input('work_type');
+        $data = $this->statisticsService->getAuthorDetail($user, $workType);
+        $data['workType'] = $workType;
 
         $catColors = ['#14b8a6','#3b82f6','#f97316','#a855f7','#22c55e','#ef4444','#eab308','#ec4899'];
 
