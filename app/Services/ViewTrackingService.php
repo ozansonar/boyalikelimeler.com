@@ -56,8 +56,8 @@ class ViewTrackingService
         }
 
         // Cache until end of day (max 24h)
-        $secondsUntilMidnight = now()->endOfDay()->diffInSeconds(now());
-        Cache::put($cacheKey, true, (int) $secondsUntilMidnight);
+        $secondsUntilMidnight = (int) now()->diffInSeconds(now()->endOfDay());
+        Cache::put($cacheKey, true, max($secondsUntilMidnight, 60));
 
         return true;
     }
