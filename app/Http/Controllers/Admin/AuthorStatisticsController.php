@@ -22,11 +22,12 @@ class AuthorStatisticsController extends Controller
             ? (int) $request->input('per_page')
             : 10;
 
-        $filters = $request->only(['search', 'sort', 'dir', 'work_type']);
+        $filters = $request->only(['search', 'sort', 'dir', 'work_type', 'min_works', 'joined', 'activity']);
 
         $stats = $this->statisticsService->getSummaryStats($filters['work_type'] ?? null);
 
-        $hasExtraFilters = !empty($filters['search']);
+        $hasExtraFilters = !empty($filters['search']) || !empty($filters['min_works'])
+            || !empty($filters['joined']) || !empty($filters['activity']);
 
         $authors = $this->statisticsService->paginateAuthors(
             $perPage,
