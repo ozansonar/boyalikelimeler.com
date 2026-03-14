@@ -16,6 +16,20 @@
     <x-admin.page-header title="Yazar İstatistikleri" subtitle="Yazarların eser ve okunma performans analizleri">
     </x-admin.page-header>
 
+    <!-- Work Type Toggle -->
+    <div class="cl-status-tabs mb-4" data-aos="fade-up">
+        <a href="{{ route('admin.author-statistics.index', request()->except(['work_type', 'page'])) }}" class="cl-status-tab {{ empty($filters['work_type']) ? 'active' : '' }}">
+            <i class="bi bi-grid"></i>
+            <span>Tümü</span>
+        </a>
+        @foreach(\App\Enums\LiteraryWorkType::cases() as $type)
+            <a href="{{ route('admin.author-statistics.index', array_merge(request()->except('page'), ['work_type' => $type->value])) }}" class="cl-status-tab {{ ($filters['work_type'] ?? '') === $type->value ? 'active' : '' }}">
+                <i class="bi {{ $type->icon() }}"></i>
+                <span>{{ $type->label() }}</span>
+            </a>
+        @endforeach
+    </div>
+
     <!-- KPI Cards -->
     <div class="row g-4 mb-4">
         <div class="col-xxl-3 col-xl-6 col-sm-6" data-aos="fade-up" data-aos-delay="0">
@@ -68,6 +82,9 @@
     <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="150">
         <div class="card-body-custom">
             <form method="GET" action="{{ route('admin.author-statistics.index') }}" class="usr-toolbar">
+                @if(!empty($filters['work_type']))
+                    <input type="hidden" name="work_type" value="{{ $filters['work_type'] }}">
+                @endif
                 <div class="usr-search">
                     <i class="bi bi-search"></i>
                     <input type="text" name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Yazar adı veya kullanıcı adı ile ara...">
@@ -84,7 +101,7 @@
                 <div class="usr-toolbar-actions">
                     <button type="submit" class="btn-glass"><i class="bi bi-funnel me-1"></i>Filtrele</button>
                     @if(!empty($filters['search']))
-                        <a href="{{ route('admin.author-statistics.index') }}" class="btn-glass"><i class="bi bi-x-lg me-1"></i>Temizle</a>
+                        <a href="{{ route('admin.author-statistics.index', array_filter(['work_type' => $filters['work_type'] ?? null])) }}" class="btn-glass"><i class="bi bi-x-lg me-1"></i>Temizle</a>
                     @endif
                 </div>
             </form>

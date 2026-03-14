@@ -71,9 +71,6 @@
 <body>
     <div class="bk-loader" id="bkLoader"><div class="bk-loader__spinner"></div></div>
 
-    <!-- Skip Link -->
-    <a class="skip-link visually-hidden-focusable" href="#main">İçeriğe atla</a>
-
     <!-- =======================================================
          NAVBAR
     ======================================================= -->
