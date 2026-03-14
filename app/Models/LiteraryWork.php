@@ -108,6 +108,8 @@ class LiteraryWork extends Model
         return $this->morphMany(Favorite::class, 'favoriteable');
     }
 
+    private ?bool $isFavoritedCache = null;
+
     public function isFavoritedBy(?int $userId = null): bool
     {
         $userId ??= Auth::id();
@@ -116,7 +118,7 @@ class LiteraryWork extends Model
             return false;
         }
 
-        return $this->favorites()->where('user_id', $userId)->exists();
+        return $this->isFavoritedCache ??= $this->favorites()->where('user_id', $userId)->exists();
     }
 
     public function readingTime(): int
