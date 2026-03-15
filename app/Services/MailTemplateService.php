@@ -151,6 +151,48 @@ final class MailTemplateService
                     ['key' => '{admin_url}', 'label' => 'Admin eser linki'],
                 ],
             ],
+            'writer_application_received' => [
+                'mailable_class' => 'App\Mail\WriterApplicationReceivedMail',
+                'subject'        => 'Yazar Başvurunuz Alındı — Boyalı Kelimeler',
+                'body'           => '<h1>Yazar Başvurunuz Alındı</h1><p>Merhaba <strong>{user_name}</strong>,</p><p>Yazar başvurunuz başarıyla alınmıştır. Editör ekibimiz başvurunuzu en kısa sürede değerlendirecektir.</p><p><strong>Başvuru Tarihi:</strong> {submit_date}</p><p>Değerlendirme süreci tamamlandığında size e-posta ile bilgi verilecektir. Bu süre genellikle 3–5 iş gününü kapsamaktadır.</p><p>Saygılarımızla,<br>Boyalı Kelimeler</p>',
+                'description'    => 'Kullanıcıya yazar başvurusu alındı bildirimi',
+                'variables'      => [
+                    ['key' => '{user_name}', 'label' => 'Kullanıcı adı'],
+                    ['key' => '{submit_date}', 'label' => 'Başvuru tarihi'],
+                ],
+            ],
+            'writer_application_submitted' => [
+                'mailable_class' => 'App\Mail\WriterApplicationSubmittedMail',
+                'subject'        => 'Yeni Yazar Başvurusu — Boyalı Kelimeler',
+                'body'           => '<h1>Yeni Yazar Başvurusu</h1><p>Merhaba,</p><p><strong>{user_name}</strong> ({user_email}) yeni bir yazar başvurusu yaptı ve değerlendirmenizi bekliyor.</p><p><strong>Başvuru Tarihi:</strong> {submit_date}</p><p><a href="{admin_url}" class="button">Başvuruyu İncele</a></p><p>Boyalı Kelimeler Sistem Bildirimi</p>',
+                'description'    => 'Admin bildirimi: Yeni yazar başvurusu',
+                'variables'      => [
+                    ['key' => '{user_name}', 'label' => 'Başvuran kullanıcı adı'],
+                    ['key' => '{user_email}', 'label' => 'Başvuran e-posta'],
+                    ['key' => '{submit_date}', 'label' => 'Başvuru tarihi'],
+                    ['key' => '{admin_url}', 'label' => 'Admin başvuru detay linki'],
+                ],
+            ],
+            'writer_application_approved' => [
+                'mailable_class' => 'App\Mail\WriterApplicationApprovedMail',
+                'subject'        => 'Yazar Başvurunuz Onaylandı — Boyalı Kelimeler',
+                'body'           => '<h1>Tebrikler! Yazar Olarak Kabul Edildiniz</h1><p>Merhaba <strong>{user_name}</strong>,</p><p>Yazar başvurunuz editör ekibimiz tarafından değerlendirilmiş ve <strong>onaylanmıştır</strong>.</p><p>Artık Boyalı Kelimeler platformunda eserlerinizi yayınlayabilir, topluluğumuzla buluşabilir ve yarışmalara katılabilirsiniz.</p><p><a href="{profile_url}" class="button">Profilime Git</a></p><p>Boyalı Kelimeler ailesine hoş geldiniz!</p><p>Saygılarımızla,<br>Boyalı Kelimeler</p>',
+                'description'    => 'Kullanıcıya yazar başvurusu onay bildirimi',
+                'variables'      => [
+                    ['key' => '{user_name}', 'label' => 'Kullanıcı adı'],
+                    ['key' => '{profile_url}', 'label' => 'Profil sayfası linki'],
+                ],
+            ],
+            'writer_application_rejected' => [
+                'mailable_class' => 'App\Mail\WriterApplicationRejectedMail',
+                'subject'        => 'Yazar Başvurunuz Hakkında — Boyalı Kelimeler',
+                'body'           => '<h1>Yazar Başvurunuz Hakkında</h1><p>Merhaba <strong>{user_name}</strong>,</p><p>Yazar başvurunuz editör ekibimiz tarafından değerlendirilmiştir. Maalesef başvurunuz şu an için uygun bulunamamıştır.</p><p><strong>Değerlendirme Notu:</strong></p><blockquote>{admin_note}</blockquote><p>30 gün sonra tekrar başvurabilirsiniz. Başvurunuzu geliştirmek için yukarıdaki değerlendirme notunu dikkate almanızı öneririz.</p><p>Saygılarımızla,<br>Boyalı Kelimeler</p>',
+                'description'    => 'Kullanıcıya yazar başvurusu red bildirimi',
+                'variables'      => [
+                    ['key' => '{user_name}', 'label' => 'Kullanıcı adı'],
+                    ['key' => '{admin_note}', 'label' => 'Red gerekçesi'],
+                ],
+            ],
         ];
     }
 
