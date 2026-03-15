@@ -68,10 +68,28 @@
             if (data.success) {
                 var bsModal = bootstrap.Modal.getInstance(modal);
                 if (bsModal) bsModal.hide();
+
+                var successMsg = data.message || 'Başvurunuz başarıyla gönderildi!';
                 if (window.BkModal) {
-                    window.BkModal.success(data.message || 'Başvurunuz başarıyla gönderildi!');
+                    window.BkModal.success(successMsg);
+
+                    /* Reload after user clicks OK or after 5 seconds */
+                    var reloaded = false;
+                    function doReload() {
+                        if (reloaded) return;
+                        reloaded = true;
+                        location.reload();
+                    }
+
+                    var gmodalBtn = document.getElementById('gmodalBtn');
+                    var gmodalClose = document.getElementById('gmodalClose');
+                    if (gmodalBtn) gmodalBtn.addEventListener('click', doReload);
+                    if (gmodalClose) gmodalClose.addEventListener('click', doReload);
+                    setTimeout(doReload, 5000);
+                } else {
+                    alert(successMsg);
+                    location.reload();
                 }
-                setTimeout(function () { location.reload(); }, 2000);
             } else {
                 if (window.BkModal) window.BkModal.danger(data.message || 'Bir hata oluştu.');
                 btnSubmit.disabled = false;
