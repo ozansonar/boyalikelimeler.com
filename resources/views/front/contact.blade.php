@@ -354,5 +354,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/contact.js') }}"></script>
+    <script src="{{ asset('js/contact.js') }}?v={{ filemtime(public_path('js/contact.js')) }}"></script>
 @endpush

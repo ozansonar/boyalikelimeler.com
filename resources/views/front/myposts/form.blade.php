@@ -270,10 +270,10 @@
     <!-- TinyMCE 7 -->
     <script src="{{ asset('vendor/tinymce/7.6.1/tinymce.min.js') }}"></script>
     <!-- Editor Image Gallery JS (must load before write-post.js) -->
-    <script src="{{ asset('js/editor-image-gallery.js') }}"></script>
+    <script src="{{ asset('js/editor-image-gallery.js') }}?v={{ filemtime(public_path('js/editor-image-gallery.js')) }}"></script>
     <!-- Write Post JS -->
-    <script src="{{ asset('js/write-post.js') }}"></script>
+    <script src="{{ asset('js/write-post.js') }}?v={{ filemtime(public_path('js/write-post.js')) }}"></script>
     @if($work?->status === \App\Enums\LiteraryWorkStatus::Approved)
-        <script src="{{ asset('js/myposts.js') }}"></script>
+        <script src="{{ asset('js/myposts.js') }}?v={{ filemtime(public_path('js/myposts.js')) }}"></script>
     @endif
 @endpush

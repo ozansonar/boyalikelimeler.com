@@ -154,5 +154,5 @@
 <script src="{{ asset('vendor/jquery/3.7.1/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery-validation-engine/2.6.4/jquery.validationEngine-tr.js') }}"></script>
 <script src="{{ asset('vendor/jquery-validation-engine/2.6.4/jquery.validationEngine.min.js') }}"></script>
-<script src="{{ asset('js/comment.js') }}"></script>
+<script src="{{ asset('js/comment.js') }}?v={{ filemtime(public_path('js/comment.js')) }}"></script>
 @endpush
