@@ -337,5 +337,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/myposts.js') }}"></script>
+    <script src="{{ asset('js/myposts.js') }}?v={{ filemtime(public_path('js/myposts.js')) }}"></script>
 @endpush
