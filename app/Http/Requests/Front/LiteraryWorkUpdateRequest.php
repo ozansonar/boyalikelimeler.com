@@ -12,7 +12,9 @@ final class LiteraryWorkUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->isYazar()
+            || auth()->user()->isSuperAdmin()
+            || auth()->user()->isAdmin();
     }
 
     /**
