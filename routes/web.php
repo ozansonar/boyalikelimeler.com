@@ -105,21 +105,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Favorite Toggle (AJAX)
     Route::post('/favori/toggle', [FavoriteController::class, 'toggle'])->name('favorite.toggle');
 
-    // Editor Image Upload (TinyMCE)
-    Route::get('/editor/images', [EditorImageController::class, 'index'])->name('editor.images.index');
-    Route::post('/editor/images', [EditorImageController::class, 'store'])->name('editor.images.store');
-    Route::delete('/editor/images/{editorImage}', [EditorImageController::class, 'destroy'])->name('editor.images.destroy');
+    // Author-only routes (requires yazar role)
+    Route::middleware('author')->group(function () {
+        // Editor Image Upload (TinyMCE)
+        Route::get('/editor/images', [EditorImageController::class, 'index'])->name('editor.images.index');
+        Route::post('/editor/images', [EditorImageController::class, 'store'])->name('editor.images.store');
+        Route::delete('/editor/images/{editorImage}', [EditorImageController::class, 'destroy'])->name('editor.images.destroy');
 
-    // My Literary Works (Eserlerim)
-    Route::get('/yazilarim', [MyPostController::class, 'index'])->name('myposts.index');
-    Route::get('/yazilarim/{work}', [MyPostController::class, 'show'])->name('myposts.show');
-    Route::get('/yazi-gonder', [MyPostController::class, 'create'])->name('myposts.create');
-    Route::post('/yazi-gonder', [MyPostController::class, 'store'])->name('myposts.store');
-    Route::get('/yazi-duzenle/{work}', [MyPostController::class, 'edit'])->name('myposts.edit');
-    Route::put('/yazi-duzenle/{work}', [MyPostController::class, 'update'])->name('myposts.update');
-    Route::patch('/yazilarim/{work}/yayindan-kaldir', [MyPostController::class, 'unpublish'])->name('myposts.unpublish');
-    Route::patch('/yazilarim/{work}/tekrar-yayinla', [MyPostController::class, 'republish'])->name('myposts.republish');
-    Route::delete('/yazilarim/{work}', [MyPostController::class, 'destroy'])->name('myposts.destroy');
+        // My Literary Works (Eserlerim)
+        Route::get('/yazilarim', [MyPostController::class, 'index'])->name('myposts.index');
+        Route::get('/yazilarim/{work}', [MyPostController::class, 'show'])->name('myposts.show');
+        Route::get('/yazi-gonder', [MyPostController::class, 'create'])->name('myposts.create');
+        Route::post('/yazi-gonder', [MyPostController::class, 'store'])->name('myposts.store');
+        Route::get('/yazi-duzenle/{work}', [MyPostController::class, 'edit'])->name('myposts.edit');
+        Route::put('/yazi-duzenle/{work}', [MyPostController::class, 'update'])->name('myposts.update');
+        Route::patch('/yazilarim/{work}/yayindan-kaldir', [MyPostController::class, 'unpublish'])->name('myposts.unpublish');
+        Route::patch('/yazilarim/{work}/tekrar-yayinla', [MyPostController::class, 'republish'])->name('myposts.republish');
+        Route::delete('/yazilarim/{work}', [MyPostController::class, 'destroy'])->name('myposts.destroy');
+    });
 });
 
 // Admin Routes
