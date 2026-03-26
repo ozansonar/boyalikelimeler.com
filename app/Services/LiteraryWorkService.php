@@ -694,5 +694,11 @@ final class LiteraryWorkService
         Cache::forget('literary_works.front_stats');
         Cache::forget('literary_works.front_stats.written');
         Cache::forget('literary_works.front_stats.visual');
+
+        // HomeService caches
+        Cache::forget('home.latest_written_works');
+        Cache::forget('home.latest_visual_works');
+        Cache::forget('home.popular_works');
+        Cache::forget('home.stats');
     }
 }
