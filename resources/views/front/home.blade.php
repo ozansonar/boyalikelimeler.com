@@ -155,44 +155,8 @@
                                         </a>
                                     </div>
                                 @empty
-                                    <div class="col-md-4">
-                                        <div class="card-bk">
-                                            <div class="card-bk__body">
-                                                <span class="popular-list__category popular-list__category--siir mb-2 d-inline-block">Şiir</span>
-                                                <h4 class="card-bk__title">Bir Avuç Gece</h4>
-                                                <p class="card-bk__text">Karanlığın en koyu yerinde bile bir ışık vardır, yeter ki aramayı bil...</p>
-                                            </div>
-                                            <div class="card-bk__footer">
-                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Erdem Yıldız</span>
-                                                <span class="card-bk__meta"><i class="fa-regular fa-eye me-1"></i>342</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card-bk">
-                                            <div class="card-bk__body">
-                                                <span class="popular-list__category popular-list__category--hikaye mb-2 d-inline-block">Hikaye</span>
-                                                <h4 class="card-bk__title">Sessiz Çığlık</h4>
-                                                <p class="card-bk__text">O gün nehir kenarında oturmuş, geçmişin sesini dinliyordu. Rüzgar...</p>
-                                            </div>
-                                            <div class="card-bk__footer">
-                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Ayşe Kara</span>
-                                                <span class="card-bk__meta"><i class="fa-regular fa-eye me-1"></i>218</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card-bk">
-                                            <div class="card-bk__body">
-                                                <span class="popular-list__category popular-list__category--deneme mb-2 d-inline-block">Deneme</span>
-                                                <h4 class="card-bk__title">Zamanın Kıyısında</h4>
-                                                <p class="card-bk__text">Modern çağın en büyük yanılsaması, zamanın bize ait olduğunu sanm...</p>
-                                            </div>
-                                            <div class="card-bk__footer">
-                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Mehmet Demir</span>
-                                                <span class="card-bk__meta"><i class="fa-regular fa-eye me-1"></i>189</span>
-                                            </div>
-                                        </div>
+                                    <div class="col-12">
+                                        <p class="text-center text-muted">Henüz yayınlanmış yazılı eser bulunmuyor.</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -221,44 +185,8 @@
                                         </a>
                                     </div>
                                 @empty
-                                    <div class="col-md-4">
-                                        <div class="card-bk">
-                                            <div class="card-bk__body text-center py-5">
-                                                <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
-                                                <h4 class="card-bk__title">Mavi Hüzün</h4>
-                                                <p class="card-bk__text">Yağlıboya — 60×80 cm</p>
-                                            </div>
-                                            <div class="card-bk__footer">
-                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Zeynep Ateş</span>
-                                                <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>127</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card-bk">
-                                            <div class="card-bk__body text-center py-5">
-                                                <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
-                                                <h4 class="card-bk__title">Sonbahar Rüyası</h4>
-                                                <p class="card-bk__text">Akrilik — 50×70 cm</p>
-                                            </div>
-                                            <div class="card-bk__footer">
-                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Ali Fırtına</span>
-                                                <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>98</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card-bk">
-                                            <div class="card-bk__body text-center py-5">
-                                                <i class="fa-solid fa-paintbrush fa-3x text-gold mb-3 d-block"></i>
-                                                <h4 class="card-bk__title">Işığın Dansı</h4>
-                                                <p class="card-bk__text">Suluboya — 40×50 cm</p>
-                                            </div>
-                                            <div class="card-bk__footer">
-                                                <span class="card-bk__meta"><i class="fa-regular fa-user me-1"></i>Deniz Çelik</span>
-                                                <span class="card-bk__meta"><i class="fa-regular fa-heart me-1"></i>85</span>
-                                            </div>
-                                        </div>
+                                    <div class="col-12">
+                                        <p class="text-center text-muted">Henüz yayınlanmış görsel eser bulunmuyor.</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -313,34 +241,7 @@
                                 </div>
                             </a>
                         @empty
-                            <a href="#" class="popular-list__item">
-                                <span class="popular-list__rank">1</span>
-                                <div class="popular-list__content">
-                                    <span class="popular-list__name">Gecenin Şiiri</span>
-                                    <span class="popular-list__category popular-list__category--siir">Şiir</span>
-                                </div>
-                            </a>
-                            <a href="#" class="popular-list__item">
-                                <span class="popular-list__rank">2</span>
-                                <div class="popular-list__content">
-                                    <span class="popular-list__name">Kayıp Rüzgarlar</span>
-                                    <span class="popular-list__category popular-list__category--hikaye">Hikaye</span>
-                                </div>
-                            </a>
-                            <a href="#" class="popular-list__item">
-                                <span class="popular-list__rank">3</span>
-                                <div class="popular-list__content">
-                                    <span class="popular-list__name">Sanatın Anlamı Üzerine</span>
-                                    <span class="popular-list__category popular-list__category--deneme">Deneme</span>
-                                </div>
-                            </a>
-                            <a href="#" class="popular-list__item">
-                                <span class="popular-list__rank">4</span>
-                                <div class="popular-list__content">
-                                    <span class="popular-list__name">Mavi Hüzün Tablosu</span>
-                                    <span class="popular-list__category popular-list__category--resim">Resim</span>
-                                </div>
-                            </a>
+                            <p class="text-center text-muted py-3">Henüz içerik bulunmuyor.</p>
                         @endforelse
                     </div>
 
