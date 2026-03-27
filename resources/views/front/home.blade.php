@@ -156,7 +156,7 @@
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <p class="text-center text-muted">Henüz yayınlanmış yazılı eser bulunmuyor.</p>
+                                        <p class="text-center text-light opacity-50">Henüz yayınlanmış yazılı eser bulunmuyor.</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -186,7 +186,7 @@
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <p class="text-center text-muted">Henüz yayınlanmış görsel eser bulunmuyor.</p>
+                                        <p class="text-center text-light opacity-50">Henüz yayınlanmış görsel eser bulunmuyor.</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -217,7 +217,7 @@
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <p class="text-center text-muted">Henüz onaylanmış soru bulunmuyor.</p>
+                                        <p class="text-center text-light opacity-50">Henüz onaylanmış soru bulunmuyor.</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -241,7 +241,7 @@
                                 </div>
                             </a>
                         @empty
-                            <p class="text-center text-muted py-3">Henüz içerik bulunmuyor.</p>
+                            <p class="text-center text-light opacity-50 py-3">Henüz içerik bulunmuyor.</p>
                         @endforelse
                     </div>
 
