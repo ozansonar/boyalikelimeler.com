@@ -52,7 +52,7 @@
                             <a href="{{ route('admin.menus.edit', $menu) }}" class="btn-glass" title="Düzenle">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <button class="btn-glass" title="Sil" onclick="openDeleteModal({{ $menu->id }}, '{{ addslashes($menu->name) }}')">
+                            <button class="btn-glass" title="Sil" onclick="openDeleteModal({{ $menu->id }}, '{{ addslashes($menu->name) }}', '{{ route('admin.menus.destroy', $menu) }}')">
                                 <i class="bi bi-trash text-danger"></i>
                             </button>
                         </div>

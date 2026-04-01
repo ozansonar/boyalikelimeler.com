@@ -146,7 +146,7 @@
                                             </button>
                                         </form>
                                     @endif
-                                    <button type="button" class="usr-action-btn text-danger" title="Sil" onclick="openDeleteModal({{ $log->id }}, '{{ e($log->subject) }}')">
+                                    <button type="button" class="usr-action-btn text-danger" title="Sil" onclick="openDeleteModal({{ $log->id }}, '{{ e($log->subject) }}', '{{ route('admin.mail-logs.destroy', $log) }}')">
                                         <i class="bi bi-trash3"></i>
                                     </button>
                                 </div>

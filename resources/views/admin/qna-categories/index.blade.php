@@ -89,7 +89,7 @@
                                 <td>
                                     <div class="usr-actions">
                                         <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.qna.categories.edit', $category->id) }}"><i class="bi bi-pencil"></i></a>
-                                        <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $category->id }}, '{{ addslashes($category->name) }}')">
+                                        <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $category->id }}, '{{ addslashes($category->name) }}', '{{ route('admin.qna-categories.destroy', $category) }}')">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>

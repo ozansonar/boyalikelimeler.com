@@ -118,7 +118,7 @@
                                             <a class="usr-action-btn" title="Görüntüle" href="{{ route('page.show', $page->slug) }}" target="_blank"><i class="bi bi-eye"></i></a>
                                         @endif
                                         <a class="usr-action-btn" title="Düzenle" href="{{ route('admin.pages.edit', $page) }}"><i class="bi bi-pencil"></i></a>
-                                        <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $page->id }}, '{{ addslashes($page->title) }}')"><i class="bi bi-trash"></i></button>
+                                        <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $page->id }}, '{{ addslashes($page->title) }}', '{{ route('admin.pages.destroy', $page) }}')"><i class="bi bi-trash"></i></button>
                                     </div>
                                 </td>
                             </tr>

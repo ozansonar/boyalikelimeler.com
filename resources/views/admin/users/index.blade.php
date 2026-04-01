@@ -155,7 +155,7 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                         @if($user->id !== auth()->id())
-                                            <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $user->id }}, '{{ addslashes($user->name) }}')">
+                                            <button class="usr-action-btn danger" title="Sil" onclick="openDeleteModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ route('admin.users.destroy', $user) }}')">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         @endif

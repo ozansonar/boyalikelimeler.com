@@ -521,7 +521,7 @@ function openDeleteModal(id, title, customUrl) {
 
   if (nameEl) nameEl.textContent = title || '';
   if (form) {
-    form.action = customUrl || (window.location.pathname.replace(/\/[^\/]*$/, '') + '/' + id);
+    form.action = customUrl || (window.location.pathname.replace(/\/$/, '') + '/' + id);
   }
 
   if (modal) {
