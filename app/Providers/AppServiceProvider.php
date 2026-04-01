@@ -53,6 +53,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('siteFavicon', ! empty($general['favicon']) ? upload_url($general['favicon']) : null);
 
             $view->with('socialLinks', $settingService->getGroup('social'));
+
+            $seo = $settingService->getGroup('seo');
+            $view->with('googleAnalyticsId', $seo['google_analytics'] ?? null);
+            $view->with('googleSearchConsole', $seo['google_search_console'] ?? null);
         });
 
         View::composer('layouts.admin', function ($view): void {

@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    @if(!empty($googleAnalyticsId))
+    <!-- Google Analytics (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $googleAnalyticsId }}"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ $googleAnalyticsId }}');</script>
+    @endif
+    @if(!empty($googleSearchConsole))
+    <meta name="google-site-verification" content="{{ $googleSearchConsole }}">
+    @endif
     @if($siteFavicon)
         <link rel="icon" type="image/webp" href="{{ $siteFavicon }}">
     @else
