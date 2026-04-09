@@ -26,6 +26,7 @@ class PageUpdateRequest extends FormRequest
             'excerpt'          => 'nullable|string|max:500',
             'body'             => 'required|string',
             'cover_image'      => 'nullable|image|mimes:png,jpg,jpeg,webp|max:1024',
+            'remove_cover'     => 'nullable|boolean',
             'meta_title'       => 'nullable|string|max:70',
             'meta_description' => 'nullable|string|max:170',
             'is_active'              => 'required|boolean',
