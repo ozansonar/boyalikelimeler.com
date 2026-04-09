@@ -92,23 +92,25 @@
                                     @enderror
                                 </div>
                             @endif
-                            <div class="col-12">
-                                <label class="form-label">Puan <span class="text-danger">*</span></label>
-                                <div class="d-flex gap-2">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="rating" id="rating{{ $i }}"
-                                                   value="{{ $i }}" {{ old('rating', $comment->rating) == $i ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="rating{{ $i }}">
-                                                {{ $i }} <i class="bi bi-star-fill text-warning"></i>
-                                            </label>
-                                        </div>
-                                    @endfor
+                            @if($comment->isTopLevel())
+                                <div class="col-12">
+                                    <label class="form-label">Puan <span class="text-danger">*</span></label>
+                                    <div class="d-flex gap-2">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="rating" id="rating{{ $i }}"
+                                                       value="{{ $i }}" {{ old('rating', $comment->rating) == $i ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="rating{{ $i }}">
+                                                    {{ $i }} <i class="bi bi-star-fill text-warning"></i>
+                                                </label>
+                                            </div>
+                                        @endfor
+                                    </div>
+                                    @error('rating')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                @error('rating')
-                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            @endif
                             <div class="col-12">
                                 <label for="body" class="form-label">Yorum <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('body') is-invalid @enderror"

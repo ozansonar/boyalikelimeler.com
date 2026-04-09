@@ -64,6 +64,7 @@ class Post extends Model
     public function approvedComments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable')
+            ->whereNull('parent_id')
             ->where('is_approved', true)
             ->orderByDesc('created_at');
     }

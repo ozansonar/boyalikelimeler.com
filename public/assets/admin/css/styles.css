@@ -24302,6 +24302,30 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
     flex-shrink: 0;
 }
 
+.cmt-admin-star {
+    font-size: 1.1rem;
+}
+
+.cmt-admin-body {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cmt-admin-body-text {
+    white-space: pre-line;
+}
+
+.cmt-admin-parent-ref {
+    background: rgba(168, 85, 247, 0.06);
+    border: 1px solid rgba(168, 85, 247, 0.18);
+}
+
+.usr-status-badge-purple {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
 
 /* =====================================================
    PAGE BOXES (.pb-*)

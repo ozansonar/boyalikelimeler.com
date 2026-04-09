@@ -80,7 +80,7 @@
     @stack('styles')
     <style>.bk-loader{position:fixed;inset:0;z-index:99999;background:#0F0F12;display:flex;align-items:center;justify-content:center;transition:opacity .4s}.bk-loader__spinner{width:40px;height:40px;border:3px solid rgba(212,175,55,.2);border-top-color:#D4AF37;border-radius:50%;animation:bk-spin .7s linear infinite}@keyframes bk-spin{to{transform:rotate(360deg)}}.bk-loader--hidden{opacity:0;pointer-events:none}</style>
 </head>
-<body>
+<body class="@guest has-mobile-auth-bar @endguest">
     <div class="bk-loader" id="bkLoader"><div class="bk-loader__spinner"></div></div>
 
     <!-- =======================================================
@@ -214,6 +214,22 @@
     <main id="main">
         @yield('content')
     </main>
+
+    @guest
+    <!-- =======================================================
+         MOBILE BOTTOM AUTH BAR (guest only)
+    ======================================================= -->
+    <div class="mobile-auth-bar" aria-label="Mobil giriş ve kayıt">
+        <a href="{{ route('login') }}"
+           class="mobile-auth-bar__btn mobile-auth-bar__btn--ghost {{ request()->routeIs('login') ? 'mobile-auth-bar__btn--active' : '' }}">
+            <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş Yap
+        </a>
+        <a href="{{ route('register') }}"
+           class="mobile-auth-bar__btn mobile-auth-bar__btn--primary {{ request()->routeIs('register') ? 'mobile-auth-bar__btn--active' : '' }}">
+            <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
+        </a>
+    </div>
+    @endguest
 
     <!-- =======================================================
          FOOTER
