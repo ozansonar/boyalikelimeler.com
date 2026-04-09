@@ -388,53 +388,83 @@
         let deferredPrompt;
         const installBtn = document.getElementById('installAppBtn');
 
-        // Check if the app is already running in standalone mode (installed)
+        // Detect if device is iOS
+        const isIos = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        };
+
+        // Detect if browser is Chrome on iOS (CriOS)
+        const isIosChrome = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return isIos() && userAgent.includes('crios');
+        };
+
+        // Detect if browser is Safari on iOS
+        const isIosSafari = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return isIos() && userAgent.includes('safari') && !userAgent.includes('crios') && !userAgent.includes('fxios');
+        };
+
+        // Check if app is already installed
         const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
         if (!isAppInstalled) {
-            // Listen for the event that indicates the PWA is installable
-            window.addEventListener('beforeinstallprompt', (e) => {
-                // Prevent the default mini-infobar from appearing on mobile
-                e.preventDefault();
 
-                // Stash the event so it can be triggered later when the user clicks the button
+            // Android & Desktop Chrome logic
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
                 deferredPrompt = e;
 
-                // Update UI to show the install button
                 if (installBtn) {
                     installBtn.style.display = 'block';
+                    installBtn.innerText = 'Install App';
                 }
             });
 
-            // Handle the button click event
+            // iOS Handling logic
+            if (isIos()) {
+                if (installBtn) {
+                    installBtn.style.display = 'block';
+
+                    if (isIosChrome()) {
+                        installBtn.innerText = 'Open in Safari to Install';
+                    } else if (isIosSafari()) {
+                        installBtn.innerText = 'Add to Home Screen';
+                    } else {
+                        installBtn.innerText = 'Install App';
+                    }
+                }
+            }
+
+            // Button click handling
             if (installBtn) {
                 installBtn.addEventListener('click', async () => {
-                    if (!deferredPrompt) {
-                        return;
+
+                    // Android flow
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        deferredPrompt = null;
+                        installBtn.style.display = 'none';
                     }
-
-                    // Show the browser's native installation prompt
-                    deferredPrompt.prompt();
-
-                    // Wait for the user to respond to the prompt
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`User response to the install prompt: ${outcome}`);
-
-                    // We've used the prompt, and can't use it again, so throw it away
-                    deferredPrompt = null;
-
-                    // Hide the button regardless of outcome
-                    installBtn.style.display = 'none';
+                    // iOS Chrome flow
+                    else if (isIosChrome()) {
+                        alert("Apple restrictions require this app to be installed via Safari. Please open this site in the Safari browser.");
+                    }
+                    // iOS Safari flow
+                    else if (isIosSafari()) {
+                        alert("To install: Tap the 'Share' icon at the bottom of Safari, then tap 'Add to Home Screen'.");
+                    }
                 });
             }
 
-            // Listen for successful installation to clean up UI
+            // Cleanup after installation
             window.addEventListener('appinstalled', () => {
                 if (installBtn) {
                     installBtn.style.display = 'none';
                 }
                 deferredPrompt = null;
-                console.log('PWA was successfully installed.');
             });
         }
     </script>
