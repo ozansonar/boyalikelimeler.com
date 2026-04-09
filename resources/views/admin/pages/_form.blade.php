@@ -353,9 +353,20 @@
                     <div class="col-12">
                         <label class="form-label" for="coverInput">Kapak Görseli</label>
                         @if($isEdit && $page->cover_image)
-                            <div class="mb-2">
-                                <img src="/uploads/{{ $page->cover_image }}" alt="" class="img-fluid rounded" loading="lazy" style="max-height:200px">
+                            <div class="page-cover-preview mb-2" id="coverPreviewWrap">
+                                <img src="/uploads/{{ $page->cover_image }}" alt="" class="page-cover-preview__img" loading="lazy">
+                                <button type="button" class="page-cover-preview__remove"
+                                        id="coverRemoveBtn"
+                                        title="Kapak görselini kaldır"
+                                        aria-label="Kapak görselini kaldır">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
                             </div>
+                            <div class="form-check mb-2 d-none" id="coverRemovedNotice">
+                                <i class="bi bi-check-circle text-success me-1"></i>
+                                <span class="small text-muted">Kapak görseli kaldırılacak — kaydetmeyi unutma</span>
+                            </div>
+                            <input type="hidden" name="remove_cover" id="removeCoverFlag" value="0">
                         @endif
                         <input type="file" class="form-control @error('cover_image') is-invalid @enderror"
                                id="coverInput" name="cover_image" accept="image/png,image/jpeg,image/webp">

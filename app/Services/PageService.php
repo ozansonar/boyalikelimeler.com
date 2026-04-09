@@ -88,7 +88,12 @@ final class PageService
 
             if ($coverImage) {
                 $data['cover_image'] = $this->uploadService->replaceImage($coverImage, 'pages', $page->cover_image, $data['title']);
+            } elseif (! empty($data['remove_cover'])) {
+                $this->uploadService->deleteImage($page->cover_image);
+                $data['cover_image'] = null;
             }
+
+            unset($data['remove_cover']);
 
             $page->update($data);
 

@@ -25785,3 +25785,58 @@ body, .sidebar, .top-navbar, .card, .stat-card, .main-content {
   .anl-mini-value { font-size: 0.95rem; }
   .ast-kpi-value-sm { font-size: 1rem !important; }
 }
+
+/* ============================================================
+   Page Cover Preview with Remove Button
+   ============================================================ */
+.page-cover-preview {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.page-cover-preview__img {
+    display: block;
+    max-width: 100%;
+    max-height: 220px;
+    height: auto;
+    border-radius: 11px;
+}
+
+.page-cover-preview__remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    background: rgba(220, 53, 69, 0.92);
+    color: #fff;
+    font-size: 0.875rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    z-index: 2;
+}
+
+.page-cover-preview__remove:hover,
+.page-cover-preview__remove:focus-visible {
+    background: #dc3545;
+    border-color: #fff;
+    transform: scale(1.08);
+    outline: none;
+}
+
+.page-cover-preview__remove:active {
+    transform: scale(0.96);
+}
