@@ -23,8 +23,13 @@
     <meta name="description" content="@yield('meta_description', 'Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı, fırçaların konuştuğu bir sanat hareketi.')">
     <link rel="canonical" href="@yield('canonical', url()->current())">
 
+    <!-- PWA -->
     <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#0F0F12">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Boyalı Kelimeler">
     <link rel="apple-touch-icon" href="{{ asset('icons/icon-192x192.png') }}">
 
     <!-- Robots -->
@@ -83,32 +88,6 @@
 
     @stack('styles')
     <style>.bk-loader{position:fixed;inset:0;z-index:99999;background:#0F0F12;display:flex;align-items:center;justify-content:center;transition:opacity .4s}.bk-loader__spinner{width:40px;height:40px;border:3px solid rgba(212,175,55,.2);border-top-color:#D4AF37;border-radius:50%;animation:bk-spin .7s linear infinite}@keyframes bk-spin{to{transform:rotate(360deg)}}.bk-loader--hidden{opacity:0;pointer-events:none}</style>
-    <style>/* Styling for the PWA install button specifically on mobile devices */
-        @media (max-width: 768px) {
-            #installAppBtn {
-                position: fixed;
-                /* Position at the bottom, accounting for modern smartphone safe areas */
-                bottom: calc(20px + env(safe-area-inset-bottom));
-                left: 50%;
-                /* Center the button precisely */
-                transform: translateX(-50%);
-                /* Ensure it stays above other content */
-                z-index: 9999;
-
-                /* Modern aesthetic styling */
-                background-color: #000000;
-                color: #ffffff;
-                padding: 12px 24px;
-                border: none;
-                border-radius: 50px; /* Pill shape */
-                font-size: 16px;
-                font-weight: bold;
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                white-space: nowrap;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="bk-loader" id="bkLoader"><div class="bk-loader__spinner"></div></div>
@@ -355,9 +334,8 @@
         </div>
     </footer>
 
-    <button id="installAppBtn" style="display: none;" class="your-custom-button-class">
-        Uygulama İndir
-    </button>
+    <!-- PWA Install Prompt -->
+    @include('partials.front.pwa-install')
 
     <!-- Global Status Modal -->
     @include('partials.front.status-modal')
@@ -370,103 +348,9 @@
     <script src="{{ asset('vendor/aos/2.3.4/aos.js') }}" defer></script>
     <!-- Custom JS -->
     <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}" defer></script>
+    <!-- PWA Install Manager -->
+    <script src="{{ asset('js/pwa.js') }}?v={{ filemtime(public_path('js/pwa.js')) }}" defer></script>
     @stack('scripts')
     <script>window.addEventListener('load',function(){var l=document.getElementById('bkLoader');if(l){l.classList.add('bk-loader--hidden');l.addEventListener('transitionend',function(){l.remove()})}})</script>
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((registration) => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    }, (error) => {
-                        console.log('ServiceWorker registration failed: ', error);
-                    });
-            });
-        }
-
-        let deferredPrompt;
-        const installBtn = document.getElementById('installAppBtn');
-
-        // Detect if device is iOS
-        const isIos = () => {
-            const userAgent = window.navigator.userAgent.toLowerCase();
-            return /iphone|ipad|ipod/.test(userAgent);
-        };
-
-        // Detect if browser is Chrome on iOS (CriOS)
-        const isIosChrome = () => {
-            const userAgent = window.navigator.userAgent.toLowerCase();
-            return isIos() && userAgent.includes('crios');
-        };
-
-        // Detect if browser is Safari on iOS
-        const isIosSafari = () => {
-            const userAgent = window.navigator.userAgent.toLowerCase();
-            return isIos() && userAgent.includes('safari') && !userAgent.includes('crios') && !userAgent.includes('fxios');
-        };
-
-        // Check if app is already installed
-        const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
-        if (!isAppInstalled) {
-
-            // Android & Desktop Chrome logic
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-
-                if (installBtn) {
-                    installBtn.style.display = 'block';
-                    installBtn.innerText = 'Install App';
-                }
-            });
-
-            // iOS Handling logic
-            if (isIos()) {
-                if (installBtn) {
-                    installBtn.style.display = 'block';
-
-                    if (isIosChrome()) {
-                        installBtn.innerText = 'Open in Safari to Install';
-                    } else if (isIosSafari()) {
-                        installBtn.innerText = 'Add to Home Screen';
-                    } else {
-                        installBtn.innerText = 'Install App';
-                    }
-                }
-            }
-
-            // Button click handling
-            if (installBtn) {
-                installBtn.addEventListener('click', async () => {
-
-                    // Android flow
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
-                        deferredPrompt = null;
-                        installBtn.style.display = 'none';
-                    }
-                    // iOS Chrome flow
-                    else if (isIosChrome()) {
-                        alert("Apple restrictions require this app to be installed via Safari. Please open this site in the Safari browser.");
-                    }
-                    // iOS Safari flow
-                    else if (isIosSafari()) {
-                        alert("To install: Tap the 'Share' icon at the bottom of Safari, then tap 'Add to Home Screen'.");
-                    }
-                });
-            }
-
-            // Cleanup after installation
-            window.addEventListener('appinstalled', () => {
-                if (installBtn) {
-                    installBtn.style.display = 'none';
-                }
-                deferredPrompt = null;
-            });
-        }
-    </script>
 </body>
 </html>

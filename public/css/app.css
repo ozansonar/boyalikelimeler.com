@@ -15562,3 +15562,368 @@ a.page-box-card:hover .page-box-card__link-hint {
         max-width: 100%;
     }
 }
+
+/* ============================================================
+   PWA INSTALL PROMPT
+   ============================================================ */
+
+/* Floating install card (Android/Desktop/iOS) */
+.pwa-install {
+    position: fixed;
+    left: 50%;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%) translateY(120%);
+    z-index: 1080;
+    width: min(480px, calc(100% - 24px));
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 360ms cubic-bezier(.2, .9, .3, 1), opacity 260ms ease;
+}
+
+.pwa-install[hidden] {
+    display: none !important;
+}
+
+.pwa-install--visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pwa-install__card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px 14px 14px;
+    background: linear-gradient(145deg, #1A1A1E 0%, #222226 100%);
+    color: var(--color-white);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 16px;
+    box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(212, 175, 55, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.pwa-install__icon {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--color-black-deep);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pwa-install__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pwa-install__body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.pwa-install__title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin: 0 0 2px;
+    line-height: 1.2;
+}
+
+.pwa-install__text {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: var(--color-silver-light);
+    margin: 0;
+    line-height: 1.35;
+}
+
+.pwa-install__btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 9px 16px;
+    background: var(--color-gold);
+    color: var(--color-black-deep);
+    border: none;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+    box-shadow: 0 6px 16px -4px rgba(212, 175, 55, 0.45);
+}
+
+.pwa-install__btn:hover,
+.pwa-install__btn:focus-visible {
+    background: var(--color-gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -4px rgba(212, 175, 55, 0.6);
+    outline: none;
+}
+
+.pwa-install__btn:active {
+    transform: translateY(0);
+}
+
+.pwa-install__close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    background: rgba(15, 15, 18, 0.6);
+    color: var(--color-silver-light);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-base), border-color var(--transition-base), background var(--transition-base);
+}
+
+.pwa-install__close:hover,
+.pwa-install__close:focus-visible {
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+    background: rgba(15, 15, 18, 0.9);
+    outline: none;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+    .pwa-install__card {
+        gap: 10px;
+        padding: 12px 14px 12px 12px;
+    }
+    .pwa-install__icon {
+        width: 44px;
+        height: 44px;
+    }
+    .pwa-install__title {
+        font-size: 0.9375rem;
+    }
+    .pwa-install__text {
+        font-size: 0.75rem;
+    }
+    .pwa-install__btn {
+        padding: 8px 14px;
+        font-size: 0.75rem;
+    }
+}
+
+/* iOS "Add to Home Screen" instruction modal */
+.pwa-ios {
+    position: fixed;
+    inset: 0;
+    z-index: 1090;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+}
+
+.pwa-ios[hidden] {
+    display: none !important;
+}
+
+.pwa-ios--visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pwa-ios__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 15, 18, 0.78);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.pwa-ios__dialog {
+    position: relative;
+    width: min(440px, calc(100% - 24px));
+    margin: 16px;
+    margin-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    padding: 28px 22px 22px;
+    background: linear-gradient(160deg, #1A1A1E 0%, #222226 100%);
+    color: var(--color-white);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 20px;
+    box-shadow: 0 -20px 60px -10px rgba(0, 0, 0, 0.8);
+    transform: translateY(40px);
+    transition: transform 360ms cubic-bezier(.2, .9, .3, 1);
+}
+
+.pwa-ios--visible .pwa-ios__dialog {
+    transform: translateY(0);
+}
+
+@media (min-width: 576px) {
+    .pwa-ios {
+        align-items: center;
+    }
+    .pwa-ios__dialog {
+        margin-bottom: 16px;
+    }
+}
+
+.pwa-ios__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: rgba(15, 15, 18, 0.6);
+    color: var(--color-silver-light);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 50%;
+    font-size: 0.875rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-base), border-color var(--transition-base);
+}
+
+.pwa-ios__close:hover,
+.pwa-ios__close:focus-visible {
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+    outline: none;
+}
+
+.pwa-ios__header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pwa-ios__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+.pwa-ios__title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin: 0 0 4px;
+}
+
+.pwa-ios__subtitle {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-silver-light);
+    margin: 0;
+}
+
+.pwa-ios__steps {
+    list-style: none;
+    margin: 0 0 18px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pwa-ios__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 12px;
+}
+
+.pwa-ios__step-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    background: var(--color-gold);
+    color: var(--color-black-deep);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+}
+
+.pwa-ios__step-text {
+    flex: 1 1 auto;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-white-muted);
+    line-height: 1.45;
+}
+
+.pwa-ios__step-text strong {
+    color: var(--color-gold);
+    font-weight: 700;
+}
+
+.pwa-ios__inline-icon {
+    display: inline-block;
+    color: var(--color-gold);
+    margin: 0 2px;
+    font-size: 0.9375rem;
+    vertical-align: -1px;
+}
+
+.pwa-ios__dismiss {
+    display: block;
+    width: 100%;
+    padding: 12px 18px;
+    background: var(--color-gold);
+    color: var(--color-black-deep);
+    border: none;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition-base), transform var(--transition-base);
+    box-shadow: 0 6px 16px -4px rgba(212, 175, 55, 0.45);
+}
+
+.pwa-ios__dismiss:hover,
+.pwa-ios__dismiss:focus-visible {
+    background: var(--color-gold-light);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .pwa-install,
+    .pwa-ios,
+    .pwa-ios__dialog,
+    .pwa-install__btn,
+    .pwa-ios__dismiss {
+        transition: none;
+    }
+}
