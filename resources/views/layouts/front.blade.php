@@ -83,6 +83,32 @@
 
     @stack('styles')
     <style>.bk-loader{position:fixed;inset:0;z-index:99999;background:#0F0F12;display:flex;align-items:center;justify-content:center;transition:opacity .4s}.bk-loader__spinner{width:40px;height:40px;border:3px solid rgba(212,175,55,.2);border-top-color:#D4AF37;border-radius:50%;animation:bk-spin .7s linear infinite}@keyframes bk-spin{to{transform:rotate(360deg)}}.bk-loader--hidden{opacity:0;pointer-events:none}</style>
+    <style>/* Styling for the PWA install button specifically on mobile devices */
+        @media (max-width: 768px) {
+            #installAppBtn {
+                position: fixed;
+                /* Position at the bottom, accounting for modern smartphone safe areas */
+                bottom: calc(20px + env(safe-area-inset-bottom));
+                left: 50%;
+                /* Center the button precisely */
+                transform: translateX(-50%);
+                /* Ensure it stays above other content */
+                z-index: 9999;
+
+                /* Modern aesthetic styling */
+                background-color: #000000;
+                color: #ffffff;
+                padding: 12px 24px;
+                border: none;
+                border-radius: 50px; /* Pill shape */
+                font-size: 16px;
+                font-weight: bold;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                white-space: nowrap;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="bk-loader" id="bkLoader"><div class="bk-loader__spinner"></div></div>
