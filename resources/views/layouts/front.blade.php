@@ -329,6 +329,10 @@
         </div>
     </footer>
 
+    <button id="installAppBtn" style="display: none;" class="your-custom-button-class">
+        Uygulama İndir
+    </button>
+
     <!-- Global Status Modal -->
     @include('partials.front.status-modal')
 
@@ -352,6 +356,59 @@
                     }, (error) => {
                         console.log('ServiceWorker registration failed: ', error);
                     });
+            });
+        }
+
+        let deferredPrompt;
+        const installBtn = document.getElementById('installAppBtn');
+
+        // Check if the app is already running in standalone mode (installed)
+        const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+        if (!isAppInstalled) {
+            // Listen for the event that indicates the PWA is installable
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent the default mini-infobar from appearing on mobile
+                e.preventDefault();
+
+                // Stash the event so it can be triggered later when the user clicks the button
+                deferredPrompt = e;
+
+                // Update UI to show the install button
+                if (installBtn) {
+                    installBtn.style.display = 'block';
+                }
+            });
+
+            // Handle the button click event
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (!deferredPrompt) {
+                        return;
+                    }
+
+                    // Show the browser's native installation prompt
+                    deferredPrompt.prompt();
+
+                    // Wait for the user to respond to the prompt
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User response to the install prompt: ${outcome}`);
+
+                    // We've used the prompt, and can't use it again, so throw it away
+                    deferredPrompt = null;
+
+                    // Hide the button regardless of outcome
+                    installBtn.style.display = 'none';
+                });
+            }
+
+            // Listen for successful installation to clean up UI
+            window.addEventListener('appinstalled', () => {
+                if (installBtn) {
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+                console.log('PWA was successfully installed.');
             });
         }
     </script>
