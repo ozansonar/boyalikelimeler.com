@@ -23,6 +23,10 @@
     <meta name="description" content="@yield('meta_description', 'Sosyal çöküntüye sanatsal direniş. Kelimelerin boyandığı, fırçaların konuştuğu bir sanat hareketi.')">
     <link rel="canonical" href="@yield('canonical', url()->current())">
 
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192x192.png') }}">
+
     <!-- Robots -->
     @hasSection('robots')
         <meta name="robots" content="@yield('robots')">
@@ -338,5 +342,18 @@
     <script src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}" defer></script>
     @stack('scripts')
     <script>window.addEventListener('load',function(){var l=document.getElementById('bkLoader');if(l){l.classList.add('bk-loader--hidden');l.addEventListener('transitionend',function(){l.remove()})}})</script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, (error) => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>

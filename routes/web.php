@@ -56,6 +56,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/advertisement/{advertisement}/click', [HomeController::class, 'trackAdClick'])->name('advertisement.click');
 Route::post('/advertisement/{advertisement}/view', [HomeController::class, 'trackAdView'])->name('advertisement.view');
 
+Route::view('/offline', 'offline');
+
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
