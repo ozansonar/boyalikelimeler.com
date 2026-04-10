@@ -95,7 +95,7 @@
     <!-- =======================================================
          NAVBAR
     ======================================================= -->
-    <nav class="navbar navbar-expand-xl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
+    <nav class="navbar navbar-expand-xxl navbar-dark navbar-bk sticky-top" aria-label="Ana navigasyon">
         <div class="container-fluid px-3 px-lg-5">
             <a class="navbar-brand navbar-bk__brand" href="{{ url('/') }}">
                 <img src="{{ $siteLogo ?? asset('images/logo.svg') }}"
@@ -145,38 +145,38 @@
                     @endisset
 
                     {{-- Mobile-only auth links (flat list, no dropdown) --}}
-                    <li class="nav-item d-xl-none navbar-bk__mobile-auth-divider"></li>
+                    <li class="nav-item d-xxl-none navbar-bk__mobile-auth-divider"></li>
                     @auth
                         @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
-                            <li class="nav-item d-xl-none">
+                            <li class="nav-item d-xxl-none">
                                 <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('admin.dashboard') }}" target="_blank">
                                     <i class="fa-solid fa-gauge-high me-1"></i>Admin Panel
                                 </a>
                             </li>
                         @endif
-                        <li class="nav-item d-xl-none">
+                        <li class="nav-item d-xxl-none">
                             <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ auth()->user()->profile_url }}">
                                 <i class="fa-solid fa-user me-1"></i>Profilim
                             </a>
                         </li>
                         @if(auth()->user()->isYazar() || auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
-                            <li class="nav-item d-xl-none">
+                            <li class="nav-item d-xxl-none">
                                 <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('myposts.index') }}">
                                     <i class="fa-solid fa-file-lines me-1"></i>Yazılarım
                                 </a>
                             </li>
-                            <li class="nav-item d-xl-none">
+                            <li class="nav-item d-xxl-none">
                                 <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('myposts.create') }}">
                                     <i class="fa-solid fa-feather-pointed me-1"></i>Yazı Ekle
                                 </a>
                             </li>
                         @endif
-                        <li class="nav-item d-xl-none">
+                        <li class="nav-item d-xxl-none">
                             <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('profile.edit') }}">
                                 <i class="fa-solid fa-gear me-1"></i>Ayarlar
                             </a>
                         </li>
-                        <li class="nav-item d-xl-none">
+                        <li class="nav-item d-xxl-none">
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="nav-link navbar-bk__link navbar-bk__mobile-auth-link navbar-bk__mobile-auth-logout w-100 text-start">
@@ -185,12 +185,12 @@
                             </form>
                         </li>
                     @else
-                        <li class="nav-item d-xl-none">
+                        <li class="nav-item d-xxl-none">
                             <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('login') }}">
                                 <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş Yap
                             </a>
                         </li>
-                        <li class="nav-item d-xl-none">
+                        <li class="nav-item d-xxl-none">
                             <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('register') }}">
                                 <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
                             </a>
@@ -198,11 +198,11 @@
                     @endauth
                 </ul>
 
-                <a href="{{ route('search.index') }}" class="navbar-bk__search-btn ms-xl-3" aria-label="Ara" title="Ara">
+                <a href="{{ route('search.index') }}" class="navbar-bk__search-btn ms-xxl-3" aria-label="Ara" title="Ara">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </a>
 
-                <div class="navbar-bk__auth d-none d-xl-flex align-items-center gap-2 ms-xl-3">
+                <div class="navbar-bk__auth d-none d-xxl-flex align-items-center gap-2 ms-xxl-3">
                     @auth
                         <div class="dropdown">
                             <a href="#" class="navbar-bk__auth-link dropdown-toggle" role="button"
