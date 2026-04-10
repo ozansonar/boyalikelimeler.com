@@ -268,6 +268,13 @@
 
                     <!-- Pagination -->
                     @if($posts->hasPages())
+                        @php
+                            $currentPage = $posts->currentPage();
+                            $lastPage    = $posts->lastPage();
+                            $window      = 2; // show 2 pages each side of current
+                            $startPage   = max(1, $currentPage - $window);
+                            $endPage     = min($lastPage, $currentPage + $window);
+                        @endphp
                         <nav class="blog-pagination" aria-label="Sayfalama">
                             @if($posts->onFirstPage())
                                 <span class="blog-pagination__btn blog-pagination__btn--prev" aria-disabled="true">
@@ -279,13 +286,30 @@
                                 </a>
                             @endif
 
-                            @foreach($posts->getUrlRange(1, $posts->lastPage()) as $page => $url)
-                                @if($page === $posts->currentPage())
-                                    <span class="blog-pagination__page blog-pagination__page--active" aria-current="page">{{ $page }}</span>
-                                @else
-                                    <a href="{{ $url }}" class="blog-pagination__page" aria-label="Sayfa {{ $page }}">{{ $page }}</a>
+                            {{-- First page --}}
+                            @if($startPage > 1)
+                                <a href="{{ $posts->url(1) }}" class="blog-pagination__page" aria-label="Sayfa 1">1</a>
+                                @if($startPage > 2)
+                                    <span class="blog-pagination__dots">&hellip;</span>
                                 @endif
-                            @endforeach
+                            @endif
+
+                            {{-- Window pages --}}
+                            @for($i = $startPage; $i <= $endPage; $i++)
+                                @if($i === $currentPage)
+                                    <span class="blog-pagination__page blog-pagination__page--active" aria-current="page">{{ $i }}</span>
+                                @else
+                                    <a href="{{ $posts->url($i) }}" class="blog-pagination__page" aria-label="Sayfa {{ $i }}">{{ $i }}</a>
+                                @endif
+                            @endfor
+
+                            {{-- Last page --}}
+                            @if($endPage < $lastPage)
+                                @if($endPage < $lastPage - 1)
+                                    <span class="blog-pagination__dots">&hellip;</span>
+                                @endif
+                                <a href="{{ $posts->url($lastPage) }}" class="blog-pagination__page" aria-label="Sayfa {{ $lastPage }}">{{ $lastPage }}</a>
+                            @endif
 
                             @if($posts->hasMorePages())
                                 <a href="{{ $posts->nextPageUrl() }}" class="blog-pagination__btn blog-pagination__btn--next" aria-label="Sonraki sayfa">
