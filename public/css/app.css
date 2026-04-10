@@ -343,8 +343,33 @@ p {
     transform: translateY(-1px);
 }
 
+/* -- Navbar Compact (xxl desktop, 1400px+) ------------------- */
+@media (min-width: 1400px) {
+    .navbar-bk__link {
+        font-size: 0.82rem;
+        padding: 1.1rem 0.7rem !important;
+        letter-spacing: 0.3px;
+    }
+
+    .navbar-bk__auth-link {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.75rem;
+    }
+
+    .navbar-bk__auth-btn {
+        font-size: 0.78rem;
+        padding: 0.4rem 0.85rem;
+    }
+
+    .navbar-bk__search-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.82rem;
+    }
+}
+
 /* -- Navbar Responsive ------------------------------------- */
-@media (max-width: 1199.98px) {
+@media (max-width: 1399.98px) {
     .navbar-bk {
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
