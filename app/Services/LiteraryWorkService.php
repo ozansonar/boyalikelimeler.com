@@ -613,7 +613,7 @@ final class LiteraryWorkService
 
     public function findPublishedBySlug(string $slug): ?LiteraryWork
     {
-        return LiteraryWork::with(['category', 'author', 'approvedComments.user'])
+        return LiteraryWork::with(['category', 'author', 'approvedComments.user', 'approvedComments.approvedReplies.user'])
             ->whereHas('author', fn ($q) => $q->whereNotNull('username'))
             ->where('slug', $slug)
             ->where('status', LiteraryWorkStatus::Approved)

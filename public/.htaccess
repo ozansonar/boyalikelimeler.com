@@ -9,6 +9,10 @@
     ExpiresActive On
     ExpiresDefault "access plus 1 month"
 
+    # Redirect www to non-www securely
+    RewriteCond %{HTTP_HOST} ^www\.boyalikelimeler\.com [NC]
+    RewriteRule ^(.*)$ https://boyalikelimeler.com/$1 [L,R=301]
+
     # Fonts (1 year)
     ExpiresByType font/woff2 "access plus 1 year"
     ExpiresByType font/woff "access plus 1 year"

@@ -128,6 +128,9 @@
                                                 @if($comment->isByUser())
                                                     <span class="usr-status-badge usr-status-badge-blue ms-1" title="Kayıtlı Kullanıcı"><i class="bi bi-person-check"></i></span>
                                                 @endif
+                                                @if($comment->parent_id)
+                                                    <span class="usr-status-badge usr-status-badge-purple ms-1" title="Yanıt"><i class="bi bi-reply"></i> Yanıt</span>
+                                                @endif
                                             </span>
                                             <span class="cl-content-meta">
                                                 <i class="bi bi-envelope me-1"></i>{{ $comment->commenterEmail() }}
