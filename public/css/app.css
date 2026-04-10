@@ -422,25 +422,36 @@ p {
         margin: 0.5rem 1rem 0;
     }
 
-    .navbar-bk__auth {
-        display: flex !important;
-        flex-wrap: wrap;
-        padding: 0.75rem 1rem;
-        border-top: 1px solid rgba(200, 169, 110, 0.12);
+    /* Mobile auth: divider + link styles */
+    .navbar-bk__mobile-auth-divider {
+        border-top: 1px solid rgba(200, 169, 110, 0.15);
         margin-top: 0.5rem;
-        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
-        width: 100%;
-        justify-content: center !important;
+        padding-top: 0.25rem;
     }
 
-    .navbar-bk__user-dropdown {
-        position: static !important;
-        float: none;
-        width: 100%;
-        margin-top: 0.5rem;
-        transform: none !important;
-        border: 1px solid rgba(200, 169, 110, 0.15);
-        border-radius: 0.5rem;
+    .navbar-bk__mobile-auth-link {
+        color: var(--color-gold) !important;
+        font-weight: 500;
+    }
+
+    .navbar-bk__mobile-auth-link:hover,
+    .navbar-bk__mobile-auth-link:focus {
+        color: var(--color-gold-light, #e8cc6e) !important;
+        background-color: rgba(200, 169, 110, 0.08);
+    }
+
+    .navbar-bk__mobile-auth-logout {
+        color: #e57373 !important;
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .navbar-bk__mobile-auth-logout:hover,
+    .navbar-bk__mobile-auth-logout:focus {
+        color: #ef5350 !important;
+        background-color: rgba(229, 115, 115, 0.08);
     }
 }
 

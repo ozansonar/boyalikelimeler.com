@@ -143,13 +143,66 @@
                             @endif
                         @endforeach
                     @endisset
+
+                    {{-- Mobile-only auth links (flat list, no dropdown) --}}
+                    <li class="nav-item d-xl-none navbar-bk__mobile-auth-divider"></li>
+                    @auth
+                        @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                            <li class="nav-item d-xl-none">
+                                <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('admin.dashboard') }}" target="_blank">
+                                    <i class="fa-solid fa-gauge-high me-1"></i>Admin Panel
+                                </a>
+                            </li>
+                        @endif
+                        <li class="nav-item d-xl-none">
+                            <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ auth()->user()->profile_url }}">
+                                <i class="fa-solid fa-user me-1"></i>Profilim
+                            </a>
+                        </li>
+                        @if(auth()->user()->isYazar() || auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                            <li class="nav-item d-xl-none">
+                                <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('myposts.index') }}">
+                                    <i class="fa-solid fa-file-lines me-1"></i>Yazılarım
+                                </a>
+                            </li>
+                            <li class="nav-item d-xl-none">
+                                <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('myposts.create') }}">
+                                    <i class="fa-solid fa-feather-pointed me-1"></i>Yazı Ekle
+                                </a>
+                            </li>
+                        @endif
+                        <li class="nav-item d-xl-none">
+                            <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('profile.edit') }}">
+                                <i class="fa-solid fa-gear me-1"></i>Ayarlar
+                            </a>
+                        </li>
+                        <li class="nav-item d-xl-none">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="nav-link navbar-bk__link navbar-bk__mobile-auth-link navbar-bk__mobile-auth-logout w-100 text-start">
+                                    <i class="fa-solid fa-right-from-bracket me-1"></i>Çıkış Yap
+                                </button>
+                            </form>
+                        </li>
+                    @else
+                        <li class="nav-item d-xl-none">
+                            <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('login') }}">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i>Giriş Yap
+                            </a>
+                        </li>
+                        <li class="nav-item d-xl-none">
+                            <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('register') }}">
+                                <i class="fa-solid fa-user-plus me-1"></i>Kayıt Ol
+                            </a>
+                        </li>
+                    @endauth
                 </ul>
 
                 <a href="{{ route('search.index') }}" class="navbar-bk__search-btn ms-xl-3" aria-label="Ara" title="Ara">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </a>
 
-                <div class="navbar-bk__auth d-flex align-items-center gap-2 ms-xl-3">
+                <div class="navbar-bk__auth d-none d-xl-flex align-items-center gap-2 ms-xl-3">
                     @auth
                         <div class="dropdown">
                             <a href="#" class="navbar-bk__auth-link dropdown-toggle" role="button"
