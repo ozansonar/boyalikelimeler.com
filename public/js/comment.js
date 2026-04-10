@@ -181,7 +181,7 @@
                     autoHideDelay: 4000,
                     onValidationComplete: function (theForm, valid) {
                         if (valid) {
-                            submitReply(theForm);
+                            submitReply(theForm[0]);
                         }
                         return false;
                     }
