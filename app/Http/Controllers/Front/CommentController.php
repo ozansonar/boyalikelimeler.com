@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\CommentReplyStoreRequest;
 use App\Http\Requests\Front\CommentStoreRequest;
+use App\Models\Comment;
 use App\Models\LiteraryWork;
 use App\Models\Post;
 use App\Services\CommentService;
@@ -66,6 +68,39 @@ final class CommentController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Yorumunuz başarıyla gönderildi. Onaylandıktan sonra yayınlanacaktır.',
+        ]);
+    }
+
+    public function storeReply(CommentReplyStoreRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $parentComment = Comment::where('id', (int) $validated['comment_id'])
+            ->where('is_approved', true)
+            ->whereNull('parent_id')
+            ->first();
+
+        if (!$parentComment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Yorum bulunamadı veya yanıt verilemez.',
+            ], 404);
+        }
+
+        $reply = $this->commentService->storeReply(
+            $parentComment,
+            $request->user(),
+            $validated,
+            $request->ip(),
+        );
+
+        $message = $reply->is_approved
+            ? 'Yanıtınız başarıyla yayınlandı.'
+            : 'Yanıtınız başarıyla gönderildi. Onaylandıktan sonra yayınlanacaktır.';
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
         ]);
     }
 }

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Front;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class CommentUpdateRequest extends FormRequest
+final class CommentReplyStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,17 +19,11 @@ final class CommentUpdateRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'body' => ['required', 'string', 'min:10', 'max:3000'],
+            'comment_id' => ['required', 'integer', 'exists:comments,id'],
+            'body'       => ['required', 'string', 'min:10', 'max:3000'],
         ];
 
-        /** @var \App\Models\Comment $comment */
-        $comment = $this->route('comment');
-
-        if ($comment->isTopLevel()) {
-            $rules['rating'] = ['required', 'integer', 'min:1', 'max:5'];
-        }
-
-        if (!$comment->isByUser()) {
+        if (!$this->user()) {
             $rules['first_name'] = ['required', 'string', 'max:100'];
             $rules['last_name']  = ['required', 'string', 'max:100'];
             $rules['email']      = ['required', 'email', 'max:255'];
@@ -44,18 +38,17 @@ final class CommentUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'comment_id.required' => 'Yanıtlanacak yorum bulunamadı.',
+            'comment_id.exists'   => 'Yanıtlanacak yorum bulunamadı.',
             'first_name.required' => 'Ad alanı zorunludur.',
             'first_name.max'      => 'Ad en fazla 100 karakter olabilir.',
             'last_name.required'  => 'Soyad alanı zorunludur.',
             'last_name.max'       => 'Soyad en fazla 100 karakter olabilir.',
             'email.required'      => 'E-posta adresi zorunludur.',
             'email.email'         => 'Geçerli bir e-posta adresi giriniz.',
-            'body.required'       => 'Yorum alanı zorunludur.',
-            'body.min'            => 'Yorum en az 10 karakter olmalıdır.',
-            'body.max'            => 'Yorum en fazla 3000 karakter olabilir.',
-            'rating.required'     => 'Lütfen bir puan seçiniz.',
-            'rating.min'          => 'Puan en az 1 olmalıdır.',
-            'rating.max'          => 'Puan en fazla 5 olabilir.',
+            'body.required'       => 'Yanıt alanı zorunludur.',
+            'body.min'            => 'Yanıt en az 10 karakter olmalıdır.',
+            'body.max'            => 'Yanıt en fazla 3000 karakter olabilir.',
         ];
     }
 }

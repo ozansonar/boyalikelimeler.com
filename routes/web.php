@@ -431,6 +431,7 @@ Route::post('/gunun-sorusu/cevapla', [FrontDailyQuestionController::class, 'answ
 
 // Comments (Frontend)
 Route::post('/yorum', [CommentController::class, 'store'])->name('comment.store')->middleware('throttle:5,1');
+Route::post('/yorum/yanit', [CommentController::class, 'storeReply'])->name('comment.reply')->middleware('throttle:5,1');
 
 // Contact (Frontend)
 Route::get('/iletisim', [ContactController::class, 'show'])->name('contact.show');

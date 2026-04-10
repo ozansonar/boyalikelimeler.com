@@ -38,14 +38,14 @@ final class CommentController extends Controller
 
     public function show(Comment $comment): View
     {
-        $comment->load(['commentable', 'approver', 'user']);
+        $comment->load(['commentable', 'approver', 'user', 'parent.user', 'replies.user']);
 
         return view('admin.comments.show', compact('comment'));
     }
 
     public function edit(Comment $comment): View
     {
-        $comment->load(['commentable', 'user']);
+        $comment->load(['commentable', 'user', 'parent']);
 
         return view('admin.comments.edit', compact('comment'));
     }

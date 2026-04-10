@@ -34,6 +34,54 @@ final class CommentService
         });
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function storeReply(Comment $parentComment, ?User $user, array $data, ?string $ipAddress = null): Comment
+    {
+        return DB::transaction(function () use ($parentComment, $user, $data, $ipAddress): Comment {
+            $parentComment->loadMissing('commentable');
+            $commentable = $parentComment->commentable;
+
+            $isContentAuthor = $user !== null
+                && $commentable !== null
+                && (int) $commentable->user_id === $user->id;
+
+            $replyData = [
+                'commentable_type' => $parentComment->commentable_type,
+                'commentable_id'   => $parentComment->commentable_id,
+                'parent_id'        => $parentComment->id,
+                'body'             => $data['body'],
+                'rating'           => null,
+                'ip_address'       => $ipAddress,
+            ];
+
+            if ($user !== null) {
+                $replyData['user_id'] = $user->id;
+            } else {
+                $replyData['first_name'] = $data['first_name'];
+                $replyData['last_name']  = $data['last_name'];
+                $replyData['email']      = $data['email'];
+            }
+
+            if ($isContentAuthor) {
+                $replyData['is_approved'] = true;
+                $replyData['approved_at'] = now();
+                $replyData['approved_by'] = $user->id;
+            }
+
+            $reply = Comment::create($replyData);
+
+            $this->clearCountCache();
+
+            if (!$isContentAuthor) {
+                $this->notifyAdmins($reply);
+            }
+
+            return $reply;
+        });
+    }
+
     public function approve(Comment $comment, User $admin): Comment
     {
         return DB::transaction(function () use ($comment, $admin): Comment {

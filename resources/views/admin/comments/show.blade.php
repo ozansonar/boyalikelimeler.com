@@ -49,24 +49,42 @@
                     </div>
                 </div>
                 <div class="card-body-custom">
-                    <!-- Rating -->
-                    <div class="mb-3">
-                        <label class="form-label text-muted small">Puan</label>
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="cmt-admin-stars">
-                                @for($i = 1; $i <= 5; $i++)
-                                    <i class="bi {{ $i <= $comment->rating ? 'bi-star-fill text-warning' : 'bi-star text-clr-secondary' }}" style="font-size: 1.1rem;"></i>
-                                @endfor
+                    @if($comment->parent_id && $comment->parent)
+                        <!-- Parent Comment Reference -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small"><i class="bi bi-reply me-1"></i>Yanıt Verilen Yorum</label>
+                            <div class="p-3 rounded cmt-admin-parent-ref">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <strong class="small">{{ $comment->parent->fullName() }}</strong>
+                                    <a href="{{ route('admin.comments.show', $comment->parent) }}" class="text-teal small">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                                <p class="mb-0 small text-muted">{{ Str::limit($comment->parent->body, 150) }}</p>
                             </div>
-                            <span class="text-muted small">({{ $comment->rating }}/5)</span>
                         </div>
-                    </div>
+                    @endif
+
+                    @if($comment->isTopLevel())
+                        <!-- Rating (only for top-level comments) -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Puan</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="cmt-admin-stars">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <i class="bi {{ $i <= (int) $comment->rating ? 'bi-star-fill text-warning' : 'bi-star text-clr-secondary' }} cmt-admin-star"></i>
+                                    @endfor
+                                </div>
+                                <span class="text-muted small">({{ $comment->rating }}/5)</span>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Body -->
                     <div class="mb-0">
-                        <label class="form-label text-muted small">Yorum Metni</label>
-                        <div class="p-3 rounded" style="background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);">
-                            <p class="mb-0" style="white-space: pre-line;">{{ $comment->body }}</p>
+                        <label class="form-label text-muted small">{{ $comment->isReply() ? 'Yanıt Metni' : 'Yorum Metni' }}</label>
+                        <div class="p-3 rounded cmt-admin-body">
+                            <p class="mb-0 cmt-admin-body-text">{{ $comment->body }}</p>
                         </div>
                     </div>
                 </div>
