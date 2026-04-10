@@ -8,7 +8,7 @@
  *  - Cross-origin requests               -> bypass
  */
 
-const CACHE_VERSION = 'bk-v2';
+const CACHE_VERSION = 'bk-v3';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const OFFLINE_URL = '/offline';

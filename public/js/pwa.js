@@ -18,18 +18,6 @@
     var DISMISS_TTL_DAYS = 7;
     var SHOW_DELAY_MS = 2500; // Small delay so the prompt does not fight the loader
 
-    // ---- Service Worker registration -----------------------------------
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-            navigator.serviceWorker.register('/sw.js').catch(function (err) {
-                // Silent fail - PWA is a progressive enhancement
-                if (window.console && console.warn) {
-                    console.warn('[PWA] Service worker registration failed:', err);
-                }
-            });
-        });
-    }
-
     // ---- Environment checks --------------------------------------------
     var ua = (navigator.userAgent || '').toLowerCase();
 
@@ -88,6 +76,36 @@
     if (isStandalone) return; // already installed
     if (dismissedRecently()) return;
 
+    // ---- Service Worker registration (early, before window.load) --------
+    // Register as soon as possible so Chrome can fire beforeinstallprompt
+    // during the first page load rather than requiring a refresh.
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(function (err) {
+            if (window.console && console.warn) {
+                console.warn('[PWA] Service worker registration failed:', err);
+            }
+        });
+    }
+
+    // ---- Capture beforeinstallprompt immediately -----------------------
+    // Attach at the top level so we never miss the event, even if it fires
+    // before DOMContentLoaded. Store the event and show card once DOM is ready.
+    var deferredPrompt = null;
+    var domReady = false;
+    var pendingShowCard = false;
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (domReady) {
+            // DOM is already ready — show the card now
+            window.setTimeout(showCard, SHOW_DELAY_MS);
+        } else {
+            // DOM not ready yet — flag it so onReady callback shows it
+            pendingShowCard = true;
+        }
+    });
+
     // ---- DOM ready ------------------------------------------------------
     function onReady(fn) {
         if (document.readyState === 'loading') {
@@ -97,9 +115,22 @@
         }
     }
 
+    // ---- showCard / hideCard (need DOM refs, defined inside onReady) ----
+    var cardEl = null;
+
+    function showCard() {
+        if (!cardEl) return;
+        cardEl.hidden = false;
+        void cardEl.offsetHeight;
+        cardEl.classList.add('pwa-install--visible');
+    }
+
     onReady(function () {
+        domReady = true;
+
         // Install card + iOS Safari instruction modal
         var card = document.getElementById('pwaInstall');
+        cardEl = card;
         var installBtn = document.getElementById('pwaInstallBtn');
         var installBtnText = document.getElementById('pwaInstallBtnText');
         var installTitle = document.getElementById('pwaInstallTitle');
@@ -123,15 +154,6 @@
         var safariInfo = document.getElementById('pwaSafariInfo');
 
         if (!card || !installBtn) return;
-
-        var deferredPrompt = null;
-
-        function showCard() {
-            card.hidden = false;
-            // Force reflow so the transition kicks in
-            void card.offsetHeight;
-            card.classList.add('pwa-install--visible');
-        }
 
         function hideCard(persistDismiss) {
             card.classList.remove('pwa-install--visible');
@@ -184,7 +206,7 @@
             }, 300);
         }
 
-        // Try Web Share API → iOS share sheet → "Open in Safari"
+        // Try Web Share API -> iOS share sheet -> "Open in Safari"
         function tryWebShare() {
             if (!navigator.share) return Promise.reject(new Error('no-share'));
             return navigator.share({
@@ -201,7 +223,6 @@
             var done = function () {
                 if (safariCopyText) safariCopyText.textContent = 'Kopyalandı!';
                 if (safariCopyBtn) safariCopyBtn.classList.add('pwa-safari__copy--success');
-                // Haptic feedback on devices that support it (not iOS, but harmless)
                 if (navigator.vibrate) {
                     try { navigator.vibrate(30); } catch (e) { /* ignore */ }
                 }
@@ -220,7 +241,6 @@
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(url).then(done).catch(function () {
-                    // Fallback: legacy execCommand
                     legacyCopy(url) ? done() : fail();
                 });
             } else {
@@ -247,13 +267,11 @@
             }
         }
 
-        // ---- Android / Desktop Chrome ---------------------------------
-        window.addEventListener('beforeinstallprompt', function (e) {
-            e.preventDefault();
-            deferredPrompt = e;
+        // ---- If beforeinstallprompt already fired before DOM was ready ---
+        if (pendingShowCard && deferredPrompt) {
             if (installBtnText) installBtnText.textContent = 'Yükle';
             window.setTimeout(showCard, SHOW_DELAY_MS);
-        });
+        }
 
         // ---- iOS Safari: show install card with "Nasıl?" action -------
         if (isIos && isIosSafari) {
@@ -287,13 +305,13 @@
                 return;
             }
 
-            // iOS Safari → show A2HS instructions
+            // iOS Safari -> show A2HS instructions
             if (isIos && isIosSafari) {
                 showIosModal();
                 return;
             }
 
-            // iOS non-Safari → show "Open in Safari" modal
+            // iOS non-Safari -> show "Open in Safari" modal
             if (isIos && !isIosSafari) {
                 showSafariModal();
                 return;
@@ -329,8 +347,7 @@
         if (safariOpenBtn) {
             safariOpenBtn.addEventListener('click', function () {
                 tryWebShare().catch(function () {
-                    // User cancelled or share not supported → hint to use copy/manual
-                    // Button stays visible so the user can try copy or manual steps
+                    // User cancelled or share not supported
                 });
             });
         }
@@ -358,7 +375,7 @@
             hideIosModal();
             hideSafariModal();
             deferredPrompt = null;
-            markDismissed(); // Avoid re-showing immediately
+            markDismissed();
         });
     });
 })();
