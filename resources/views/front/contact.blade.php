@@ -268,7 +268,7 @@
                             </h3>
                             <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#contactFaq">
                                 <div class="accordion-body contact-faq__body">
-                                    Ücretsiz kayıt olduktan sonra profil sayfanızdan yazar başvurusu yapabilirsiniz.
+                                    Ücretsiz kayıt olduktan sonra profil sayfanızdan yazar & ressam başvurusu yapabilirsiniz.
                                     Editoryal ekibimiz başvurunuzu inceleyip size en kısa sürede dönüş yapacaktır.
                                 </div>
                             </div>

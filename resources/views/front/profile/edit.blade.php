@@ -86,7 +86,7 @@
                                     </div>
                                     <h4 class="writer-cta-card__title">Yazar Olmak İstiyor musunuz?</h4>
                                     <p class="writer-cta-card__text">
-                                        Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar başvurusu yapın.
+                                        Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar & ressam başvurusu yapın.
                                     </p>
                                     <button type="button"
                                             class="writer-cta-card__btn"
@@ -107,7 +107,7 @@
                                     </div>
                                     <h4 class="writer-cta-card__title">Başvurunuz Değerlendiriliyor</h4>
                                     <p class="writer-cta-card__text">
-                                        Yazar başvurunuz editör ekibimiz tarafından incelenmektedir. Sonuç e-posta ile bildirilecektir.
+                                        Yazar & Ressam başvurunuz editör ekibimiz tarafından incelenmektedir. Sonuç e-posta ile bildirilecektir.
                                     </p>
                                     <div class="writer-cta-card__note">
                                         <i class="fa-solid fa-calendar me-1"></i>Başvuru tarihi: {{ $writerStatus['last_application']->created_at->format('d.m.Y') }}

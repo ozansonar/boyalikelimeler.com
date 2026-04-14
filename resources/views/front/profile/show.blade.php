@@ -149,7 +149,7 @@
                                     <i class="fa-solid fa-list me-1"></i>Yazılarım
                                 </a>
                                 <a href="{{ route('myposts.create') }}" class="profile-header__btn profile-header__btn--primary">
-                                    <i class="fa-solid fa-feather-pointed me-1"></i>Yazı Gönder
+                                    <i class="fa-solid fa-feather-pointed me-1"></i>Eser gönder
                                 </a>
                             @endif
                         @endif
@@ -198,7 +198,7 @@
                                     </div>
                                     <h4 class="writer-cta-card__title">Yazar Olmak İstiyor musunuz?</h4>
                                     <p class="writer-cta-card__text">
-                                        Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar başvurusu yapın.
+                                        Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar & ressam başvurusu yapın.
                                     </p>
                                     <button type="button"
                                             class="writer-cta-card__btn"
@@ -218,7 +218,7 @@
                                     </div>
                                     <h4 class="writer-cta-card__title">Başvurunuz Değerlendiriliyor</h4>
                                     <p class="writer-cta-card__text">
-                                        Yazar başvurunuz editör ekibimiz tarafından incelenmektedir. Sonuç e-posta ile bildirilecektir.
+                                        Yazar & Ressam başvurunuz editör ekibimiz tarafından incelenmektedir. Sonuç e-posta ile bildirilecektir.
                                     </p>
                                     <div class="writer-cta-card__note">
                                         <i class="fa-solid fa-calendar me-1"></i>Başvuru tarihi: {{ $writerStatus['last_application']->created_at->format('d.m.Y') }}

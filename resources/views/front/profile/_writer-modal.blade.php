@@ -14,7 +14,7 @@
                 </div>
                 <div>
                     <h2 class="modal-title writer-modal__title" id="writerModalLabel">
-                        Yazar Başvurusu
+                        Yazar & Ressam Başvurusu
                     </h2>
                     <p class="writer-modal__subtitle">Boyalı Kelimeler yazarlık programına katılın</p>
                 </div>
