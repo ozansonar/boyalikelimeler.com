@@ -1844,6 +1844,35 @@ p {
     font-style: italic;
 }
 
+/* Slider CTA Button */
+.hero-slider__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+    padding: 0.7rem 1.75rem;
+    border: 2px solid var(--color-gold);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--color-gold);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.hero-slider__btn:hover,
+.hero-slider__btn:focus {
+    background: var(--color-gold);
+    color: var(--color-black-deep);
+    box-shadow: 0 6px 24px rgba(200, 169, 110, 0.45);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
 /* Slider Arrows */
 .hero-slider__arrow {
     position: absolute;
@@ -3034,6 +3063,12 @@ p {
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
+    }
+
+    .hero-slider__btn {
+        margin-top: 1rem;
+        padding: 0.55rem 1.25rem;
+        font-size: 0.85rem;
     }
 
     .footer-bk {
