@@ -176,4 +176,106 @@
             }
         });
     }
+
+    /* ─── PWA Monthly Trend (Line) ─── */
+    const pwaTrendCtx = document.getElementById('pwaTrendChart');
+    if (pwaTrendCtx && data.pwaMonthly) {
+        new Chart(pwaTrendCtx, {
+            type: 'line',
+            data: {
+                labels: data.pwaMonthly.labels,
+                datasets: [{
+                    label: 'PWA Yüklemeleri',
+                    data: data.pwaMonthly.values,
+                    borderColor: 'rgb(' + tealRgb + ')',
+                    backgroundColor: 'rgba(' + tealRgb + ', 0.15)',
+                    borderWidth: 2.5,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: 'rgb(' + tealRgb + ')',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: tooltipBg,
+                        borderColor: 'rgba(' + tealRgb + ', 0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 8,
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { color: gridColor }, beginAtZero: true, ticks: { precision: 0 } }
+                }
+            }
+        });
+    }
+
+    /* ─── PWA Platform Distribution (Doughnut) ─── */
+    const pwaPlatformCtx = document.getElementById('pwaPlatformChart');
+    if (pwaPlatformCtx && data.pwaPlatforms) {
+        const platformLabelMap = {
+            android: 'Android',
+            ios: 'iOS',
+            desktop: 'Masaüstü',
+            unknown: 'Bilinmeyen'
+        };
+        const platformColorMap = {
+            android: 'rgba(' + greenRgb + ', 0.85)',
+            ios:     'rgba(' + blueRgb + ', 0.85)',
+            desktop: 'rgba(' + purpleRgb + ', 0.85)',
+            unknown: 'rgba(' + orangeRgb + ', 0.85)'
+        };
+
+        const pfLabels = Object.keys(data.pwaPlatforms).map(function (k) { return platformLabelMap[k] || k; });
+        const pfValues = Object.values(data.pwaPlatforms);
+        const pfColors = Object.keys(data.pwaPlatforms).map(function (k) { return platformColorMap[k] || 'rgba(148,163,184,0.85)'; });
+
+        // Hide chart entirely if there is no data at all
+        const hasData = pfValues.some(function (v) { return v > 0; });
+
+        if (hasData) {
+            new Chart(pwaPlatformCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: pfLabels,
+                    datasets: [{
+                        data: pfValues,
+                        backgroundColor: pfColors,
+                        borderColor: 'rgba(0,0,0,0.2)',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: tickColor, padding: 12, font: { size: 11 } }
+                        },
+                        tooltip: {
+                            backgroundColor: tooltipBg,
+                            padding: 12,
+                            cornerRadius: 8,
+                        }
+                    }
+                }
+            });
+        } else {
+            // No data placeholder
+            const parent = pwaPlatformCtx.parentElement;
+            if (parent) {
+                parent.innerHTML = '<div class="text-sm-muted text-center py-4"><i class="bi bi-inbox fs-1 d-block mb-2"></i>Henüz veri yok</div>';
+            }
+        }
+    }
 })();

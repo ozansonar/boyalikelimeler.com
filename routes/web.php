@@ -29,6 +29,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\EditorImageController;
+use App\Http\Controllers\PwaInstallController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Front\AuthorController;
 use App\Http\Controllers\Front\BlogController;
@@ -57,6 +58,11 @@ Route::post('/advertisement/{advertisement}/click', [HomeController::class, 'tra
 Route::post('/advertisement/{advertisement}/view', [HomeController::class, 'trackAdView'])->name('advertisement.view');
 
 Route::view('/offline', 'offline');
+
+// PWA install tracking (public, throttled)
+Route::post('/pwa/installed', [PwaInstallController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('pwa.installed');
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
