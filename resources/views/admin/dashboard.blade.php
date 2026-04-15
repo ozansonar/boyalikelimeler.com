@@ -209,6 +209,89 @@
     </div>
 </div>
 
+<!-- PWA Install Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card teal animate-in">
+            <div class="stat-card-header">
+                <div class="stat-icon teal"><i class="bi bi-phone"></i></div>
+                <span class="stat-trend up">
+                    <i class="bi bi-download"></i>PWA
+                </span>
+            </div>
+            <div class="stat-value">{{ number_format($pwaStats['total']) }}</div>
+            <div class="stat-label">Toplam Yükleme</div>
+            <div class="stat-desc">Uygulama olarak yüklenme sayısı</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card orange animate-in anim-delay-1">
+            <div class="stat-card-header">
+                <div class="stat-icon orange"><i class="bi bi-calendar-week"></i></div>
+            </div>
+            <div class="stat-value">{{ number_format($pwaStats['last_7_days']) }}</div>
+            <div class="stat-label">Son 7 Gün</div>
+            <div class="stat-desc">Son haftanın PWA yüklemeleri</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card blue animate-in anim-delay-2">
+            <div class="stat-card-header">
+                <div class="stat-icon blue"><i class="bi bi-calendar-month"></i></div>
+            </div>
+            <div class="stat-value">{{ number_format($pwaStats['last_30_days']) }}</div>
+            <div class="stat-label">Son 30 Gün</div>
+            <div class="stat-desc">Son ayın PWA yüklemeleri</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card purple animate-in anim-delay-3">
+            <div class="stat-card-header">
+                <div class="stat-icon purple"><i class="bi bi-calendar-day"></i></div>
+            </div>
+            <div class="stat-value">{{ number_format($pwaStats['today']) }}</div>
+            <div class="stat-label">Bugün</div>
+            <div class="stat-desc">Bugünün PWA yüklemeleri</div>
+        </div>
+    </div>
+</div>
+
+<!-- PWA Charts Row -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-8">
+        <div class="card-dark">
+            <div class="card-header-custom">
+                <h6><i class="bi bi-graph-up-arrow me-2 text-teal"></i>Aylık PWA Yükleme Trendi</h6>
+            </div>
+            <div class="card-body-custom">
+                <div class="chart-container"><canvas id="pwaTrendChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="card-dark">
+            <div class="card-header-custom">
+                <h6><i class="bi bi-pie-chart-fill me-2 text-neon-purple"></i>Platform Dağılımı</h6>
+            </div>
+            <div class="card-body-custom">
+                <div class="chart-container chart-container-sm"><canvas id="pwaPlatformChart"></canvas></div>
+                <div class="mt-3">
+                    @foreach($pwaPlatformCases as $platform)
+                        @php $count = $pwaPlatforms[$platform->value] ?? 0; @endphp
+                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom border-secondary-subtle">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="{{ $platform->icon() }} text-{{ $platform->color() === 'green' ? 'success' : ($platform->color() === 'blue' ? 'info' : ($platform->color() === 'purple' ? 'neon-purple' : 'warning')) }}"></i>
+                                <span class="text-sm-muted">{{ $platform->label() }}</span>
+                            </div>
+                            <span class="fw-600-primary">{{ number_format($count) }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Latest Works Table -->
 <div class="row g-3 mb-4">
     <div class="col-12">
@@ -305,6 +388,8 @@
         monthlyWorks: @json($monthlyWorks),
         roleDistribution: @json($roleDistribution),
         workStatus: @json($workStatus),
+        pwaMonthly: @json($pwaMonthly),
+        pwaPlatforms: @json($pwaPlatforms),
     };
 </script>
 <script src="{{ asset('assets/admin/js/dashboard.js') }}?v={{ filemtime(public_path('assets/admin/js/dashboard.js')) }}"></script>

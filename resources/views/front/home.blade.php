@@ -312,6 +312,15 @@
                     <h2 class="hero-slider__title">{{ $slide->title }}</h2>
                     <div class="hero-slider__divider"></div>
                     <p class="hero-slider__text">{{ $slide->description }}</p>
+                    @if(!empty($slide->button_text) && !empty($slide->button_link))
+                        <a href="{{ $slide->button_link }}"
+                           class="hero-slider__btn"
+                           target="{{ $slide->button_target ?? '_self' }}"
+                           @if(($slide->button_target ?? '_self') === '_blank') rel="noopener noreferrer" @endif>
+                            {{ $slide->button_text }}
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+                    @endif
                 </div>
             </div>
         @empty

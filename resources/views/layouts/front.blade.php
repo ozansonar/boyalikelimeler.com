@@ -338,6 +338,14 @@
                                 <i class="fa-brands fa-linkedin-in"></i>
                             </a>
                         @endif
+                        <button type="button"
+                                class="footer-bk__social-link footer-bk__social-link--pwa"
+                                id="pwaFooterBtn"
+                                aria-label="Uygulamayı Yükle"
+                                title="Uygulamayı Yükle"
+                                hidden>
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="col-6 col-lg-2">

@@ -17,6 +17,9 @@ class HomeSlider extends Model
         'badge_text',
         'title',
         'description',
+        'button_text',
+        'button_link',
+        'button_target',
         'is_active',
         'sort_order',
     ];
