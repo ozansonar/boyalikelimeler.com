@@ -4,19 +4,18 @@
  * - Registers the service worker.
  * - Handles Android/Desktop Chrome install via beforeinstallprompt.
  * - Handles iOS Safari "Add to Home Screen" via a themed instruction modal.
- * - Handles iOS non-Safari (Chrome/Firefox/Edge/in-app) with a 3-layer fallback:
- *     1) Web Share API -> iOS native share sheet -> "Open in Safari"
- *     2) Clipboard API -> copy link with visual feedback
- *     3) Browser-specific manual instructions
- * - Hides the prompt if already installed or the user dismissed it recently.
+ * - Handles iOS non-Safari (Chrome/Firefox/Edge/in-app) with a 3-layer fallback.
+ * - Footer button lets users install at any time (bypasses dismiss state).
+ * - Reports successful installs to backend for analytics.
  */
 (function () {
     'use strict';
 
     // ---- Config ---------------------------------------------------------
     var DISMISS_KEY = 'bk-pwa-dismissed-at';
-    var DISMISS_TTL_DAYS = 7;
+    var DISMISS_TTL_HOURS = 1;
     var SHOW_DELAY_MS = 2500; // Small delay so the prompt does not fight the loader
+    var TRACK_URL = '/pwa/installed';
 
     // ---- Environment checks --------------------------------------------
     var ua = (navigator.userAgent || '').toLowerCase();
@@ -26,6 +25,8 @@
         var iPadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
         return /iphone|ipad|ipod/.test(ua) || iPadOS;
     })();
+
+    var isAndroid = /android/.test(ua);
 
     var isIosSafari = (function () {
         if (!isIos) return false;
@@ -46,6 +47,12 @@
         return 'generic';
     }
 
+    function detectPlatform() {
+        if (isIos) return 'ios';
+        if (isAndroid) return 'android';
+        return 'desktop';
+    }
+
     var isStandalone =
         (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
         window.navigator.standalone === true ||
@@ -58,7 +65,7 @@
             var ts = parseInt(raw, 10);
             if (!ts) return false;
             var ageMs = Date.now() - ts;
-            return ageMs < DISMISS_TTL_DAYS * 24 * 60 * 60 * 1000;
+            return ageMs < DISMISS_TTL_HOURS * 60 * 60 * 1000;
         } catch (e) {
             return false;
         }
@@ -72,13 +79,46 @@
         }
     }
 
-    // ---- Early exit -----------------------------------------------------
-    if (isStandalone) return; // already installed
-    if (dismissedRecently()) return;
+    function clearDismiss() {
+        try {
+            localStorage.removeItem(DISMISS_KEY);
+        } catch (e) {
+            /* ignore */
+        }
+    }
+
+    function getCsrfToken() {
+        var meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.getAttribute('content') : '';
+    }
+
+    // Send install event to backend for analytics (fire-and-forget)
+    function reportInstall() {
+        try {
+            var token = getCsrfToken();
+            if (!token) return;
+            fetch(TRACK_URL, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    platform: detectPlatform(),
+                    referrer: document.referrer || null
+                })
+            }).catch(function () { /* swallow */ });
+        } catch (e) { /* swallow */ }
+    }
+
+    // ---- Standalone mode: nothing to do --------------------------------
+    // If the app is already installed (launched from home screen), we don't
+    // need to show install prompts or the footer button.
+    if (isStandalone) return;
 
     // ---- Service Worker registration (early, before window.load) --------
-    // Register as soon as possible so Chrome can fire beforeinstallprompt
-    // during the first page load rather than requiring a refresh.
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').catch(function (err) {
             if (window.console && console.warn) {
@@ -88,8 +128,6 @@
     }
 
     // ---- Capture beforeinstallprompt immediately -----------------------
-    // Attach at the top level so we never miss the event, even if it fires
-    // before DOMContentLoaded. Store the event and show card once DOM is ready.
     var deferredPrompt = null;
     var domReady = false;
     var pendingShowCard = false;
@@ -98,10 +136,12 @@
         e.preventDefault();
         deferredPrompt = e;
         if (domReady) {
-            // DOM is already ready — show the card now
-            window.setTimeout(showCard, SHOW_DELAY_MS);
+            if (!dismissedRecently()) {
+                window.setTimeout(showCard, SHOW_DELAY_MS);
+            }
+            // Footer button becomes active once deferredPrompt is captured
+            refreshFooterBtnVisibility();
         } else {
-            // DOM not ready yet — flag it so onReady callback shows it
             pendingShowCard = true;
         }
     });
@@ -117,12 +157,21 @@
 
     // ---- showCard / hideCard (need DOM refs, defined inside onReady) ----
     var cardEl = null;
+    var footerBtnEl = null;
 
     function showCard() {
         if (!cardEl) return;
         cardEl.hidden = false;
         void cardEl.offsetHeight;
         cardEl.classList.add('pwa-install--visible');
+    }
+
+    function refreshFooterBtnVisibility() {
+        if (!footerBtnEl) return;
+        // On iOS we can always guide the user; on Android/desktop we need
+        // deferredPrompt to be useful. Firefox desktop has no install flow.
+        var canInstall = !!deferredPrompt || isIos;
+        footerBtnEl.hidden = !canInstall;
     }
 
     onReady(function () {
@@ -152,6 +201,10 @@
         var safariCopyText = document.getElementById('pwaSafariCopyText');
         var safariInfoBtn = document.getElementById('pwaSafariInfoBtn');
         var safariInfo = document.getElementById('pwaSafariInfo');
+
+        // Footer manual install button (always-available entry point)
+        footerBtnEl = document.getElementById('pwaFooterBtn');
+        refreshFooterBtnVisibility();
 
         if (!card || !installBtn) return;
 
@@ -267,28 +320,8 @@
             }
         }
 
-        // ---- If beforeinstallprompt already fired before DOM was ready ---
-        if (pendingShowCard && deferredPrompt) {
-            if (installBtnText) installBtnText.textContent = 'Yükle';
-            window.setTimeout(showCard, SHOW_DELAY_MS);
-        }
-
-        // ---- iOS Safari: show install card with "Nasıl?" action -------
-        if (isIos && isIosSafari) {
-            if (installBtnText) installBtnText.textContent = 'Nasıl?';
-            window.setTimeout(showCard, SHOW_DELAY_MS);
-        }
-
-        // ---- iOS non-Safari: show install card with "Safari'de Aç" ----
-        if (isIos && !isIosSafari) {
-            if (installTitle) installTitle.textContent = 'Uygulamayı Yükle';
-            if (installDesc) installDesc.textContent = "Tek tıkla Safari'de aç, uygulamayı yükle.";
-            if (installBtnText) installBtnText.textContent = "Safari'de Aç";
-            window.setTimeout(showCard, SHOW_DELAY_MS);
-        }
-
-        // ---- Install button click ------------------------------------
-        installBtn.addEventListener('click', function () {
+        // ---- Trigger the appropriate install flow --------------------
+        function triggerInstall() {
             // Android / Desktop flow
             if (deferredPrompt) {
                 deferredPrompt.prompt();
@@ -299,8 +332,10 @@
                         hideCard(true);
                     }
                     deferredPrompt = null;
+                    refreshFooterBtnVisibility();
                 }).catch(function () {
                     deferredPrompt = null;
+                    refreshFooterBtnVisibility();
                 });
                 return;
             }
@@ -319,7 +354,45 @@
 
             // Fallback: nothing we can do programmatically
             hideCard(true);
-        });
+        }
+
+        // ---- If beforeinstallprompt already fired before DOM was ready ---
+        if (pendingShowCard && deferredPrompt) {
+            if (installBtnText) installBtnText.textContent = 'Yükle';
+            if (!dismissedRecently()) {
+                window.setTimeout(showCard, SHOW_DELAY_MS);
+            }
+            refreshFooterBtnVisibility();
+        }
+
+        // ---- iOS Safari: show install card with "Nasıl?" action -------
+        if (isIos && isIosSafari) {
+            if (installBtnText) installBtnText.textContent = 'Nasıl?';
+            if (!dismissedRecently()) {
+                window.setTimeout(showCard, SHOW_DELAY_MS);
+            }
+        }
+
+        // ---- iOS non-Safari: show install card with "Safari'de Aç" ----
+        if (isIos && !isIosSafari) {
+            if (installTitle) installTitle.textContent = 'Uygulamayı Yükle';
+            if (installDesc) installDesc.textContent = "Tek tıkla Safari'de aç, uygulamayı yükle.";
+            if (installBtnText) installBtnText.textContent = "Safari'de Aç";
+            if (!dismissedRecently()) {
+                window.setTimeout(showCard, SHOW_DELAY_MS);
+            }
+        }
+
+        // ---- Install button click ------------------------------------
+        installBtn.addEventListener('click', triggerInstall);
+
+        // ---- Footer button click (bypasses dismiss state) ------------
+        if (footerBtnEl) {
+            footerBtnEl.addEventListener('click', function () {
+                clearDismiss();
+                triggerInstall();
+            });
+        }
 
         // ---- Close button --------------------------------------------
         if (closeBtn) {
@@ -376,6 +449,8 @@
             hideSafariModal();
             deferredPrompt = null;
             markDismissed();
+            if (footerBtnEl) footerBtnEl.hidden = true;
+            reportInstall();
         });
     });
 })();

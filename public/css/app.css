@@ -2853,6 +2853,21 @@ p {
     background-color: rgba(200, 169, 110, 0.1);
 }
 
+.footer-bk__social-link--pwa {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    background-color: rgba(200, 169, 110, 0.08);
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+}
+
+.footer-bk__social-link--pwa:hover {
+    background-color: var(--color-gold);
+    color: var(--color-black-deep);
+    box-shadow: 0 0 12px rgba(200, 169, 110, 0.35);
+}
+
 .footer-bk__bottom {
     border-top: var(--border-silver);
     padding-top: 1.25rem;
