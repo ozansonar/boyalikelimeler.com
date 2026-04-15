@@ -47,11 +47,18 @@
                     </div>
                 @endif
                 <input type="file" class="form-control @error('image') is-invalid @enderror"
-                       name="image" accept="image/jpeg,image/png,image/webp" {{ !$isEdit ? 'required' : '' }}>
+                       name="image" accept="image/jpeg,image/png,image/webp,image/gif" {{ !$isEdit ? 'required' : '' }}>
                 @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-                <div class="form-text">JPG, PNG veya WebP — Maksimum 2 MB</div>
+                <div class="form-text">
+                    JPG, PNG, WebP veya <strong>GIF</strong> — Maks. 3 MB, en fazla 1400 piksel genişlik.
+                    <br>
+                    <small class="text-warning">
+                        <i class="bi bi-info-circle"></i>
+                        GIF dosyaları animasyon korunarak olduğu gibi kaydedilir. Yüklemeden önce kendiniz optimize edin.
+                    </small>
+                </div>
             </div>
             <div class="col-md-8">
                 <label class="form-label">Hedef Link</label>

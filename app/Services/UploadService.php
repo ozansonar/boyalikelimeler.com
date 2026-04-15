@@ -51,6 +51,15 @@ final class UploadService
         $originalExt = strtolower($file->getClientOriginalExtension()) ?: 'bin';
         $mime = $file->getMimeType() ?: '';
 
+        // GIF files: keep as-is to preserve animation (GD cannot resize animated GIFs).
+        // No WebP conversion, no responsive variants. File is saved directly.
+        if ($mime === 'image/gif' || $originalExt === 'gif') {
+            $fileName = $baseName . '.gif';
+            $file->move($this->uploadsPath($directory), $fileName);
+
+            return $directory . '/' . $fileName;
+        }
+
         // Non-processable files (SVG, ICO, DOCX etc.) — save as-is, no conversion
         if (! in_array($mime, self::PROCESSABLE_MIMES, true)) {
             $fileName = $baseName . '.' . $originalExt;
