@@ -196,12 +196,9 @@ final class CommentService
     private function notifyAdmins(Comment $comment): void
     {
         $comment->loadMissing('user');
-        $admins = User::whereHas('role', fn (Builder $q) => $q->whereIn('slug', ['admin', 'super-admin']))->get();
+        $admins = User::whereHas('role', fn (Builder $q) => $q->whereIn('slug', ['admin', 'super-admin']))->where('notify_admin_mails', true)->get();
 
         foreach ($admins as $admin) {
-            if (!$admin->wantsMailNotification('new_comment')) {
-                continue;
-            }
             $this->sendMailSafely(
                 fn () => Mail::to($admin->email, $admin->name)->send(new NewCommentMail($comment)),
                 'notifyAdmins',

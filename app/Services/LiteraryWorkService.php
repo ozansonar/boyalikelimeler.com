@@ -500,7 +500,7 @@ final class LiteraryWorkService
 
     private function notifyAdminsNewSubmission(LiteraryWork $work): bool
     {
-        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->where('notify_admin_mails', true)->get();
         $allSent = true;
 
         foreach ($admins as $admin) {
@@ -519,7 +519,7 @@ final class LiteraryWorkService
 
     private function notifyAdminsUpdated(LiteraryWork $work): bool
     {
-        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->where('notify_admin_mails', true)->get();
         $allSent = true;
 
         foreach ($admins as $admin) {
@@ -538,7 +538,7 @@ final class LiteraryWorkService
 
     private function notifyAdminsRevised(LiteraryWork $work): bool
     {
-        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->get();
+        $admins = User::whereHas('role', fn ($q) => $q->whereIn('slug', ['admin', 'super_admin']))->where('notify_admin_mails', true)->get();
         $allSent = true;
 
         foreach ($admins as $admin) {

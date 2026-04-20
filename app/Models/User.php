@@ -57,6 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'notify_comment_approved',
         'notify_work_status',
         'notify_new_comment',
+        'notify_admin_mails',
     ];
 
     protected $hidden = [
@@ -80,6 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'notify_comment_approved' => 'boolean',
             'notify_work_status'      => 'boolean',
             'notify_new_comment'      => 'boolean',
+            'notify_admin_mails'      => 'boolean',
         ];
     }
 
@@ -221,6 +223,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'comment_approved' => $this->notify_comment_approved,
             'work_status'      => $this->notify_work_status,
             'new_comment'      => $this->notify_new_comment,
+            'admin_mails'      => $this->notify_admin_mails,
             default            => true,
         };
     }
