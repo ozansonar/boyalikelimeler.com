@@ -145,7 +145,7 @@ final class QnaAnswerService
     private function notifyAdminsNewAnswer(QnaAnswer $answer): void
     {
         $answer->loadMissing('user', 'question.category');
-        $admins = User::whereHas('role', fn (Builder $q) => $q->whereIn('slug', ['admin', 'super-admin']))->get();
+        $admins = User::whereHas('role', fn (Builder $q) => $q->whereIn('slug', ['admin', 'super-admin']))->where('notify_admin_mails', true)->get();
 
         foreach ($admins as $admin) {
             $this->sendMailSafely(
