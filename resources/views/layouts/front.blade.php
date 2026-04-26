@@ -162,7 +162,7 @@
                         @if(auth()->user()->isYazar() || auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
                             <li class="nav-item d-xxl-none">
                                 <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('myposts.index') }}">
-                                    <i class="fa-solid fa-file-lines me-1"></i>Yazılarım
+                                    <i class="fa-solid fa-file-lines me-1"></i>Eserlerim
                                 </a>
                             </li>
                             <li class="nav-item d-xxl-none">
@@ -228,7 +228,7 @@
                                 @if(auth()->user()->isYazar() || auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
                                     <li>
                                         <a class="dropdown-item" href="{{ route('myposts.index') }}">
-                                            <i class="fa-solid fa-file-lines me-2"></i>Yazılarım
+                                            <i class="fa-solid fa-file-lines me-2"></i>Eserlerim
                                         </a>
                                     </li>
                                     <li>
