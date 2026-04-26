@@ -33,7 +33,10 @@ class AdminProfileController extends Controller
     {
         $user = Auth::user();
 
-        $this->profileService->updateProfile($user, $request->validated());
+        $data = $request->validated();
+        $data['notify_admin_mails'] = $request->boolean('notify_admin_mails');
+
+        $this->profileService->updateProfile($user, $data);
 
         return redirect()->route('admin.profile.index')
             ->with('success', 'Profil bilgileri başarıyla güncellendi.');

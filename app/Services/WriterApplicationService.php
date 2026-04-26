@@ -178,7 +178,7 @@ final class WriterApplicationService
 
     private function notifyAdmins(WriterApplication $application): void
     {
-        $admins = User::whereIn('type', ['super_admin', 'admin'])->get();
+        $admins = User::whereIn('type', ['super_admin', 'admin'])->where('notify_admin_mails', true)->get();
 
         foreach ($admins as $admin) {
             Mail::to($admin->email)->send(new WriterApplicationSubmittedMail($application));

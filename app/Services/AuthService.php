@@ -56,6 +56,7 @@ final class AuthService
     {
         $admins = User::whereIn('type', [UserType::SuperAdmin, UserType::Admin])
             ->whereNotNull('email_verified_at')
+            ->where('notify_admin_mails', true)
             ->get();
 
         foreach ($admins as $admin) {

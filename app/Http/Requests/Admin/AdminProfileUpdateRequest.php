@@ -32,7 +32,8 @@ class AdminProfileUpdateRequest extends FormRequest
             'twitter'   => 'nullable|url|max:255',
             'youtube'   => 'nullable|url|max:255',
             'tiktok'    => 'nullable|url|max:255',
-            'spotify'   => 'nullable|url|max:255',
+            'spotify'            => 'nullable|url|max:255',
+            'notify_admin_mails' => 'nullable|boolean',
         ];
     }
 

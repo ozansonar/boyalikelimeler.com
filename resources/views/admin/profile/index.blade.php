@@ -214,6 +214,31 @@
                         </div>
                     </div>
 
+                    <div class="stg-section">
+                        <div class="stg-section-title">
+                            <h6>Mail Bildirimleri</h6>
+                            <p>Yönetim bildirimi e-postalarını almak isteyip istemediğinizi seçin</p>
+                        </div>
+                        <div class="stg-field">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="notifyAdminMails"
+                                       name="notify_admin_mails"
+                                       value="1"
+                                       {{ old('notify_admin_mails', $user->notify_admin_mails) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="notifyAdminMails">
+                                    Yönetim bildirimlerini e-posta ile al
+                                </label>
+                            </div>
+                            <small class="text-muted d-block mt-1">
+                                Yeni eser gönderimi, yorum, yazar başvurusu, yeni kullanıcı kaydı ve revize
+                                gibi durumlarda size bildirim maili gönderilir. Kapatırsanız bu mailler size ulaşmaz.
+                            </small>
+                        </div>
+                    </div>
+
                     <div class="d-flex gap-2">
                         <button type="submit" class="stg-save-btn"><i class="bi bi-check-lg"></i> Değişiklikleri Kaydet</button>
                     </div>

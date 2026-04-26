@@ -673,7 +673,7 @@
                                     <div class="mini-cta__icon">
                                         <i class="fa-solid fa-pen-nib"></i>
                                     </div>
-                                    <h4 class="mini-cta__title">Yazmaya Başla</h4>
+                                    <h4 class="mini-cta__title">Eser Gönder</h4>
                                     <p class="mini-cta__text">İlk yazını paylaş</p>
                                 </div>
                             </a>

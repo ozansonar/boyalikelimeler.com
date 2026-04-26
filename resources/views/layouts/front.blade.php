@@ -167,7 +167,7 @@
                             </li>
                             <li class="nav-item d-xxl-none">
                                 <a class="nav-link navbar-bk__link navbar-bk__mobile-auth-link" href="{{ route('myposts.create') }}">
-                                    <i class="fa-solid fa-feather-pointed me-1"></i>Yazı Ekle
+                                    <i class="fa-solid fa-feather-pointed me-1"></i>Eser Gönder
                                 </a>
                             </li>
                         @endif
@@ -233,7 +233,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="{{ route('myposts.create') }}">
-                                            <i class="fa-solid fa-feather-pointed me-2"></i>Yazı Ekle
+                                            <i class="fa-solid fa-feather-pointed me-2"></i>Eser Gönder
                                         </a>
                                     </li>
                                 @endif
