@@ -101,4 +101,36 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    /* -- Instagram Share (copy + feedback) -------------------- */
+    var igButtons = document.querySelectorAll('.blogd-share__btn--instagram');
+    igButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var url = this.getAttribute('data-url');
+            if (!url) return;
+            var done = function () {
+                var originalHtml = btn.innerHTML;
+                var originalTitle = btn.getAttribute('title') || '';
+                btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                btn.setAttribute('title', 'Link kopyalandı! Instagram\'da paylaşabilirsiniz.');
+                setTimeout(function () {
+                    btn.innerHTML = originalHtml;
+                    btn.setAttribute('title', originalTitle);
+                }, 2500);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(done).catch(done);
+            } else {
+                var ta = document.createElement('textarea');
+                ta.value = url;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                done();
+            }
+        });
+    });
 });
