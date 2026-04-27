@@ -144,14 +144,14 @@
                                     <div class="usr-actions">
                                         <a class="usr-action-btn" title="Detay" href="{{ route('admin.qna.questions.show', $question->id) }}"><i class="bi bi-eye"></i></a>
                                         @if($question->status->value === 'pending')
-                                            <button class="usr-action-btn success" title="Onayla" onclick="openQnaApproveModal({{ $question->id }}, '{{ addslashes(Str::limit($question->title, 40)) }}', 'question')">
+                                            <button class="usr-action-btn success" title="Onayla" onclick="openQnaApproveModal({{ $question->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', $question->title), 40)) }}, 'question')">
                                                 <i class="bi bi-check-lg"></i>
                                             </button>
-                                            <button class="usr-action-btn warning" title="Reddet" onclick="openQnaRejectModal({{ $question->id }}, '{{ addslashes(Str::limit($question->title, 40)) }}', 'question')">
+                                            <button class="usr-action-btn warning" title="Reddet" onclick="openQnaRejectModal({{ $question->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', $question->title), 40)) }}, 'question')">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
                                         @endif
-                                        <button class="usr-action-btn danger" title="Sil" onclick="openQnaDeleteModal({{ $question->id }}, '{{ addslashes(Str::limit($question->title, 40)) }}', 'question')">
+                                        <button class="usr-action-btn danger" title="Sil" onclick="openQnaDeleteModal({{ $question->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', $question->title), 40)) }}, 'question')">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
