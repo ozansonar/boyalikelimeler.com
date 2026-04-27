@@ -130,10 +130,10 @@ final class AuthorService
                 })
                 ->with(['activeGoldenPenPeriod'])
                 ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
-                    $q->where('status', 'approved');
+                    $q->where('status', 'approved')->where('work_type', 'written');
                 }])
                 ->withSum(['literaryWorks as total_views' => function ($q): void {
-                    $q->where('status', 'approved');
+                    $q->where('status', 'approved')->where('work_type', 'written');
                 }], 'view_count')
                 ->orderBy('users.name')
                 ->get();
