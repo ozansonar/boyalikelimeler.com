@@ -9,15 +9,17 @@
     <!-- Tom Select CSS -->
     <link href="{{ asset('vendor/tom-select/2.4.3/css/tom-select.min.css') }}" rel="stylesheet">
     <style>
-        .tox-tbtn[data-mce-name="pasteContent"] {
-            background-color: rgba(212, 175, 55, 0.12) !important;
-            border-radius: 4px !important;
+        .tox .tox-tbtn[data-mce-name="pasteContent"] {
+            background-color: rgba(212, 175, 55, 0.15) !important;
+            border: 1px solid rgba(212, 175, 55, 0.35) !important;
+            border-radius: 6px !important;
         }
-        .tox-tbtn[data-mce-name="pasteContent"] .tox-icon {
-            color: #D4AF37 !important;
+        .tox .tox-tbtn[data-mce-name="pasteContent"] .tox-icon svg {
+            fill: #D4AF37 !important;
         }
-        .tox-tbtn[data-mce-name="pasteContent"]:hover {
-            background-color: rgba(212, 175, 55, 0.25) !important;
+        .tox .tox-tbtn[data-mce-name="pasteContent"]:hover {
+            background-color: rgba(212, 175, 55, 0.3) !important;
+            border-color: rgba(212, 175, 55, 0.5) !important;
         }
     </style>
 @endpush
