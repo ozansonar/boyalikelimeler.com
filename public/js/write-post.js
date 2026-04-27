@@ -51,6 +51,7 @@
             menubar: 'file edit view insert format tools table',
             height: 900,
             placeholder: 'Yazınızı buraya yazın... Hayal gücünüzün sınırı yok.',
+            contextmenu: false,
             promotion: false,
             branding: false,
             automatic_uploads: true,
