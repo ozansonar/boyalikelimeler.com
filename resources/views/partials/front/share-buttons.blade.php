@@ -26,6 +26,11 @@
        class="{{ $btnClass }} {{ $btnClass }}--whatsapp" aria-label="WhatsApp'ta paylas">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
+    <button type="button" class="{{ $btnClass }} {{ $btnClass }}--instagram"
+            aria-label="Instagram'da paylas"
+            data-url="{{ $shareUrl }}">
+        <i class="fa-brands fa-instagram"></i>
+    </button>
     <button type="button" class="{{ $btnClass }} {{ $btnClass }}--copy"
             aria-label="Baglantiyi kopyala"
             data-url="{{ $shareUrl }}">

@@ -13452,6 +13452,12 @@ p {
     color: #25d366;
 }
 
+.blogd-share__btn--instagram:hover {
+    background: rgba(225, 48, 108, 0.15);
+    border-color: rgba(225, 48, 108, 0.3);
+    color: #e1306c;
+}
+
 .blogd-share__btn--copy:hover {
     background: rgba(212, 175, 55, 0.1);
     border-color: rgba(212, 175, 55, 0.25);
