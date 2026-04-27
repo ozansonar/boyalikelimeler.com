@@ -674,7 +674,7 @@
                                         <i class="fa-solid fa-pen-nib"></i>
                                     </div>
                                     <h4 class="mini-cta__title">Eser Gönder</h4>
-                                    <p class="mini-cta__text">İlk yazını paylaş</p>
+                                    <p class="mini-cta__text">İlk eserini paylaş</p>
                                 </div>
                             </a>
                         </div>
