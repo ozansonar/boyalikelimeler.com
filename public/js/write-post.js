@@ -45,7 +45,7 @@
             language_url: 'https://cdn.jsdelivr.net/npm/tinymce-i18n@24.11.25/langs7/tr.min.js',
             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen preview code',
             toolbar: [
-                'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor',
+                'undo redo | pasteContent | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor',
                 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link imagegallery media table | blockquote codesample | charmap emoticons | fullscreen code | removeformat'
             ],
             menubar: 'file edit view insert format tools table',
@@ -73,6 +73,35 @@
                 if (typeof window.editorImagesSetup === 'function') {
                     window.editorImagesSetup(editor);
                 }
+
+                /* ── Paste Button ──────────────────────────── */
+                editor.ui.registry.addButton('pasteContent', {
+                    icon: 'paste',
+                    tooltip: 'Yapıştır',
+                    onAction: function () {
+                        if (navigator.clipboard && navigator.clipboard.readText) {
+                            navigator.clipboard.readText().then(function (text) {
+                                if (text) {
+                                    var safe = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                                    var html = safe.replace(/\n/g, '<br>');
+                                    editor.insertContent(html);
+                                }
+                            }).catch(function () {
+                                editor.notificationManager.open({
+                                    text: 'Yapıştırmak için Ctrl+V (veya Cmd+V) kullanın.',
+                                    type: 'info',
+                                    timeout: 3000
+                                });
+                            });
+                        } else {
+                            editor.notificationManager.open({
+                                text: 'Yapıştırmak için Ctrl+V (veya Cmd+V) kullanın.',
+                                type: 'info',
+                                timeout: 3000
+                            });
+                        }
+                    }
+                });
 
                 /* ── Image Size Buttons ─────────────────────── */
                 var IMG_SIZES = [
