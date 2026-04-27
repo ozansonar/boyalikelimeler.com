@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\RoleSlug;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,10 +21,9 @@ final class AuthorService
         return Cache::remember('front.authors.stats', 300, function (): array {
             $today = now()->toDateString();
 
-            $row = User::join('roles', 'users.role_id', '=', 'roles.id')
-                ->where('roles.slug', RoleSlug::Yazar->value)
-                ->whereNotNull('users.email_verified_at')
+            $row = User::whereNotNull('users.email_verified_at')
                 ->whereNull('users.deleted_at')
+                ->whereHas('literaryWorks', fn ($q) => $q->where('status', 'approved')->where('work_type', 'written'))
                 ->selectRaw('COUNT(*) as author_count')
                 ->selectRaw("(SELECT COUNT(DISTINCT gpp.user_id) FROM golden_pen_periods gpp WHERE gpp.deleted_at IS NULL AND gpp.starts_at <= ? AND gpp.ends_at >= ?) as golden_pen_count", [$today, $today])
                 ->selectRaw("(SELECT COUNT(*) FROM literary_works lw WHERE lw.deleted_at IS NULL AND lw.status = 'approved') as total_works")
@@ -120,9 +118,8 @@ final class AuthorService
 
             $authors = User::query()
                 ->select('users.*')
-                ->join('roles', 'users.role_id', '=', 'roles.id')
-                ->where('roles.slug', RoleSlug::Yazar->value)
                 ->whereNotNull('users.email_verified_at')
+                ->whereHas('literaryWorks', fn ($q) => $q->where('status', 'approved')->where('work_type', 'written'))
                 ->whereExists(function ($q) use ($firstDay, $lastDay): void {
                     $q->select(DB::raw(1))
                       ->from('golden_pen_periods')
@@ -218,15 +215,14 @@ final class AuthorService
 
         $query = User::query()
             ->select('users.*')
-            ->join('roles', 'users.role_id', '=', 'roles.id')
-            ->where('roles.slug', RoleSlug::Yazar->value)
             ->whereNotNull('users.email_verified_at')
+            ->whereHas('literaryWorks', fn ($q) => $q->where('status', 'approved')->where('work_type', 'written'))
             ->with(['activeGoldenPenPeriod'])
             ->withCount(['literaryWorks as approved_works_count' => function ($q): void {
-                $q->where('status', 'approved');
+                $q->where('status', 'approved')->where('work_type', 'written');
             }])
             ->withSum(['literaryWorks as total_views' => function ($q): void {
-                $q->where('status', 'approved');
+                $q->where('status', 'approved')->where('work_type', 'written');
             }], 'view_count');
 
         // Search filter
