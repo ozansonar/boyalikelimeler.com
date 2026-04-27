@@ -17,7 +17,7 @@
                     <i class="fa-solid fa-magnifying-glass me-3"></i>Ara
                 </h1>
                 <p class="search-hero__desc">
-                    Yazılar, blog içerikleri ve yazarlar arasında arama yapın.
+                    Yazılar, blog içerikleri ve sanatçılar arasında arama yapın.
                 </p>
                 <form class="search-hero__form" method="GET" action="{{ route('search.index') }}">
                     <div class="search-hero__input-wrap">
@@ -193,7 +193,7 @@
                 @if($results['authors']->isNotEmpty())
                     <div class="search-results__section">
                         <h2 class="search-results__section-title">
-                            <i class="fa-solid fa-users me-2"></i>Yazarlar
+                            <i class="fa-solid fa-users me-2"></i>Sanatçılar
                             <span class="search-results__section-count">{{ $results['authors']->count() }}</span>
                         </h2>
                         <div class="search-results__authors">

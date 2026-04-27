@@ -101,7 +101,7 @@
                                     <div class="team-card__icon">
                                         <i class="fa-solid fa-pen-fancy"></i>
                                     </div>
-                                    <h3 class="team-card__title">Yazarlarımız</h3>
+                                    <h3 class="team-card__title">Sanatçılarımız</h3>
                                     <p class="team-card__text">Kelimelere hayat veren kalemler</p>
                                     <a href="{{ url('yazarlar') }}" class="team-card__link">Keşfet <i class="fa-solid fa-arrow-right ms-1"></i></a>
                                 </div>

@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
 @section('title', 'İçerikler — Boyalı Kelimeler')
-@section('meta_description', 'Boyalı Kelimeler yazarlarının en güzel yazılarını keşfedin. Şiir, hikaye, deneme, roman ve daha fazlası.')
+@section('meta_description', 'Boyalı Kelimeler yazar ve ressamlarının en güzel eserlerini keşfedin. Şiir, hikaye, deneme, roman ve daha fazlası.')
 @section('canonical', route('literary-works.index'))
 @section('og_title', 'İçerikler — Boyalı Kelimeler')
-@section('og_description', 'Yazarlarımızın en güzel eserlerini keşfedin.')
+@section('og_description', 'Yazar ve ressamlarımızın en güzel eserlerini keşfedin.')
 
 @if(request('kategori') || request('sirala') || request('ara') || request('tur'))
     @section('robots', 'noindex, follow')
@@ -27,7 +27,7 @@
         [
             '@type' => 'CollectionPage',
             'name' => 'İçerikler',
-            'description' => 'Boyalı Kelimeler yazarlarının en güzel yazılarını keşfedin.',
+            'description' => 'Boyalı Kelimeler yazar ve ressamlarının en güzel eserlerini keşfedin.',
             'url' => route('literary-works.index'),
             'isPartOf' => [
                 '@type' => 'WebSite',
@@ -68,7 +68,7 @@
                     <i class="fa-solid fa-feather-pointed me-3"></i>İçerikler
                 </h1>
                 <p class="clist-hero__desc">
-                    Yazarlarımızın kaleminden dökülen en güzel eserler. Şiirden hikayeye, denemeden romana — kelimelerin boyandığı dünya.
+                    Yazar ve ressamlarımızın en güzel eserleri. Şiirden hikayeye, denemeden romana — kelimelerin boyandığı dünya.
                 </p>
                 <div class="clist-hero__stats">
                     <span class="clist-hero__stat">
@@ -76,7 +76,7 @@
                     </span>
                     <span class="clist-hero__stat-sep">|</span>
                     <span class="clist-hero__stat">
-                        <i class="fa-solid fa-users me-1"></i>{{ number_format($stats['author_count']) }} Yazar
+                        <i class="fa-solid fa-users me-1"></i>{{ number_format($stats['author_count']) }} Sanatçı
                     </span>
                     <span class="clist-hero__stat-sep">|</span>
                     <span class="clist-hero__stat">

@@ -25,7 +25,7 @@
                     <div class="login-welcome__stats">
                         <div class="login-welcome__stat">
                             <span class="login-welcome__stat-number">{{ number_format($activeAuthorCount, 0, ',', '.') }}+</span>
-                            <span class="login-welcome__stat-label">Aktif Yazar</span>
+                            <span class="login-welcome__stat-label">Aktif Sanatçı</span>
                         </div>
                         <div class="login-welcome__stat">
                             <span class="login-welcome__stat-number">{{ number_format($totalWorkCount, 0, ',', '.') }}+</span>

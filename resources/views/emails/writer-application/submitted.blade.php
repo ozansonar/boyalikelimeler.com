@@ -1,9 +1,9 @@
 <x-mail::message>
-# Yeni Yazar Başvurusu
+# Yeni Yazar & Ressam Başvurusu
 
 Merhaba,
 
-**{{ $application->user->name }}** ({{ $application->user->email }}) yeni bir yazar başvurusu yaptı ve değerlendirmenizi bekliyor.
+**{{ $application->user->name }}** ({{ $application->user->email }}) yeni bir yazar & ressam başvurusu yaptı ve değerlendirmenizi bekliyor.
 
 **Başvuru Tarihi:** {{ $application->created_at->format('d.m.Y H:i') }}
 

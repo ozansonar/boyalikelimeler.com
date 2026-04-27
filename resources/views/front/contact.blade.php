@@ -263,7 +263,7 @@
                                         data-bs-toggle="collapse" data-bs-target="#faq1"
                                         aria-expanded="true" aria-controls="faq1">
                                     <i class="fa-solid fa-circle-question me-2"></i>
-                                    Boyalı Kelimeler'e nasıl yazar olarak katılabilirim?
+                                    Boyalı Kelimeler'e nasıl yazar veya ressam olarak katılabilirim?
                                 </button>
                             </h3>
                             <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#contactFaq">
