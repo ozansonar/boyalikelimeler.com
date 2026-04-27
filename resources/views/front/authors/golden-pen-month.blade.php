@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
 @section('title', $monthData['label'] . ' — Boyalı Kelimeler')
-@section('meta_description', $monthData['label'] . ' — Boyalı Kelimeler altın kalem yazarları.')
+@section('meta_description', $monthData['label'] . ' — Boyalı Kelimeler altın kalem sanatçıları.')
 @section('canonical', route('authors.golden-pen-month', $yearMonth))
 @section('og_title', $monthData['label'] . ' — Boyalı Kelimeler')
-@section('og_description', $monthData['label'] . ' — Boyalı Kelimeler altın kalem yazarları.')
+@section('og_description', $monthData['label'] . ' — Boyalı Kelimeler altın kalem sanatçıları.')
 
 @push('jsonld')
 <script type="application/ld+json">
@@ -14,7 +14,7 @@
         [
             '@type' => 'CollectionPage',
             'name' => $monthData['label'] . ' — Boyalı Kelimeler',
-            'description' => $monthData['label'] . ' altın kalem yazarları.',
+            'description' => $monthData['label'] . ' altın kalem sanatçıları.',
             'url' => route('authors.golden-pen-month', $yearMonth),
         ],
         [
@@ -22,7 +22,7 @@
             'name' => 'Breadcrumb',
             'itemListElement' => [
                 ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
-                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Yazarlar', 'item' => route('authors.index')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Sanatçılar', 'item' => route('authors.index')],
                 ['@type' => 'ListItem', 'position' => 3, 'name' => $monthData['label']],
             ],
         ],
@@ -44,7 +44,7 @@
                 </h1>
                 <div class="page-header__divider"></div>
                 <p class="page-header__desc">
-                    {{ $pageSettings['golden_pen_description'] ?? 'Bu ay altın kalem ödülüne layık görülen yazarlarımız.' }}
+                    {{ $pageSettings['golden_pen_description'] ?? 'Bu ay altın kalem ödülüne layık görülen sanatçılarımız.' }}
                 </p>
             </div>
         </div>
@@ -59,7 +59,7 @@
                 <ol class="golden-breadcrumb">
                     <li class="golden-breadcrumb__item">
                         <a href="{{ route('authors.index') }}" class="golden-breadcrumb__link">
-                            <i class="fa-solid fa-users me-1"></i>Yazarlarımız
+                            <i class="fa-solid fa-users me-1"></i>Sanatçılarımız
                         </a>
                     </li>
                     <li class="golden-breadcrumb__item golden-breadcrumb__item--active">
@@ -115,7 +115,7 @@
                             <h2 class="golden-empty__title">Henüz Belirlenmedi</h2>
                             <div class="golden-empty__divider"></div>
                             <p class="golden-empty__text">
-                                Bu ay için Altın Kalem yazarı henüz belirlenmemiştir.
+                                Bu ay için Altın Kalem sanatçısı henüz belirlenmemiştir.
                                 Değerlendirme sürecimiz devam ediyor; lütfen daha sonra tekrar ziyaret ediniz.
                             </p>
                             <p class="golden-empty__sub">
@@ -124,7 +124,7 @@
                                 <i class="fa-solid fa-quote-right ms-1"></i>
                             </p>
                             <a href="{{ route('authors.index') }}" class="golden-empty__btn">
-                                <i class="fa-solid fa-users me-2"></i>Tüm Yazarlarımız
+                                <i class="fa-solid fa-users me-2"></i>Tüm Sanatçılarımız
                             </a>
                         </div>
                     </div>

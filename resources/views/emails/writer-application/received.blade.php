@@ -1,9 +1,9 @@
 <x-mail::message>
-# Yazar Başvurunuz Alındı
+# Yazar & Ressam Başvurunuz Alındı
 
 Merhaba **{{ $application->user->name }}**,
 
-Yazar başvurunuz başarıyla alınmıştır. Editör ekibimiz başvurunuzu en kısa sürede değerlendirecektir.
+Yazar & Ressam başvurunuz başarıyla alınmıştır. Editör ekibimiz başvurunuzu en kısa sürede değerlendirecektir.
 
 **Başvuru Tarihi:** {{ $application->created_at->format('d.m.Y H:i') }}
 

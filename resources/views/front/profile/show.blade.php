@@ -1,9 +1,9 @@
 @extends('layouts.front')
 
-@section('title', $user->name . ' — Yazar Profili | Boyalı Kelimeler')
+@section('title', $user->name . ' — Sanatçı Profili | Boyalı Kelimeler')
 @section('meta_description', $user->bio ?? $user->name . ' profili — Boyalı Kelimeler')
 @section('canonical', route('profile.show', $user->username))
-@section('og_title', $user->name . ' — Yazar Profili | Boyalı Kelimeler')
+@section('og_title', $user->name . ' — Sanatçı Profili | Boyalı Kelimeler')
 @section('og_description', $user->bio ?? $user->name . ' profili')
 @section('og_type', 'profile')
 @if($user->avatar_url)
@@ -50,7 +50,7 @@
             'name' => 'Breadcrumb',
             'itemListElement' => [
                 ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
-                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Yazarlar', 'item' => route('authors.index')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Sanatçılar', 'item' => route('authors.index')],
                 ['@type' => 'ListItem', 'position' => 3, 'name' => $user->name],
             ],
         ],
@@ -62,7 +62,7 @@
 @section('content')
 
     {{-- Cover + Profile Header --}}
-    <section class="profile-cover" aria-label="Yazar kapak görseli">
+    <section class="profile-cover" aria-label="Sanatçı kapak görseli">
         <div class="profile-cover__image">
             @if($user->cover_image_url)
                 <img src="{{ $user->cover_image_url }}"
@@ -79,7 +79,7 @@
         </div>
     </section>
 
-    <section class="profile-header" aria-label="Yazar bilgileri">
+    <section class="profile-header" aria-label="Sanatçı bilgileri">
         <div class="container">
             <div class="profile-header__inner">
                 {{-- Profile Photo --}}
@@ -180,7 +180,7 @@
     </section>
 
     {{-- Content Area (Two Column) --}}
-    <section class="profile-content" aria-label="Yazar içerikleri">
+    <section class="profile-content" aria-label="Sanatçı içerikleri">
         <div class="container">
             <div class="row g-4">
 
@@ -196,7 +196,7 @@
                                     <div class="writer-cta-card__icon">
                                         <i class="fa-solid fa-feather-pointed"></i>
                                     </div>
-                                    <h4 class="writer-cta-card__title">Yazar Olmak İstiyor musunuz?</h4>
+                                    <h4 class="writer-cta-card__title">Yazar & Ressam Olmak İster misiniz?</h4>
                                     <p class="writer-cta-card__text">
                                         Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar & ressam başvurusu yapın.
                                     </p>
@@ -205,7 +205,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#writerApplicationModal"
                                             aria-haspopup="dialog">
-                                        <i class="fa-solid fa-paper-plane me-2"></i>Yazar Olma İsteğinde Bulun
+                                        <i class="fa-solid fa-paper-plane me-2"></i>Başvuru Yap
                                     </button>
                                     <div class="writer-cta-card__note">
                                         <i class="fa-solid fa-shield-halved me-1"></i>Başvurunuz 3–5 iş günü içinde değerlendirilir

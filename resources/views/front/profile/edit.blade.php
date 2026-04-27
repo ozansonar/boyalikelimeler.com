@@ -84,7 +84,7 @@
                                     <div class="writer-cta-card__icon">
                                         <i class="fa-solid fa-feather-pointed"></i>
                                     </div>
-                                    <h4 class="writer-cta-card__title">Yazar Olmak İstiyor musunuz?</h4>
+                                    <h4 class="writer-cta-card__title">Yazar & Ressam Olmak İster misiniz?</h4>
                                     <p class="writer-cta-card__text">
                                         Eserlerinizi platformumuzda yayınlamak, topluluğumuzla buluşmak ve yarışmalara katılmak için yazar & ressam başvurusu yapın.
                                     </p>
@@ -93,7 +93,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#writerApplicationModal"
                                             aria-haspopup="dialog">
-                                        <i class="fa-solid fa-paper-plane me-2"></i>Yazar Olma İsteğinde Bulun
+                                        <i class="fa-solid fa-paper-plane me-2"></i>Başvuru Yap
                                     </button>
                                     <div class="writer-cta-card__note">
                                         <i class="fa-solid fa-shield-halved me-1"></i>Başvurunuz 3–5 iş günü içinde değerlendirilir

@@ -16,7 +16,7 @@
                     <h2 class="modal-title writer-modal__title" id="writerModalLabel">
                         Yazar & Ressam Başvurusu
                     </h2>
-                    <p class="writer-modal__subtitle">Boyalı Kelimeler yazarlık programına katılın</p>
+                    <p class="writer-modal__subtitle">Boyalı Kelimeler yazar & ressam programına katılın</p>
                 </div>
                 <button type="button"
                         class="btn-close writer-modal__close"
@@ -31,7 +31,7 @@
 
                     <div class="writer-form__group">
                         <label class="writer-form__label" for="wf_motivation">
-                            Neden Yazar Olmak İstiyorsunuz? <span class="writer-form__required">*</span>
+                            Neden Yazar & Ressam Olmak İstiyorsunuz? <span class="writer-form__required">*</span>
                         </label>
                         <textarea class="writer-form__input writer-form__textarea"
                                   id="wf_motivation"

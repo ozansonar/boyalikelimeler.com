@@ -1,9 +1,9 @@
 <x-mail::message>
-# Tebrikler! Yazar Olarak Kabul Edildiniz
+# Tebrikler! Yazar & Ressam Olarak Kabul Edildiniz
 
 Merhaba **{{ $application->user->name }}**,
 
-Yazar başvurunuz editör ekibimiz tarafından değerlendirilmiş ve **onaylanmıştır**.
+Yazar & Ressam başvurunuz editör ekibimiz tarafından değerlendirilmiş ve **onaylanmıştır**.
 
 Artık Boyalı Kelimeler platformunda eserlerinizi yayınlayabilir, topluluğumuzla buluşabilir ve yarışmalara katılabilirsiniz.
 

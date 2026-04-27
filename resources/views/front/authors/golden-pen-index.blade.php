@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
 @section('title', ($pageSettings['golden_pen_title'] ?? 'Altın Kalemlerimiz') . ' — Boyalı Kelimeler')
-@section('meta_description', ($pageSettings['golden_pen_description'] ?? 'Boyalı Kelimeler altın kalem yazarları. Her ay en iyi yazarlarımızı seçiyoruz.'))
+@section('meta_description', ($pageSettings['golden_pen_description'] ?? 'Boyalı Kelimeler altın kalem sanatçıları. Her ay en iyi yazarlarımızı seçiyoruz.'))
 @section('canonical', route('authors.golden-pen-index'))
 @section('og_title', ($pageSettings['golden_pen_title'] ?? 'Altın Kalemlerimiz') . ' — Boyalı Kelimeler')
-@section('og_description', ($pageSettings['golden_pen_description'] ?? 'Boyalı Kelimeler altın kalem yazarları. Her ay en iyi yazarlarımızı seçiyoruz.'))
+@section('og_description', ($pageSettings['golden_pen_description'] ?? 'Boyalı Kelimeler altın kalem sanatçıları. Her ay en iyi yazarlarımızı seçiyoruz.'))
 
 @if(request('page'))
     @section('robots', 'noindex, follow')
@@ -27,7 +27,7 @@
         [
             '@type' => 'CollectionPage',
             'name' => ($pageSettings['golden_pen_title'] ?? 'Altın Kalemlerimiz') . ' — Boyalı Kelimeler',
-            'description' => $pageSettings['golden_pen_description'] ?? 'Boyalı Kelimeler altın kalem yazarları.',
+            'description' => $pageSettings['golden_pen_description'] ?? 'Boyalı Kelimeler altın kalem sanatçıları.',
             'url' => route('authors.golden-pen-index'),
         ],
         [
@@ -99,7 +99,7 @@
                                 </div>
                                 <h3 class="golden-month-card__label">{{ $month['label'] }}</h3>
                                 <div class="golden-month-card__action">
-                                    <span>Yazarları Gör</span>
+                                    <span>Tümünü Gör</span>
                                     <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </div>
                             </article>

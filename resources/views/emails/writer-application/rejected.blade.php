@@ -1,9 +1,9 @@
 <x-mail::message>
-# Yazar Başvurunuz Hakkında
+# Yazar & Ressam Başvurunuz Hakkında
 
 Merhaba **{{ $application->user->name }}**,
 
-Yazar başvurunuz editör ekibimiz tarafından değerlendirilmiştir. Maalesef başvurunuz şu an için uygun bulunamamıştır.
+Yazar & Ressam başvurunuz editör ekibimiz tarafından değerlendirilmiştir. Maalesef başvurunuz şu an için uygun bulunamamıştır.
 
 @if($application->admin_note)
 **Değerlendirme Notu:**

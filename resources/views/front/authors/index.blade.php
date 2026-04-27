@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
-@section('title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız — Boyalı Kelimeler')
-@section('meta_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazarları ile tanışın. Şairler, hikayeciler ve deneme yazarlarımız.')
+@section('title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız & Ressamlarımız — Boyalı Kelimeler')
+@section('meta_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazar ve ressamları ile tanışın. Şairler, hikayeciler, ressamlar ve daha fazlası.')
 @section('canonical', route('authors.index'))
-@section('og_title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız — Boyalı Kelimeler')
-@section('og_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazarları ile tanışın. Şairler, hikayeciler ve deneme yazarlarımız.')
+@section('og_title', !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız & Ressamlarımız — Boyalı Kelimeler')
+@section('og_description', !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazar ve ressamları ile tanışın. Şairler, hikayeciler, ressamlar ve daha fazlası.')
 
 @if(request()->anyFilled(['search', 'sort', 'dir', 'golden_pen', 'page']))
     @section('robots', 'noindex, follow')
@@ -17,8 +17,8 @@
     '@graph' => [
         [
             '@type' => 'CollectionPage',
-            'name' => !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız — Boyalı Kelimeler',
-            'description' => !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazarları ile tanışın.',
+            'name' => !empty($pageSettings['meta_title']) ? $pageSettings['meta_title'] : 'Yazarlarımız & Ressamlarımız — Boyalı Kelimeler',
+            'description' => !empty($pageSettings['meta_description']) ? $pageSettings['meta_description'] : 'Boyalı Kelimeler yazar ve ressamları ile tanışın.',
             'url' => route('authors.index'),
         ],
         [
@@ -26,7 +26,7 @@
             'name' => 'Breadcrumb',
             'itemListElement' => [
                 ['@type' => 'ListItem', 'position' => 1, 'name' => 'Ana Sayfa', 'item' => url('/')],
-                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Yazarlar'],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Yazarlar & Ressamlar'],
             ],
         ],
     ],
@@ -43,11 +43,11 @@
         <div class="container">
             <div class="page-header__inner">
                 <h1 class="page-header__title">
-                    <i class="fa-solid fa-feather-pointed me-2"></i>{{ $pageSettings['title'] ?? 'Yazarlarımız' }}
+                    <i class="fa-solid fa-feather-pointed me-2"></i>{{ $pageSettings['title'] ?? 'Yazarlarımız & Ressamlarımız' }}
                 </h1>
                 <div class="page-header__divider"></div>
                 <p class="page-header__desc">
-                    {{ $pageSettings['description'] ?? 'Kelimelerin büyüsüne inanan, kalemleriyle dünyalar kuran yazarlarımızla tanışın.' }}
+                    {{ $pageSettings['description'] ?? 'Kelimelerin büyüsüne inanan, kalemleriyle dünyalar kuran yazar ve ressamlarımızla tanışın.' }}
                 </p>
             </div>
         </div>
@@ -143,7 +143,7 @@
                                             </div>
                                             <h3 class="golden-month-card__label">{{ $month['label'] }}</h3>
                                             <div class="golden-month-card__action">
-                                                <span>Yazarları Gör</span>
+                                                <span>Tümünü Gör</span>
                                                 <i class="fa-solid fa-arrow-right ms-2"></i>
                                             </div>
                                         </article>
@@ -164,7 +164,7 @@
         <div class="container">
 
             <h2 class="authors-list__title" data-aos="fade-up">
-                <i class="fa-solid fa-users me-2"></i>{{ $pageSettings['authors_list_title'] ?? 'Yazarlarımız' }}
+                <i class="fa-solid fa-users me-2"></i>{{ $pageSettings['authors_list_title'] ?? 'Yazarlarımız & Ressamlarımız' }}
             </h2>
 
             <!-- Toolbar: Search + Sort + Filter -->
@@ -175,7 +175,7 @@
                         <input type="text"
                                name="search"
                                class="member-toolbar__input"
-                               placeholder="Yazar ara..."
+                               placeholder="Yazar veya ressam ara..."
                                value="{{ $filters['search'] ?? '' }}"
                                autocomplete="off">
                     </div>
@@ -218,7 +218,7 @@
             </div>
 
             <div class="member-toolbar__count">
-                <span>{{ $authors->total() }} yazar gösteriliyor</span>
+                <span>{{ $authors->total() }} sanatçı gösteriliyor</span>
             </div>
 
             <div class="row g-4" id="memberGrid">
@@ -256,7 +256,7 @@
                     <div class="col-12">
                         <div class="member-no-result member-no-result--visible">
                             <i class="fa-solid fa-search member-no-result__icon"></i>
-                            <p class="member-no-result__text">Aramanızla eşleşen yazar bulunamadı.</p>
+                            <p class="member-no-result__text">Aramanızla eşleşen sanatçı bulunamadı.</p>
                         </div>
                     </div>
                 @endforelse
