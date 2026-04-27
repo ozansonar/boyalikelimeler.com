@@ -8,6 +8,14 @@
 @push('styles')
     <!-- Tom Select CSS -->
     <link href="{{ asset('vendor/tom-select/2.4.3/css/tom-select.min.css') }}" rel="stylesheet">
+    <style>
+        .tox-tbtn[data-mce-name="pasteContent"] .tox-icon {
+            color: #D4AF37 !important;
+        }
+        .tox-tbtn[data-mce-name="pasteContent"]:hover {
+            background-color: rgba(212, 175, 55, 0.15) !important;
+        }
+    </style>
 @endpush
 
 @section('content')
