@@ -22,7 +22,11 @@ trait GeneratesUniqueSlug
         $counter = 1;
         $model = $this->slugModel();
 
-        while ($model::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+        $query = fn () => $model::withTrashed()
+            ->where('slug', $slug)
+            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId));
+
+        while ($query()->exists()) {
             $slug = $original . '-' . $counter;
             $counter++;
         }
