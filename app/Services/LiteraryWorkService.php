@@ -205,22 +205,26 @@ final class LiteraryWorkService
      */
     public function getAuthorStats(User $user, ?string $workType = null): array
     {
-        $query = $user->literaryWorks()->selectRaw("status, COUNT(*) as cnt");
+        $cacheKey = "literary_works.author_stats.{$user->id}" . ($workType ? ".{$workType}" : '');
 
-        if ($workType) {
-            $query->where('work_type', $workType);
-        }
+        return Cache::remember($cacheKey, 300, function () use ($user, $workType): array {
+            $query = $user->literaryWorks()->selectRaw("status, COUNT(*) as cnt");
 
-        $counts = $query->groupBy('status')->pluck('cnt', 'status');
+            if ($workType) {
+                $query->where('work_type', $workType);
+            }
 
-        return [
-            'total'              => (int) $counts->sum(),
-            'pending'            => (int) ($counts[LiteraryWorkStatus::Pending->value] ?? 0),
-            'approved'           => (int) ($counts[LiteraryWorkStatus::Approved->value] ?? 0),
-            'rejected'           => (int) ($counts[LiteraryWorkStatus::Rejected->value] ?? 0),
-            'revision_requested' => (int) ($counts[LiteraryWorkStatus::RevisionRequested->value] ?? 0),
-            'unpublished'        => (int) ($counts[LiteraryWorkStatus::Unpublished->value] ?? 0),
-        ];
+            $counts = $query->groupBy('status')->pluck('cnt', 'status');
+
+            return [
+                'total'              => (int) $counts->sum(),
+                'pending'            => (int) ($counts[LiteraryWorkStatus::Pending->value] ?? 0),
+                'approved'           => (int) ($counts[LiteraryWorkStatus::Approved->value] ?? 0),
+                'rejected'           => (int) ($counts[LiteraryWorkStatus::Rejected->value] ?? 0),
+                'revision_requested' => (int) ($counts[LiteraryWorkStatus::RevisionRequested->value] ?? 0),
+                'unpublished'        => (int) ($counts[LiteraryWorkStatus::Unpublished->value] ?? 0),
+            ];
+        });
     }
 
     // ─── Author: Paginate ───
@@ -296,7 +300,7 @@ final class LiteraryWorkService
             }
 
             $work->update($updateData);
-            $this->clearCache();
+            $this->clearCache($work->user_id);
 
             return $work->fresh();
         });
@@ -308,8 +312,9 @@ final class LiteraryWorkService
     {
         return DB::transaction(function () use ($work): bool {
             $this->deleteOldCover($work->cover_image);
+            $authorId = $work->user_id;
             $work->delete();
-            $this->clearCache();
+            $this->clearCache($authorId);
             return true;
         });
     }
@@ -654,11 +659,15 @@ final class LiteraryWorkService
     public function getPublishedStats(): array
     {
         return Cache::remember('literary_works.front_stats', 300, function (): array {
+            $row = LiteraryWork::whereHas('author')
+                ->where('status', LiteraryWorkStatus::Approved)
+                ->selectRaw('COUNT(*) as work_count, COUNT(DISTINCT user_id) as author_count, COALESCE(SUM(view_count), 0) as total_views')
+                ->first();
+
             return [
-                'work_count'   => LiteraryWork::whereHas('author')->where('status', LiteraryWorkStatus::Approved)->count(),
-                'author_count' => LiteraryWork::whereHas('author')->where('status', LiteraryWorkStatus::Approved)
-                    ->distinct('user_id')->count('user_id'),
-                'total_views'  => (int) LiteraryWork::whereHas('author')->where('status', LiteraryWorkStatus::Approved)->sum('view_count'),
+                'work_count'   => (int) $row->work_count,
+                'author_count' => (int) $row->author_count,
+                'total_views'  => (int) $row->total_views,
             ];
         });
     }
@@ -671,21 +680,23 @@ final class LiteraryWorkService
     public function getPublishedStatsByType(string $workType): array
     {
         return Cache::remember("literary_works.front_stats.{$workType}", 300, function () use ($workType): array {
-            $base = LiteraryWork::whereHas('author')
+            $row = LiteraryWork::whereHas('author')
                 ->where('status', LiteraryWorkStatus::Approved)
-                ->where('work_type', $workType);
+                ->where('work_type', $workType)
+                ->selectRaw('COUNT(*) as work_count, COUNT(DISTINCT user_id) as author_count, COALESCE(SUM(view_count), 0) as total_views')
+                ->first();
 
             return [
-                'work_count'   => (clone $base)->count(),
-                'author_count' => (clone $base)->distinct('user_id')->count('user_id'),
-                'total_views'  => (int) (clone $base)->sum('view_count'),
+                'work_count'   => (int) $row->work_count,
+                'author_count' => (int) $row->author_count,
+                'total_views'  => (int) $row->total_views,
             ];
         });
     }
 
     // ─── Cache ───
 
-    private function clearCache(): void
+    private function clearCache(?int $authorId = null): void
     {
         Cache::forget('literary_works.admin_stats');
         Cache::forget('literary_works.admin_stats.written');
@@ -694,6 +705,12 @@ final class LiteraryWorkService
         Cache::forget('literary_works.front_stats');
         Cache::forget('literary_works.front_stats.written');
         Cache::forget('literary_works.front_stats.visual');
+
+        if ($authorId) {
+            Cache::forget("literary_works.author_stats.{$authorId}");
+            Cache::forget("literary_works.author_stats.{$authorId}.written");
+            Cache::forget("literary_works.author_stats.{$authorId}.visual");
+        }
 
         // HomeService caches
         Cache::forget('home.latest_written_works');

@@ -322,7 +322,7 @@
                                         <a href="{{ route('blog.category', $cat->slug) }}"
                                            class="blog-sidebar__cat-link {{ $currentCategory === $cat->slug ? 'blog-sidebar__cat-link--active' : '' }}">
                                             <i class="fa-solid fa-folder me-2"></i>{{ $cat->name }}
-                                            <span class="blog-sidebar__cat-count">{{ $cat->posts()->where('status', 'published')->count() }}</span>
+                                            <span class="blog-sidebar__cat-count">{{ $cat->published_posts_count }}</span>
                                         </a>
                                     </li>
                                 @endforeach

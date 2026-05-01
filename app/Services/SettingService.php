@@ -127,23 +127,19 @@ final class SettingService
     /**
      * Clear the settings cache.
      */
+    private const KNOWN_GROUPS = [
+        'general', 'homepage', 'seo', 'social', 'contact', 'smtp',
+        'recaptcha', 'maintenance', 'authors_page', 'painters_page',
+    ];
+
     public function clearCache(): void
     {
         Cache::forget(self::CACHE_KEY);
         Cache::forget(self::CACHE_KEY . '.grouped');
         Cache::forget(self::CACHE_KEY . '.weekly_movies');
 
-        $groups = Setting::distinct()->pluck('group');
-        foreach ($groups as $group) {
+        foreach (self::KNOWN_GROUPS as $group) {
             Cache::forget(self::CACHE_KEY . ".group.{$group}");
-        }
-
-        // YouTube cache - channel ID may have changed
-        $channelId = Setting::where('group', 'homepage')
-            ->where('key', 'youtube_channel_id')
-            ->value('value');
-        if (!empty($channelId)) {
-            Cache::forget('youtube.channel_videos.' . $channelId);
         }
 
         self::$memo = [];

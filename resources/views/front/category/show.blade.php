@@ -175,7 +175,7 @@
                                         <a href="{{ route('category.show', $cat->slug) }}"
                                            class="blog-sidebar__cat-link {{ $category->id === $cat->id ? 'blog-sidebar__cat-link--active' : '' }}">
                                             <i class="fa-solid fa-folder me-2"></i>{{ $cat->name }}
-                                            <span class="blog-sidebar__cat-count">{{ $cat->publishedPosts()->count() }}</span>
+                                            <span class="blog-sidebar__cat-count">{{ $cat->published_posts_count }}</span>
                                         </a>
                                     </li>
                                 @endforeach

@@ -173,12 +173,18 @@ final class QnaQuestionService
      */
     public function getAdminStats(): array
     {
-        return [
-            'total'    => QnaQuestion::count(),
-            'pending'  => QnaQuestion::where('status', QnaStatus::Pending)->count(),
-            'approved' => QnaQuestion::where('status', QnaStatus::Approved)->count(),
-            'rejected' => QnaQuestion::where('status', QnaStatus::Rejected)->count(),
-        ];
+        return Cache::remember('qna.stats', 300, function (): array {
+            $counts = QnaQuestion::selectRaw("status, COUNT(*) as cnt")
+                ->groupBy('status')
+                ->pluck('cnt', 'status');
+
+            return [
+                'total'    => (int) $counts->sum(),
+                'pending'  => (int) ($counts[QnaStatus::Pending->value] ?? 0),
+                'approved' => (int) ($counts[QnaStatus::Approved->value] ?? 0),
+                'rejected' => (int) ($counts[QnaStatus::Rejected->value] ?? 0),
+            ];
+        });
     }
 
     public function clearCountCache(): void
