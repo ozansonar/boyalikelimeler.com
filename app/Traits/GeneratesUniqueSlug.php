@@ -18,19 +18,33 @@ trait GeneratesUniqueSlug
     protected function generateUniqueSlug(string $value, ?int $ignoreId = null): string
     {
         $slug = Str::slug($value);
-        $original = $slug;
-        $counter = 1;
         $model = $this->slugModel();
 
-        $query = fn () => $model::withTrashed()
+        $exists = $model::withTrashed()
             ->where('slug', $slug)
-            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId));
+            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
+            ->exists();
 
-        while ($query()->exists()) {
-            $slug = $original . '-' . $counter;
-            $counter++;
+        if (! $exists) {
+            return $slug;
         }
 
-        return $slug;
+        $existing = $model::withTrashed()
+            ->where('slug', 'LIKE', $slug . '-%')
+            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
+            ->pluck('slug');
+
+        $max = 0;
+        $prefix = $slug . '-';
+        $prefixLen = strlen($prefix);
+
+        foreach ($existing as $s) {
+            $suffix = substr($s, $prefixLen);
+            if (ctype_digit($suffix)) {
+                $max = max($max, (int) $suffix);
+            }
+        }
+
+        return $slug . '-' . ($max + 1);
     }
 }
