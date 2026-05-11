@@ -130,7 +130,7 @@ final class LiteraryWorkService
                 'published_at' => now(),
             ]);
 
-            $this->clearCache();
+            $this->clearCache($work->user_id);
         });
 
         if ($work->author?->wantsMailNotification('work_status')) {
@@ -153,7 +153,7 @@ final class LiteraryWorkService
                 'status' => LiteraryWorkStatus::Rejected,
             ]);
 
-            $this->clearCache();
+            $this->clearCache($work->user_id);
         });
 
         if ($work->author?->wantsMailNotification('work_status')) {
@@ -182,7 +182,7 @@ final class LiteraryWorkService
                 'reason'           => $reason,
             ]);
 
-            $this->clearCache();
+            $this->clearCache($work->user_id);
         });
 
         $work->load('revisions.admin');
@@ -267,7 +267,7 @@ final class LiteraryWorkService
             ]);
         });
 
-        $this->clearCache();
+        $this->clearCache($user->id);
         $this->lastMailSent = $this->notifyAdminsNewSubmission($work);
 
         return $work;
@@ -332,7 +332,7 @@ final class LiteraryWorkService
                 'status'       => LiteraryWorkStatus::Unpublished,
                 'published_at' => null,
             ]);
-            $this->clearCache();
+            $this->clearCache($work->user_id);
             return true;
         });
     }
@@ -399,7 +399,7 @@ final class LiteraryWorkService
             return $work->fresh();
         });
 
-        $this->clearCache();
+        $this->clearCache($updatedWork->user_id);
 
         if ($wasApproved) {
             $this->lastMailSent = $this->notifyAdminsUpdated($updatedWork);
@@ -439,7 +439,7 @@ final class LiteraryWorkService
                 'published_at' => null,
             ]);
 
-            $this->clearCache();
+            $this->clearCache($work->user_id);
 
             return true;
         });
@@ -462,7 +462,7 @@ final class LiteraryWorkService
                 'status' => LiteraryWorkStatus::Pending,
             ]);
 
-            $this->clearCache();
+            $this->clearCache($work->user_id);
 
             return true;
         });
@@ -483,8 +483,9 @@ final class LiteraryWorkService
         }
 
         return DB::transaction(function () use ($work): bool {
+            $authorId = $work->user_id;
             $work->delete();
-            $this->clearCache();
+            $this->clearCache($authorId);
             return true;
         });
     }

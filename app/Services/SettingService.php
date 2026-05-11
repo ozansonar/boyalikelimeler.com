@@ -129,7 +129,7 @@ final class SettingService
      */
     private const KNOWN_GROUPS = [
         'general', 'homepage', 'seo', 'social', 'contact', 'smtp',
-        'recaptcha', 'maintenance', 'authors_page', 'painters_page',
+        'recaptcha', 'maintenance', 'authors_page', 'painters_page', 'mail_theme',
     ];
 
     public function clearCache(): void
