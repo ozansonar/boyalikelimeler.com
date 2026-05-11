@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
+            if (!categoryId.value) {
+                showQnaToast('Lütfen bir kategori seçin.', 'error');
+                categoryId.focus();
+                return;
+            }
+
             submitQuestionBtn.disabled = true;
             submitQuestionBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Gönderiliyor...';
 

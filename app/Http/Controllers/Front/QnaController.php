@@ -29,10 +29,11 @@ final class QnaController extends Controller
 
     public function index(): View
     {
-        $categories = $this->categoryService->getActiveCategories();
-        $stats      = $this->categoryService->getStats();
+        $categories    = $this->categoryService->getActiveCategories();
+        $stats         = $this->categoryService->getStats();
+        $allCategories = $categories;
 
-        return view('front.qna.index', compact('categories', 'stats'));
+        return view('front.qna.index', compact('categories', 'stats', 'allCategories'));
     }
 
     public function category(string $categorySlug, Request $request): View|Response
