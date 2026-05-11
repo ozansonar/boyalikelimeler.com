@@ -10493,6 +10493,164 @@ p {
     font-size: 0.75rem;
 }
 
+/* -- Ask Question Card --------------------------------------- */
+
+.qna-ask-section {
+    padding: 2rem 0 0;
+}
+
+.qna-ask-card {
+    background: var(--color-black-card);
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    border-radius: 1rem;
+    padding: 1.75rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.qna-ask-card__header {
+    margin-bottom: 1.25rem;
+}
+
+.qna-ask-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin-bottom: 0.35rem;
+}
+
+.qna-ask-card__desc {
+    font-size: 0.85rem;
+    color: var(--color-silver-dark);
+    margin: 0;
+}
+
+.qna-ask-card__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.qna-ask-card__row {
+    display: flex;
+    gap: 1rem;
+}
+
+.qna-ask-card__field--title {
+    flex: 1;
+    min-width: 0;
+}
+
+.qna-ask-card__field--category {
+    flex: 0 0 220px;
+}
+
+.qna-ask-card__label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-cream);
+    margin-bottom: 0.4rem;
+}
+
+.qna-ask-card__label i {
+    color: var(--color-gold);
+    opacity: 0.7;
+}
+
+.qna-ask-card__input {
+    width: 100%;
+    background: var(--color-black-deep);
+    border: 1px solid rgba(155, 158, 163, 0.2);
+    border-radius: 0.5rem;
+    color: var(--color-cream);
+    padding: 0.65rem 0.875rem;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qna-ask-card__input::placeholder {
+    color: var(--color-silver-dark);
+}
+
+.qna-ask-card__input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.12);
+    color: var(--color-white);
+}
+
+.qna-ask-card__input option {
+    background: var(--color-black-deep);
+    color: var(--color-cream);
+}
+
+.qna-ask-card__textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.qna-ask-card__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.qna-ask-card__submit {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.5rem;
+    background: var(--color-gold);
+    color: var(--color-black-deep);
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.qna-ask-card__submit:hover {
+    background: var(--color-gold-light);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    transform: translateY(-1px);
+}
+
+.qna-ask-card__guest {
+    text-align: center;
+    padding: 1rem 0 0.25rem;
+    font-size: 0.9rem;
+    color: var(--color-silver-dark);
+}
+
+.qna-ask-card__login-link {
+    color: var(--color-gold);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.qna-ask-card__login-link:hover {
+    color: var(--color-gold-light);
+    text-decoration: underline;
+}
+
+@media (max-width: 767.98px) {
+    .qna-ask-card {
+        padding: 1.25rem 1rem;
+    }
+
+    .qna-ask-card__row {
+        flex-direction: column;
+    }
+
+    .qna-ask-card__field--category {
+        flex: none;
+    }
+}
+
 /* -- Subtitle Bar -------------------------------------------- */
 
 .qna-subtitle-bar {
@@ -15897,6 +16055,7 @@ a.page-box-card:hover .page-box-card__link-hint {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
+    min-width: 0;
 }
 
 /* -- Authors Grid -------------------------------------------- */
@@ -15905,6 +16064,7 @@ a.page-box-card:hover .page-box-card__link-hint {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+    min-width: 0;
 }
 
 .search-results__author-card {
@@ -15917,6 +16077,7 @@ a.page-box-card:hover .page-box-card__link-hint {
     border-radius: 12px;
     text-decoration: none;
     transition: all 0.2s ease;
+    overflow: hidden;
 }
 
 .search-results__author-card:hover {
@@ -15947,6 +16108,8 @@ a.page-box-card:hover .page-box-card__link-hint {
 
 .search-results__author-info {
     min-width: 0;
+    flex: 1;
+    overflow: hidden;
 }
 
 .search-results__author-name {
@@ -15954,6 +16117,9 @@ a.page-box-card:hover .page-box-card__link-hint {
     font-weight: 600;
     color: var(--color-white);
     margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .search-results__author-bio {
