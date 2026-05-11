@@ -173,7 +173,7 @@ final class QnaQuestionService
      */
     public function getAdminStats(): array
     {
-        return Cache::remember('qna.stats', 300, function (): array {
+        return Cache::remember('qna.admin_stats', 300, function (): array {
             $counts = QnaQuestion::selectRaw("status, COUNT(*) as cnt")
                 ->groupBy('status')
                 ->pluck('cnt', 'status');
@@ -191,6 +191,7 @@ final class QnaQuestionService
     {
         Cache::forget('qna_questions.pending_count');
         Cache::forget('qna.pending_total');
+        Cache::forget('qna.admin_stats');
         Cache::forget('qna.stats');
     }
 
