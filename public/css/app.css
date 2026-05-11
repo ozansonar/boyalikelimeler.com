@@ -9204,6 +9204,14 @@ p {
 
     .clist-toolbar {
         flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .clist-toolbar__search {
+        flex: none;
+        width: 100%;
+        min-width: 0;
     }
 
     .clist-toolbar__filters {
@@ -9217,7 +9225,7 @@ p {
     }
 
     .clist-toolbar__view {
-        align-self: flex-end;
+        display: none;
     }
 
     .clist-grid,
