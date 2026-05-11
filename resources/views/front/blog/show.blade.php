@@ -235,7 +235,7 @@
                                     <li>
                                         <a href="{{ route('blog.category', $cat->slug) }}" class="blogd-sidebar__cat-link">
                                             <i class="fa-solid fa-folder me-2"></i>{{ $cat->name }}
-                                            <span class="blogd-sidebar__cat-count">{{ $cat->posts()->where('status', 'published')->count() }}</span>
+                                            <span class="blogd-sidebar__cat-count">{{ $cat->published_posts_count }}</span>
                                         </a>
                                     </li>
                                 @endforeach

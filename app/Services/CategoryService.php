@@ -28,6 +28,7 @@ final class CategoryService
     {
         return Cache::remember('categories.active', 600, function (): Collection {
             return Category::where('is_active', true)
+                ->withCount(['posts as published_posts_count' => fn ($q) => $q->where('status', 'published')])
                 ->orderBy('sort_order')
                 ->orderBy('name')
                 ->get();

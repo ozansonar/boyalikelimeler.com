@@ -215,5 +215,6 @@ final class PostService
         Cache::forget('posts.featured.5');
         Cache::forget('posts.popular.5');
         Cache::forget('posts.published.stats');
+        Cache::forget('categories.active');
     }
 }

@@ -106,11 +106,17 @@
                      loading="lazy">
             </a>
 
-            <button class="navbar-toggler navbar-bk__toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarMain"
-                    aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
-                <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
-            </button>
+            <div class="d-flex d-xxl-none align-items-center gap-2">
+                <button type="button" class="navbar-bk__search-btn navbar-bk__search-btn--mobile"
+                        data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Ara">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button class="navbar-toggler navbar-bk__toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                        aria-controls="navbarMain" aria-expanded="false" aria-label="Menüyü aç/kapat">
+                    <i class="fa-solid fa-bars navbar-bk__toggler-icon"></i>
+                </button>
+            </div>
 
             <div class="collapse navbar-collapse" id="navbarMain">
                 <ul class="navbar-nav ms-auto navbar-bk__nav">
@@ -198,9 +204,10 @@
                     @endauth
                 </ul>
 
-                <a href="{{ route('search.index') }}" class="navbar-bk__search-btn ms-xxl-3" aria-label="Ara" title="Ara">
+                <button type="button" class="navbar-bk__search-btn d-none d-xxl-flex ms-xxl-3"
+                        data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Ara" title="Ara">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                </a>
+                </button>
 
                 <div class="navbar-bk__auth d-none d-xxl-flex align-items-center gap-2 ms-xxl-3">
                     @auth
@@ -429,5 +436,42 @@
     <script src="{{ asset('js/pwa.js') }}?v={{ filemtime(public_path('js/pwa.js')) }}" defer></script>
     @stack('scripts')
     <script>window.addEventListener('load',function(){var l=document.getElementById('bkLoader');if(l){l.classList.add('bk-loader--hidden');l.addEventListener('transitionend',function(){l.remove()})}})</script>
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-label="Arama" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered search-modal">
+            <div class="modal-content search-modal__content">
+                <div class="search-modal__header">
+                    <h5 class="search-modal__title">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i>Ara
+                    </h5>
+                    <button type="button" class="search-modal__close" data-bs-dismiss="modal" aria-label="Kapat">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="search-modal__body">
+                    <form action="{{ route('search.index') }}" method="GET" class="search-modal__form">
+                        <div class="search-modal__input-wrap">
+                            <i class="fa-solid fa-magnifying-glass search-modal__input-icon"></i>
+                            <input type="text"
+                                   name="q"
+                                   class="search-modal__input"
+                                   placeholder="Yazı, blog veya yazar ara..."
+                                   minlength="2"
+                                   required
+                                   autocomplete="off">
+                        </div>
+                        <button type="submit" class="search-modal__btn">
+                            <i class="fa-solid fa-arrow-right me-2"></i>Ara
+                        </button>
+                    </form>
+                    <p class="search-modal__hint">
+                        Yazılar, blog içerikleri ve yazarlar arasında arama yapın.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
