@@ -759,4 +759,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         renderPage();
     }
+
+    /* -- Search Modal: auto-focus input on open --------------- */
+    var searchModal = document.getElementById('searchModal');
+    if (searchModal) {
+        searchModal.addEventListener('shown.bs.modal', function () {
+            var input = searchModal.querySelector('.search-modal__input');
+            if (input) input.focus();
+        });
+    }
 });
