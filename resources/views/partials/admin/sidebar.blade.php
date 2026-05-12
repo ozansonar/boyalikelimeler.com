@@ -111,6 +111,9 @@
                 </a>
                 <a href="{{ route('admin.qna.answers.index') }}" class="nav-link {{ request()->routeIs('admin.qna.answers.*') ? 'active' : '' }}">
                     <i class="bi bi-chat-left-text-fill"></i> Cevaplar
+                    @if($pendingQnaAnswerCount > 0)
+                        <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingQnaAnswerCount }}</span>
+                    @endif
                 </a>
             @endif
         @endif

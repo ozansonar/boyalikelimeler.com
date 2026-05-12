@@ -78,7 +78,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with('pendingWorksCount', app(LiteraryWorkService::class)->getPendingCount());
             $view->with('pendingCommentsCount', app(CommentService::class)->getPendingCount());
             $view->with('unreadMessagesCount', app(ContactService::class)->getUnreadCount());
-            $view->with('pendingQnaCount', app(QnaQuestionService::class)->getPendingCount() + app(QnaAnswerService::class)->getPendingCount());
+            $view->with('pendingQnaCount', app(QnaQuestionService::class)->getPendingCount());
+            $view->with('pendingQnaAnswerCount', app(QnaAnswerService::class)->getPendingCount());
             $view->with('pendingWriterApplicationsCount', app(WriterApplicationService::class)->getPendingCount());
         });
     }
