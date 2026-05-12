@@ -83,10 +83,10 @@
                         <a href="https://x.com/{{ $user->twitter }}" target="_blank" rel="noopener" class="prf-social-btn sc-twitter"><i class="bi bi-twitter-x"></i></a>
                     @endif
                     @if($user->youtube)
-                        <a href="https://youtube.com/{{ $user->youtube }}" target="_blank" rel="noopener" class="prf-social-btn sc-youtube"><i class="bi bi-youtube"></i></a>
+                        <a href="https://youtube.com/{{ '@' . $user->youtube }}" target="_blank" rel="noopener" class="prf-social-btn sc-youtube"><i class="bi bi-youtube"></i></a>
                     @endif
                     @if($user->tiktok)
-                        <a href="https://tiktok.com/@{{ $user->tiktok }}" target="_blank" rel="noopener" class="prf-social-btn sc-tiktok"><i class="bi bi-tiktok"></i></a>
+                        <a href="https://tiktok.com/{{ '@' . $user->tiktok }}" target="_blank" rel="noopener" class="prf-social-btn sc-tiktok"><i class="bi bi-tiktok"></i></a>
                     @endif
                     @if($user->spotify)
                         <a href="https://open.spotify.com/user/{{ $user->spotify }}" target="_blank" rel="noopener" class="prf-social-btn sc-spotify"><i class="bi bi-spotify"></i></a>

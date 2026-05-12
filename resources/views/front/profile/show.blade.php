@@ -15,7 +15,7 @@
     $socialLinks = array_values(array_filter([
         $user->instagram ? 'https://instagram.com/' . $user->instagram : null,
         $user->twitter ? 'https://x.com/' . $user->twitter : null,
-        $user->youtube ? 'https://youtube.com/' . $user->youtube : null,
+        $user->youtube ? 'https://youtube.com/@' . $user->youtube : null,
         $user->tiktok ? 'https://tiktok.com/@' . $user->tiktok : null,
         $user->website ?? null,
     ]));
@@ -319,13 +319,13 @@
                                     </a>
                                 @endif
                                 @if($user->youtube)
-                                    <a href="https://youtube.com/@{{ $user->youtube }}" class="profile-social__link profile-social__link--youtube" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                                    <a href="https://youtube.com/{{ '@' . $user->youtube }}" class="profile-social__link profile-social__link--youtube" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
                                         <i class="fa-brands fa-youtube"></i>
                                         <span>{{ $user->youtube }}</span>
                                     </a>
                                 @endif
                                 @if($user->tiktok)
-                                    <a href="https://tiktok.com/@{{ $user->tiktok }}" class="profile-social__link profile-social__link--tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                                    <a href="https://tiktok.com/{{ '@' . $user->tiktok }}" class="profile-social__link profile-social__link--tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
                                         <i class="fa-brands fa-tiktok"></i>
                                         <span>{{ '@' . $user->tiktok }}</span>
                                     </a>

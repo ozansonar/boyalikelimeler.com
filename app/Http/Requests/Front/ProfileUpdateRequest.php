@@ -28,6 +28,14 @@ class ProfileUpdateRequest extends FormRequest
                 $this->merge([$field => false]);
             }
         }
+
+        $socialFields = ['instagram', 'twitter', 'youtube', 'tiktok'];
+        foreach ($socialFields as $field) {
+            $value = $this->input($field);
+            if (is_string($value)) {
+                $this->merge([$field => ltrim($value, '@')]);
+            }
+        }
     }
 
     /**
