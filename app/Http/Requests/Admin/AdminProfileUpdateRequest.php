@@ -14,6 +14,17 @@ class AdminProfileUpdateRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $socialFields = ['instagram', 'twitter', 'youtube', 'tiktok'];
+        foreach ($socialFields as $field) {
+            $value = $this->input($field);
+            if (is_string($value)) {
+                $this->merge([$field => ltrim($value, '@')]);
+            }
+        }
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -28,11 +39,11 @@ class AdminProfileUpdateRequest extends FormRequest
             'bio'       => 'nullable|string|max:300',
             'location'  => 'nullable|string|max:100',
             'website'   => 'nullable|url|max:255',
-            'instagram' => 'nullable|url|max:255',
-            'twitter'   => 'nullable|url|max:255',
-            'youtube'   => 'nullable|url|max:255',
-            'tiktok'    => 'nullable|url|max:255',
-            'spotify'            => 'nullable|url|max:255',
+            'instagram' => 'nullable|string|max:50',
+            'twitter'   => 'nullable|string|max:50',
+            'youtube'   => 'nullable|string|max:50',
+            'tiktok'    => 'nullable|string|max:50',
+            'spotify'   => 'nullable|string|max:100',
             'notify_admin_mails' => 'nullable|boolean',
         ];
     }
@@ -53,11 +64,11 @@ class AdminProfileUpdateRequest extends FormRequest
             'username.regex'    => 'Kullanıcı adı sadece harf, rakam, nokta, tire ve alt çizgi içerebilir.',
             'bio.max'           => 'Biyografi en fazla 300 karakter olabilir.',
             'website.url'       => 'Geçerli bir URL girin (https://...).',
-            'instagram.url'     => 'Geçerli bir Instagram URL\'si girin.',
-            'twitter.url'       => 'Geçerli bir Twitter/X URL\'si girin.',
-            'youtube.url'       => 'Geçerli bir YouTube URL\'si girin.',
-            'tiktok.url'        => 'Geçerli bir TikTok URL\'si girin.',
-            'spotify.url'       => 'Geçerli bir Spotify URL\'si girin.',
+            'instagram.max'     => 'Instagram kullanıcı adı en fazla 50 karakter olabilir.',
+            'twitter.max'       => 'Twitter kullanıcı adı en fazla 50 karakter olabilir.',
+            'youtube.max'       => 'YouTube kanal adı en fazla 50 karakter olabilir.',
+            'tiktok.max'        => 'TikTok kullanıcı adı en fazla 50 karakter olabilir.',
+            'spotify.max'       => 'Spotify kullanıcı adı en fazla 100 karakter olabilir.',
         ];
     }
 }

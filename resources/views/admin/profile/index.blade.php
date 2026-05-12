@@ -153,26 +153,26 @@
                     <div class="stg-section">
                         <div class="stg-section-title">
                             <h6>Sosyal Medya</h6>
-                            <p>Sosyal medya profil URL'lerinizi ekleyin</p>
+                            <p>Sosyal medya kullanıcı adlarınızı ekleyin</p>
                         </div>
 
                         <div class="stg-row">
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apInstagram"><i class="bi bi-instagram me-1"></i> Instagram</label>
-                                <input type="url" class="stg-input @error('instagram') is-invalid @enderror"
+                                <input type="text" class="stg-input @error('instagram') is-invalid @enderror"
                                        id="apInstagram" name="instagram"
                                        value="{{ old('instagram', $user->instagram) }}"
-                                       placeholder="https://instagram.com/kullaniciadi">
+                                       placeholder="kullaniciadi">
                                 @error('instagram')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apTwitter"><i class="bi bi-twitter-x me-1"></i> Twitter / X</label>
-                                <input type="url" class="stg-input @error('twitter') is-invalid @enderror"
+                                <input type="text" class="stg-input @error('twitter') is-invalid @enderror"
                                        id="apTwitter" name="twitter"
                                        value="{{ old('twitter', $user->twitter) }}"
-                                       placeholder="https://x.com/kullaniciadi">
+                                       placeholder="kullaniciadi">
                                 @error('twitter')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -182,20 +182,20 @@
                         <div class="stg-row">
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apYoutube"><i class="bi bi-youtube me-1"></i> YouTube</label>
-                                <input type="url" class="stg-input @error('youtube') is-invalid @enderror"
+                                <input type="text" class="stg-input @error('youtube') is-invalid @enderror"
                                        id="apYoutube" name="youtube"
                                        value="{{ old('youtube', $user->youtube) }}"
-                                       placeholder="https://youtube.com/@kanaladi">
+                                       placeholder="kanaladi">
                                 @error('youtube')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="stg-field stg-half">
                                 <label class="stg-label" for="apTiktok"><i class="bi bi-tiktok me-1"></i> TikTok</label>
-                                <input type="url" class="stg-input @error('tiktok') is-invalid @enderror"
+                                <input type="text" class="stg-input @error('tiktok') is-invalid @enderror"
                                        id="apTiktok" name="tiktok"
                                        value="{{ old('tiktok', $user->tiktok) }}"
-                                       placeholder="https://tiktok.com/@kullaniciadi">
+                                       placeholder="kullaniciadi">
                                 @error('tiktok')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -204,10 +204,10 @@
 
                         <div class="stg-field">
                             <label class="stg-label" for="apSpotify"><i class="bi bi-spotify me-1"></i> Spotify</label>
-                            <input type="url" class="stg-input @error('spotify') is-invalid @enderror"
+                            <input type="text" class="stg-input @error('spotify') is-invalid @enderror"
                                    id="apSpotify" name="spotify"
                                    value="{{ old('spotify', $user->spotify) }}"
-                                   placeholder="https://open.spotify.com/user/kullaniciadi">
+                                   placeholder="kullaniciadi">
                             @error('spotify')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
