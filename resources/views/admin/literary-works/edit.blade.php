@@ -197,14 +197,24 @@
     <script>
     tinymce.init({
         selector: '#bodyEditor',
-        height: 500,
-        menubar: false,
+        base_url: 'https://cdn.jsdelivr.net/npm/tinymce@7.6.1',
+        suffix: '.min',
+        license_key: 'gpl',
         skin: 'oxide-dark',
         content_css: 'dark',
-        plugins: 'lists link image code fullscreen',
-        toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link imagegallery | code fullscreen',
-        branding: false,
+        language: 'tr',
+        language_url: 'https://cdn.jsdelivr.net/npm/tinymce-i18n@24.11.25/langs7/tr.min.js',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen preview code',
+        toolbar: [
+            'undo redo | pasteContent | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor',
+            'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link imagegallery media table | blockquote codesample | charmap emoticons | fullscreen code | removeformat'
+        ],
+        menubar: 'file edit view insert format tools table',
+        height: 900,
+        placeholder: 'Eser içeriğini düzenleyin...',
+        contextmenu: false,
         promotion: false,
+        branding: false,
         automatic_uploads: true,
         relative_urls: false,
         remove_script_host: false,
@@ -212,72 +222,196 @@
         entity_encoding: 'raw',
         valid_children: '+div[img]',
         extended_valid_elements: 'div[class]',
+        object_resizing: true,
+        image_advtab: true,
+        image_caption: true,
+        image_title: true,
+        image_description: true,
+        image_dimensions: true,
+        editimage_toolbar: 'imageoptions',
         images_upload_handler: window.editorImagesUploadHandler,
         setup: function (editor) {
             if (typeof window.editorImagesSetup === 'function') {
                 window.editorImagesSetup(editor);
             }
 
+            /* ── Paste Button ──────────────────────────── */
+            editor.ui.registry.addButton('pasteContent', {
+                icon: 'paste',
+                tooltip: 'Yapıştır',
+                onAction: function () {
+                    if (navigator.clipboard && navigator.clipboard.readText) {
+                        navigator.clipboard.readText().then(function (text) {
+                            if (text) {
+                                var safe = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                                var html = safe.replace(/\n/g, '<br>');
+                                editor.insertContent(html);
+                            }
+                        }).catch(function () {
+                            editor.notificationManager.open({
+                                text: 'Yapıştırmak için Ctrl+V (veya Cmd+V) kullanın.',
+                                type: 'info',
+                                timeout: 3000
+                            });
+                        });
+                    } else {
+                        editor.notificationManager.open({
+                            text: 'Yapıştırmak için Ctrl+V (veya Cmd+V) kullanın.',
+                            type: 'info',
+                            timeout: 3000
+                        });
+                    }
+                }
+            });
+
+            /* ── Image Size Buttons ─────────────────────── */
             var IMG_SIZES = [
-                { name: 'imgw20',  label: 'XS',  cls: 'img-w-20'  },
-                { name: 'imgw40',  label: 'S',   cls: 'img-w-40'  },
-                { name: 'imgw60',  label: 'M',   cls: 'img-w-60'  },
-                { name: 'imgw80',  label: 'L',   cls: 'img-w-80'  },
-                { name: 'imgw100', label: 'XL',  cls: 'img-w-100' }
+                { name: 'imgw20',  label: 'XS',  cls: 'img-w-20',  pct: '20%'  },
+                { name: 'imgw40',  label: 'S',   cls: 'img-w-40',  pct: '40%'  },
+                { name: 'imgw60',  label: 'M',   cls: 'img-w-60',  pct: '60%'  },
+                { name: 'imgw80',  label: 'L',   cls: 'img-w-80',  pct: '80%'  },
+                { name: 'imgw100', label: 'XL',  cls: 'img-w-100', pct: '100%' }
             ];
             var ALL_W = IMG_SIZES.map(function (s) { return s.cls; });
-            function getImg() { var n = editor.selection.getNode(); return n && n.nodeName === 'IMG' ? n : null; }
+
+            function getImg() {
+                var n = editor.selection.getNode();
+                return n && n.nodeName === 'IMG' ? n : null;
+            }
+
             IMG_SIZES.forEach(function (s) {
                 editor.ui.registry.addToggleButton(s.name, {
-                    text: s.label, tooltip: 'Boyut: ' + s.label,
-                    onAction: function () { var img = getImg(); if (img) { ALL_W.forEach(function (c) { editor.dom.removeClass(img, c); }); editor.dom.addClass(img, s.cls); editor.undoManager.add(); editor.nodeChanged(); } },
-                    onSetup: function (api) { var h = function () { var img = getImg(); api.setActive(img ? editor.dom.hasClass(img, s.cls) : false); }; editor.on('NodeChange', h); return function () { editor.off('NodeChange', h); }; }
+                    text: s.label,
+                    tooltip: 'Boyut: ' + s.pct,
+                    onAction: function () {
+                        var img = getImg();
+                        if (img) {
+                            ALL_W.forEach(function (c) { editor.dom.removeClass(img, c); });
+                            editor.dom.addClass(img, s.cls);
+                            editor.undoManager.add();
+                            editor.nodeChanged();
+                        }
+                    },
+                    onSetup: function (api) {
+                        var h = function () {
+                            var img = getImg();
+                            api.setActive(img ? editor.dom.hasClass(img, s.cls) : false);
+                        };
+                        editor.on('NodeChange', h);
+                        return function () { editor.off('NodeChange', h); };
+                    }
                 });
             });
 
+            /* ── Image Align Buttons ────────────────────── */
             var IMG_ALIGNS = [
-                { name: 'imgAlignLeft',   icon: 'align-left',   cls: 'img-align-left'   },
-                { name: 'imgAlignCenter', icon: 'align-center', cls: 'img-align-center' },
-                { name: 'imgAlignRight',  icon: 'align-right',  cls: 'img-align-right'  }
+                { name: 'imgAlignLeft',   icon: 'align-left',   cls: 'img-align-left',   tip: 'Sola Yasla' },
+                { name: 'imgAlignCenter', icon: 'align-center', cls: 'img-align-center', tip: 'Ortala'      },
+                { name: 'imgAlignRight',  icon: 'align-right',  cls: 'img-align-right',  tip: 'Sağa Yasla'  }
             ];
             var ALL_A = IMG_ALIGNS.map(function (a) { return a.cls; });
+
             IMG_ALIGNS.forEach(function (a) {
                 editor.ui.registry.addToggleButton(a.name, {
-                    icon: a.icon, tooltip: a.name.replace('imgAlign', ''),
-                    onAction: function () { var img = getImg(); if (img) { ALL_A.forEach(function (c) { editor.dom.removeClass(img, c); }); editor.dom.addClass(img, a.cls); editor.undoManager.add(); editor.nodeChanged(); } },
-                    onSetup: function (api) { var h = function () { var img = getImg(); api.setActive(img ? editor.dom.hasClass(img, a.cls) : false); }; editor.on('NodeChange', h); return function () { editor.off('NodeChange', h); }; }
+                    icon: a.icon,
+                    tooltip: a.tip,
+                    onAction: function () {
+                        var img = getImg();
+                        if (img) {
+                            ALL_A.forEach(function (c) { editor.dom.removeClass(img, c); });
+                            editor.dom.addClass(img, a.cls);
+                            editor.undoManager.add();
+                            editor.nodeChanged();
+                        }
+                    },
+                    onSetup: function (api) {
+                        var h = function () {
+                            var img = getImg();
+                            api.setActive(img ? editor.dom.hasClass(img, a.cls) : false);
+                        };
+                        editor.on('NodeChange', h);
+                        return function () { editor.off('NodeChange', h); };
+                    }
                 });
             });
 
+            /* ── Context Toolbar: Image ── */
             editor.ui.registry.addContextToolbar('imagetools', {
-                predicate: function (node) { return node.nodeName === 'IMG' && !node.closest('.img-grid'); },
+                predicate: function (node) {
+                    return node.nodeName === 'IMG' && !node.closest('.img-grid');
+                },
                 items: 'imgw20 imgw40 imgw60 imgw80 imgw100 | imgAlignLeft imgAlignCenter imgAlignRight',
-                position: 'node', scope: 'node'
+                position: 'node',
+                scope: 'node'
             });
 
-            // Grid column buttons
+            /* ── Grid Column Buttons ───────────────────── */
             var GRID_COLS = [
-                { name: 'gridCol2', label: '2', cls: 'img-grid-2' },
-                { name: 'gridCol3', label: '3', cls: 'img-grid-3' },
-                { name: 'gridCol4', label: '4', cls: 'img-grid-4' }
+                { name: 'gridCol2', label: '2', cls: 'img-grid-2', tip: '2 Sütun' },
+                { name: 'gridCol3', label: '3', cls: 'img-grid-3', tip: '3 Sütun' },
+                { name: 'gridCol4', label: '4', cls: 'img-grid-4', tip: '4 Sütun' }
             ];
             var ALL_G = GRID_COLS.map(function (g) { return g.cls; });
-            function getGrid() { var n = editor.selection.getNode(); if (n.classList && n.classList.contains('img-grid')) return n; return n.closest ? n.closest('.img-grid') : null; }
+
+            function getGrid() {
+                var n = editor.selection.getNode();
+                if (n.classList && n.classList.contains('img-grid')) return n;
+                return n.closest ? n.closest('.img-grid') : null;
+            }
+
             GRID_COLS.forEach(function (g) {
                 editor.ui.registry.addToggleButton(g.name, {
-                    text: g.label, tooltip: g.label + ' Sütun',
-                    onAction: function () { var grid = getGrid(); if (grid) { ALL_G.forEach(function (c) { editor.dom.removeClass(grid, c); }); editor.dom.addClass(grid, g.cls); editor.undoManager.add(); editor.nodeChanged(); } },
-                    onSetup: function (api) { var h = function () { var grid = getGrid(); api.setActive(grid ? editor.dom.hasClass(grid, g.cls) : false); }; editor.on('NodeChange', h); return function () { editor.off('NodeChange', h); }; }
+                    text: g.label,
+                    tooltip: g.tip,
+                    onAction: function () {
+                        var grid = getGrid();
+                        if (grid) {
+                            ALL_G.forEach(function (c) { editor.dom.removeClass(grid, c); });
+                            editor.dom.addClass(grid, g.cls);
+                            editor.undoManager.add();
+                            editor.nodeChanged();
+                        }
+                    },
+                    onSetup: function (api) {
+                        var h = function () {
+                            var grid = getGrid();
+                            api.setActive(grid ? editor.dom.hasClass(grid, g.cls) : false);
+                        };
+                        editor.on('NodeChange', h);
+                        return function () { editor.off('NodeChange', h); };
+                    }
                 });
             });
+
             editor.ui.registry.addButton('gridRemove', {
-                icon: 'remove', tooltip: 'Gridi Kaldır',
-                onAction: function () { var grid = getGrid(); if (grid) { var imgs = grid.querySelectorAll('img'); var frag = document.createDocumentFragment(); imgs.forEach(function (img) { var p = document.createElement('p'); p.appendChild(img.cloneNode(true)); frag.appendChild(p); }); grid.parentNode.replaceChild(frag, grid); editor.undoManager.add(); editor.nodeChanged(); } }
+                icon: 'remove',
+                tooltip: 'Gridi Kaldır (görselleri ayır)',
+                onAction: function () {
+                    var grid = getGrid();
+                    if (grid) {
+                        var imgs = grid.querySelectorAll('img');
+                        var frag = document.createDocumentFragment();
+                        imgs.forEach(function (img) {
+                            var p = document.createElement('p');
+                            p.appendChild(img.cloneNode(true));
+                            frag.appendChild(p);
+                        });
+                        grid.parentNode.replaceChild(frag, grid);
+                        editor.undoManager.add();
+                        editor.nodeChanged();
+                    }
+                }
             });
+
+            /* ── Context Toolbar: Grid ── */
             editor.ui.registry.addContextToolbar('gridtools', {
-                predicate: function (node) { if (node.classList && node.classList.contains('img-grid')) return true; return node.closest ? !!node.closest('.img-grid') : false; },
+                predicate: function (node) {
+                    if (node.classList && node.classList.contains('img-grid')) return true;
+                    return node.closest ? !!node.closest('.img-grid') : false;
+                },
                 items: 'gridCol2 gridCol3 gridCol4 | gridRemove',
-                position: 'node', scope: 'node'
+                position: 'node',
+                scope: 'node'
             });
         },
         image_class_list: [
@@ -287,7 +421,7 @@
             { title: 'Küçük (S — 40%)', value: 'img-fluid img-w-40' },
             { title: 'Çok Küçük (XS — 20%)', value: 'img-fluid img-w-20' }
         ],
-        content_style: 'img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; } .img-grid { display: grid; gap: 0.75rem; margin: 1rem 0; } .img-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem; } .img-grid-2 { grid-template-columns: repeat(2, 1fr); } .img-grid-3 { grid-template-columns: repeat(3, 1fr); } .img-grid-4 { grid-template-columns: repeat(4, 1fr); }',
+        content_style: 'body { font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14px; color: #F5F5F0; line-height: 1.8; } h1,h2,h3,h4,h5,h6 { font-family: Playfair Display, Georgia, serif; color: #D4AF37; } blockquote { border-left: 3px solid #D4AF37; padding-left: 1rem; color: #C5C8CE; font-style: italic; } a { color: #D4AF37; } img { max-width: 100%; height: auto; border-radius: 0.5rem; cursor: pointer; } img.img-w-20 { max-width: 20%; } img.img-w-40 { max-width: 40%; } img.img-w-60 { max-width: 60%; } img.img-w-80 { max-width: 80%; } img.img-w-100 { max-width: 100%; } img.img-align-left { float: left; margin: 0 1rem 1rem 0; } img.img-align-right { float: right; margin: 0 0 1rem 1rem; } img.img-align-center { display: block; margin: 1rem auto; } .img-grid { display: grid; gap: 0.75rem; margin: 1rem 0; } .img-grid img { width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem; } .img-grid-2 { grid-template-columns: repeat(2, 1fr); } .img-grid-3 { grid-template-columns: repeat(3, 1fr); } .img-grid-4 { grid-template-columns: repeat(4, 1fr); } figure { margin: 1rem 0; } figure.align-left { float: left; margin: 0 1rem 1rem 0; max-width: 50%; } figure.align-right { float: right; margin: 0 0 1rem 1rem; max-width: 50%; } figure.align-center { display: block; margin: 1rem auto; text-align: center; } figcaption { font-size: 0.85em; color: #9B9EA3; text-align: center; margin-top: 0.5rem; font-style: italic; } table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid rgba(155,158,163,0.3); padding: 0.5rem; } pre { background: #2A2A2F; border-radius: 0.5rem; padding: 1rem; color: #C5C8CE; } code { background: #2A2A2F; padding: 2px 6px; border-radius: 3px; color: #E2CFA0; font-size: 0.9em; }'
     });
     </script>
 @endpush
