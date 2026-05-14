@@ -371,6 +371,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     // Söz Meydanı — QnA Answer Management
     Route::middleware('permission:qna.view')->group(function () {
         Route::get('soz-meydani/cevaplar', [AdminQnaAnswerController::class, 'index'])->name('qna.answers.index');
+        Route::get('soz-meydani/cevaplar/{id}', [AdminQnaAnswerController::class, 'show'])->name('qna.answers.show')->where('id', '[0-9]+');
     });
     Route::middleware('permission:qna.approve')->group(function () {
         Route::patch('soz-meydani/cevaplar/{id}/onayla', [AdminQnaAnswerController::class, 'approve'])->name('qna.answers.approve')->where('id', '[0-9]+');
