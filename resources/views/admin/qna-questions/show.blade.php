@@ -69,10 +69,10 @@
                     @if($question->status->value === 'pending')
                         <hr class="border-secondary">
                         <div class="d-flex gap-2">
-                            <button class="btn-teal" onclick="openQnaApproveModal({{ $question->id }}, '{{ addslashes(Str::limit($question->title, 40)) }}', 'question')">
+                            <button class="btn-teal" onclick="openQnaApproveModal({{ $question->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', $question->title), 40)) }}, 'question')">
                                 <i class="bi bi-check-circle me-1"></i>Onayla
                             </button>
-                            <button class="btn-teal btn-danger-gradient" onclick="openQnaRejectModal({{ $question->id }}, '{{ addslashes(Str::limit($question->title, 40)) }}', 'question')">
+                            <button class="btn-teal btn-danger-gradient" onclick="openQnaRejectModal({{ $question->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', $question->title), 40)) }}, 'question')">
                                 <i class="bi bi-x-circle me-1"></i>Reddet
                             </button>
                         </div>
@@ -107,14 +107,14 @@
                                 <span class="usr-meta"><i class="bi bi-hand-thumbs-up me-1"></i>{{ $answer->like_count }} beğeni</span>
                                 <div class="usr-actions">
                                     @if($answer->status->value === 'pending')
-                                        <button class="usr-action-btn success" title="Onayla" onclick="openQnaApproveModal({{ $answer->id }}, '{{ addslashes(Str::limit($answer->body, 40)) }}', 'answer')">
+                                        <button class="usr-action-btn success" title="Onayla" onclick="openQnaApproveModal({{ $answer->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', strip_tags($answer->body)), 40)) }}, 'answer')">
                                             <i class="bi bi-check-lg"></i>
                                         </button>
-                                        <button class="usr-action-btn warning" title="Reddet" onclick="openQnaRejectModal({{ $answer->id }}, '{{ addslashes(Str::limit($answer->body, 40)) }}', 'answer')">
+                                        <button class="usr-action-btn warning" title="Reddet" onclick="openQnaRejectModal({{ $answer->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', strip_tags($answer->body)), 40)) }}, 'answer')">
                                             <i class="bi bi-x-lg"></i>
                                         </button>
                                     @endif
-                                    <button class="usr-action-btn danger" title="Sil" onclick="openQnaDeleteModal({{ $answer->id }}, '{{ addslashes(Str::limit($answer->body, 40)) }}', 'answer')">
+                                    <button class="usr-action-btn danger" title="Sil" onclick="openQnaDeleteModal({{ $answer->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', strip_tags($answer->body)), 40)) }}, 'answer')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -155,7 +155,7 @@
             <div class="card-dark mb-4" data-aos="fade-up" data-aos-delay="250">
                 <div class="card-body-custom">
                     <h5 class="form-section-title text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Tehlikeli Bölge</h5>
-                    <button class="btn-teal btn-danger-gradient w-100" onclick="openQnaDeleteModal({{ $question->id }}, '{{ addslashes(Str::limit($question->title, 40)) }}', 'question')">
+                    <button class="btn-teal btn-danger-gradient w-100" onclick="openQnaDeleteModal({{ $question->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', $question->title), 40)) }}, 'question')">
                         <i class="bi bi-trash me-1"></i>Soruyu Sil
                     </button>
                 </div>

@@ -138,6 +138,7 @@
                                 </td>
                                 <td>
                                     <div class="usr-actions">
+                                        <a class="usr-action-btn" title="Detay" href="{{ route('admin.qna.answers.show', $answer->id) }}"><i class="bi bi-eye"></i></a>
                                         @if($answer->status->value === 'pending')
                                             <button class="usr-action-btn success" title="Onayla" onclick="openQnaApproveModal({{ $answer->id }}, {{ Js::from(Str::limit(str_replace(["\r\n", "\r", "\n"], ' ', strip_tags($answer->body)), 40)) }}, 'answer')">
                                                 <i class="bi bi-check-lg"></i>

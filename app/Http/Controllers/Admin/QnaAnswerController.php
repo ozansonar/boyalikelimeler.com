@@ -32,6 +32,17 @@ final class QnaAnswerController extends Controller
         return view('admin.qna-answers.index', compact('answers', 'stats', 'filters', 'perPage'));
     }
 
+    public function show(int $id): View
+    {
+        $answer = $this->answerService->findById($id);
+
+        if (!$answer) {
+            abort(404);
+        }
+
+        return view('admin.qna-answers.show', compact('answer'));
+    }
+
     public function approve(int $id): JsonResponse
     {
         $answer = $this->answerService->findById($id);
